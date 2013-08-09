@@ -1,16 +1,11 @@
 #include <QtGui/QGuiApplication>
 #include "qtquick2applicationviewer.h"
 
-//#include <QtQml> // for qmlRegisterType
 #include <QQmlContext> // for setContextProperty
-//#include <QQmlEngine>
 
 
-#include "src/configuration.h"
-//#define APPLICATION_NAME "gStabi"
-//#define APPLICATION_VERSION "V.1.0.1(beta rc1)"
-//#define WIDTH 1024
-//#define HEIGHT 700
+#include "configuration.h"
+#include "SerialLink.h"
 
 int main(int argc, char *argv[])
 {
@@ -26,6 +21,9 @@ int main(int argc, char *argv[])
 
     Configuration m_configuration;
     viewer.rootContext()->setContextProperty("_configuration",&m_configuration);
+    SerialLink m_serialLink;
+    viewer.rootContext()->setContextProperty("_serialLink", &m_serialLink);
+
     viewer.showNormal();
 
     return app.exec();

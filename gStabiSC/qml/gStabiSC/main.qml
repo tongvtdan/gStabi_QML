@@ -1,11 +1,12 @@
 import QtQuick 2.0
 
 import "Header"
+import "Communication"
 
 Rectangle {
     width: 1024
     height: 700
-
+    property int header_height: 30
     BorderImage {
         id: gstabiBackgroundImage
         anchors.fill: parent
@@ -15,7 +16,13 @@ Rectangle {
         id: header
         anchors.top: parent.top
         anchors.left: parent.left
-        implicitHeight: 30
-        implicitWidth: 1024
+        implicitHeight: header_height
+        implicitWidth: parent.width
+    }
+    CommSetting{
+        id: comportSettingPanel
+        anchors.top: header.bottom
+        implicitHeight: 250
+        implicitWidth: 300
     }
 }

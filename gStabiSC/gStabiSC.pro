@@ -10,10 +10,13 @@ QML_IMPORT_PATH =
 # lines and add the respective components to the MOBILITY variable.
 # CONFIG += mobility
 # MOBILITY +=
+QT       += serialport
 
+INCLUDEPATH += src
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
-    src/configuration.cpp
+    src/configuration.cpp \
+    src/SerialLink.cpp
 
 # Installation path
 # target.path =
@@ -23,7 +26,9 @@ include(qtquick2applicationviewer/qtquick2applicationviewer.pri)
 qtcAddDeployment()
 
 OTHER_FILES += \
-    qml/gStabiSC/Header/AppHeader.qml
+    qml/gStabiSC/Header/AppHeader.qml \
+    qml/gStabiSC/Communication/CommSetting.qml
 
 HEADERS += \
-    src/configuration.h
+    src/configuration.h \
+    src/SerialLink.h

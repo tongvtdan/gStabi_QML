@@ -24,7 +24,7 @@ Item {
     Label{
         id: applicationName
         color: "#09fdb0"
-        text: _configuration.application_name()+ " " + _configuration.application_version();
+        text: _configuration.application_name() + " " + _configuration.application_version()
         anchors.horizontalCenter: parent.horizontalCenter
         horizontalAlignment: Text.AlignHCenter
         style: Text.Raised
@@ -34,7 +34,6 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         anchors.centerIn: parent.Center
     }
-
     Label{
         id: comportInfo
         color: "#09fdb0"
