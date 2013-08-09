@@ -14,6 +14,18 @@ class Configuration : public QObject
 public:
     explicit Configuration(QObject *parent = 0);
     
+
+    Q_INVOKABLE QString application_name()
+    {
+        return APPLICATION_NAME;
+    }
+    Q_INVOKABLE QString application_version()
+    {
+        return APPLICATION_VERSION;
+    }
+
+
+
 signals:
     
 public slots:
