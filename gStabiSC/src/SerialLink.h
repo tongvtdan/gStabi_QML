@@ -3,8 +3,8 @@
 
 #include <QObject>
 #include <QStringList>
-#include <QSerialPort>
-#include <QSerialPortInfo>
+//#include <QSerialPort>
+//#include <QSerialPortInfo>
 
 #include "qextserialport.h"
 #include "qextserialenumerator.h"
@@ -13,35 +13,31 @@
 class SerialLink : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QList<QSerialPortInfo> portList READ portList WRITE setportList NOTIFY portListChanged)
+//    Q_PROPERTY(QList<QextPortInfo> portList READ portList WRITE setportList NOTIFY portListChanged)
 
-    QextSerialPort *serialport;
-    QextSerialEnumerator *enumerator;
+
 
 public:
 
     struct Settings {
         QString name;
-        QSerialPort::BaudRate baudRate;
-//        QString stringBaudRate;
-        QSerialPort::DataBits dataBits;
-//        QString stringDataBits;
-        QSerialPort::Parity parity;
-//        QString stringParity;
-        QSerialPort::StopBits stopBits;
-//        QString stringStopBits;
-        QSerialPort::FlowControl flowControl;
-//        QString stringFlowControl;
+//        QSerialPort::BaudRate baudRate;
+////        QString stringBaudRate;
+//        QSerialPort::DataBits dataBits;
+////        QString stringDataBits;
+//        QSerialPort::Parity parity;
+////        QString stringParity;
+//        QSerialPort::StopBits stopBits;
+////        QString stringStopBits;
+//        QSerialPort::FlowControl flowControl;
+////        QString stringFlowControl;
         bool localEchoEnabled;
     };
 
     explicit SerialLink(QObject *parent = 0);
 
-    QList<QSerialPortInfo> ports;
-    QSerialPortInfo portInfo;
-
-    QList<QSerialPortInfo> portList();
-    void setportList(QList<QSerialPortInfo> mList);
+    QextSerialPort *serialport;
+    QextSerialEnumerator *enumerator;
 
     /**
      * @brief: this function is called from QML to get the portname only
@@ -58,32 +54,23 @@ public:
       *@brief: update port setting if there is any change in setting
       **/
     Q_INVOKABLE void update_comport_settings(QString portname_str);
-//    Q_SLOT QString getSerialPortMsg();
 
     void fillSerialPortInfo();
-    void openSerialPort();
 
     void portSettings();
-    /*! Trigger when a device plug or unplug from COM/USB port*/
 
+    /*! Trigger when a device plug or unplug from COM/USB port*/
     void updatePortStatus(bool isConnected);
 
-signals:
-    void portListChanged(QList<QSerialPortInfo>);
 public slots:
     QString getSerialPortMsg();
 
 
 private slots:
-    void showPortInfo(int idx);
     void PortAddedRemoved();
 private:
-    void getPortsInfo();
 
-    QList<QSerialPortInfo> m_list;
-    QSerialPort *m_serialPort;
-
-    Settings m_settings;
+    QList<QString> portNameList;
 
 
 
