@@ -12,11 +12,15 @@ QML_IMPORT_PATH =
 # MOBILITY +=
 QT       += serialport
 
-INCLUDEPATH += src
+INCLUDEPATH += src \
+               thirdParty/mavlink/v1.0/gremsyBGC \
+               thirdParty/mavlink/v1.0
+
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
     src/configuration.cpp \
-    src/SerialLink.cpp
+    src/SerialLink.cpp \
+    src/MavLinkManager.cpp
 
 # Installation path
 # target.path =
@@ -33,4 +37,5 @@ OTHER_FILES += \
 
 HEADERS += \
     src/configuration.h \
-    src/SerialLink.h
+    src/SerialLink.h \
+    src/MavLinkManager.hpp
