@@ -20,11 +20,11 @@ int main(int argc, char *argv[])
 //    viewer.setFlags(Qt::FramelessWindowHint); // no boarder and no icon on StaskBar
 
     Configuration m_configuration;
-    viewer.rootContext()->setContextProperty("_configuration",&m_configuration);
+    viewer.rootContext()->setContextProperty("m_configuration",&m_configuration);
     SerialLink m_serialLink;
     viewer.rootContext()->setContextProperty("_serialLink", &m_serialLink);
 
-    viewer.showNormal();
+    viewer.showExpanded();
 
     return app.exec();
 }

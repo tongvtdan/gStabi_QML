@@ -6,11 +6,17 @@
 #include <QSerialPort>
 #include <QSerialPortInfo>
 
+#include "qextserialport.h"
+#include "qextserialenumerator.h"
+
+
 class SerialLink : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QList<QSerialPortInfo> portList READ portList WRITE setportList NOTIFY portListChanged)
 
+    QextSerialPort *serialport;
+    QextSerialEnumerator *enumerator;
 
 public:
 
@@ -52,19 +58,30 @@ public:
       *@brief: update port setting if there is any change in setting
       **/
     Q_INVOKABLE void update_comport_settings(QString portname_str);
+//    Q_SLOT QString getSerialPortMsg();
+
+    void fillSerialPortInfo();
+    void openSerialPort();
+
+    void portSettings();
+    /*! Trigger when a device plug or unplug from COM/USB port*/
+
+    void updatePortStatus(bool isConnected);
 
 signals:
     void portListChanged(QList<QSerialPortInfo>);
 public slots:
+    QString getSerialPortMsg();
+
 
 private slots:
     void showPortInfo(int idx);
-
+    void PortAddedRemoved();
 private:
     void getPortsInfo();
 
     QList<QSerialPortInfo> m_list;
-    QSerialPort m_serialPort;
+    QSerialPort *m_serialPort;
 
     Settings m_settings;
 

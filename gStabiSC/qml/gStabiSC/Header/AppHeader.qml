@@ -24,7 +24,7 @@ Item {
     Label{
         id: applicationName
         color: "#09fdb0"
-        text: _configuration.application_name() + " " + _configuration.application_version()
+        text: m_configuration.application_name() + " " + m_configuration.application_version()
         anchors.horizontalCenter: parent.horizontalCenter
         horizontalAlignment: Text.AlignHCenter
         style: Text.Raised

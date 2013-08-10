@@ -25,6 +25,8 @@ SOURCES += main.cpp \
 include(qtquick2applicationviewer/qtquick2applicationviewer.pri)
 qtcAddDeployment()
 
+include(thirdParty/qextserialport/src/qextserialport.pri)
+
 OTHER_FILES += \
     qml/gStabiSC/Header/AppHeader.qml \
     qml/gStabiSC/Communication/CommSetting.qml

@@ -36,6 +36,18 @@ Item{
                     }
                 }
             }// comport Open/Close
+        }
+
+        TextField {
+            id: consoleLog
+            x: 0
+            y: 41
+            width: 284
+            height: 173
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 10
+            placeholderText: "Text Field"
         }   // portRow
     } // communication GroupBox
     ListModel {
