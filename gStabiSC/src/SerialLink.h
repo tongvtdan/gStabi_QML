@@ -19,20 +19,7 @@ class SerialLink : public QObject
 
 public:
 
-    struct Settings {
-        QString name;
-//        QSerialPort::BaudRate baudRate;
-////        QString stringBaudRate;
-//        QSerialPort::DataBits dataBits;
-////        QString stringDataBits;
-//        QSerialPort::Parity parity;
-////        QString stringParity;
-//        QSerialPort::StopBits stopBits;
-////        QString stringStopBits;
-//        QSerialPort::FlowControl flowControl;
-////        QString stringFlowControl;
-        bool localEchoEnabled;
-    };
+
 
     explicit SerialLink(QObject *parent = 0);
 
@@ -70,7 +57,9 @@ private slots:
     void PortAddedRemoved();
 private:
 
-    QList<QString> portNameList;
+    QList<QString> port_name_list;
+    PortSettings m_port_settings;
+    QString selected_port_name;
 
 
 
