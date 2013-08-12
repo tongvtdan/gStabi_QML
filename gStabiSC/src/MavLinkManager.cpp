@@ -4,6 +4,7 @@ MavLinkManager::MavLinkManager(QObject *parent) :
     QObject(parent)
 {
     mavlink_init();
+    sethb_pulse(false);
 }
 
 void MavLinkManager::process_seriallink_data(QByteArray data)

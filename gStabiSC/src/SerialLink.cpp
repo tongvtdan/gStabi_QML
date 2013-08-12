@@ -15,6 +15,7 @@ SerialLink::SerialLink(QObject *parent) :
 {
     fillSerialPortInfo();
     portSettings();
+//    setportsUpdated(false);
 
     connect(serialport, SIGNAL(readyRead()),this, SLOT(getSerialPortMsg()));
     connect(enumerator, SIGNAL(deviceDiscovered(QextPortInfo)), SLOT(PortAddedRemoved()));
@@ -26,6 +27,7 @@ void SerialLink::PortAddedRemoved()
 {
     updatePortStatus(false);
     fillSerialPortInfo();
+//    setportsUpdated(true);
 }
 
 QString SerialLink::getPortName(int idx)
@@ -44,6 +46,7 @@ bool SerialLink::open_close_comport()
     if(serialport->isOpen())
     {
         serialport->close();
+
     }
     else
     {
@@ -53,6 +56,7 @@ bool SerialLink::open_close_comport()
         serialport->setDtr(0); // 3V3 output on reset
     }
     updatePortStatus(serialport->isOpen());
+//    setportsUpdated(false);
     return serialport->isOpen();
 
 }
@@ -66,6 +70,7 @@ void SerialLink::update_comport_settings(QString portname_str)
 
 void SerialLink::fillSerialPortInfo()
 {
+    port_name_list.clear();
     // Get the ports available on this system
    QList<QextPortInfo> ports = QextSerialEnumerator::getPorts();
    // Add the ports in reverse order, because we prepend them to the list
@@ -75,7 +80,7 @@ void SerialLink::fillSerialPortInfo()
             port_name_list << portInfo.portName;
        }
    }
-   selected_port_name = ports.at(ports.size()-1).portName; // get the latest port
+   selected_port_name = port_name_list.at(0); // get the latest port
    qDebug()<< "Selected Port @Start: " << selected_port_name;
 }
 
@@ -96,6 +101,7 @@ void SerialLink::portSettings()
 
 void SerialLink::updatePortStatus(bool connection_state)
 {
+//    /*
     if(connection_state)
     {
         qDebug()<< "Port "<< serialport->portName() << " is opened";
@@ -105,6 +111,7 @@ void SerialLink::updatePortStatus(bool connection_state)
     {
          qDebug()<< "Port "<< serialport->portName() << " is closed";
     }
+//    */
     setisConnected(connection_state);
 }
 
@@ -119,13 +126,22 @@ void SerialLink::setisConnected(bool state)
     emit isConnectedChanged(m_connection_state);
 }
 
+bool SerialLink::portsUpdated() const
+{
+    return m_ports_updated;
+}
+
+void SerialLink::setportsUpdated(bool updated)
+{
+    m_ports_updated = updated;
+    emit portsUpdatedChanged(m_ports_updated);
+}
+
 QString SerialLink::getSerialPortMsg()
 {
     QByteArray serial_data = serialport->readAll();
     qDebug()<< QString::fromUtf8(serial_data.data());
     emit mavlink_data_ready(serial_data);
-//    qDebug() << "Connect Called";
-//    return "Done";
     return QString::fromUtf8(serial_data.data());
 
 }

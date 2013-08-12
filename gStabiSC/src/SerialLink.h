@@ -14,6 +14,7 @@ class SerialLink : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool isConnected READ isConnected WRITE setisConnected NOTIFY isConnectedChanged)
+    Q_PROPERTY(bool portsUpdated READ portsUpdated WRITE setportsUpdated NOTIFY portsUpdatedChanged)
 
 public:
 
@@ -26,8 +27,8 @@ public:
 
     /**
      * @brief: this function is called from QML to get the portname only
-     * @param: idx is the index of port in the portlist
-     * @note:  the index will be check to make sure it is the range of portlist size
+     * @param: idx is the index of port in the ports
+     * @note:  the index will be check to make sure it is the range of ports size
     **/
     Q_INVOKABLE QString getPortName(int idx);
     /**
@@ -51,6 +52,8 @@ public:
     bool isConnected()const ;
     void setisConnected(bool state);
 
+    bool portsUpdated() const;
+    void setportsUpdated(bool updated);
     //[!]
 
 public slots:
@@ -60,6 +63,7 @@ signals:
     void mavlink_data_ready(QByteArray data);
 //    [!] Q_PROPERTY
     void isConnectedChanged(bool state);
+    void portsUpdatedChanged(bool updated);
 
 //    [!]
 private slots:
@@ -72,6 +76,7 @@ private:
 
 //    [!] Q_PROPERTY
     bool m_connection_state;
+    bool m_ports_updated;
 //    [!]
 
 

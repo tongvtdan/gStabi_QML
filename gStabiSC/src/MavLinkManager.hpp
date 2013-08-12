@@ -23,6 +23,10 @@ public:
     explicit MavLinkManager(QObject *parent = 0);
 
 
+    //[!] Q_PROPERTY functions
+    bool hb_pulse();
+    void sethb_pulse(bool state);
+    //[!]
     
 signals:
     void mavlink_data_ready(QByteArray data);
@@ -32,10 +36,8 @@ signals:
     //[!]
 public slots:
     void process_seriallink_data(QByteArray);
-    //[!] Q_PROPERTY functions
-    bool hb_pulse();
-    void sethb_pulse(bool state);
-    //[!]
+
+
 
 private:
     void mavlink_init();

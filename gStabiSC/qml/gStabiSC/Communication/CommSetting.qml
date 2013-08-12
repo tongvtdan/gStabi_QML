@@ -7,6 +7,7 @@ import QtQuick.Controls.Styles 1.0
 Item{
     property string portname: ""    // used to store portname in getPortNameList()
     property alias selected_portname: portListBox.currentText
+    property bool portsListUpdated: _serialLink.portsUpdated
     GroupBox{
         id: communicationgroupbox
         flat: false
@@ -28,14 +29,8 @@ Item{
                 }
             }   // portlistBox
             Button{
-                text: "Open"
-                onClicked: {
-                    if(_serialLink.open_close_comport()){
-                        text = "Close"
-                    } else{
-                        text = "Open"
-                    }
-                }
+                text: _serialLink.isConnected ? "Open"  : "Close"
+                onClicked: _serialLink.open_close_comport()
             }// comport Open/Close
 
 
@@ -68,6 +63,7 @@ Item{
     }
     function getPortNameList()
     {
+        comportList.clear()
         for(var i=0 ; i < 5 ; i++){
             portname = _serialLink.getPortName(i);
             if(portname !== "NA"){
@@ -75,4 +71,9 @@ Item{
             }
         }
     }
+//    onPortsListUpdatedChanged: {
+//        if(_serialLink.portsUpdated){
+//        getPortNameList();
+//        }
+//    }
 }

@@ -15,6 +15,7 @@ signals:
     
 public slots:
     void connectLink(SerialLink *serial, MavLinkManager *_mavlink);
+
 };
 
 #endif // LINKMANAGER_H
