@@ -10,8 +10,9 @@ Item {
     height: 30
     Label{
         id: systemStatus
-        color: "#09fdb0"
-        text: "Status: Standby"
+        text: _mavlink_manager.hb_pulse ? "System: Online" : "System: Offline"
+        color: _mavlink_manager.hb_pulse ? "cyan" : "red"
+
         style: Text.Raised
         verticalAlignment: Text.AlignVCenter
         font.pointSize: 10
@@ -34,18 +35,36 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         anchors.centerIn: parent.Center
     }
-    Label{
+    RowLayout{
+        id: rowlayout1
+        anchors.right: parent.right
+        anchors.rightMargin: 0
+        anchors.verticalCenter: parent.verticalCenter
+        Label{
         id: comportInfo
         color: "#09fdb0"
-        text: "COM1: 57600,8,N,1"
-        verticalAlignment: Text.AlignVCenter
         style: Text.Raised
         font.pointSize: 10
         font.family: "Terminal"
-        horizontalAlignment: Text.AlignRight
-        anchors.right: parent.right
+        text: comportSettingPanel.selected_portname +  ": 57600,8,N,1 - "
         anchors.rightMargin: 10
         anchors.verticalCenter: parent.verticalCenter
+        anchors.right: portConnectionState.left
 
+        verticalAlignment: Text.AlignVCenter
+
+        horizontalAlignment: Text.AlignRight
+    }
+        Label{
+            id: portConnectionState
+            color: "#09fdb0"
+            style: Text.Raised
+            font.pointSize: 10
+            font.family: "Terminal"
+            text: _serialLink.isConnected? "Connected" : "Disconnected"
+            anchors.right: parent.right
+            anchors.rightMargin: 0
+            anchors.verticalCenter: parent.verticalCenter
+        }
     }
 }

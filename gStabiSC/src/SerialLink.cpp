@@ -6,17 +6,20 @@
 
 #include "qextserialport.h"
 #include "qextserialenumerator.h"
+#include "MavLinkManager.hpp"
 
 
 SerialLink::SerialLink(QObject *parent) :
-    QObject(parent)
+    QObject(parent),
+    m_connection_state(false)
 {
     fillSerialPortInfo();
     portSettings();
 
     connect(serialport, SIGNAL(readyRead()),this, SLOT(getSerialPortMsg()));
     connect(enumerator, SIGNAL(deviceDiscovered(QextPortInfo)), SLOT(PortAddedRemoved()));
-    connect(enumerator, SIGNAL(deviceRemoved(QextPortInfo)), SLOT(PortAddedRemoved()));
+    connect(enumerator, SIGNAL(deviceRemoved(QextPortInfo)), SLOT(PortAddedRemoved()));    
+
 }
 
 void SerialLink::PortAddedRemoved()
@@ -91,22 +94,36 @@ void SerialLink::portSettings()
     enumerator->setUpNotifications();
 }
 
-void SerialLink::updatePortStatus(bool isConnected)
+void SerialLink::updatePortStatus(bool connection_state)
 {
-    if(isConnected)
+    if(connection_state)
     {
         qDebug()<< "Port "<< serialport->portName() << " is opened";
+
     }
     else
     {
          qDebug()<< "Port "<< serialport->portName() << " is closed";
     }
+    setisConnected(connection_state);
+}
+
+bool SerialLink::isConnected() const
+{
+    return m_connection_state;
+}
+
+void SerialLink::setisConnected(bool state)
+{
+    m_connection_state = state;
+    emit isConnectedChanged(m_connection_state);
 }
 
 QString SerialLink::getSerialPortMsg()
 {
     QByteArray serial_data = serialport->readAll();
     qDebug()<< QString::fromUtf8(serial_data.data());
+    emit mavlink_data_ready(serial_data);
 //    qDebug() << "Connect Called";
 //    return "Done";
     return QString::fromUtf8(serial_data.data());

@@ -6,6 +6,7 @@ import QtQuick.Controls.Styles 1.0
 
 Item{
     property string portname: ""    // used to store portname in getPortNameList()
+    property alias selected_portname: portListBox.currentText
     GroupBox{
         id: communicationgroupbox
         flat: false
@@ -36,8 +37,9 @@ Item{
                     }
                 }
             }// comport Open/Close
-        }
 
+
+        }
         TextField {
             id: consoleLog
             x: 0
@@ -48,6 +50,8 @@ Item{
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 10
             placeholderText: "Text Field"
+//            text: "Hello"
+            text: _mavlink_manager.hb_pulse? "HB OK" : "HB Stop"
         }   // portRow
     } // communication GroupBox
     ListModel {

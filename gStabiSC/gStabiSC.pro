@@ -20,7 +20,8 @@ INCLUDEPATH += src \
 SOURCES += main.cpp \
     src/configuration.cpp \
     src/SerialLink.cpp \
-    src/MavLinkManager.cpp
+    src/MavLinkManager.cpp \
+    src/gLinkManager.cpp
 
 # Installation path
 # target.path =
@@ -38,4 +39,5 @@ OTHER_FILES += \
 HEADERS += \
     src/configuration.h \
     src/SerialLink.h \
-    src/MavLinkManager.hpp
+    src/MavLinkManager.hpp \
+    src/gLinkManager.h

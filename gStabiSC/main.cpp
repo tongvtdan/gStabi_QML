@@ -6,6 +6,8 @@
 
 #include "configuration.h"
 #include "SerialLink.h"
+#include "MavLinkManager.hpp"
+#include "gLinkManager.h"
 
 int main(int argc, char *argv[])
 {
@@ -23,6 +25,11 @@ int main(int argc, char *argv[])
     viewer.rootContext()->setContextProperty("m_configuration",&m_configuration);
     SerialLink m_serialLink;
     viewer.rootContext()->setContextProperty("_serialLink", &m_serialLink);
+    MavLinkManager m_mavlink_manager;
+    viewer.rootContext()->setContextProperty("_mavlink_manager", &m_mavlink_manager);
+
+    LinkManager m_gLinkManager;
+    m_gLinkManager.connectLink(&m_serialLink,&m_mavlink_manager);
 
     viewer.showExpanded();
 

@@ -15,6 +15,10 @@
 class MavLinkManager : public QObject
 {
     Q_OBJECT
+    // interface with QML
+    Q_PROPERTY(bool hb_pulse READ hb_pulse WRITE sethb_pulse NOTIFY hb_pulseChanged)
+
+
 public:
     explicit MavLinkManager(QObject *parent = 0);
 
@@ -22,13 +26,23 @@ public:
     
 signals:
     void mavlink_data_ready(QByteArray data);
+
+    //[!] Q_PROPERTY
+    void hb_pulseChanged(bool);
+    //[!]
 public slots:
-    void process_seriallink_data(QByteArray data);
+    void process_seriallink_data(QByteArray);
+    //[!] Q_PROPERTY functions
+    bool hb_pulse();
+    void sethb_pulse(bool state);
+    //[!]
+
 private:
     void mavlink_init();
 private:
     /// mavlink variables
     mavlink_attitude_t att;
+    mavlink_attitude_t attitude_degree;  // to convert rad to deg
     mavlink_system_t mavlink_system;
     // Define the system type, in this case an airplane
     uint8_t system_type ;
@@ -47,6 +61,8 @@ private:
     mavlink_gyro_calib_status_t gyro_calib_sta;
     global_struct global_data;
     gConfig_t oldParamConfig;
+
+    bool m_hb_pulse;
 };
 
 #endif // MAVLINKMANAGER_HPP

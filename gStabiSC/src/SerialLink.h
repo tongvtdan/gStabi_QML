@@ -13,9 +13,7 @@
 class SerialLink : public QObject
 {
     Q_OBJECT
-//    Q_PROPERTY(QList<QextPortInfo> portList READ portList WRITE setportList NOTIFY portListChanged)
-
-
+    Q_PROPERTY(bool isConnected READ isConnected WRITE setisConnected NOTIFY isConnectedChanged)
 
 public:
 
@@ -47,12 +45,23 @@ public:
     void portSettings();
 
     /*! Trigger when a device plug or unplug from COM/USB port*/
-    void updatePortStatus(bool isConnected);
+    void updatePortStatus(bool connection_state);
+
+    //[!] Q_PROPERTY
+    bool isConnected()const ;
+    void setisConnected(bool state);
+
+    //[!]
 
 public slots:
     QString getSerialPortMsg();
 
+signals:
+    void mavlink_data_ready(QByteArray data);
+//    [!] Q_PROPERTY
+    void isConnectedChanged(bool state);
 
+//    [!]
 private slots:
     void PortAddedRemoved();
 private:
@@ -60,6 +69,10 @@ private:
     QList<QString> port_name_list;
     PortSettings m_port_settings;
     QString selected_port_name;
+
+//    [!] Q_PROPERTY
+    bool m_connection_state;
+//    [!]
 
 
 
