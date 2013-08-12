@@ -9,11 +9,25 @@ Item {
     width: 1024
     height: 30
     property bool portIsConnected: _serialLink.isConnected
-    property bool heartbeatState: _mavlink_manager.hb_pulse
+    property bool linkConnectionLost: _mavlink_manager.link_connection_timeout
     Label{
         id: systemStatus
-        text :_mavlink_manager.hb_pulse ? "System: Online" : "System: Offline"
-        color : _mavlink_manager.hb_pulse ? "cyan" : "red"
+        text :{
+            if((portIsConnected) && (!linkConnectionLost)){
+                        return "System: Online"
+                    }
+            else{
+                return "System: Offline"
+            }
+        }
+        color : {
+            if((portIsConnected) && (!linkConnectionLost)){
+                        return "cyan"
+                    }
+            else{
+                return "red"
+            }
+        }
         y:8
         style: Text.Raised
         verticalAlignment: Text.AlignVCenter
@@ -100,15 +114,14 @@ Item {
     }
     onPortIsConnectedChanged: {
         portConnectionChangeStateAnimation.start();
-        if(!portIsConnected){
-            systemStatus.text = "System: Offline"
-            systemStatus.color = "red"
-        }
-        systemChangeStateAnimation.start();
+//        if(!portIsConnected){
+//            systemStatus.text = "System: Offline"
+//            systemStatus.color = "red"
+//        }
+//        systemChangeStateAnimation.start();
     }
-    onHeartbeatStateChanged: {
+    onLinkConnectionLostChanged:  {
         systemChangeStateAnimation.start();
-        console.log("HB Changed")
 
     }
 }

@@ -14,7 +14,6 @@ class SerialLink : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool isConnected READ isConnected WRITE setisConnected NOTIFY isConnectedChanged)
-    Q_PROPERTY(bool portsUpdated READ portsUpdated WRITE setportsUpdated NOTIFY portsUpdatedChanged)
 
 public:
 
@@ -35,7 +34,7 @@ public:
      * @brief: open and close comport, this function can be called from QML
      * @return: bool port status, true if port is opened, false if port is close
      **/
-    Q_INVOKABLE bool open_close_comport();
+    Q_INVOKABLE void open_close_comport();
     /**
       *@brief: update port setting if there is any change in setting
       **/
@@ -52,8 +51,6 @@ public:
     bool isConnected()const ;
     void setisConnected(bool state);
 
-    bool portsUpdated() const;
-    void setportsUpdated(bool updated);
     //[!]
 
 public slots:
@@ -63,7 +60,6 @@ signals:
     void mavlink_data_ready(QByteArray data);
 //    [!] Q_PROPERTY
     void isConnectedChanged(bool state);
-    void portsUpdatedChanged(bool updated);
 
 //    [!]
 private slots:

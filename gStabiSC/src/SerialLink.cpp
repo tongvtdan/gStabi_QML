@@ -15,7 +15,7 @@ SerialLink::SerialLink(QObject *parent) :
 {
     fillSerialPortInfo();
     portSettings();
-//    setportsUpdated(false);
+    updatePortStatus(false);
 
     connect(serialport, SIGNAL(readyRead()),this, SLOT(getSerialPortMsg()));
     connect(enumerator, SIGNAL(deviceDiscovered(QextPortInfo)), SLOT(PortAddedRemoved()));
@@ -27,7 +27,6 @@ void SerialLink::PortAddedRemoved()
 {
     updatePortStatus(false);
     fillSerialPortInfo();
-//    setportsUpdated(true);
 }
 
 QString SerialLink::getPortName(int idx)
@@ -41,10 +40,13 @@ QString SerialLink::getPortName(int idx)
     }
 }
 
-bool SerialLink::open_close_comport()
+void SerialLink::open_close_comport()
 {
     if(serialport->isOpen())
     {
+        serialport->setRts(0);
+        serialport->setDtr(0);
+        serialport->setDtr(1);
         serialport->close();
 
     }
@@ -56,9 +58,6 @@ bool SerialLink::open_close_comport()
         serialport->setDtr(0); // 3V3 output on reset
     }
     updatePortStatus(serialport->isOpen());
-//    setportsUpdated(false);
-    return serialport->isOpen();
-
 }
 
 void SerialLink::update_comport_settings(QString portname_str)
@@ -80,7 +79,8 @@ void SerialLink::fillSerialPortInfo()
             port_name_list << portInfo.portName;
        }
    }
-   selected_port_name = port_name_list.at(0); // get the latest port
+   selected_port_name = ports.at(ports.size()-1).portName;
+//   selected_port_name = port_name_list.at(0); // get the latest port
    qDebug()<< "Selected Port @Start: " << selected_port_name;
 }
 
@@ -124,17 +124,6 @@ void SerialLink::setisConnected(bool state)
 {
     m_connection_state = state;
     emit isConnectedChanged(m_connection_state);
-}
-
-bool SerialLink::portsUpdated() const
-{
-    return m_ports_updated;
-}
-
-void SerialLink::setportsUpdated(bool updated)
-{
-    m_ports_updated = updated;
-    emit portsUpdatedChanged(m_ports_updated);
 }
 
 QString SerialLink::getSerialPortMsg()

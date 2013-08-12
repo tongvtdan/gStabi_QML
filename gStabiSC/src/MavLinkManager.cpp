@@ -1,10 +1,14 @@
 #include "MavLinkManager.hpp"
 
 MavLinkManager::MavLinkManager(QObject *parent) :
-    QObject(parent)
+    QObject(parent),
+    m_link_connection_timeout(true) // assume connection is lost at start up
 {
+    linkConnectionTimer = new QTimer(this);
+    connect(linkConnectionTimer,SIGNAL(timeout()),this, SLOT(connection_timeout()));
+
     mavlink_init();
-    sethb_pulse(false);
+//    sethb_pulse(false);
 }
 
 void MavLinkManager::process_seriallink_data(QByteArray data)
@@ -18,7 +22,8 @@ void MavLinkManager::process_seriallink_data(QByteArray data)
     {
         byte = data[position];
         decodeState = mavlink_parse_char(MAVLINK_COMM_0,byte, &message, &status);
-        Q_UNUSED(decodeState);
+//        Q_UNUSED(decodeState);
+        if(decodeState) RestartLinkConnectionTimer(1000);
 
         switch (message.msgid)
         {
@@ -144,7 +149,18 @@ void MavLinkManager::process_seriallink_data(QByteArray data)
 */
 }
 
-bool MavLinkManager::hb_pulse()
+void MavLinkManager::connection_timeout()
+{
+    m_link_connection_timeout = true;
+}
+
+void MavLinkManager::start_link_connection_timer()
+{
+    linkConnectionTimer->setInterval(5000);
+    linkConnectionTimer->setSingleShot(true);
+}
+
+bool MavLinkManager::hb_pulse() const
 {
     return m_hb_pulse;
 }
@@ -156,6 +172,11 @@ void MavLinkManager::sethb_pulse(bool state)
 
 }
 
+bool MavLinkManager::link_connection_timeout() const
+{
+    return m_link_connection_timeout;
+}
+
 void MavLinkManager::mavlink_init()
 {
     system_type = MAV_TYPE_FIXED_WING;
@@ -163,5 +184,12 @@ void MavLinkManager::mavlink_init()
     system_mode = MAV_MODE_PREFLIGHT; ///< Booting up
     custom_mode = 0;                 ///< Custom mode, can be defined by user/adopter
     system_state = MAV_STATE_STANDBY; ///< System ready for flight
-    sethb_pulse(false);
+    //    sethb_pulse(false);
+}
+
+void MavLinkManager::RestartLinkConnectionTimer(int msec)
+{
+    linkConnectionTimer->stop();
+    m_link_connection_timeout = false;
+    linkConnectionTimer->start(msec);
 }
