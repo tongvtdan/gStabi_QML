@@ -79,9 +79,8 @@ void SerialLink::fillSerialPortInfo()
             port_name_list << portInfo.portName;
        }
    }
-//   selected_port_name = ports.at(ports.size()-1).portName;
    selected_port_name = port_name_list.at(0); // get the latest port
-//   qDebug()<< "Selected Port @Start: " << selected_port_name;
+   m_ports_updated = !m_ports_updated;
 }
 
 
@@ -101,7 +100,7 @@ void SerialLink::portSettings()
 
 void SerialLink::updatePortStatus(bool connection_state)
 {
-//    /*
+    /*
     if(connection_state)
     {
         qDebug()<< "Port "<< serialport->portName() << " is opened";
@@ -111,8 +110,9 @@ void SerialLink::updatePortStatus(bool connection_state)
     {
          qDebug()<< "Port "<< serialport->portName() << " is closed";
     }
-//    */
+    */
     setisConnected(connection_state);
+
 }
 
 bool SerialLink::isConnected() const
@@ -124,6 +124,17 @@ void SerialLink::setisConnected(bool state)
 {
     m_connection_state = state;
     emit isConnectedChanged(m_connection_state);
+}
+
+bool SerialLink::isPortListUpdated() const
+{
+    return m_ports_updated;
+}
+
+void SerialLink::setisPortListUpdated(bool update_state)
+{
+    m_ports_updated = update_state;
+    emit isPortListUpdatedChanged(m_ports_updated);
 }
 
 QString SerialLink::getSerialPortMsg()

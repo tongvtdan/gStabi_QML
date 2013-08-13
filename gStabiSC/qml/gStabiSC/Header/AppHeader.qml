@@ -114,11 +114,6 @@ Item {
     }
     onPortIsConnectedChanged: {
         portConnectionChangeStateAnimation.start();
-//        if(!portIsConnected){
-//            systemStatus.text = "System: Offline"
-//            systemStatus.color = "red"
-//        }
-//        systemChangeStateAnimation.start();
     }
     onLinkConnectionLostChanged:  {
         systemChangeStateAnimation.start();

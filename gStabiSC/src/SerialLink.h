@@ -14,6 +14,8 @@ class SerialLink : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool isConnected READ isConnected WRITE setisConnected NOTIFY isConnectedChanged)
+    Q_PROPERTY(bool isPortListUpdated READ isPortListUpdated WRITE setisPortListUpdated NOTIFY isPortListUpdatedChanged)
+
 
 public:
 
@@ -51,6 +53,10 @@ public:
     bool isConnected()const ;
     void setisConnected(bool state);
 
+    bool isPortListUpdated() const;
+    void setisPortListUpdated(bool update_state);
+
+
     //[!]
 
 public slots:
@@ -61,6 +67,7 @@ signals:
     void mavlink_data_ready(QByteArray data);
 //    [!] Q_PROPERTY
     void isConnectedChanged(bool state);
+    void isPortListUpdatedChanged(bool update_state);
 
 //    [!]
 private slots:

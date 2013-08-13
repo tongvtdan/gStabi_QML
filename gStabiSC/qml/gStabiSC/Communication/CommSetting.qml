@@ -5,81 +5,71 @@ import QtQuick.Controls.Styles 1.0
 
 
 Item{
+    id: comportSettings
     property string portname: ""    // used to store portname in getPortNameList()
     property alias selected_portname: portListBox.currentText
-    GroupBox{
-        id: communicationgroupbox
-        flat: false
-        title: "Communication"
-        width: 300
-        height: 250
+    property bool portUpdated: _serialLink.isPortListUpdated
+    property bool showPortSetting: true
+
+    RowLayout{
+        id: portRow
+        anchors.left: parent.left
+        anchors.leftMargin: 0
         anchors.top: parent.top
-        anchors.topMargin: 5
-        RowLayout{
-            id: portRow
+        anchors.topMargin: 10
+        Layout.fillWidth: parent
+        ComboBox{
+            id: portListBox
+            width: 115
+            height: 30
             anchors.left: parent.left
             anchors.leftMargin: 0
-            anchors.top: parent.top
-            anchors.topMargin: 0
-            Layout.fillWidth: parent
-            ComboBox{
-                id: portListBox
-                width: 115
-                height: 30
-                anchors.left: parent.left
-                anchors.leftMargin: 0
-                anchors.verticalCenter: parent.verticalCenter
-                model: comportList
-                onCurrentTextChanged:{
-                    _serialLink.update_comport_settings(currentText);
-                    console.log(currentText);
-                }
-            }   // portlistBox
-            Button{
-                id: portOpenClose
-                y: -25
-                width: 672
-                height: 30
-                text: _serialLink.isConnected? "Close" : "Open"
-                anchors.left: portListBox.right
-                anchors.leftMargin: 0
-                anchors.verticalCenter: parent.verticalCenter
-                onClicked: {
-                    _serialLink.open_close_comport()
-//                    if(_serialLink.isConnected){
-//                        text = "Close"
-//                        consoleLog.text += "Port Opened \n"
-//                    } else{
-//                        text = "Open"
-//                        consoleLog.text += "Port Closed \n"
-//                    }
-                }
-            }// comport Open/Close
-            Button{
-                id: refresshPorts
-                height: 30
-                text: "Refresh"
-                anchors.left: portOpenClose.right
-                anchors.leftMargin: 10
-                anchors.verticalCenter: parent.verticalCenter
-                onClicked: getPortNameList()
+            anchors.verticalCenter: parent.verticalCenter
+            model: comportList
+            style: ComboBoxStyle {}
+            onCurrentTextChanged:{
+                _serialLink.update_comport_settings(currentText);
+                console.log(currentText);
             }
-
-
+        }   // portlistBox
+        Button{
+            id: portOpenClose
+            y: -25
+            width: 672
+            height: 30
+            text: _serialLink.isConnected? "Close" : "Open"
+            anchors.left: portListBox.right
+            anchors.leftMargin: 0
+            anchors.verticalCenter: parent.verticalCenter
+            style: ButtonStyle{}
+            onClicked: {
+                _serialLink.open_close_comport()
+            }
+        }// comport Open/Close
+        Button{
+            id: refresshPorts
+            height: 30
+            text: "Refresh"
+            anchors.left: portOpenClose.right
+            anchors.leftMargin: 10
+            anchors.verticalCenter: parent.verticalCenter
+            style: ButtonStyle{}
+            onClicked: {
+                showPortSetting = !showPortSetting
+                getPortNameList()
+            }
         }
-        TextArea {
-            id: consoleLog
-            x: 0
-            y: 41
-            width: 284
-            height: 173
-            readOnly: true
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 10
-//            text: _mavlink_manager.hb_pulse? "HB OK \n" : "HB Stop \n"
-        }   // portRow
-    } // communication GroupBox
+    } // portRow
+    TextArea{
+        id: logTextArea
+        anchors.top: portRow.bottom
+        anchors.topMargin: 10
+        anchors.left: parent.left
+        width: 300
+        height: 150
+    }
+
+    //    } // communication GroupBox
     ListModel {
         id: comportList
     }
@@ -102,4 +92,34 @@ Item{
             }
         }
     }
+    onPortUpdatedChanged: {
+        getPortNameList();
+    }
+    states:[
+        State {
+            name: "show"
+            when: (showPortSetting == true)
+            PropertyChanges {
+                target: comportSettings
+                x: 0
+
+            }
+        }
+        ,State {
+            name: "hide"
+            when: (showPortSetting == false)
+            PropertyChanges {
+                target: comportSettings
+                x: -200
+            }
+        }
+
+    ]
+    transitions: Transition {
+        PropertyAnimation{
+            properties: "x"
+            easing.type: Easing.Bezier
+        }
+    }
+
 }
