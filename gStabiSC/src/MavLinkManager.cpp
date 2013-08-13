@@ -1,14 +1,15 @@
 #include "MavLinkManager.hpp"
+#include <QDebug>
 
 MavLinkManager::MavLinkManager(QObject *parent) :
-    QObject(parent),
-    m_link_connection_timeout(true) // assume connection is lost at start up
+    QObject(parent)
 {
     linkConnectionTimer = new QTimer(this);
+    linkConnectionTimer->setSingleShot(true);
+
     connect(linkConnectionTimer,SIGNAL(timeout()),this, SLOT(connection_timeout()));
 
     mavlink_init();
-//    sethb_pulse(false);
 }
 
 void MavLinkManager::process_seriallink_data(QByteArray data)
@@ -23,7 +24,10 @@ void MavLinkManager::process_seriallink_data(QByteArray data)
         byte = data[position];
         decodeState = mavlink_parse_char(MAVLINK_COMM_0,byte, &message, &status);
 //        Q_UNUSED(decodeState);
-        if(decodeState) RestartLinkConnectionTimer(1000);
+        if(decodeState) {
+            RestartLinkConnectionTimer(1000);   // Connection OK, Restart the connection watchdog timer
+            setboard_connection_state(ONLINE);
+        }
 
         switch (message.msgid)
         {
@@ -31,8 +35,11 @@ void MavLinkManager::process_seriallink_data(QByteArray data)
             mavlink_heartbeat_t heartbeat;
             heartbeat.mavlink_version = 0;
             mavlink_msg_heartbeat_decode(&message,&heartbeat);
-            if(heartbeat.mavlink_version == MAVLINK_VERSION )
+            if(heartbeat.mavlink_version == MAVLINK_VERSION ){
                 sethb_pulse(true);
+                qDebug()<< "Received: HB";
+                setmsg_received("Received: HB \n");
+            }
             else
                 sethb_pulse(false);
 
@@ -44,6 +51,8 @@ void MavLinkManager::process_seriallink_data(QByteArray data)
             raw_imu.xgyro = mavlink_msg_raw_imu_get_xgyro(&message);
             raw_imu.ygyro = mavlink_msg_raw_imu_get_ygyro(&message);
             raw_imu.zgyro = mavlink_msg_raw_imu_get_zgyro(&message);
+            setmsg_received("Received: raw IMU Data \n");
+            qDebug()<< "Received: raw IMU Data";
             break;
         case MAVLINK_MSG_ID_ATTITUDE:
             attitude.roll = mavlink_msg_attitude_get_roll(&message);
@@ -52,6 +61,8 @@ void MavLinkManager::process_seriallink_data(QByteArray data)
             attitude_degree.pitch = attitude.pitch*180/PI;
             attitude.yaw = mavlink_msg_attitude_get_yaw(&message);
             attitude_degree.yaw = attitude.yaw*180/PI;
+            setmsg_received("Received:  Attitude Data\n");
+            qDebug()<< "Received:  Attitude Data";
 //            emit attitudeChanged(attitude_degree.pitch, attitude_degree.roll, attitude_degree.yaw);
             break;
         case MAVLINK_MSG_ID_PARAM_VALUE:
@@ -78,11 +89,15 @@ void MavLinkManager::process_seriallink_data(QByteArray data)
             sbus_chan_values.ch16 = mavlink_msg_sbus_chan_values_get_ch16(&message);
             sbus_chan_values.ch17 = mavlink_msg_sbus_chan_values_get_ch17(&message);
             sbus_chan_values.ch18 = mavlink_msg_sbus_chan_values_get_ch18(&message);
+            setmsg_received("Received: raw SBUS Data \n");
+            qDebug()<< "Received: raw SBUS Data";
 //            emit updateSbusValues();
             break;
 
         case MAVLINK_MSG_ID_ACC_CALIB_STATUS:
             acc_calib_sta.acc_calib_status = mavlink_msg_acc_calib_status_get_acc_calib_status(&message);
+            setmsg_received("Received:  Acc calib Data \n");
+            qDebug()<< "Received:  Acc calib Data";
             /*
             switch(acc_calib_sta.acc_calib_status)
             {
@@ -115,49 +130,32 @@ void MavLinkManager::process_seriallink_data(QByteArray data)
             */
         case MAVLINK_MSG_ID_GYRO_CALIB_STATUS:
             gyro_calib_sta.status = mavlink_msg_gyro_calib_status_get_status(&message);
-           /*
-            switch(gyro_calib_sta.status)
-            {
-                case GYRO_CALIB_FAIL:
-                    ui->gyro_calib_label->setText("Gyro calib failed!");
-                break;
-                case GYRO_CALIB_FINISH:
-                    ui->gyro_calib_label->setText("Gyro calib finished!");
-                break;
-            }
-            */
+            setmsg_received("Received: gyro calib Data\n");
+            qDebug()<< "Received: gyro calib Data";
             break;
         default:
             break;
         } // end of switch
     }
-//     read all params at the first time
-    /*
-    if(readParams == false){
-        readParamsOnBoard();
-        readParams = true;
-    }
-
-    if(ui->tabWidget->currentIndex() == 3){
-        chartTimer->start();
-        chartTimerStarted = true;
-    }
-    else{
-        chartTimer->stop();
-        chartTimerStarted = false;
-    }
-*/
 }
 
 void MavLinkManager::connection_timeout()
 {
-    m_link_connection_timeout = true;
+    setboard_connection_state(OFFLINE);
+    qDebug() << "Lost Connection";
+    RestartLinkConnectionTimer(1000);
 }
 
-void MavLinkManager::start_link_connection_timer()
+void MavLinkManager::link_connection_state_changed(bool connection_state)
 {
-    linkConnectionTimer->setInterval(5000);
-    linkConnectionTimer->setSingleShot(true);
+    isConnected = connection_state;
+    if(isConnected){
+        linkConnectionTimer->start(5000); // 5s for Controller send the 1st message
+    }
+    else {
+        linkConnectionTimer->stop();
+        setboard_connection_state(OFFLINE);
+    }
 }
 
 bool MavLinkManager::hb_pulse() const
@@ -172,9 +170,26 @@ void MavLinkManager::sethb_pulse(bool state)
 
 }
 
-bool MavLinkManager::link_connection_timeout() const
+bool MavLinkManager::board_connection_state() const
 {
-    return m_link_connection_timeout;
+    return m_board_connection_state;
+}
+
+void MavLinkManager::setboard_connection_state(bool _state)
+{
+    m_board_connection_state = _state;
+    emit board_connection_stateChanged(m_board_connection_state);
+}
+
+QString MavLinkManager::msg_received() const
+{
+    return m_msg_received;
+}
+
+void MavLinkManager::setmsg_received(QString msg_data)
+{
+    m_msg_received = msg_data;
+    emit msg_receivedChanged(m_msg_received);
 }
 
 void MavLinkManager::mavlink_init()
@@ -190,6 +205,6 @@ void MavLinkManager::mavlink_init()
 void MavLinkManager::RestartLinkConnectionTimer(int msec)
 {
     linkConnectionTimer->stop();
-    m_link_connection_timeout = false;
     linkConnectionTimer->start(msec);
+
 }

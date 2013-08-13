@@ -1,7 +1,7 @@
 import QtQuick 2.0
 
-import "Header"
-import "Communication"
+import "AppHeader"
+import "Comm"
 
 Rectangle {
     width: 1024

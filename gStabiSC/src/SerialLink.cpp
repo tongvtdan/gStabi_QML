@@ -143,7 +143,6 @@ QString SerialLink::getSerialPortMsg()
     qDebug()<< QString::fromUtf8(serial_data.data());
     emit mavlink_data_ready(serial_data);
     return QString::fromUtf8(serial_data.data());
-
 }
 
 void SerialLink::portPrepareToClose()

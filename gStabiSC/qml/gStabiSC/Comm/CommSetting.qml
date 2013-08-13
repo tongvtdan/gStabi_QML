@@ -10,6 +10,10 @@ Item{
     property alias selected_portname: portListBox.currentText
     property bool portUpdated: _serialLink.isPortListUpdated
     property bool showPortSetting: true
+    MouseArea{
+        anchors.fill: parent
+        onClicked: showPortSetting = !showPortSetting
+    }
 
     RowLayout{
         id: portRow
@@ -48,26 +52,31 @@ Item{
         }// comport Open/Close
         Button{
             id: refresshPorts
-            height: 30
+            width: 50
+            height: 25
             text: "Refresh"
             anchors.left: portOpenClose.right
             anchors.leftMargin: 10
             anchors.verticalCenter: parent.verticalCenter
             style: ButtonStyle{}
             onClicked: {
-                showPortSetting = !showPortSetting
                 getPortNameList()
             }
         }
     } // portRow
-    TextArea{
-        id: logTextArea
+    Label{
+        id: logText
         anchors.top: portRow.bottom
         anchors.topMargin: 10
         anchors.left: parent.left
         width: 300
         height: 150
+        color: "#ee1212"
+        text: mavlink_manager.msg_received
+        styleColor: "#0af9ea"
+        wrapMode: Text.WordWrap
     }
+
 
     //    } // communication GroupBox
     ListModel {

@@ -9,25 +9,12 @@ Item {
     width: 1024
     height: 30
     property bool portIsConnected: _serialLink.isConnected
-    property bool linkConnectionLost: _mavlink_manager.link_connection_timeout
+    property bool linkConnectionLost: _mavlink_manager.board_connection_state
     Label{
         id: systemStatus
-        text :{
-            if((portIsConnected) && (!linkConnectionLost)){
-                        return "System: Online"
-                    }
-            else{
-                return "System: Offline"
-            }
-        }
-        color : {
-            if((portIsConnected) && (!linkConnectionLost)){
-                        return "cyan"
-                    }
-            else{
-                return "red"
-            }
-        }
+        text : _mavlink_manager.board_connection_state ?  "System: Online" : "System: Offline"
+        color: _mavlink_manager.board_connection_state ? "cyan" :  "red"
+
         y:8
         style: Text.Raised
         verticalAlignment: Text.AlignVCenter
@@ -114,6 +101,7 @@ Item {
     }
     onPortIsConnectedChanged: {
         portConnectionChangeStateAnimation.start();
+
     }
     onLinkConnectionLostChanged:  {
         systemChangeStateAnimation.start();

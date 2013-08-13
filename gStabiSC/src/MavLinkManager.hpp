@@ -12,13 +12,15 @@
 
 
 #define TARGET_SYSTEM_ID 10
-
+#define ONLINE true
+#define OFFLINE false
 class MavLinkManager : public QObject
 {
     Q_OBJECT
     // interface with QML
     Q_PROPERTY(bool hb_pulse READ hb_pulse WRITE sethb_pulse NOTIFY hb_pulseChanged)
-    Q_PROPERTY(bool link_connection_timeout READ link_connection_timeout NOTIFY link_connection_timeoutChanged )
+    Q_PROPERTY(bool board_connection_state READ board_connection_state WRITE setboard_connection_state NOTIFY board_connection_stateChanged )
+    Q_PROPERTY(QString msg_received READ msg_received WRITE setmsg_received NOTIFY msg_receivedChanged)
 
 public:
     explicit MavLinkManager(QObject *parent = 0);
@@ -28,7 +30,11 @@ public:
     bool hb_pulse() const;
     void sethb_pulse(bool state);
 
-    bool link_connection_timeout() const;
+    bool board_connection_state() const;
+    void setboard_connection_state(bool _state);
+
+    QString msg_received() const;
+    void setmsg_received(QString msg_data);
     //[!]
     
 signals:
@@ -36,15 +42,15 @@ signals:
 
     //[!] Q_PROPERTY
     void hb_pulseChanged(bool);
-    void link_connection_timeoutChanged(bool);
-
+    void board_connection_stateChanged(bool);
+    void msg_receivedChanged(QString);
 
     //[!]
 public slots:
     void process_seriallink_data(QByteArray);
 
     void connection_timeout(); // trigger when lost connection
-    void start_link_connection_timer();
+    void link_connection_state_changed(bool connection_state);
 
 
 private:
@@ -75,9 +81,11 @@ private:
     gConfig_t oldParamConfig;
 //    [!] Q_PROPERTY
     bool m_hb_pulse;
-    bool m_link_connection_timeout;
+    bool m_board_connection_state;
+    QString m_msg_received;
 //    [1!
     QTimer *linkConnectionTimer; // this timer will monitor message on mavlink, if timer timeout, lost connection.
+    bool isConnected;
 
 };
 
