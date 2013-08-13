@@ -72,7 +72,7 @@ Item{
         width: 300
         height: 150
         color: "#ee1212"
-        text: mavlink_manager.msg_received
+        text: _mavlink_manager.msg_received
         styleColor: "#0af9ea"
         wrapMode: Text.WordWrap
     }

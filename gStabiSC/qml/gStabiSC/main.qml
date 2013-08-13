@@ -1,9 +1,11 @@
-import QtQuick 2.0
+import QtQuick 2.1
 
 import "AppHeader"
 import "Comm"
+import "Dashboard"
 
 Rectangle {
+    id: rectangle1
     width: 1024
     height: 700
     property int header_height: 30
@@ -24,5 +26,13 @@ Rectangle {
         anchors.top: header.bottom
         implicitHeight: 250
         implicitWidth: 300
+    }
+    Dashboard{
+//        width: 924
+//        height: 600
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        anchors.topMargin: 10
+
     }
 }
