@@ -2,7 +2,7 @@ import QtQuick 2.1
 
 import "AppHeader"
 import "Comm"
-import "Dashboard"
+import "GDashboard"
 
 Rectangle {
     id: rectangle1
@@ -27,12 +27,15 @@ Rectangle {
         implicitHeight: 250
         implicitWidth: 300
     }
-    Dashboard{
-//        width: 924
-//        height: 600
+    GDashBoard{
+        x: 211
+        y: 80
+        width: 600
+        height: 200
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
-        anchors.topMargin: 10
+        anchors.topMargin: 80
+
 
     }
 }
