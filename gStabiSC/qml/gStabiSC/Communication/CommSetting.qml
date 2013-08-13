@@ -17,11 +17,18 @@ Item{
         anchors.topMargin: 5
         RowLayout{
             id: portRow
+            anchors.left: parent.left
+            anchors.leftMargin: 0
             anchors.top: parent.top
             anchors.topMargin: 0
             Layout.fillWidth: parent
             ComboBox{
                 id: portListBox
+                width: 115
+                height: 30
+                anchors.left: parent.left
+                anchors.leftMargin: 0
+                anchors.verticalCenter: parent.verticalCenter
                 model: comportList
                 onCurrentTextChanged:{
                     _serialLink.update_comport_settings(currentText);
@@ -29,12 +36,19 @@ Item{
                 }
             }   // portlistBox
             Button{
+                id: portOpenClose
+                y: -25
+                width: 672
+                height: 30
                 text: { if(_serialLink.isConnected) {
                         return "Close"
                     } else {
                         return "Open"
                     }
                 }
+                anchors.left: portListBox.right
+                anchors.leftMargin: 0
+                anchors.verticalCenter: parent.verticalCenter
                 onClicked: {
                     _serialLink.open_close_comport()
                     if(_serialLink.isConnected){
@@ -48,7 +62,11 @@ Item{
             }// comport Open/Close
             Button{
                 id: refresshPorts
+                height: 30
                 text: "Refresh"
+                anchors.left: portOpenClose.right
+                anchors.leftMargin: 10
+                anchors.verticalCenter: parent.verticalCenter
                 onClicked: getPortNameList()
             }
 
