@@ -18,7 +18,7 @@ class MavLinkManager : public QObject
     Q_OBJECT
     // interface with QML
     Q_PROPERTY(bool hb_pulse READ hb_pulse WRITE sethb_pulse NOTIFY hb_pulseChanged)
-    Q_PROPERTY(bool link_connection_timeout READ link_connection_timeout )
+    Q_PROPERTY(bool link_connection_timeout READ link_connection_timeout NOTIFY link_connection_timeoutChanged )
 
 public:
     explicit MavLinkManager(QObject *parent = 0);
@@ -36,7 +36,7 @@ signals:
 
     //[!] Q_PROPERTY
     void hb_pulseChanged(bool);
-
+    void link_connection_timeoutChanged(bool);
 
 
     //[!]
