@@ -62,9 +62,12 @@ void SerialLink::open_close_comport()
 
 void SerialLink::update_comport_settings(QString portname_str)
 {
-    qDebug()<< "COM Port selected:" << portname_str;
+    if(serialport->isOpen()){
+        serialport->close();
+    }
+//    qDebug()<< "COM Port selected:" << portname_str;
     selected_port_name = portname_str;
-    qDebug()<< "Selected Port @Running: " << selected_port_name;
+    serialport->setPortName(selected_port_name);
 }
 
 void SerialLink::fillSerialPortInfo()
@@ -79,9 +82,9 @@ void SerialLink::fillSerialPortInfo()
             port_name_list << portInfo.portName;
        }
    }
-   selected_port_name = ports.at(ports.size()-1).portName;
-//   selected_port_name = port_name_list.at(0); // get the latest port
-   qDebug()<< "Selected Port @Start: " << selected_port_name;
+//   selected_port_name = ports.at(ports.size()-1).portName;
+   selected_port_name = port_name_list.at(0); // get the latest port
+//   qDebug()<< "Selected Port @Start: " << selected_port_name;
 }
 
 

@@ -25,10 +25,16 @@ Item{
                 model: comportList
                 onCurrentTextChanged:{
                     _serialLink.update_comport_settings(currentText);
+                    console.log(currentText);
                 }
             }   // portlistBox
             Button{
-                text: "Open"
+                text: { if(_serialLink.isConnected) {
+                        return "Close"
+                    } else {
+                        return "Open"
+                    }
+                }
                 onClicked: {
                     _serialLink.open_close_comport()
                     if(_serialLink.isConnected){
