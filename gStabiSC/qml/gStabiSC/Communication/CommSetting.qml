@@ -40,24 +40,19 @@ Item{
                 y: -25
                 width: 672
                 height: 30
-                text: { if(_serialLink.isConnected) {
-                        return "Close"
-                    } else {
-                        return "Open"
-                    }
-                }
+                text: _serialLink.isConnected? "Close" : "Open"
                 anchors.left: portListBox.right
                 anchors.leftMargin: 0
                 anchors.verticalCenter: parent.verticalCenter
                 onClicked: {
                     _serialLink.open_close_comport()
-                    if(_serialLink.isConnected){
-                        text = "Close"
-                        consoleLog.text += "Port Opened \n"
-                    } else{
-                        text = "Open"
-                        consoleLog.text += "Port Closed \n"
-                    }
+//                    if(_serialLink.isConnected){
+//                        text = "Close"
+//                        consoleLog.text += "Port Opened \n"
+//                    } else{
+//                        text = "Open"
+//                        consoleLog.text += "Port Closed \n"
+//                    }
                 }
             }// comport Open/Close
             Button{

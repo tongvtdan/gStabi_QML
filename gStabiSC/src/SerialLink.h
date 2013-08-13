@@ -55,6 +55,7 @@ public:
 
 public slots:
     QString getSerialPortMsg();
+    void portPrepareToClose();
 
 signals:
     void mavlink_data_ready(QByteArray data);

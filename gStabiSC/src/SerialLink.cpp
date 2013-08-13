@@ -18,6 +18,7 @@ SerialLink::SerialLink(QObject *parent) :
     updatePortStatus(false);
 
     connect(serialport, SIGNAL(readyRead()),this, SLOT(getSerialPortMsg()));
+    connect(serialport, SIGNAL(aboutToClose()), this, SLOT(portPrepareToClose()));
     connect(enumerator, SIGNAL(deviceDiscovered(QextPortInfo)), SLOT(PortAddedRemoved()));
     connect(enumerator, SIGNAL(deviceRemoved(QextPortInfo)), SLOT(PortAddedRemoved()));    
 
@@ -44,11 +45,7 @@ void SerialLink::open_close_comport()
 {
     if(serialport->isOpen())
     {
-        serialport->setRts(0);
-        serialport->setDtr(0);
-        serialport->setDtr(1);
         serialport->close();
-
     }
     else
     {
@@ -136,4 +133,11 @@ QString SerialLink::getSerialPortMsg()
     emit mavlink_data_ready(serial_data);
     return QString::fromUtf8(serial_data.data());
 
+}
+
+void SerialLink::portPrepareToClose()
+{
+    serialport->setRts(0);
+    serialport->setDtr(0);
+    serialport->setDtr(1);
 }
