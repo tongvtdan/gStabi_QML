@@ -21,6 +21,10 @@ class MavLinkManager : public QObject
     Q_PROPERTY(bool hb_pulse READ hb_pulse WRITE sethb_pulse NOTIFY hb_pulseChanged)
     Q_PROPERTY(bool board_connection_state READ board_connection_state WRITE setboard_connection_state NOTIFY board_connection_stateChanged )
     Q_PROPERTY(QString msg_received READ msg_received WRITE setmsg_received NOTIFY msg_receivedChanged)
+    // IMU data
+    Q_PROPERTY(float roll_angle READ roll_angle WRITE setroll_angle NOTIFY roll_angleChanged)
+    Q_PROPERTY(float tilt_angle READ tilt_angle WRITE settilt_angle NOTIFY tilt_angleChanged)
+    Q_PROPERTY(float yaw_angle READ yaw_angle WRITE setyaw_angle NOTIFY yaw_angleChanged)
 
 public:
     explicit MavLinkManager(QObject *parent = 0);
@@ -35,6 +39,17 @@ public:
 
     QString msg_received() const;
     void setmsg_received(QString msg_data);
+
+    // IMU data
+    float roll_angle() const;
+    void setroll_angle(float _angle);
+
+    float tilt_angle() const;
+    void settilt_angle(float _angle);
+
+    float yaw_angle() const;
+    void setyaw_angle(float _angle);
+
     //[!]
     
 signals:
@@ -44,6 +59,10 @@ signals:
     void hb_pulseChanged(bool);
     void board_connection_stateChanged(bool);
     void msg_receivedChanged(QString);
+    // IMU data
+    void roll_angleChanged(float);
+    void tilt_angleChanged(float);
+    void yaw_angleChanged(float);
 
     //[!]
 public slots:
@@ -83,6 +102,10 @@ private:
     bool m_hb_pulse;
     bool m_board_connection_state;
     QString m_msg_received;
+    // IMU data
+    float m_roll_angle, m_tilt_angle, m_yaw_angle;
+
+
 //    [1!
     QTimer *linkConnectionTimer; // this timer will monitor message on mavlink, if timer timeout, lost connection.
     bool isConnected;

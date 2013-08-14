@@ -57,10 +57,15 @@ void MavLinkManager::process_seriallink_data(QByteArray data)
         case MAVLINK_MSG_ID_ATTITUDE:
             attitude.roll = mavlink_msg_attitude_get_roll(&message);
             attitude_degree.roll = attitude.roll*180/PI;     // convert to deg
+            setroll_angle(attitude_degree.roll);
+
             attitude.pitch = mavlink_msg_attitude_get_pitch(&message);
             attitude_degree.pitch = attitude.pitch*180/PI;
+            settilt_angle(attitude_degree.pitch);
+
             attitude.yaw = mavlink_msg_attitude_get_yaw(&message);
             attitude_degree.yaw = attitude.yaw*180/PI;
+            setyaw_angle(attitude_degree.yaw);
             setmsg_received("Received:  Attitude Data\n");
             qDebug()<< "Received:  Attitude Data";
 //            emit attitudeChanged(attitude_degree.pitch, attitude_degree.roll, attitude_degree.yaw);
@@ -190,6 +195,39 @@ void MavLinkManager::setmsg_received(QString msg_data)
 {
     m_msg_received = msg_data;
     emit msg_receivedChanged(m_msg_received);
+}
+
+float MavLinkManager::roll_angle() const
+{
+    return m_roll_angle;
+}
+
+void MavLinkManager::setroll_angle(float _angle)
+{
+    m_roll_angle = _angle;
+    emit roll_angleChanged(m_roll_angle);
+}
+
+float MavLinkManager::tilt_angle() const
+{
+    return m_tilt_angle;
+}
+
+void MavLinkManager::settilt_angle(float _angle)
+{
+    m_tilt_angle = _angle;
+    emit tilt_angleChanged(m_tilt_angle);
+}
+
+float MavLinkManager::yaw_angle() const
+{
+    return m_yaw_angle;
+}
+
+void MavLinkManager::setyaw_angle(float _angle)
+{
+    m_yaw_angle = _angle;
+    emit yaw_angleChanged(m_yaw_angle);
 }
 
 void MavLinkManager::mavlink_init()
