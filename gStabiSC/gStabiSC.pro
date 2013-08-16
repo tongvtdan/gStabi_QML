@@ -42,3 +42,6 @@ HEADERS += \
     src/SerialLink.h \
     src/MavLinkManager.hpp \
     src/gLinkManager.h
+
+RESOURCES += \
+    gStabiSC.qrc

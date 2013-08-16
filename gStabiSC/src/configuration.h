@@ -5,8 +5,8 @@
 
 #define APPLICATION_NAME "gStabi"
 #define APPLICATION_VERSION "V.1.0.1(beta rc1)"
-#define APPLICATION_WIDTH 1024
-#define APPLICATION_HEIGHT 700
+#define APPLICATION_WIDTH 1200
+#define APPLICATION_HEIGHT 720
 
 class Configuration : public QObject
 {

@@ -15,7 +15,7 @@ Item{
         onClicked: showPortSetting = !showPortSetting
     }
 
-    RowLayout{
+    ColumnLayout{
         id: portRow
         anchors.left: parent.left
         anchors.leftMargin: 0
@@ -26,9 +26,9 @@ Item{
             id: portListBox
             width: 115
             height: 30
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            anchors.verticalCenter: parent.verticalCenter
+//            anchors.left: parent.left
+//            anchors.leftMargin: 0
+//            anchors.verticalCenter: parent.verticalCenter
             model: comportList
             style: ComboBoxStyle {}
             onCurrentTextChanged:{
@@ -42,9 +42,9 @@ Item{
             width: 672
             height: 30
             text: _serialLink.isConnected? "Close" : "Open"
-            anchors.left: portListBox.right
-            anchors.leftMargin: 0
-            anchors.verticalCenter: parent.verticalCenter
+//            anchors.left: portListBox.right
+//            anchors.leftMargin: 0
+//            anchors.verticalCenter: parent.verticalCenter
             style: ButtonStyle{}
             onClicked: {
                 _serialLink.open_close_comport()
@@ -55,9 +55,10 @@ Item{
             width: 50
             height: 25
             text: "Refresh"
-            anchors.left: portOpenClose.right
-            anchors.leftMargin: 10
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.top: portOpenClose.bottom
+            anchors.topMargin: 10
+            anchors.left: parent.left
+            anchors.leftMargin: 0
             style: ButtonStyle{}
             onClicked: {
                 getPortNameList()
@@ -68,11 +69,13 @@ Item{
         id: logText
         anchors.top: portRow.bottom
         anchors.topMargin: 10
-        anchors.left: parent.left
-        width: 300
+//        anchors.left: parent.left
+        width: 197
         height: 150
         color: "#ee1212"
         text: _mavlink_manager.msg_received
+        anchors.left: parent.left
+        anchors.leftMargin: 0
         styleColor: "#0af9ea"
         wrapMode: Text.WordWrap
     }
