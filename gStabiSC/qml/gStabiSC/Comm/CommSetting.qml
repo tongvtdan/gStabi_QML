@@ -70,7 +70,7 @@ Item{
         anchors.top: portRow.bottom
         anchors.topMargin: 10
 //        anchors.left: parent.left
-        width: 197
+        width: 222
         height: 150
         color: "#ee1212"
         text: _mavlink_manager.msg_received
