@@ -1,7 +1,7 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.0
-import QtQuick.Layouts 1.0
-import QtQuick.Controls.Styles 1.0
+//import QtQuick.Layouts 1.0
+//import QtQuick.Controls.Styles 1.0
 
 
 Item {
@@ -14,8 +14,19 @@ Item {
     property int hideY: -25
     Image {
         id: headerImage
-        source: "images/header.png"
+        source: "qrc:/images/qml/gStabiSC/AppHeader/images/header.png"
     }
+    AnimatedImage{
+        width: 25
+        height: 25
+        anchors.right: systemStatus.left
+        anchors.rightMargin: 10
+        anchors.verticalCenter: parent.verticalCenter
+        id: waitingForConnection
+        visible: false
+        source: "qrc:/images/qml/gStabiSC/images/loading_01.gif"
+    }
+
     Label{
         id: systemStatus
         horizontalAlignment: Text.AlignHCenter
@@ -28,8 +39,8 @@ Item {
         verticalAlignment: Text.AlignVCenter
         font.pointSize: 10
         color: _mavlink_manager.board_connection_state ? "cyan" :  "red"
-//        text : _mavlink_manager.board_connection_state ?  "SYSTEM: ONLINE" : "SYSTEM: OFFLINE"
-        text: "SYSTEM: OFFLINE"
+        text : _mavlink_manager.board_connection_state ?  "SYSTEM: ONLINE" : "SYSTEM: OFFLINE"
+//        text: "SYSTEM: OFFLINE"
 
 
     }
@@ -104,10 +115,12 @@ Item {
             easing.type:  Easing.Bezier
             from: hideY ; to: showY; duration: 250
         }
+        onStarted: waitingForConnection.visible = true
     }
     SequentialAnimation{
         id: systemChangeStateAnimation
         running: true
+
         NumberAnimation{
             target: systemStatus
             property: "y"
@@ -120,6 +133,8 @@ Item {
             easing.type:  Easing.Bezier
             from: hideY ; to: showY; duration: 250
         }
+
+        onStopped: waitingForConnection.visible = false
     }
     onPortIsConnectedChanged: {
         portConnectionChangeStateAnimation.start();

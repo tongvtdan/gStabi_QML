@@ -54,12 +54,23 @@ Item{
             id: refresshPorts
             width: 50
             height: 25
-            text: "Refresh"
+//            text: "Refresh"
             anchors.top: portOpenClose.bottom
             anchors.topMargin: 10
             anchors.left: parent.left
             anchors.leftMargin: 0
-            style: ButtonStyle{}
+            style: ButtonStyle{
+                background: BorderImage {
+                    source: control.pressed ? "qrc:/images/qml/gStabiSC/images/buttons/good_button_active.png" : "qrc:/images/qml/gStabiSC/images/buttons/good_button_inactive.png"
+                    border.left: 4 ; border.right: 4 ; border.top: 4 ; border.bottom: 4
+                }
+                label: Text{
+                    color: "white"
+                    text: "Refresh"
+                    anchors.centerIn: control.center
+                }
+            }
+
             onClicked: {
                 getPortNameList()
             }
