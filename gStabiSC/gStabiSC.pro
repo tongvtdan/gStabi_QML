@@ -35,7 +35,8 @@ include(thirdParty/qextserialport/src/qextserialport.pri)
 OTHER_FILES += \
     qml/gStabiSC/Header/AppHeader.qml \
     qml/gStabiSC/Communication/CommSetting.qml \
-    qml/gStabiSC/GDashboard/GDashBoard.qml
+    qml/gStabiSC/GDashboard/GDashBoard.qml \
+    qml/gStabiSC/GDashboard/MegaDash.qml
 
 HEADERS += \
     src/configuration.h \
