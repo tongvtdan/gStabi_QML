@@ -30,7 +30,8 @@ Rectangle {
         id: comportSettingPanel
         anchors.top: header.bottom
         anchors.left: gstabiBackgroundImage.left
-        implicitHeight: 250
+        anchors.leftMargin: 10
+        implicitHeight: 200
         implicitWidth: 300
     }
     GDashBoard{
