@@ -39,7 +39,7 @@ Item{
         style: ComboBoxStyle {
             background: BorderImage {
                 source: control.pressed ? "qrc:/images/qml/gStabiSC/images/dropdownlist/selected_dropdownlist.png" : "qrc:/images/qml/gStabiSC/images/dropdownlist/deselected_dropdownlist.png"
-                border.left: 6 ; border.right: 6 ; border.top: 6 ; border.bottom: 6
+//                border.left: 6 ; border.right: 6 ; border.top: 6 ; border.bottom: 6
             }
         }
         //             comboBoxStyle

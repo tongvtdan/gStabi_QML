@@ -109,6 +109,7 @@ private:
 //    [1!
     QTimer *linkConnectionTimer; // this timer will monitor message on mavlink, if timer timeout, lost connection.
     bool isConnected;
+    QString system_msg_log;             // system log message
 
 };
 

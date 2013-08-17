@@ -35,13 +35,13 @@ Rectangle {
         implicitWidth: 300
     }
     GDashBoard{
-//        x: 211
-//        y: 80
         width: 700
         height: 250
-        anchors.horizontalCenter: gstabiBackgroundImage.horizontalCenter
         anchors.top: parent.top
-        anchors.topMargin: 80
+        anchors.topMargin: 40
+        anchors.right:  gstabiBackgroundImage.right
+        anchors.rightMargin: 20
+
     }
 
 }

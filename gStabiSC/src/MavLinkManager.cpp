@@ -10,6 +10,7 @@ MavLinkManager::MavLinkManager(QObject *parent) :
     connect(linkConnectionTimer,SIGNAL(timeout()),this, SLOT(connection_timeout()));
 
     mavlink_init();
+    system_msg_log = "";
 }
 
 void MavLinkManager::process_seriallink_data(QByteArray data)
@@ -39,6 +40,7 @@ void MavLinkManager::process_seriallink_data(QByteArray data)
                 sethb_pulse(true);
                 qDebug()<< "Received: HB";
                 setmsg_received("Received: HB \n");
+                system_msg_log.append("Received: HB \n");
             }
             else
                 sethb_pulse(false);
@@ -52,6 +54,7 @@ void MavLinkManager::process_seriallink_data(QByteArray data)
             raw_imu.ygyro = mavlink_msg_raw_imu_get_ygyro(&message);
             raw_imu.zgyro = mavlink_msg_raw_imu_get_zgyro(&message);
             setmsg_received("Received: raw IMU Data \n");
+            system_msg_log.append("Received: raw IMU Data \n");
             qDebug()<< "Received: raw IMU Data";
             break;
         case MAVLINK_MSG_ID_ATTITUDE:
@@ -188,7 +191,8 @@ void MavLinkManager::setboard_connection_state(bool _state)
 
 QString MavLinkManager::msg_received() const
 {
-    return m_msg_received;
+//    return m_msg_received;
+    return system_msg_log;
 }
 
 void MavLinkManager::setmsg_received(QString msg_data)
