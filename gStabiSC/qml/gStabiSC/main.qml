@@ -5,7 +5,7 @@ import QtQuick.Controls.Styles 1.0
 import "AppHeader"
 import "Comm"
 import "GDashboard"
-import "Dashboard"
+//import "Dashboard"
 
 Rectangle {
     id: rectangle1
@@ -55,12 +55,16 @@ Rectangle {
     }
     CommSetting{
         id: comportSettingPanel
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
-        visible: false
+        x: 500
+        y: 400
+        opacity: 0
+        scale: 0.0
+        state: "hide"
         implicitHeight: 200
         implicitWidth: 300
     }
+
+
     Button{
         id: openSerialSettingButton
         text: "Port"
@@ -95,9 +99,7 @@ Rectangle {
             }
         }
 
-        onClicked: {
-            comportSettingPanel.visible = true
-        }
+        onClicked: comportSettingPanel.state == "hide"? comportSettingPanel.state = "show" : comportSettingPanel.state = "hide"
     }// comport Open/Close
 
 }

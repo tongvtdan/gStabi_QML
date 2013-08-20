@@ -170,28 +170,35 @@ Item{
     states:[
         State {
             name: "show"
-            when: (showPortSetting == true)
-            PropertyChanges {
-                target: comportSettings
-                x: 0
+            PropertyChanges {target: comportSettings; scale: 1.0; opacity: 1; }
 
-            }
         }
         ,State {
             name: "hide"
-            when: (showPortSetting == false)
-            PropertyChanges {
-                target: comportSettings
-                x: -200
-            }
+            PropertyChanges {target: comportSettings; scale: 0.0 ; opacity: 0; }
         }
 
     ]
-    transitions: Transition {
-        PropertyAnimation{
-            properties: "x"
-            easing.type: Easing.Bezier
-        }
-    }
+    transitions: [ Transition {
+            from: "show"
+            to:   "hide"
+            NumberAnimation{ target: comportSettings; properties: "scale"; from: 1.0; to: 0; duration: 1000}
+            NumberAnimation { target: comportSettings; property: "opacity"; duration: 200; easing.type: Easing.InOutQuad }
 
+        },
+        Transition{
+            from: "hide"
+            to: "show"
+            NumberAnimation { target: comportSettings; properties: "scale" ; from: 0; to: 1.0; duration: 1000}
+            NumberAnimation { target: comportSettings; property: "opacity"; duration: 200; easing.type: Easing.InOutQuad }
+        }
+    ]
+    MouseArea{
+        width: parent.width
+        height: 30
+        anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
+        drag.target: parent
+
+    }
 }

@@ -2,7 +2,8 @@
 #include "qtquick2applicationviewer.h"
 
 #include <QQmlContext> // for setContextProperty
-
+//#include <QUrl>
+//#include <QtQuick>
 
 #include "configuration.h"
 #include "SerialLink.h"
@@ -14,7 +15,10 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     QtQuick2ApplicationViewer viewer;
-    viewer.setMainQmlFile(QStringLiteral("qml/gStabiSC/main.qml"));
+//    QQuickView viewer;
+//    viewer.setMainQmlFile(QStringLiteral("qrc:/qml/gStabiSC/main.qml"));
+    viewer.setSource(QUrl("qrc:/qml/gStabiSC/main.qml"));
+    viewer.addImportPath("qrc:/qml/gStabiSC");
 
     viewer.setTitle(QString("%1 %2").arg(APPLICATION_NAME).arg(APPLICATION_VERSION));
     viewer.setMinimumSize(QSize(APPLICATION_WIDTH,APPLICATION_HEIGHT));
@@ -31,7 +35,7 @@ int main(int argc, char *argv[])
     LinkManager m_gLinkManager;
     m_gLinkManager.connectLink(&m_serialLink,&m_mavlink_manager);
 
-    viewer.showExpanded();
+    viewer.show();
 
     return app.exec();
 }
