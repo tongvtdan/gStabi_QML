@@ -46,3 +46,7 @@ HEADERS += \
 
 RESOURCES += \
     gStabiSC.qrc
+
+#ICON = resources/icon64.png
+#macx: ICON = resources/icon.icns
+win32: RC_FILE = resources/appicon.rc

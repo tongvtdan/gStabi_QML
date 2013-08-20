@@ -12,6 +12,7 @@ Item {
     property bool linkConnectionLost: _mavlink_manager.board_connection_state
     property int showY: 4
     property int hideY: -25
+    /*
     Image {
         id: headerImage
         source: "qrc:/images/qml/gStabiSC/AppHeader/images/header.png"
@@ -41,9 +42,9 @@ Item {
         color: _mavlink_manager.board_connection_state ? "cyan" :  "red"
         text : _mavlink_manager.board_connection_state ?  "SYSTEM: ONLINE" : "SYSTEM: OFFLINE"
 //        text: "SYSTEM: OFFLINE"
-
-
     }
+    */
+
     Label{
         id: applicationName
         color: "cyan"
@@ -55,14 +56,14 @@ Item {
         horizontalAlignment: Text.AlignLeft
         style: Text.Raised
         verticalAlignment: Text.AlignVCenter
-        font.pointSize: 10
+        font.pointSize: 20
         anchors.verticalCenter: parent.verticalCenter
         anchors.centerIn: parent.Center
-        text: m_configuration.application_name() + " " + m_configuration.application_version()
-//        text: "gStabiSC v. 1.0.0 (alpha-01)"
+//        text: m_configuration.application_name() + " " + m_configuration.application_version()
+        text: "gStabiSC v. 1.0.0 (alpha-01)"
 
     }
-
+/*
     Label{
         id: comportInfo
         height: 17
@@ -100,6 +101,7 @@ Item {
 //        text: "Disconnected"
 
     }
+
     SequentialAnimation{
         id: portConnectionChangeStateAnimation
         running: true
@@ -144,4 +146,5 @@ Item {
         systemChangeStateAnimation.start();
 
     }
+    */
 }

@@ -80,7 +80,7 @@ Item{
             }
         }
         onClicked: {
-            getPortNameList()
+            comportSettings.visible = false
         }
     } // refresh Button
     Button{
