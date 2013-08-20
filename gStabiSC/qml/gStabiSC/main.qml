@@ -3,6 +3,7 @@ import QtQuick 2.1
 import "AppHeader"
 import "Comm"
 import "GDashboard"
+import "Dashboard"
 
 Rectangle {
     id: rectangle1
@@ -12,8 +13,8 @@ Rectangle {
     color: "#242424"
     BorderImage {
         id: gstabiBackgroundImage
-//        width: 1024
-//        height: 700
+        width: 1024
+        height: 700
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
 
@@ -34,14 +35,14 @@ Rectangle {
         implicitHeight: 200
         implicitWidth: 300
     }
-    GDashBoard{
-        width: 700
-        height: 250
-        anchors.top: parent.top
+
+    GMegaDash{
+        anchors.top: gstabiBackgroundImage.top
         anchors.topMargin: 40
         anchors.right:  gstabiBackgroundImage.right
         anchors.rightMargin: 20
 
     }
+
 
 }

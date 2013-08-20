@@ -1,12 +1,22 @@
-import QtQuick 2.0
+import QtQuick 2.1
+import QtQuick.Controls 1.0
 
 Item {
-    id: dashboardRoot
+    id: dashboardControRoot
 
     width: 700
     height: 250
+    Label{
+        x: 173
+        y: 0
+        text: "Control"
+        font.pixelSize: 16
+        font.family: "Segoe UI Symbol"
+        horizontalAlignment: Text.AlignHCenter
+    }
+
     Item{
-        id: tilt_gauge
+        id: tilt_control_gauge
 
         width: 200
         height: 200
@@ -15,13 +25,13 @@ Item {
         anchors.top: parent.top
         anchors.topMargin: 20
         Image {
-            id: tilt_back
+            id: tilt_control_back
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             source: "qrc:/images/qml/gStabiSC/images/gauges/back_tilt_gauge.png"
         }
         Image {
-            id: tilt_needle
+            id: tilt_control_needle
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             source: "qrc:/images/qml/gStabiSC/images/gauges/needle_tilt_gauge.png"
@@ -49,7 +59,7 @@ Item {
 
 //    Roll
     Item{
-        id: roll_gauge
+        id: roll_control_gauge
         width: 200
         height: 200
         anchors.top: parent.top
@@ -57,13 +67,13 @@ Item {
         anchors.right : parent.right
         anchors.rightMargin: 44
         Image {
-            id: roll_back
+            id: roll_control_back
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             source: "qrc:/images/qml/gStabiSC/images/gauges/back_roll_gauge.png"
         }
         Image {
-            id: roll_needle
+            id: roll_control_needle
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             source: "qrc:/images/qml/gStabiSC/images/gauges/needle_roll_gauge.png"
@@ -84,21 +94,21 @@ Item {
             text: ""+ _mavlink_manager.roll_angle.toFixed(1);
         }
     }
-    // yaw
+    // roll_control
     Item{
-        id:yaw_gauge
+        id:pan_control_gauge
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
         width: 200
         height: 200
         Image {
-            id: yaw_back
+            id: pan_control_back
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             source: "qrc:/images/qml/gStabiSC/images/gauges/back_pan_gauge.png"
         }
         Image {
-            id: yaw_needle
+            id: pan_control_needle
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             source: "qrc:/images/qml/gStabiSC/images/gauges/needle_pan_gauge.png"

@@ -36,7 +36,7 @@ OTHER_FILES += \
     qml/gStabiSC/Header/AppHeader.qml \
     qml/gStabiSC/Communication/CommSetting.qml \
     qml/gStabiSC/GDashboard/GDashBoard.qml \
-    qml/gStabiSC/GDashboard/MegaDash.qml
+    qml/gStabiSC/GDashboard/GMegaDash.qml
 
 HEADERS += \
     src/configuration.h \
