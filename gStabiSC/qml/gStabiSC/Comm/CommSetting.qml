@@ -196,8 +196,6 @@ Item{
             to:   "hide"
             NumberAnimation{ target: comportSettings; properties: "scale"; from: 1.0; to: 0.5; duration: 500}
             NumberAnimation { target: comportSettings; property: "opacity"; duration: 200; easing.type: Easing.InOutQuad }
-            NumberAnimation { target: comportSettings; property: "x,y"; duration: 200; easing.type: Easing.InOutQuad }
-
         },
         Transition{
             from: "hide"
@@ -215,5 +213,10 @@ Item{
         onDoubleClicked: comportSettings.state == "hide"? comportSettings.state = "show" : comportSettings.state = "hide"
 
 
+    }
+    onStateChanged: {
+        if(state == "show"){
+            getPortNameList()
+        }
     }
 }

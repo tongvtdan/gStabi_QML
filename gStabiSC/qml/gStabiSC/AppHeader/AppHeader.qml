@@ -47,7 +47,7 @@ Item {
 
     Label{
         id: applicationName
-        color: "white"
+        color: "#00ffff"
         anchors.left: header.left
         anchors.leftMargin: 10
         anchors.verticalCenterOffset: 0
