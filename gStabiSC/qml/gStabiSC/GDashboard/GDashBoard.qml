@@ -60,13 +60,13 @@ Item {
             id: roll_back
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            source: "qrc:/images/qml/gStabiSC/images/gauges/back_roll_gauge.png"
+            source: "qrc:/images/qml/gStabiSC/GDashboard/images/gStabiUI_3.2_back_roll.png"
         }
         Image {
             id: roll_needle
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            source: "qrc:/images/qml/gStabiSC/images/gauges/needle_roll_gauge.png"
+            source: "qrc:/images/qml/gStabiSC/GDashboard/images/gStabiUI_3.2_arrows_roll.png"
             rotation: _mavlink_manager.roll_angle
         }
         Text{
@@ -74,10 +74,10 @@ Item {
             height: 13
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
-            style: Text.Raised
-            color: "white"
+//            style: Text.Raised
+            color: "#00ffff"
             font.pixelSize: 24
-            font.family: "Segoe UI Symbol"
+//            font.family: "Segoe UI Symbol"
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             font.bold: true

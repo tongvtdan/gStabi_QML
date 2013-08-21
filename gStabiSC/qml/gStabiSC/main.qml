@@ -50,15 +50,15 @@ Rectangle {
         anchors.leftMargin: 5
         anchors.verticalCenter: parent.verticalCenter
         source: "qrc:/images/qml/gStabiSC/images/animation.gif"
-//        playing: true
+        paused: true
 
     }
     CommSetting{
         id: comportSettingPanel
         x: 500
         y: 400
-        opacity: 0
-        scale: 0.0
+        opacity: 1
+        scale: 0.5
         state: "hide"
         implicitHeight: 200
         implicitWidth: 300
@@ -99,7 +99,7 @@ Rectangle {
             }
         }
 
-        onClicked: comportSettingPanel.state == "hide"? comportSettingPanel.state = "show" : comportSettingPanel.state = "hide"
+        onClicked: comportSettingPanel.visible == true ? comportSettingPanel.visible = false : comportSettingPanel.visible = true
     }// comport Open/Close
 
 }

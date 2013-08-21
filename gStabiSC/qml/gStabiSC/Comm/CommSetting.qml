@@ -15,7 +15,7 @@ Item{
     property int anchor_leftMargin  : 10
     property int anchor_rightMargin : 10
 
-    implicitHeight: 200
+    implicitHeight: 150
     implicitWidth: 300
     //    MouseArea{
     //        anchors.fill: parent
@@ -23,18 +23,30 @@ Item{
     //    }
     BorderImage {
         id: commBorderImage
-        source: "qrc:/images/qml/gStabiSC/images/comport_dialog.png"
+        source: "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_serial_setting_dialog.png"
         width: 300; height: 200
 //        anchors.fill: parent
         border.left: 5; border.top: 5
         border.right: 5; border.bottom: 5
     }
+    Text {
+        font.family: "Ubuntu"
+        font.bold: true
+        color: "cyan"
+        text: "Serial Ports"
+        font.pixelSize: 12
+        anchors.top: parent.top
+        anchors.topMargin: 10
+        anchors.left: parent.left
+        anchors.leftMargin: 20
+    }
+
     ComboBox{
         id: portListBox
         anchors.left: parent.left
         anchors.leftMargin: anchor_leftMargin
         anchors.top: parent.top
-        anchors.topMargin: anchor_topMargin
+        anchors.topMargin: anchor_topMargin+20
         model: comportList
         style: ComboBoxStyle {
             background: BorderImage {
@@ -80,7 +92,7 @@ Item{
             }
         }
         onClicked: {
-            comportSettings.visible = false
+//            comportSettings.visible = false
         }
     } // refresh Button
     Button{
@@ -121,25 +133,25 @@ Item{
         }
     }// comport Open/Close
 
-    Image{
-        id: terminalLogImage
-        width: 280
-        height: 130
-        source: "qrc:/images/qml/gStabiSC/images/terminal_log.png"
-        anchors.horizontalCenter: commBorderImage.horizontalCenter
-        anchors.bottom: commBorderImage.bottom
-        anchors.bottomMargin: anchor_bottomMargin
-    }
+//    Image{
+//        id: terminalLogImage
+//        width: 280
+//        height: 130
+//        source: "qrc:/images/qml/gStabiSC/images/terminal_log.png"
+//        anchors.horizontalCenter: commBorderImage.horizontalCenter
+//        anchors.bottom: commBorderImage.bottom
+//        anchors.bottomMargin: anchor_bottomMargin
+//    }
 
-    TextArea{
-        id: logText
-        backgroundVisible: false
-        readOnly: true
-        anchors.fill: terminalLogImage
-        wrapMode: Text.WordWrap
-//        text: _mavlink_manager.msg_received
-        text: " This is a sample text"
-    }
+//    TextArea{
+//        id: logText
+//        backgroundVisible: false
+//        readOnly: true
+//        anchors.fill: terminalLogImage
+//        wrapMode: Text.WordWrap
+////        text: _mavlink_manager.msg_received
+//        text: " This is a sample text"
+//    }
 
     //    } // communication GroupBox
     ListModel {
@@ -175,21 +187,22 @@ Item{
         }
         ,State {
             name: "hide"
-            PropertyChanges {target: comportSettings; scale: 0.0 ; opacity: 0; }
+            PropertyChanges {target: comportSettings; scale: 0.5 ; opacity: 0.5; }
         }
 
     ]
     transitions: [ Transition {
             from: "show"
             to:   "hide"
-            NumberAnimation{ target: comportSettings; properties: "scale"; from: 1.0; to: 0; duration: 1000}
+            NumberAnimation{ target: comportSettings; properties: "scale"; from: 1.0; to: 0.5; duration: 500}
             NumberAnimation { target: comportSettings; property: "opacity"; duration: 200; easing.type: Easing.InOutQuad }
+            NumberAnimation { target: comportSettings; property: "x,y"; duration: 200; easing.type: Easing.InOutQuad }
 
         },
         Transition{
             from: "hide"
             to: "show"
-            NumberAnimation { target: comportSettings; properties: "scale" ; from: 0; to: 1.0; duration: 1000}
+            NumberAnimation { target: comportSettings; properties: "scale" ; from: 0.5; to: 1.0; duration: 500}
             NumberAnimation { target: comportSettings; property: "opacity"; duration: 200; easing.type: Easing.InOutQuad }
         }
     ]
@@ -199,6 +212,8 @@ Item{
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
         drag.target: parent
+        onDoubleClicked: comportSettings.state == "hide"? comportSettings.state = "show" : comportSettings.state = "hide"
+
 
     }
 }

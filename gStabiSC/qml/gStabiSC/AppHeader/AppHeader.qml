@@ -47,20 +47,19 @@ Item {
 
     Label{
         id: applicationName
-        color: "cyan"
+        color: "white"
         anchors.left: header.left
         anchors.leftMargin: 10
         anchors.verticalCenterOffset: 0
         font.bold: true
-        font.family: "Segoe UI Symbol"
+        font.family: "Ubuntu"
         horizontalAlignment: Text.AlignLeft
-        style: Text.Raised
         verticalAlignment: Text.AlignVCenter
         font.pointSize: 20
         anchors.verticalCenter: parent.verticalCenter
         anchors.centerIn: parent.Center
-//        text: m_configuration.application_name() + " " + m_configuration.application_version()
-        text: "gStabiSC v. 1.0.0 (alpha-01)"
+        text: m_configuration.application_name() + " " + m_configuration.application_version()
+//        text: "gStabiSC v. 1.0.0 (alpha-01)"
 
     }
 /*
