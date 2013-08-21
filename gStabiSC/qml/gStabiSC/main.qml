@@ -33,7 +33,7 @@ Rectangle {
     }
 
 
-    GMegaDash{
+    GDashBoard{
         x: -512
         y: -310
         anchors.top: gstabiBackgroundImage.top
