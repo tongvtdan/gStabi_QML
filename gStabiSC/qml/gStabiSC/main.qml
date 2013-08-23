@@ -72,13 +72,11 @@ Rectangle {
         x: gstabiBackgroundImage.x + gstabiBackgroundImage.width - textConsole.width - 10
         y: 400
         opacity: 1
-//        scale: 0.5
         state: "show"
         implicitHeight: 200
         implicitWidth: 300
         dragMaxX: gstabiBackgroundImage.width - textConsole.width
         dragMaxY: gstabiBackgroundImage.height - textConsole.height
-//        msg_history: gDashboard.msg_log + msg_history
         msg_history: main_log_msg
     }
 
@@ -118,6 +116,10 @@ Rectangle {
 
         onClicked: comportSettingPanel.visible == true ? comportSettingPanel.visible = false : comportSettingPanel.visible = true
     }// comport Open/Close
-
+    onMain_log_msgChanged: {
+        if(main_log_msg.length >=10000){
+            main_log_msg = "Log data cleared "
+        }
+    }
 
 }
