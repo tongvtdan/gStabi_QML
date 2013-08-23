@@ -8,9 +8,7 @@ import "GDashboard"
 //import "Dashboard"
 
 Rectangle {
-    id: rectangle1
-//    width: 1200
-//    height: 760
+    id: mainWindow
     property int header_height: 30
     color: "#242424"
     BorderImage {
@@ -63,15 +61,20 @@ Rectangle {
         state: "hide"
         implicitHeight: 200
         implicitWidth: 300
+        dragMaxX: gstabiBackgroundImage.width - comportSettingPanel.width
+        dragMaxY: gstabiBackgroundImage.height - comportSettingPanel.height
     }
     Console{
-        x: 240
+        id: textConsole
+        x: gstabiBackgroundImage.x + gstabiBackgroundImage.width - textConsole.width - 10
         y: 400
         opacity: 1
-        scale: 0.5
-        state: "hide"
+//        scale: 0.5
+        state: "show"
         implicitHeight: 200
         implicitWidth: 300
+        dragMaxX: gstabiBackgroundImage.width - textConsole.width
+        dragMaxY: gstabiBackgroundImage.height - textConsole.height
         msg_history: gDashboard.msg_log + msg_history
     }
 

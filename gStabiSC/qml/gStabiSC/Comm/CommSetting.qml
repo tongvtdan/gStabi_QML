@@ -15,6 +15,10 @@ Item{
     property int anchor_leftMargin  : 10
     property int anchor_rightMargin : 10
 
+    property int  dragMaxX          : 500
+    property int  dragMaxY          : 500
+
+
     implicitHeight: 150
     implicitWidth: 300
     BorderImage {
@@ -181,6 +185,10 @@ Item{
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
         drag.target: parent
+        drag.minimumX: 0
+        drag.minimumY: 0
+        drag.maximumX: dragMaxX
+        drag.maximumY: dragMaxY
         onDoubleClicked: comportSettings.state == "hide"? comportSettings.state = "show" : comportSettings.state = "hide"
 
 

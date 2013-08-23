@@ -13,9 +13,9 @@ Item {
     property double gauge_center_y: gauge_height/2
     property double gauge_radius: gauge_width - gauge_center_x
 
-    property alias  tilt_setpoint_angle : tilt_setpoint_handle.rotation
+    property int  tilt_setpoint_angle   :0
     property bool   tilt_set_enabled    : false
-    property double tilt_angle_delta    : tilt_needle.rotation - tilt_setpoint_handle.rotation
+    property double tilt_angle_delta    : tiltNeedleImage.rotation - tilt_setpoint_angle
     property int  tilt_control_handler_no_of_clicks: 0
 
     property alias  roll_setpoint_angle : roll_setpoint_handle.rotation
@@ -51,17 +51,17 @@ Item {
 //            source: "../images/gauges/gStabiUI_3.2_back_tilt.png"  // enable for design UI only
         }
         Image {
-            id: tilt_needle
+            id: tiltNeedleImage
 
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             source: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_needle_tilt.png"
 //            source: "../images/gauges/gStabiUI_3.2_needle_tilt.png" // enable for design UI only
-            rotation: tilt_set_enabled ? tilt_setpoint_handle.rotation : _mavlink_manager.tilt_angle
+            rotation: tilt_set_enabled ? tilt_setpoint_angle : _mavlink_manager.tilt_angle
         }
         // text display current angle value, sensor angle value
         Text{
-            id: tiltAngleValue
+            id: tiltAngleValueText
             width: 20
             height: 13
             color: "#00ffff"
@@ -73,18 +73,18 @@ Item {
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             style: Text.Normal
-            text: tilt_needle.rotation.toFixed(1)
+            text: tiltNeedleImage.rotation.toFixed(1)
         }
         // display different value from setpoint
         Text{
-            id: tiltAngleDelta
+            id: tiltAngleDeltaText
             width: 20
             height: 13
             color: "#ff0000"
             font.pixelSize: 12
             font.family: "Ubuntu"
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: tiltAngleValue.bottom
+            anchors.top: tiltAngleValueText.bottom
             anchors.topMargin: 35
             font.bold: true
             verticalAlignment: Text.AlignVCenter
@@ -136,17 +136,35 @@ Item {
 //            height: 20
             height: tilt_angle_delta <= 0 ? -tilt_angle_delta:0
         }
-        Image{
-            id: tilt_setpoint_handle
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            source: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_inactive_setpoint.png"
-//            source: "../images/gauges/gStabiUI_3.2_inactive_setpoint.png" //enable for design UI only
-            Behavior on source{
-                SequentialAnimation {
-                    NumberAnimation { target: tilt_setpoint_handle; property: "scale"; to: 1; duration: 150 }
-                    NumberAnimation { target: tilt_setpoint_handle; property: "scale"; to: 1.2; duration: 150 }
-                    NumberAnimation { target: tilt_setpoint_handle; property: "scale"; to: 1.0; duration: 150 }
+        Item{
+            id: tileControlItem
+            anchors.fill: parent
+            rotation: tilt_setpoint_angle
+            Image{
+                id: tiltControlHandleImage
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                source: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_inactive_setpoint.png"
+//                rotation: tilt_setpoint_angle
+                //            source: "../images/gauges/gStabiUI_3.2_inactive_setpoint.png" //enable for design UI only
+
+            }
+            Image {
+                id: tiltHandleSelectedImage
+                anchors.right: tiltControlHandleImage.right
+                anchors.rightMargin: 0
+                anchors.verticalCenter: tiltControlHandleImage.verticalCenter
+
+                source: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_handle_selected.png"
+                //            source: "../images/gauges/gStabiUI_3.2_handle_selected.png"
+                visible: false
+
+                Behavior on visible{
+                    SequentialAnimation {
+                        NumberAnimation { target: tiltHandleSelectedImage; property: "scale"; to: 0.5; duration: 150}
+                        NumberAnimation { target: tiltHandleSelectedImage; property: "scale"; to: 1.2; duration: 150}
+                        NumberAnimation { target: tiltHandleSelectedImage; property: "scale"; to: 1.0; duration: 150}
+                    }
                 }
             }
         }
@@ -161,8 +179,10 @@ Item {
                     var rot = calc_rotate_angle(mouse.x, mouse.y);
                     if(rot !== -360) {
                         if(rot > 180){ rot = rot - 360}
-                        tilt_setpoint_handle.rotation = rot;
-                        msg_log = "Tilting camera to angle: " + tilt_setpoint_handle.rotation.toFixed(1) + "\n"
+//                        tiltControlHandleImage.rotation = rot;
+//                        tileControlItem.rotation = rot
+                        tilt_setpoint_angle = rot
+                        msg_log = "Tilting camera to angle: " + tilt_setpoint_angle + "\n"
                     }
                 }
             }
@@ -175,12 +195,14 @@ Item {
                 if(tilt_control_handler_no_of_clicks == 1){
                     tilt_set_enabled = true;
                     msg_log = "Start to tilt camera \n";
-                    tilt_setpoint_handle.source =  "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_active_setpoint.png";
+                    tiltHandleSelectedImage.visible = true
+//                    tiltControlHandleImage.source =  "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_active_setpoint.png";
                 }
                 else if(tilt_control_handler_no_of_clicks == 2){
                     tilt_set_enabled = false;
                     msg_log = " Stop tilting camera \n";
-                    tilt_setpoint_handle.source =  "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_inactive_setpoint.png";
+                    tiltHandleSelectedImage.visible = false
+//                    tiltControlHandleImage.source =  "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_inactive_setpoint.png";
                     tilt_control_handler_no_of_clicks = 0;
                 }
             }
@@ -447,12 +469,12 @@ Item {
     states:[
         State {
             name: "start tilt"
-            PropertyChanges {target: tilt_setpoint_handle; scale: 1.0; opacity: 1; }
+            PropertyChanges {target: tiltControlHandleImage; scale: 1.0; opacity: 1; }
 
         }
         ,State {
             name: "top tilt"
-            PropertyChanges {target: tilt_setpoint_handle; scale: 1.0 ; opacity: 0.5; }
+            PropertyChanges {target: tiltControlHandleImage; scale: 1.0 ; opacity: 0.5; }
         }
 
     ]
@@ -461,8 +483,8 @@ Item {
 //            from: ""
            SequentialAnimation{
            id: setpointEnableAnimation
-           NumberAnimation{ target: tilt_setpoint_handle; properties: "scale"; from: 1.5; to: 0.5;easing.type: Easing.InElastic ;duration: 500}
-           NumberAnimation{ target: tilt_setpoint_handle; properties: "scale"; from: 0.5; to: 1.5; easing.type: Easing.InElastic ;duration: 500}
+           NumberAnimation{ target: tiltControlHandleImage; properties: "scale"; from: 1.5; to: 0.5;easing.type: Easing.InElastic ;duration: 500}
+           NumberAnimation{ target: tiltControlHandleImage; properties: "scale"; from: 0.5; to: 1.5; easing.type: Easing.InElastic ;duration: 500}
         }
         }
     ]
