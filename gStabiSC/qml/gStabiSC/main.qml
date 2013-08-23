@@ -10,6 +10,7 @@ import "GDashboard"
 Rectangle {
     id: mainWindow
     property int header_height: 30
+    property string main_log_msg: ""
     color: "#242424"
     BorderImage {
         id: gstabiBackgroundImage
@@ -39,6 +40,8 @@ Rectangle {
         anchors.topMargin: 40
         anchors.right:  gstabiBackgroundImage.right
         anchors.rightMargin: 20
+        onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
+
 
     }
     AnimatedImage{
@@ -75,7 +78,8 @@ Rectangle {
         implicitWidth: 300
         dragMaxX: gstabiBackgroundImage.width - textConsole.width
         dragMaxY: gstabiBackgroundImage.height - textConsole.height
-        msg_history: gDashboard.msg_log + msg_history
+//        msg_history: gDashboard.msg_log + msg_history
+        msg_history: main_log_msg
     }
 
     Button{

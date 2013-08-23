@@ -13,23 +13,25 @@ Item {
     property double gauge_center_y: gauge_height/2
     property double gauge_radius: gauge_width - gauge_center_x
 
-    property int  tilt_setpoint_angle   :0
-    property bool   tilt_set_enabled    : false
-    property double tilt_angle_delta    : tiltNeedleImage.rotation - tilt_setpoint_angle
-    property int  tilt_control_handler_no_of_clicks: 0
+    property int    tilt_setpoint_angle     : 0
+    property bool   tilt_set_enabled        : false
+    property double tilt_angle_delta        : tiltNeedleImage.rotation - tilt_setpoint_angle
+    property int    tilt_control_handler_no_of_clicks: 0
 
-    property alias  roll_setpoint_angle : roll_setpoint_handle.rotation
-    property bool   roll_set_enabled    : false
-    property double roll_angle_delta    : roll_needle.rotation - roll_setpoint_handle.rotation
+    property int    roll_setpoint_angle     : 0
+    property bool   roll_set_enabled        : false
+    property double roll_angle_delta        : rollNeedleImage.rotation - roll_setpoint_angle
+    property int    roll_control_handler_no_of_clicks: 0
 
-    property alias  pan_setpoint_angle : pan_setpoint_handle.rotation
-    property bool   pan_set_enabled    : false
-    property double pan_angle_delta    : pan_needle.rotation - pan_setpoint_handle.rotation
-    property double  pan_offset_display: -90
+    property int    pan_setpoint_angle      : 0
+    property bool   pan_set_enabled         : false
+    property double pan_angle_delta         : panNeedleImage.rotation - panControlHandleImage.rotation
+    property double pan_offset_display      : -90
+    property int    pan_control_handler_no_of_clicks: 0
 
-    property string msg_log: ""
-    property int hint_x: 0
-    property int hint_y: 0
+    property string msg_log : "" // log the message to display on Console
+    property int    hint_x  : 0
+    property int    hint_y  : 0
 
 
     // tilt
@@ -43,7 +45,7 @@ Item {
         anchors.top: parent.top
         anchors.topMargin: 0
         Image {
-            id: tilt_back
+            id: tiltBackImage
 
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
@@ -93,7 +95,7 @@ Item {
 //                        text: "-180.0"
         }
         Rectangle{
-            id: angleDeltaNumDisplay
+            id: tiltAngleDeltaNumDisplay
 
             color: "#00000000"
             height: 15
@@ -107,7 +109,7 @@ Item {
         }
         // Display different from setpoint, positive delta
         Rectangle{
-            id: positiveAngleDelta
+            id: tiltPositiveAngleDelta
             anchors.bottom: parent.bottom
             anchors.leftMargin: 190
             anchors.left: parent.left
@@ -123,7 +125,7 @@ Item {
         }
         // Display different from setpoint, negative delta
         Rectangle{
-            id: negativeAngleDelta
+            id: tiltNegativeAngleDelta
 
             anchors.rightMargin: 190
             anchors.right: parent.right
@@ -137,7 +139,7 @@ Item {
             height: tilt_angle_delta <= 0 ? -tilt_angle_delta:0
         }
         Item{
-            id: tileControlItem
+            id: tiltControlItem
             anchors.fill: parent
             rotation: tilt_setpoint_angle
             Image{
@@ -154,20 +156,20 @@ Item {
                 anchors.right: tiltControlHandleImage.right
                 anchors.rightMargin: 0
                 anchors.verticalCenter: tiltControlHandleImage.verticalCenter
-
                 source: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_handle_selected.png"
                 //            source: "../images/gauges/gStabiUI_3.2_handle_selected.png"
                 visible: false
-
                 Behavior on visible{
                     SequentialAnimation {
                         NumberAnimation { target: tiltHandleSelectedImage; property: "scale"; to: 0.5; duration: 150}
-                        NumberAnimation { target: tiltHandleSelectedImage; property: "scale"; to: 1.2; duration: 150}
+                        NumberAnimation { target: tiltHandleSelectedImage; property: "scale"; to: 1.5; duration: 150}
                         NumberAnimation { target: tiltHandleSelectedImage; property: "scale"; to: 1.0; duration: 150}
                     }
                 }
             }
+
         }
+
         MouseArea{
             id: tiltMouseArea
             anchors.fill: parent
@@ -179,34 +181,31 @@ Item {
                     var rot = calc_rotate_angle(mouse.x, mouse.y);
                     if(rot !== -360) {
                         if(rot > 180){ rot = rot - 360}
-//                        tiltControlHandleImage.rotation = rot;
-//                        tileControlItem.rotation = rot
                         tilt_setpoint_angle = rot
-                        msg_log = "Tilting camera to angle: " + tilt_setpoint_angle + "\n"
+                        tilt_log("Tilting camera to angle: " + tilt_setpoint_angle)
                     }
                 }
             }
             onHoveredChanged:
             {
-                msg_log = "Tilt axis of gStabi \n"
+                tilt_log("Tilt axis of gStabi")
             }
             onClicked: {
                 tilt_control_handler_no_of_clicks = tilt_control_handler_no_of_clicks + 1
                 if(tilt_control_handler_no_of_clicks == 1){
                     tilt_set_enabled = true;
-                    msg_log = "Start to tilt camera \n";
+                    tilt_log("Start to tilt camera")
                     tiltHandleSelectedImage.visible = true
-//                    tiltControlHandleImage.source =  "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_active_setpoint.png";
                 }
                 else if(tilt_control_handler_no_of_clicks == 2){
                     tilt_set_enabled = false;
-                    msg_log = " Stop tilting camera \n";
+                    tilt_log(" Stop tilting camera");
                     tiltHandleSelectedImage.visible = false
-//                    tiltControlHandleImage.source =  "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_inactive_setpoint.png";
                     tilt_control_handler_no_of_clicks = 0;
                 }
             }
         }
+
 
     }   // end of Tilt Gauge
 
@@ -220,21 +219,21 @@ Item {
         anchors.right : parent.right
         anchors.rightMargin: 20
         Image {
-            id: roll_back
+            id: rollBackImage
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             source: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_back_roll.png"
         }
         Image {
-            id: roll_needle
+            id: rollNeedleImage
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             source: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_needle_roll.png"
-            rotation: roll_set_enabled ? roll_setpoint_handle.rotation : _mavlink_manager.roll_angle
+            rotation: roll_set_enabled ? roll_setpoint_angle : _mavlink_manager.roll_angle
 //            rotation: _mavlink_manager.roll_angle
         }
         Text{
-            id: rollAngleValue
+            id: rollAngleValueText
             width: 20
             height: 13
             verticalAlignment: Text.AlignVCenter
@@ -246,17 +245,17 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             font.bold: true
-            text: ""+ _mavlink_manager.roll_angle.toFixed(1);
+            text: rollNeedleImage.rotation.toFixed(1)
         }
         Text{
-            id: rollAngleDelta
+            id: rollAngleDeltaText
             width: 20
             height: 13
             color: "#ff0000"
             font.pixelSize: 12
             font.family: "Ubuntu"
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: rollAngleValue.bottom
+            anchors.top: rollAngleValueText.bottom
             anchors.topMargin: 35
             font.bold: true
             verticalAlignment: Text.AlignVCenter
@@ -307,37 +306,70 @@ Item {
 //            height: 20
             height: roll_angle_delta <= 0 ? -roll_angle_delta:0
         }
-        Image{
-            id: roll_setpoint_handle
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            source: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_inactive_setpoint.png"
-//            source: "../images/gauges/gStabiUI_3.2_inactive_setpoint.png" //enable for design UI only
-        }
-        MouseArea{
+        Item{
+            id: rollControlItem
             anchors.fill: parent
+            rotation: roll_setpoint_angle
+            Image{
+                id: rollControlHandleImage
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                source: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_inactive_setpoint.png"
+    //            source: "../images/gauges/gStabiUI_3.2_inactive_setpoint.png" //enable for design UI only
+            }
+            Image {
+                id: rollHandleSelectedImage
+                anchors.right: rollControlHandleImage.right
+                anchors.rightMargin: 0
+                anchors.verticalCenter: rollControlHandleImage.verticalCenter
+                source: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_handle_selected.png"
+                //            source: "../images/gauges/gStabiUI_3.2_handle_selected.png"
+                visible: false
+                Behavior on visible{
+                    SequentialAnimation {
+                        NumberAnimation { target: rollHandleSelectedImage; property: "scale"; to: 0.5; duration: 150}
+                        NumberAnimation { target: rollHandleSelectedImage; property: "scale"; to: 1.5; duration: 150}
+                        NumberAnimation { target: rollHandleSelectedImage; property: "scale"; to: 1.0; duration: 150}
+                    }
+                }
+            } // end of image
+        } // end of item
+
+        MouseArea{
+            id: rollMouseArea
+            anchors.fill: parent
+            hoverEnabled: true
             onPositionChanged:
             {
-                roll_set_enabled = true;
-                roll_setpoint_handle.source =  "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_active_setpoint.png"
-                var rot = calc_rotate_angle(mouse.x, mouse.y);
-                if(rot !== -360) {
-                    if(rot > 180){ rot = rot - 360}
-                    roll_setpoint_handle.rotation = rot;
+                if(roll_set_enabled) {
+                    var rot = calc_rotate_angle(mouse.x, mouse.y);
+                    if(rot !== -360) {
+                        if(rot > 180){ rot = rot - 360}
+                        roll_setpoint_angle = rot;
+                        roll_log("Rolling camera to angle: " + roll_setpoint_angle);
+                    }
                 }
             }
-            onReleased: {
-                roll_set_enabled = false;
-                roll_setpoint_handle.source =  "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_inactive_setpoint.png"
-            }
+            onHoveredChanged: {roll_log("Roll axis of gStabi")}
             onClicked:
             {
-                msg_log = "Roll Camera \n"
+                roll_control_handler_no_of_clicks = roll_control_handler_no_of_clicks + 1
+                if(roll_control_handler_no_of_clicks == 1){
+                    roll_set_enabled = true;
+                    roll_log("Start to roll camera")
+                    rollHandleSelectedImage.visible = true
+                }
+                else if(roll_control_handler_no_of_clicks == 2){
+                    roll_set_enabled = false;
+                    roll_log( "Stop rolling camera");
+                    rollHandleSelectedImage.visible = false
+                    roll_control_handler_no_of_clicks = 0;
+                }
             }
         }
 
     } // end of Roll Gauge
-    // yaw
+    // Pan
     Item{
         id:pan_gauge
         anchors.horizontalCenter: parent.horizontalCenter
@@ -346,22 +378,22 @@ Item {
         width: gauge_width
         height: gauge_height
         Image {
-            id: yaw_back
+            id: panBackImage
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             source: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_back_pan.png"
         }
         Image {
-            id: pan_needle
+            id: panNeedleImage
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             source: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_needle_pan.png"
 //            rotation: _mavlink_manager.yaw_angle
-            rotation: pan_set_enabled ? pan_setpoint_handle.rotation : _mavlink_manager.yaw_angle
+            rotation: pan_set_enabled ? pan_setpoint_angle : _mavlink_manager.yaw_angle
 
         }
         Text{
-            id: panAngleValue
+            id: panAngleValueText
             width: 30
             height: 13
             verticalAlignment: Text.AlignVCenter
@@ -372,19 +404,18 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             font.bold: true
-
-            text: ""+ _mavlink_manager.yaw_angle.toFixed(1);
+            text: panNeedleImage.rotation.toFixed(1);
 
         }
         Text{
-            id: panAngleDelta
+            id: panAngleDeltaText
             width: 20
             height: 13
             color: "#ff0000"
             font.pixelSize: 12
             font.family: "Ubuntu"
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: panAngleValue.bottom
+            anchors.top: panAngleValueText.bottom
             anchors.topMargin: 35
             font.bold: true
             verticalAlignment: Text.AlignVCenter
@@ -393,7 +424,7 @@ Item {
 //                        text: "-180.0"
         }
         Rectangle{
-            id: panAngleDeltaNumDisplay
+            id: pantiltAngleDeltaNumDisplay
             color: "#00000000"
             height: 15
             width: 50
@@ -434,60 +465,72 @@ Item {
 //            height: 20
             height: pan_angle_delta <= 0 ? -pan_angle_delta:0
         }
-        Image{
-            id: pan_setpoint_handle
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            source: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_inactive_setpoint_pan.png"
-//            source: "../images/gauges/gStabiUI_3.2_inactive_setpoint_pan.png" //enable for design UI only
-        }
+        Item{
+            id: panControlItem
+            anchors.fill: parent
+            rotation: pan_setpoint_angle
+            Image{
+                id: panControlHandleImage
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                source: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_inactive_setpoint_pan.png"
+//                source: "../images/gauges/gStabiUI_3.2_inactive_setpoint_pan.png" //enable for design UI only
+            } // end of image
+            Image {
+                id: panHandleSelectedImage
+                anchors.top: parent.top
+                anchors.topMargin: 2
+                anchors.horizontalCenter: parent.horizontalCenter
+                source: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_handle_selected.png"
+//                            source: "../images/gauges/gStabiUI_3.2_handle_selected.png"
+                visible: false
+                Behavior on visible{
+                    SequentialAnimation {
+                        NumberAnimation { target: panHandleSelectedImage; property: "scale"; to: 0.5; duration: 150}
+                        NumberAnimation { target: panHandleSelectedImage; property: "scale"; to: 1.5; duration: 150}
+                        NumberAnimation { target: panHandleSelectedImage; property: "scale"; to: 1.0; duration: 150}
+                    }
+                }
+            } // end of image
+        } // end of item
+
+
         // Interact with user control
         MouseArea{
+            id: panMouseArea
             anchors.fill: parent
-//            hoverEnabled: true
+            hoverEnabled: true
             onPositionChanged:
             {
-                pan_set_enabled = true;
-                pan_setpoint_handle.source =  "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_active_setpoint_pan.png"
+                if(pan_set_enabled)
                 var rot = calc_rotate_angle_pan(mouse.x, mouse.y);
                 if(rot !== -360) {
-                    if(rot > 180){ rot = rot - 360}
-                    pan_setpoint_handle.rotation = rot;
+                    if(rot > 180){ rot = rot - 360;}
+                    pan_setpoint_angle = rot;
+                    pan_log("Panning camera to angle: " + pan_setpoint_angle);
                 }
             }
-            onReleased: {
-                pan_set_enabled = false;
-                pan_setpoint_handle.source =  "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_inactive_setpoint_pan.png"
-            }
-            onEntered:
+            onHoveredChanged: {pan_log("Pan axis of gStabi")}
+            onClicked:
             {
-                msg_log = "Pan Camera \n"
+                pan_control_handler_no_of_clicks = pan_control_handler_no_of_clicks + 1
+                if(pan_control_handler_no_of_clicks == 1){
+                    pan_set_enabled = true;
+                    pan_log("Start to pan camera")
+                    panHandleSelectedImage.visible = true
+                }
+                else if(pan_control_handler_no_of_clicks == 2){
+                    pan_set_enabled = false;
+                    pan_log( "Stop paning camera");
+                    panHandleSelectedImage.visible = false
+                    pan_control_handler_no_of_clicks = 0;
+                }
             }
-        }
+
+        } // end of MouseArea
 
     } // end of Pan Gauge
-    states:[
-        State {
-            name: "start tilt"
-            PropertyChanges {target: tiltControlHandleImage; scale: 1.0; opacity: 1; }
 
-        }
-        ,State {
-            name: "top tilt"
-            PropertyChanges {target: tiltControlHandleImage; scale: 1.0 ; opacity: 0.5; }
-        }
-
-    ]
-    transitions: [
-        Transition {
-//            from: ""
-           SequentialAnimation{
-           id: setpointEnableAnimation
-           NumberAnimation{ target: tiltControlHandleImage; properties: "scale"; from: 1.5; to: 0.5;easing.type: Easing.InElastic ;duration: 500}
-           NumberAnimation{ target: tiltControlHandleImage; properties: "scale"; from: 0.5; to: 1.5; easing.type: Easing.InElastic ;duration: 500}
-        }
-        }
-    ]
 
 
     /* function calc_rotate_angle(_x, _y)
@@ -542,6 +585,29 @@ Item {
         }
         return rot_angle_deg;
     } // end of function
-
+    /* function tilt_log(_message)
+       @brief: put message to log
+       @input: message
+       @output: msg_log in HTML format
+      */
+    function tilt_log(_message){
+        msg_log = "<font color=\"cyan\">" + _message+ "</font><br>";
+    }
+    /* function roll_log(_message)
+       @brief: put message to log
+       @input: message
+       @output: msg_log in HTML format
+      */
+    function roll_log(_message){
+        msg_log = "<font color=\"green\">" + _message+ "</font><br>";
+    }
+    /* function pan_log(_message)
+       @brief: put message to log
+       @input: message
+       @output: msg_log in HTML format
+      */
+    function pan_log(_message){
+        msg_log = "<font color=\"deepskyblue\">" + _message+ "</font><br>";
+    }
 
 }
