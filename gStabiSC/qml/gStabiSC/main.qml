@@ -34,6 +34,7 @@ Rectangle {
 
 
     GDashBoard{
+        id: gDashboard
         x: -512
         y: -310
         anchors.top: gstabiBackgroundImage.top
@@ -55,7 +56,7 @@ Rectangle {
     }
     CommSetting{
         id: comportSettingPanel
-        x: 500
+        x: 50
         y: 400
         opacity: 1
         scale: 0.5
@@ -63,7 +64,16 @@ Rectangle {
         implicitHeight: 200
         implicitWidth: 300
     }
-
+    Console{
+        x: 240
+        y: 400
+        opacity: 1
+        scale: 0.5
+        state: "hide"
+        implicitHeight: 200
+        implicitWidth: 300
+        msg_history: gDashboard.msg_hint + msg_history
+    }
 
     Button{
         id: openSerialSettingButton

@@ -30,6 +30,7 @@ Item {
     property int hint_x: 0
     property int hint_y: 0
 
+
     // tilt
     Item{
         id: tilt_gauge
@@ -160,11 +161,7 @@ Item {
             }
             onClicked:
             {
-                msg_hint = "Tilt Camera"
-                hintText.visible = true
-                hint_x = parent.x + mouse.x
-                hint_y = parent.y + mouse.y
-                hintTextDisplayTimer.start();
+                msg_hint = "Tilt Camera \n"
 
             }
         }
@@ -292,12 +289,7 @@ Item {
             }
             onClicked:
             {
-                msg_hint = "Roll Camera"
-                hintText.visible = true
-                hint_x = mouse.x + parent.x
-                hint_y = mouse.y + parent. y
-                hintTextDisplayTimer.start();
-
+                msg_hint = "Roll Camera \n"
             }
         }
 
@@ -409,8 +401,11 @@ Item {
         // Interact with user control
         MouseArea{
             anchors.fill: parent
+//            hoverEnabled: true
             onPositionChanged:
             {
+//                if(pan_set_enabled)
+                {
                 pan_set_enabled = true;
                 pan_setpoint_handle.source =  "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_active_setpoint_pan.png"
                 var rot = calc_rotate_angle_pan(mouse.x, mouse.y);
@@ -419,45 +414,25 @@ Item {
                     if(rot > 180){ rot = rot - 360}
                     pan_setpoint_handle.rotation = rot;
                 }
+                }
             }
             onReleased: {
                 pan_set_enabled = false;
+//                hoverEnabled = true
                 pan_setpoint_handle.source =  "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_inactive_setpoint_pan.png"
             }
-            onClicked:
+            onEntered:
             {
-                msg_hint = "Pan Camera"
-                hintText.visible = true
-                hint_x = mouse.x + parent.x
-                hint_y = mouse.y + parent.y
-                hintTextDisplayTimer.start();
-
+                msg_hint = "Pan Camera \n"
+            }
+            onClicked: {
+//                hoverEnabled = false
+//                pan_set_enabled = true
             }
         }
 
     } // end of Pan Gauge
-// use to print hint
-    Text{
-        id: hintText
-        text: msg_hint
-        font.italic: true
-        font.bold: false
-        font.pixelSize: 20
-        font.family: "Ubuntu"
-        color: "cyan"
-        x: hint_x
-        y: hint_y
-        visible: false
-    }
-    Timer{
-        id: hintTextDisplayTimer
-        interval: 1500
-        running: true
-        repeat: false   // run once at start up
-        onTriggered: {
-            hintText.visible = false;
-        }
-    }
+
     /* function calc_rotate_angle(_x, _y)
        @brief: get the angle to rotate the setpoint handler
        @input: (_x, _y) = (mouse.x, mouse.y)
