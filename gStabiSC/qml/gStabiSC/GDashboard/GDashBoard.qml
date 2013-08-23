@@ -16,6 +16,7 @@ Item {
     property alias  tilt_setpoint_angle : tilt_setpoint_handle.rotation
     property bool   tilt_set_enabled    : false
     property double tilt_angle_delta    : tilt_needle.rotation - tilt_setpoint_handle.rotation
+    property int  tilt_control_handler_no_of_clicks: 0
 
     property alias  roll_setpoint_angle : roll_setpoint_handle.rotation
     property bool   roll_set_enabled    : false
@@ -26,7 +27,7 @@ Item {
     property double pan_angle_delta    : pan_needle.rotation - pan_setpoint_handle.rotation
     property double  pan_offset_display: -90
 
-    property string msg_hint: ""
+    property string msg_log: ""
     property int hint_x: 0
     property int hint_y: 0
 
@@ -104,7 +105,6 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
         }
-
         // Display different from setpoint, positive delta
         Rectangle{
             id: positiveAngleDelta
@@ -142,29 +142,50 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             source: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_inactive_setpoint.png"
 //            source: "../images/gauges/gStabiUI_3.2_inactive_setpoint.png" //enable for design UI only
-        }
-        MouseArea{
-            anchors.fill: parent
-            onPositionChanged:
-            {
-                tilt_set_enabled = true;
-                tilt_setpoint_handle.source =  "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_active_setpoint.png"
-                var rot = calc_rotate_angle(mouse.x, mouse.y);
-                if(rot !== -360) {
-                    if(rot > 180){ rot = rot - 360}
-                    tilt_setpoint_handle.rotation = rot;
+            Behavior on source{
+                SequentialAnimation {
+                    NumberAnimation { target: tilt_setpoint_handle; property: "scale"; to: 1; duration: 150 }
+                    NumberAnimation { target: tilt_setpoint_handle; property: "scale"; to: 1.2; duration: 150 }
+                    NumberAnimation { target: tilt_setpoint_handle; property: "scale"; to: 1.0; duration: 150 }
                 }
             }
-            onReleased: {
-                tilt_set_enabled = false;
-                tilt_setpoint_handle.source =  "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_inactive_setpoint.png"
-            }
-            onClicked:
+        }
+        MouseArea{
+            id: tiltMouseArea
+            anchors.fill: parent
+            hoverEnabled: true
+            onPositionChanged:
             {
-                msg_hint = "Tilt Camera \n"
-
+                if(tilt_set_enabled)
+                {
+                    var rot = calc_rotate_angle(mouse.x, mouse.y);
+                    if(rot !== -360) {
+                        if(rot > 180){ rot = rot - 360}
+                        tilt_setpoint_handle.rotation = rot;
+                        msg_log = "Tilting camera to angle: " + tilt_setpoint_handle.rotation.toFixed(1) + "\n"
+                    }
+                }
+            }
+            onHoveredChanged:
+            {
+                msg_log = "Tilt axis of gStabi \n"
+            }
+            onClicked: {
+                tilt_control_handler_no_of_clicks = tilt_control_handler_no_of_clicks + 1
+                if(tilt_control_handler_no_of_clicks == 1){
+                    tilt_set_enabled = true;
+                    msg_log = "Start to tilt camera \n";
+                    tilt_setpoint_handle.source =  "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_active_setpoint.png";
+                }
+                else if(tilt_control_handler_no_of_clicks == 2){
+                    tilt_set_enabled = false;
+                    msg_log = " Stop tilting camera \n";
+                    tilt_setpoint_handle.source =  "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_inactive_setpoint.png";
+                    tilt_control_handler_no_of_clicks = 0;
+                }
             }
         }
+
     }   // end of Tilt Gauge
 
 //    Roll
@@ -289,14 +310,14 @@ Item {
             }
             onClicked:
             {
-                msg_hint = "Roll Camera \n"
+                msg_log = "Roll Camera \n"
             }
         }
 
     } // end of Roll Gauge
     // yaw
     Item{
-        id:yaw_gauge
+        id:pan_gauge
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
         anchors.topMargin: 0
@@ -404,34 +425,48 @@ Item {
 //            hoverEnabled: true
             onPositionChanged:
             {
-//                if(pan_set_enabled)
-                {
                 pan_set_enabled = true;
                 pan_setpoint_handle.source =  "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_active_setpoint_pan.png"
                 var rot = calc_rotate_angle_pan(mouse.x, mouse.y);
-//                pan_setpoint_handle.rotation = rot;
                 if(rot !== -360) {
                     if(rot > 180){ rot = rot - 360}
                     pan_setpoint_handle.rotation = rot;
                 }
-                }
             }
             onReleased: {
                 pan_set_enabled = false;
-//                hoverEnabled = true
                 pan_setpoint_handle.source =  "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_inactive_setpoint_pan.png"
             }
             onEntered:
             {
-                msg_hint = "Pan Camera \n"
-            }
-            onClicked: {
-//                hoverEnabled = false
-//                pan_set_enabled = true
+                msg_log = "Pan Camera \n"
             }
         }
 
     } // end of Pan Gauge
+    states:[
+        State {
+            name: "start tilt"
+            PropertyChanges {target: tilt_setpoint_handle; scale: 1.0; opacity: 1; }
+
+        }
+        ,State {
+            name: "top tilt"
+            PropertyChanges {target: tilt_setpoint_handle; scale: 1.0 ; opacity: 0.5; }
+        }
+
+    ]
+    transitions: [
+        Transition {
+//            from: ""
+           SequentialAnimation{
+           id: setpointEnableAnimation
+           NumberAnimation{ target: tilt_setpoint_handle; properties: "scale"; from: 1.5; to: 0.5;easing.type: Easing.InElastic ;duration: 500}
+           NumberAnimation{ target: tilt_setpoint_handle; properties: "scale"; from: 0.5; to: 1.5; easing.type: Easing.InElastic ;duration: 500}
+        }
+        }
+    ]
+
 
     /* function calc_rotate_angle(_x, _y)
        @brief: get the angle to rotate the setpoint handler

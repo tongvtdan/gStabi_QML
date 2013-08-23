@@ -17,15 +17,10 @@ Item{
 
     implicitHeight: 150
     implicitWidth: 300
-    //    MouseArea{
-    //        anchors.fill: parent
-    //        onClicked: showPortSetting = !showPortSetting
-    //    }
     BorderImage {
         id: commBorderImage
         source: "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_serial_setting_dialog.png"
         width: 300; height: 200
-//        anchors.fill: parent
         border.left: 5; border.top: 5
         border.right: 5; border.bottom: 5
     }
@@ -51,10 +46,8 @@ Item{
         style: ComboBoxStyle {
             background: BorderImage {
                 source: control.pressed ? "qrc:/images/qml/gStabiSC/images/dropdownlist/selected_dropdownlist.png" : "qrc:/images/qml/gStabiSC/images/dropdownlist/deselected_dropdownlist.png"
-//                border.left: 6 ; border.right: 6 ; border.top: 6 ; border.bottom: 6
             }
         }
-        //             comboBoxStyle
         onCurrentTextChanged:{
             _serialLink.update_comport_settings(currentText);
             console.log(currentText);
@@ -90,9 +83,6 @@ Item{
                     }
                 }
             }
-        }
-        onClicked: {
-//            comportSettings.visible = false
         }
     } // refresh Button
     Button{
@@ -133,25 +123,6 @@ Item{
         }
     }// comport Open/Close
 
-//    Image{
-//        id: terminalLogImage
-//        width: 280
-//        height: 130
-//        source: "qrc:/images/qml/gStabiSC/images/terminal_log.png"
-//        anchors.horizontalCenter: commBorderImage.horizontalCenter
-//        anchors.bottom: commBorderImage.bottom
-//        anchors.bottomMargin: anchor_bottomMargin
-//    }
-
-//    TextArea{
-//        id: logText
-//        backgroundVisible: false
-//        readOnly: true
-//        anchors.fill: terminalLogImage
-//        wrapMode: Text.WordWrap
-////        text: _mavlink_manager.msg_received
-//        text: " This is a sample text"
-//    }
 
     //    } // communication GroupBox
     ListModel {

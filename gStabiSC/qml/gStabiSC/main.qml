@@ -72,7 +72,7 @@ Rectangle {
         state: "hide"
         implicitHeight: 200
         implicitWidth: 300
-        msg_history: gDashboard.msg_hint + msg_history
+        msg_history: gDashboard.msg_log + msg_history
     }
 
     Button{
@@ -111,5 +111,6 @@ Rectangle {
 
         onClicked: comportSettingPanel.visible == true ? comportSettingPanel.visible = false : comportSettingPanel.visible = true
     }// comport Open/Close
+
 
 }
