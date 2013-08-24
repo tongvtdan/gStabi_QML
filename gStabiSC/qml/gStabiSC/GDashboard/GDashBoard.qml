@@ -64,13 +64,6 @@ Item {
                     tilt_log("Tilt sensor value: " + tilt_old_angle_value);
                 }
             }
-            Behavior on rotation {
-                SpringAnimation{
-                    damping: 0.5
-                    spring: 5
-
-                }
-            }
         }
         // text display current angle value, sensor angle value
         Text{

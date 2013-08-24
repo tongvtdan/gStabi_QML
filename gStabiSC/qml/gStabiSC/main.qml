@@ -59,13 +59,12 @@ Rectangle {
         id: comportSettingPanel
         x: 50
         y: 400
-//        opacity: 1
-//        scale: 0.5
         state: "show"
         implicitHeight: 200
         implicitWidth: 300
         dragMaxX: gstabiBackgroundImage.width - comportSettingPanel.width
         dragMaxY: gstabiBackgroundImage.height - comportSettingPanel.height
+        onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
     }
     Console{
         id: textConsole
