@@ -32,6 +32,13 @@ Item {
 
     property string msg_log : "" // log the message to display on Console
 
+
+    BorderImage {
+        id: dashboardPanelImage
+        source: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_dashboard_panel.png"
+        opacity: 0.5
+        anchors.fill: parent
+    }
     // tilt
     Item{
         id: tilt_gauge
@@ -42,6 +49,7 @@ Item {
         anchors.leftMargin: 0
         anchors.top: parent.top
         anchors.topMargin: 0
+
         Image {
             id: tiltBackImage
 
@@ -516,6 +524,71 @@ Item {
 
     } // end of Pan Gauge
 
+    // Open Close Button
+    Rectangle{
+        id: configButton
+        width: 70; height: 30; border.width: 1; border.color: "cyan"
+        color: "#00000000"
+        anchors.right: parent.right
+        anchors.rightMargin: 50
+        anchors.top: parent.top
+        anchors.topMargin: -20
+        Text{
+            id: configButtonText
+            anchors.verticalCenter: parent.verticalCenter ; anchors.horizontalCenter: parent.horizontalCenter
+            color : "#00e3f9"
+            font.family: "Segoe UI Symbol"
+            font.bold: true
+            font.pixelSize: 16
+            text:"Config"
+        }
+        MouseArea{
+            anchors.fill: parent; hoverEnabled: true
+            onClicked: {
+            }
+            onEntered: {
+                configButton.border.color =  "cyan"
+                configButtonText.color = "red"
+            }
+            onExited: {
+                configButton.border.color ="#009dff"
+                configButtonText.color = "#00e3f9"
+            }
+        }
+    } // end of open close port button
+// Refresh ports button
+    Rectangle{
+        id: dashboardButton
+        width: 100; height: 30; border.width: 1; border.color: "cyan"
+        color: "#00000000"
+        anchors.rightMargin: 10
+        anchors.right: configButton.left
+        anchors.leftMargin: 30
+        anchors.top: configButton.top
+        anchors.topMargin: 0
+        Text{
+            id: dashboardButtonText
+            anchors.verticalCenter: parent.verticalCenter ; anchors.horizontalCenter: parent.horizontalCenter
+            color : "#00e3f9"
+            text: "Dashboard"
+            font.pixelSize: 16
+            font.family: "Segoe UI Symbol"
+            font.bold: true
+        }
+        MouseArea{
+            anchors.fill: parent; hoverEnabled: true
+            onClicked: {
+            }
+            onEntered: {
+                dashboardButton.border.color =  "cyan"
+                dashboardButtonText.color = "red"
+            }
+            onExited: {
+                dashboardButton.border.color ="#009dff"
+                dashboardButtonText.color = "#00e3f9"
+            }
+        }
+    } // end of refreshbutton
     /* function calc_rotate_angle_tilt(_x, _y)
        @brief: get the angle to rotate the setpoint handler
        @input: (_x, _y) = (mouse.x, mouse.y)

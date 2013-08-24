@@ -34,12 +34,10 @@ Rectangle {
 
     GDashBoard{
         id: gDashboard
-        x: -512
-        y: -310
+        anchors.horizontalCenterOffset: 15
+        anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: gstabiBackgroundImage.top
-        anchors.topMargin: 40
-        anchors.right:  gstabiBackgroundImage.right
-        anchors.rightMargin: 20
+        anchors.topMargin: 60
         onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
 
 
