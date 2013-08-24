@@ -1,5 +1,6 @@
 import QtQuick 2.1
-//import QtQuick.Controls 1.0
+import QtQuick.Controls 1.0
+import "../Components"
 
 Item {
     id: dashboardRoot
@@ -212,7 +213,6 @@ Item {
 
 
     }   // end of Tilt Gauge
-
 //    Roll
     Item{
         id: roll_gauge
@@ -524,71 +524,33 @@ Item {
 
     } // end of Pan Gauge
 
-    // Open Close Button
-    Rectangle{
+    // Config Button
+    GButton{
         id: configButton
-        width: 70; height: 30; border.width: 1; border.color: "cyan"
-        color: "#00000000"
         anchors.right: parent.right
         anchors.rightMargin: 50
         anchors.top: parent.top
         anchors.topMargin: -20
-        Text{
-            id: configButtonText
-            anchors.verticalCenter: parent.verticalCenter ; anchors.horizontalCenter: parent.horizontalCenter
-            color : "#00e3f9"
-            font.family: "Segoe UI Symbol"
-            font.bold: true
-            font.pixelSize: 16
-            text:"Config"
+        width: 70; height: 30
+        text: "Config"
+        onClicked: {
+
         }
-        MouseArea{
-            anchors.fill: parent; hoverEnabled: true
-            onClicked: {
-            }
-            onEntered: {
-                configButton.border.color =  "cyan"
-                configButtonText.color = "red"
-            }
-            onExited: {
-                configButton.border.color ="#009dff"
-                configButtonText.color = "#00e3f9"
-            }
-        }
-    } // end of open close port button
-// Refresh ports button
-    Rectangle{
+    }
+    // end of Config Button
+    // Dashboard Button
+    GButton{
         id: dashboardButton
-        width: 100; height: 30; border.width: 1; border.color: "cyan"
-        color: "#00000000"
-        anchors.rightMargin: 10
-        anchors.right: configButton.left
-        anchors.leftMargin: 30
-        anchors.top: configButton.top
-        anchors.topMargin: 0
-        Text{
-            id: dashboardButtonText
-            anchors.verticalCenter: parent.verticalCenter ; anchors.horizontalCenter: parent.horizontalCenter
-            color : "#00e3f9"
-            text: "Dashboard"
-            font.pixelSize: 16
-            font.family: "Segoe UI Symbol"
-            font.bold: true
+        width: 100; height: 30
+        anchors.rightMargin: 10; anchors.right: configButton.left
+        anchors.top: configButton.top; anchors.topMargin: 0
+        text: "Dashboard"
+        onClicked: {
+
         }
-        MouseArea{
-            anchors.fill: parent; hoverEnabled: true
-            onClicked: {
-            }
-            onEntered: {
-                dashboardButton.border.color =  "cyan"
-                dashboardButtonText.color = "red"
-            }
-            onExited: {
-                dashboardButton.border.color ="#009dff"
-                dashboardButtonText.color = "#00e3f9"
-            }
-        }
-    } // end of refreshbutton
+    }
+    // end of Dashboard Button
+
     /* function calc_rotate_angle_tilt(_x, _y)
        @brief: get the angle to rotate the setpoint handler
        @input: (_x, _y) = (mouse.x, mouse.y)

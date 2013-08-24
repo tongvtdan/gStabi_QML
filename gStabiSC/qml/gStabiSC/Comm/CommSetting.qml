@@ -2,7 +2,7 @@ import QtQuick 2.1
 import QtQuick.Controls 1.0
 import QtQuick.Layouts 1.0
 import QtQuick.Controls.Styles 1.0
-
+import "../Components"
 
 Item{
     id: comportSettings
@@ -45,75 +45,32 @@ Item{
         anchors.left: parent.left
         anchors.leftMargin: 30
     }
-    // Open Close Button
-    Rectangle{
+    // Open Close Port Button
+    GButton{
         id: openCloseComportButton
-        width: 60; height: 30; border.width: 1; border.color: "cyan"
-        color: "#00000000"
-        anchors.left: listBackGround.right
-        anchors.leftMargin: 30
-        anchors.top: parent.top
-        anchors.topMargin: 50
-        Text{
-            id: openCloseComportButtonText
-            anchors.verticalCenter: parent.verticalCenter ; anchors.horizontalCenter: parent.horizontalCenter
-            color : "#00e3f9"
-            font.family: "Segoe UI Symbol"
-            font.bold: true
-            font.pixelSize: 16
-            text: _serialLink.isConnected? "Close" : "Open"
+        width: 60; height: 30;
+        anchors.left: listBackGround.right; anchors.leftMargin: 30
+        anchors.top: parent.top; anchors.topMargin: 50
+        text: _serialLink.isConnected? "Close" : "Open"
+        onClicked: {
+            _serialLink.open_close_comport();
+            if(_serialLink.isConnected) serial_dialog_log("Open Serialport");
+            else serial_dialog_log("Close Serialport")
+
         }
-        MouseArea{
-            anchors.fill: parent; hoverEnabled: true
-            onClicked: {
-                _serialLink.open_close_comport();
-                if(_serialLink.isConnected) serial_dialog_log("Open Serialport");
-                else serial_dialog_log("Close Serialport")
-            }
-            onEntered: {
-                openCloseComportButton.border.color =  "cyan"
-                openCloseComportButtonText.color = "red"
-            }
-            onExited: {
-                openCloseComportButton.border.color ="#009dff"
-                openCloseComportButtonText.color = "#00e3f9"
-            }
+    } // end of Open Close Port Button
+    // Refresh Button
+    GButton{
+        id: refreshButton
+        width: 60; height: 30;
+        anchors.left: listBackGround.right; anchors.leftMargin: 30
+        anchors.top: openCloseComportButton.top; anchors.topMargin: 36
+        text: "Refresh"
+        onClicked: {
+            getPortNameList();
+            serial_dialog_log("Refresh port list")
         }
-    } // end of open close port button
-// Refresh ports button
-    Rectangle{
-        id: refreshComportButton
-        width: 60; height: 30; border.width: 1; border.color: "cyan"
-        color: "#00000000"
-        anchors.left: listBackGround.right
-        anchors.leftMargin: 30
-        anchors.top: openCloseComportButton.top
-        anchors.topMargin: 36
-        Text{
-            id: refreshComportButtonText
-            anchors.verticalCenter: parent.verticalCenter ; anchors.horizontalCenter: parent.horizontalCenter
-            color : "#00e3f9"
-            text: "Refresh"
-            font.pixelSize: 16
-            font.family: "Segoe UI Symbol"
-            font.bold: true
-        }
-        MouseArea{
-            anchors.fill: parent; hoverEnabled: true
-            onClicked: {
-                getPortNameList();
-                serial_dialog_log("Refresh port list")
-            }
-            onEntered: {
-                refreshComportButton.border.color =  "cyan"
-                refreshComportButtonText.color = "red"
-            }
-            onExited: {
-                refreshComportButton.border.color ="#009dff"
-                refreshComportButtonText.color = "#00e3f9"
-            }
-        }
-    } // end of refreshbutton
+    } // end of Refresh Button
     Rectangle{
         id: listBackGround
         width: 100; height: 88;
