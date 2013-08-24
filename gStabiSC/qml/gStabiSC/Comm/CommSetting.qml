@@ -48,22 +48,28 @@ Item{
     // Open Close Button
     Rectangle{
         id: openCloseComportButton
-        x: 228
-        width: 50; height: 20; border.width: 1; border.color: "cyan"
+        width: 60; height: 30; border.width: 1; border.color: "cyan"
         color: "#00000000"
+        anchors.left: listBackGround.right
+        anchors.leftMargin: 30
         anchors.top: parent.top
         anchors.topMargin: 50
-        anchors.right: parent.right
-        anchors.rightMargin: 20
         Text{
             id: openCloseComportButtonText
             anchors.verticalCenter: parent.verticalCenter ; anchors.horizontalCenter: parent.horizontalCenter
             color : "#00e3f9"
+            font.family: "Segoe UI Symbol"
+            font.bold: true
+            font.pixelSize: 16
             text: _serialLink.isConnected? "Close" : "Open"
         }
         MouseArea{
             anchors.fill: parent; hoverEnabled: true
-            onClicked: {_serialLink.open_close_comport()}
+            onClicked: {
+                _serialLink.open_close_comport();
+                if(_serialLink.isConnected) serial_dialog_log("Open Serialport");
+                else serial_dialog_log("Close Serialport")
+            }
             onEntered: {
                 openCloseComportButton.border.color =  "cyan"
                 openCloseComportButtonText.color = "red"
@@ -77,22 +83,27 @@ Item{
 // Refresh ports button
     Rectangle{
         id: refreshComportButton
-        x: 228
-        width: 50; height: 20; border.width: 1; border.color: "cyan"
+        width: 60; height: 30; border.width: 1; border.color: "cyan"
         color: "#00000000"
+        anchors.left: listBackGround.right
+        anchors.leftMargin: 30
         anchors.top: openCloseComportButton.top
-        anchors.topMargin: 20
-        anchors.right: parent.right
-        anchors.rightMargin: 20
+        anchors.topMargin: 36
         Text{
             id: refreshComportButtonText
             anchors.verticalCenter: parent.verticalCenter ; anchors.horizontalCenter: parent.horizontalCenter
             color : "#00e3f9"
             text: "Refresh"
+            font.pixelSize: 16
+            font.family: "Segoe UI Symbol"
+            font.bold: true
         }
         MouseArea{
             anchors.fill: parent; hoverEnabled: true
-            onClicked: {getPortNameList()}
+            onClicked: {
+                getPortNameList();
+                serial_dialog_log("Refresh port list")
+            }
             onEntered: {
                 refreshComportButton.border.color =  "cyan"
                 refreshComportButtonText.color = "red"
@@ -105,7 +116,7 @@ Item{
     } // end of refreshbutton
     Rectangle{
         id: listBackGround
-        width: 180; height: 88;
+        width: 100; height: 88;
 //        anchors.horizontalCenter: parent.horizontalCenter;
         anchors.left: parent.left; anchors.leftMargin: 10
         anchors.bottom: parent.bottom; anchors.bottomMargin: 50
@@ -168,7 +179,7 @@ Item{
 
         ListView{
             id: portListView
-            width: 150; height: parent.height
+            width: 100; height: parent.height
             x: 10
 
             model: comportList

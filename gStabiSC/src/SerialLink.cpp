@@ -33,9 +33,7 @@ void SerialLink::PortAddedRemoved()
 QString SerialLink::getPortName(int idx)
 {
     if(idx < port_name_list.size()){
-        qDebug()<< port_name_list.at(idx);
         return port_name_list.at(idx);
-
     } else {
         return "NA";
     }

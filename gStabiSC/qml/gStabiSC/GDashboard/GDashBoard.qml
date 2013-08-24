@@ -61,7 +61,7 @@ Item {
             onRotationChanged: {
                 if(tilt_old_angle_value !== _mavlink_manager.tilt_angle.toFixed(1)){
                     tilt_old_angle_value = _mavlink_manager.tilt_angle.toFixed(1);
-                    tilt_log("Tilt sensor value: " + tilt_old_angle_value);
+//                    tilt_log("Tilt sensor value: " + tilt_old_angle_value);
                 }
             }
         }
@@ -548,8 +548,6 @@ Item {
             }
         }
     } // end of function
-
-
     /* function calc_rotate_angle_roll(_x, _y)
        @brief: get the angle to rotate the setpoint handler
        @input: (_x, _y) = (mouse.x, mouse.y)
