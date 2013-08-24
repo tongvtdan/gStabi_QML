@@ -7,7 +7,7 @@ import QtQuick.Controls.Styles 1.0
 Item{
     id: comportSettings
     property string portname: ""    // used to store portname in getPortNameList()
-    property alias selected_portname: portListBox.currentText
+    property string selected_portname: ""
     property bool portUpdated: _serialLink.isPortListUpdated
     property bool showPortSetting: true
     property int anchor_topMargin   : 10
@@ -39,7 +39,7 @@ Item{
         anchors.left: parent.left
         anchors.leftMargin: 20
     }
-
+/*
     ComboBox{
         id: portListBox
         anchors.left: parent.left
@@ -57,11 +57,104 @@ Item{
             console.log(currentText);
         }
     }   // portlistBox
+*/
+    Rectangle{
+        id:listBackGround
+        width: 180; height: 88;
+        anchors.horizontalCenter: parent.horizontalCenter;
+        anchors.bottom: parent.bottom; anchors.bottomMargin: 50
+        color: "#00000000"
+
+        Component {
+            id: portListDelegate
+            Rectangle {
+                id: wrapper
+                width: 70 ; height: 20; color: "#00000000"
+                border.width: 1 ; border.color: "cyan"
+
+                Text {
+                    id: portNameListText
+//                    anchors.left: parent.left; anchors.leftMargin: 10
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    color : "#00e3f9"
+                    text: port
+                    Behavior on color{
+                        ColorAnimation { }
+                    }
+                }
+                states: State{
+                    name: "Current"
+                    when: wrapper.ListView.isCurrentItem
+                    PropertyChanges {target: wrapper; x: 20}
+                    PropertyChanges { target: portNameListText; color: "red" }
+                }
+                transitions: Transition {
+                    NumberAnimation { property: "x"; duration: 200; }
+                }
+
+                MouseArea{
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onClicked: {
+                        wrapper.ListView.view.currentIndex = index
+                        selected_portname = portNameListText.text;
+                        console.log("Selected: " + selected_portname)
+                    }
+
+                    onEntered: {
+                        wrapper.border.color =  "cyan"
+                        portNameListText.color = "red"
+//                        portNameListText.anchors.leftMargin = 60
+                    }
+                    onExited: {
+                        wrapper.border.color ="#009dff"
+                        portNameListText.color = "#00e3f9"
+//                        portNameListText.anchors.leftMargin = 10
+                    }
+                }
+
+            }
+        } // end of Component
+        Component {
+            id: highlightBar
+            Rectangle {
+                width: 70; height: 20
+                color: "cyan"
+                opacity: 0.5
+                y: portListView.currentItem.y;
+                x: portListView.currentItem.x;
+                Behavior on y { SpringAnimation { spring: 2; damping: 0.1 } }
+                Behavior on x { SpringAnimation { spring: 2; damping: 0.1 } }
+            }
+        }
+
+        ListView{
+            id: portListView
+            width: 150; height: parent.height
+            x: 10
+
+            model: comportList
+            delegate: portListDelegate
+            highlightFollowsCurrentItem: false
+            highlight: highlightBar
+            focus: true
+            spacing: 2
+
+
+
+        } // end of ListView
+    } // end of list
+    ListModel {
+        id: comportList
+    }
+
+
     Button{
         id: refresshPorts
-        anchors.left: portListBox.right
+//        anchors.left: portListBox.right
         anchors.leftMargin:0
-        anchors.top: portListBox.top
+//        anchors.top: portListBox.top
         anchors.topMargin: 1
 
         style: ButtonStyle{
@@ -94,7 +187,7 @@ Item{
         text: _serialLink.isConnected? "Close" : "Open"
         anchors.right: parent.right
         anchors.rightMargin: 10
-        anchors.top: portListBox.top
+//        anchors.top: portListBox.top
         anchors.topMargin: 1
 
         style: ButtonStyle{
@@ -129,9 +222,8 @@ Item{
 
 
     //    } // communication GroupBox
-    ListModel {
-        id: comportList
-    }
+
+
     Timer{
         id: getPortListTimer
         interval: 100
@@ -167,26 +259,23 @@ Item{
 
     ]
     transitions: [ Transition {
-            from: "show"
-            to:   "hide"
+            from: "show" ; to:   "hide"
             NumberAnimation{ target: comportSettings; properties: "scale"; from: 1.0; to: 0.5; duration: 500}
             NumberAnimation { target: comportSettings; property: "opacity"; duration: 200; easing.type: Easing.InOutQuad }
         },
         Transition{
-            from: "hide"
-            to: "show"
+            from: "hide"; to: "show"
             NumberAnimation { target: comportSettings; properties: "scale" ; from: 0.5; to: 1.0; duration: 500}
             NumberAnimation { target: comportSettings; property: "opacity"; duration: 200; easing.type: Easing.InOutQuad }
         }
     ]
     MouseArea{
-        width: parent.width
-        height: 30
+        id: windowMouseArea
+        width: parent.width ; height: 30
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
         drag.target: parent
-        drag.minimumX: 0
-        drag.minimumY: 0
+        drag.minimumX: 0; drag.minimumY: 0
         drag.maximumX: dragMaxX
         drag.maximumY: dragMaxY
         onDoubleClicked: comportSettings.state == "hide"? comportSettings.state = "show" : comportSettings.state = "hide"

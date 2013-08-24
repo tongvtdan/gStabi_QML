@@ -59,9 +59,9 @@ Rectangle {
         id: comportSettingPanel
         x: 50
         y: 400
-        opacity: 1
-        scale: 0.5
-        state: "hide"
+//        opacity: 1
+//        scale: 0.5
+        state: "show"
         implicitHeight: 200
         implicitWidth: 300
         dragMaxX: gstabiBackgroundImage.width - comportSettingPanel.width

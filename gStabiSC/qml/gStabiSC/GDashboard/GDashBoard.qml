@@ -31,9 +31,6 @@ Item {
     property int    pan_control_handler_no_of_clicks: 0
 
     property string msg_log : "" // log the message to display on Console
-    property int    hint_x  : 0
-    property int    hint_y  : 0
-
 
     // tilt
     Item{
@@ -65,6 +62,13 @@ Item {
                 if(tilt_old_angle_value !== _mavlink_manager.tilt_angle.toFixed(1)){
                     tilt_old_angle_value = _mavlink_manager.tilt_angle.toFixed(1);
                     tilt_log("Tilt sensor value: " + tilt_old_angle_value);
+                }
+            }
+            Behavior on rotation {
+                SpringAnimation{
+                    damping: 0.5
+                    spring: 5
+
                 }
             }
         }
