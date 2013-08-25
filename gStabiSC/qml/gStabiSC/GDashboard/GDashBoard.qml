@@ -3,7 +3,7 @@ import QtQuick.Controls 1.0
 import "../Components"
 
 Item {
-    id: dashboardRoot
+    id: root
 
     width: 960
     height: 340
@@ -33,6 +33,7 @@ Item {
 
     property string msg_log : "" // log the message to display on Console
 
+    state: "Dashboard"
 
     BorderImage {
         id: dashboardPanelImage
@@ -526,29 +527,41 @@ Item {
 
     // Config Button
     GButton{
-        id: configButton
+        id: modeSelectionButton
         anchors.right: parent.right
         anchors.rightMargin: 50
         anchors.top: parent.top
         anchors.topMargin: -20
-        width: 70; height: 30
+        width: 100; height: 30
         text: "Config"
         onClicked: {
+            root.state === "Dashboard" ? root.state = "Config" : root.state = "Dashboard"
 
         }
     }
     // end of Config Button
     // Dashboard Button
-    GButton{
-        id: dashboardButton
-        width: 100; height: 30
-        anchors.rightMargin: 10; anchors.right: configButton.left
-        anchors.top: configButton.top; anchors.topMargin: 0
-        text: "Dashboard"
-        onClicked: {
+//    GButton{
+//        id: dashboardButton
+//        width: 100; height: 30
+//        anchors.rightMargin: 10; anchors.right: modeSelectionButton.left
+//        anchors.top: modeSelectionButton.top; anchors.topMargin: 0
+//        text: "Dashboard"
+//        onClicked: {
 
+//        }
+//    }
+    states: [
+        State {
+            name: "Dashboard"
+
+            PropertyChanges { target: modeSelectionButton; text: "Config"}
+        },
+        State {
+            name: "Config"
+            PropertyChanges {target: modeSelectionButton; text: "Dashboard" }
         }
-    }
+    ]
     // end of Dashboard Button
 
     /* function calc_rotate_angle_tilt(_x, _y)
