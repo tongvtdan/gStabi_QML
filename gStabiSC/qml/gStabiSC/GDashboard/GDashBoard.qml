@@ -629,9 +629,10 @@ Item {
 //    }
     GSlider{
         id: powerSlider
-        width: 350
+        width: 300
         height: 20
         lowerLimit: 0; upperLimit: 100
+        anchors.top: tilt_gauge.bottom ; anchors.topMargin: 0
 
     }
 

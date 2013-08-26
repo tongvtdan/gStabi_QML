@@ -6,22 +6,27 @@ gradients the background of the slider is a slightly rotated rectangle
 with a gradient that is clipped by a rectangle defining the actual slider
 box.
 
-property int value:      The value that the slider currently has.
+property int fill_width:      The fill_width that the slider currently has.
 property int lowerLimit: The lower limit of the slider.
 property int upperLimit: The upper limit of the slider.
 */
 Rectangle {
-    property int value: 0
+    property double   value: 0
+    property int fill_width: 0
     property int lowerLimit: 0
     property int upperLimit: 0
     property int  handle_offset_x: handle.width/2
 
+    property double  convert_ratio: (background.width - 2*background.border.width)/(Math.abs(upperLimit) - Math.abs(lowerLimit))
+
     id: background
     color: "#00000000"
     smooth: true
-    radius: 2
+//    radius: 2
     border.width: 2
     border.color: "dodgerblue"
+    implicitHeight: 20; implicitWidth: 300
+
 
     Item {
         id: grooveRect
@@ -31,18 +36,17 @@ Rectangle {
         clip: true
         Rectangle {
             id: fillRect
-            height: parent.height;  width: value
+            height: parent.height;  width: fill_width
             color: "#04ffde"
             anchors.left: parent.left
-            anchors.leftMargin: 0
-            border.color: "#08f7d0"
+            anchors.leftMargin: background.border.width/2
         }
     }
 
     Item {
         id: handle
         height:  40; width: 40
-        x: -handle_offset_x + background.border.width;
+        x: -handle_offset_x + background.border.width
         anchors.top: grooveRect.bottom; anchors.topMargin: 0
         Image{
             id: handleReleasedImage
@@ -67,15 +71,17 @@ Rectangle {
             anchors.fill: parent
             drag.target: parent
             drag.axis: Drag.XAxis
-            drag.minimumX: -parent.width/2 + background.border.width
+            drag.minimumX: -handle_offset_x + background.border.width
             drag.maximumX: background.width - handle_offset_x - background.border.width
             onPressed: { handlePressedImage.visible = true }
             onReleased: { handlePressedImage.visible = false}
             onPositionChanged: {
-                value = handle_offset_x + lowerLimit + parent.x    // (drag.maximumX - drag.minimumX)) * (Math.abs(upperLimit) - Math.abs(lowerLimit))
-                console.log("Slider value: " + value)
+                fill_width = handle.x + handle_offset_x  - background.border.width
+                value = lowerLimit + (fill_width )/(drag.maximumX - drag.minimumX)*(Math.abs(upperLimit) - Math.abs(lowerLimit));
+                console.log("Handle pos x: "+ handle.x + ", Fill width: " + fill_width +  ", Slider pos: " + value)
             }
         }
     }
+
 }
 
