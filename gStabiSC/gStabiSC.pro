@@ -37,7 +37,9 @@ OTHER_FILES += \
     qml/gStabiSC/Communication/CommSetting.qml \
     qml/gStabiSC/GDashboard/GDashBoard.qml \
     qml/gStabiSC/Console.qml \
-    qml/gStabiSC/Components/GButton.qml
+    qml/gStabiSC/Components/GButton.qml \
+    qml/gStabiSC/Components/GSlider.qml \
+    qml/gStabiSC/GDashboard/GConfigDialog.qml
 
 HEADERS += \
     src/configuration.h \
