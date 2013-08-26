@@ -56,10 +56,9 @@ Rectangle {
     CommSetting{
         id: comportSettingPanel
         x: 50
-        y: 400
+        y: mainWindow.height - comportSettingPanel.height - 60
         state: "show"
-        implicitHeight: 200
-        implicitWidth: 300
+        height: 200 ; width: 300
         dragMaxX: gstabiBackgroundImage.width - comportSettingPanel.width
         dragMaxY: gstabiBackgroundImage.height - comportSettingPanel.height
         onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
@@ -70,8 +69,7 @@ Rectangle {
         y: 400
         opacity: 1
         state: "show"
-        implicitHeight: 200
-        implicitWidth: 300
+        height: 200; width:  300
         dragMaxX: gstabiBackgroundImage.width - textConsole.width
         dragMaxY: gstabiBackgroundImage.height - textConsole.height
         msg_history: main_log_msg
@@ -81,7 +79,7 @@ Rectangle {
         id: openSerialSettingButton
         text: "Port"
         anchors.bottom: gstabiBackgroundImage.bottom
-        anchors.bottomMargin: 20
+        anchors.bottomMargin: 10
         anchors.left: gstabiBackgroundImage.left
         anchors.leftMargin: 50
 

@@ -1,6 +1,6 @@
-import QtQuick 2.1
-import QtQuick.Controls 1.0
-import QtQuick.Controls.Styles 1.0
+import QtQuick 2.0
+//import QtQuick.Controls 1.0
+//import QtQuick.Controls.Styles 1.0
 
 
 import "../Components"
@@ -99,7 +99,7 @@ Item {
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             style: Text.Normal
-            text: tiltNeedleImage.rotation.toFixed(1)
+            text: tiltNeedleImage.rotation.toFixed(angle_precision)
         }
         // display different value from setpoint
         Text{
@@ -115,7 +115,7 @@ Item {
             font.bold: true
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
-            text: tilt_angle_delta.toFixed(1)
+            text: tilt_angle_delta.toFixed(angle_precision)
 //                        text: "-180.0"
         }
         Rectangle{
@@ -327,7 +327,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             font.bold: true
-            text: rollNeedleImage.rotation.toFixed(1)
+            text: rollNeedleImage.rotation.toFixed(angle_precision)
         }
         Text{
             id: rollAngleDeltaText
@@ -481,7 +481,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             font.bold: true
-            text: panNeedleImage.rotation.toFixed(1);
+            text: panNeedleImage.rotation.toFixed(angle_precision);
 
         }
         Text{
@@ -497,7 +497,7 @@ Item {
             font.bold: true
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
-            text: pan_angle_delta.toFixed(1)
+            text: pan_angle_delta.toFixed(angle_precision)
 //                        text: "-180.0"
         }
         Rectangle{
@@ -615,18 +615,6 @@ Item {
             root.state = dashboard_config_mode? "Config" : "Dashboard"
         }
     }
-//    Slider{
-//        id: powerSlider
-//        opacity: 50
-//        minimumValue: 0
-//        maximumValue: 100
-//        value: 50
-//        width: 200; height: 20
-//        anchors.top: tilt_gauge.bottom; anchors.topMargin: 50
-//        anchors.left: tilt_gauge.left
-//        style: sliderStyle
-
-//    }
     GSlider{
         id: powerSlider
         width: 300
@@ -658,46 +646,6 @@ Item {
     ]
     onStateChanged: {
         if(dashboard_config_mode) {tilt_log("Change to Config Mode")} else {tilt_log("Return to Dashboard mode")}
-    }
-
-    property Component sliderStyle: SliderStyle {
-        handle: Rectangle {
-            implicitWidth: 40
-            implicitHeight: implicitWidth
-            color: control.pressed ? "aqua" : "#00dfdf"
-            border.color: "cyan"
-            antialiasing: true
-            radius: height/2
-            Rectangle {
-                anchors.fill: parent
-                anchors.margins: 1
-                color: "transparent"
-                antialiasing: true
-                border.color: "blue"
-                radius: height/2
-            }
-        }
-
-        groove: Rectangle {
-            implicitWidth: 200
-            implicitHeight: 22
-
-            antialiasing: true
-            color: "#00000000"
-            border.color: "aqua"
-            radius: height/2 - 8
-            Rectangle {
-//                anchors.fill: parent
-//                anchors.margins: 1
-                anchors.verticalCenter: parent.verticalCenter
-                width: styleData.handlePosition
-                height: parent.height-2
-                color: "#00dfdf"
-                antialiasing: true
-                border.color: "darkturquoise"
-                radius: height/2 - 8
-            }
-        }
     }
 
     /* function calc_rotate_angle_tilt(_x, _y)
