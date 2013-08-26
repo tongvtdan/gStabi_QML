@@ -1,7 +1,9 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.0
 import "../Components"
-
+/*
+  All angles value unit are Degree
+  */
 Item {
     id: root
 
@@ -13,9 +15,13 @@ Item {
     property double gauge_center_x: gauge_width/2
     property double gauge_center_y: gauge_height/2
     property double gauge_radius: gauge_width - gauge_center_x
+    property int  angle_precision: 1        // number after dot
 
-    property double tilt_setpoint_angle     : 0
-    property bool   tilt_set_enabled        : false
+    property double     tilt_setpoint_angle         : 0         // to control the tilt angle of camera
+    property double     tilt_down_limit_set_angle   : 30
+    property double     tilt_up_limit_set_angle     : -10
+    property bool       tilt_down_limit_set_enabled : false
+    property bool       tilt_set_enabled            : false
     property double tilt_angle_delta        : tiltNeedleImage.rotation - tilt_setpoint_angle
     property double tilt_old_angle_value    : 0
     property int    tilt_control_handler_no_of_clicks: 0
@@ -32,6 +38,7 @@ Item {
     property int    pan_control_handler_no_of_clicks: 0
 
     property string msg_log : "" // log the message to display on Console
+    property bool   dashboard_config_mode : false   // if false: dashbord mode; if true: config mode
 
     state: "Dashboard"
 
@@ -67,13 +74,13 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             source: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_needle_tilt.png"
 //            source: "../images/gauges/gStabiUI_3.2_needle_tilt.png" // enable for design UI only
-            rotation: tilt_set_enabled ? tilt_setpoint_angle : _mavlink_manager.tilt_angle
-            onRotationChanged: {
-                if(tilt_old_angle_value !== _mavlink_manager.tilt_angle.toFixed(1)){
-                    tilt_old_angle_value = _mavlink_manager.tilt_angle.toFixed(1);
-//                    tilt_log("Tilt sensor value: " + tilt_old_angle_value);
-                }
+            rotation: {
+                if(dashboard_config_mode == false){ return _mavlink_manager.tilt_angle; }
+                else if(tilt_set_enabled == true) {return tilt_up_limit_set_angle;}
+                else if(tilt_down_limit_set_enabled == true) {return tilt_down_limit_set_angle;}
+                else {return _mavlink_manager.tilt_angle;}
             }
+
         }
         // text display current angle value, sensor angle value
         Text{
@@ -110,7 +117,6 @@ Item {
         }
         Rectangle{
             id: tiltAngleDeltaNumDisplay
-
             color: "#00000000"
             height: 15
             width: 50
@@ -155,7 +161,7 @@ Item {
         Item{
             id: tiltControlItem
             anchors.fill: parent
-            rotation: tilt_setpoint_angle
+            rotation: dashboard_config_mode? tilt_up_limit_set_angle : tilt_setpoint_angle
 
             Image {
                 id: tiltHandleSelectedImage
@@ -183,7 +189,73 @@ Item {
             }
 
         }
+        // This item will be use to set range limit accompany with tiltControlItem
+        Item{
+            id: tiltDownLimitSetItem
+//            anchors.fill: parent
+            rotation: tilt_down_limit_set_angle
+            width: 330; height: 165
+            anchors.horizontalCenter: parent.horizontalCenter
+//            rotation: 0
+            transformOrigin: Item.Top
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 0
 
+            Image {
+                id: tiltDownRangeHandleSelectedImage
+                anchors.verticalCenter: tiltDownRangeSelectHandlerImage.verticalCenter
+                anchors.right: tiltDownRangeSelectHandlerImage.right
+                source: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_roll_handle_selected.png"  // to get different color from roll
+//                            source: "../images/gauges/gStabiUI_3.2_roll_handle_selected.png"
+//                visible: false
+                Behavior on visible{
+                    SequentialAnimation {
+                        NumberAnimation { target: tiltDownRangeHandleSelectedImage; property: "scale"; to: 0.5; duration: 150}
+                        NumberAnimation { target: tiltDownRangeHandleSelectedImage; property: "scale"; to: 1.5; duration: 150}
+                        NumberAnimation { target: tiltDownRangeHandleSelectedImage; property: "scale"; to: 1.0; duration: 150}
+                    }
+                }
+            }
+            Image{
+                id: tiltDownRangeSelectHandlerImage
+                anchors.horizontalCenterOffset: 0
+                anchors.top: parent.top
+                anchors.topMargin: -20
+                anchors.horizontalCenter: parent.horizontalCenter
+                source: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_roll_setpoint_handle.png"
+//                            source: "../images/gauges/gStabiUI_3.2_tilt_setpoint_handle.png" //enable for design UI only
+
+            }
+
+
+        }
+        MouseArea{
+            id: tiltDownLimitSetMouseArea
+            anchors.fill: parent
+            hoverEnabled: true
+            onPositionChanged:
+            {
+                calc_rotate_angle_tilt(mouse.x, mouse.y)
+            }
+            onEntered:
+            {
+                tilt_log("<b><i>Tilt axis of gStabi</i></b>")
+            }
+            onClicked: {
+                tilt_control_handler_no_of_clicks = tilt_control_handler_no_of_clicks + 1
+                if(tilt_control_handler_no_of_clicks == 1){
+                    tilt_down_limit_set_enabled = true;
+                    tilt_log("<b>Start to set tilt down angle limit for the camera</b>")
+                    tiltDownRangeHandleSelectedImage.visible = true
+                }
+                else if(tilt_control_handler_no_of_clicks == 2){
+                    tilt_down_limit_set_enabled = false;
+                    tilt_log("<b>Stop setting tilt down angle limit for the camera</b>");
+                    tiltDownRangeHandleSelectedImage.visible = false
+                    tilt_control_handler_no_of_clicks = 0;
+                }
+            }
+        }
         MouseArea{
             id: tiltMouseArea
             anchors.fill: parent
@@ -200,14 +272,17 @@ Item {
                 tilt_control_handler_no_of_clicks = tilt_control_handler_no_of_clicks + 1
                 if(tilt_control_handler_no_of_clicks == 1){
                     tilt_set_enabled = true;
-                    tilt_log("<b>Start to tilt camera</b>")
                     tiltHandleSelectedImage.visible = true
+                    if(dashboard_config_mode) tilt_log("<b>Start to set tilt up angle limit for the camera</b>")
+                    else tilt_log("<b>Start to tilt camera</b>")
+
                 }
                 else if(tilt_control_handler_no_of_clicks == 2){
                     tilt_set_enabled = false;
-                    tilt_log("<b>Stop tilting camera</b>");
                     tiltHandleSelectedImage.visible = false
                     tilt_control_handler_no_of_clicks = 0;
+                    if(dashboard_config_mode) tilt_log("<b>Stop setting tilt up angle limit for the camera</b>")
+                    else tilt_log("<b>Stop tilting camera</b>");
                 }
             }
         }
@@ -528,46 +603,44 @@ Item {
     // Config Button
     GButton{
         id: modeSelectionButton
-        anchors.right: parent.right
-        anchors.rightMargin: 50
-        anchors.top: parent.top
-        anchors.topMargin: -20
-        width: 100; height: 30
+        anchors.right: parent.right; anchors.rightMargin: 50
+        anchors.top: parent.top; anchors.topMargin: -20
+        width: 120; height: 30
         text: "Config"
         onClicked: {
-            root.state === "Dashboard" ? root.state = "Config" : root.state = "Dashboard"
-
+            dashboard_config_mode = !dashboard_config_mode;
+            root.state = dashboard_config_mode? "Config" : "Dashboard"
         }
     }
     // end of Config Button
-    // Dashboard Button
-//    GButton{
-//        id: dashboardButton
-//        width: 100; height: 30
-//        anchors.rightMargin: 10; anchors.right: modeSelectionButton.left
-//        anchors.top: modeSelectionButton.top; anchors.topMargin: 0
-//        text: "Dashboard"
-//        onClicked: {
-
-//        }
-//    }
     states: [
         State {
             name: "Dashboard"
+            PropertyChanges { target: modeSelectionButton; text: "Config >>"}
+            PropertyChanges { target: tiltDownLimitSetMouseArea; visible: false}
+            PropertyChanges { target: tiltDownLimitSetItem; visible: false}
 
-            PropertyChanges { target: modeSelectionButton; text: "Config"}
         },
         State {
             name: "Config"
-            PropertyChanges {target: modeSelectionButton; text: "Dashboard" }
+            PropertyChanges { target: modeSelectionButton; text: "<< Dashboard" }
+            PropertyChanges { target: tiltDownLimitSetMouseArea; visible: true}
+
+            PropertyChanges { target: tiltMouseArea; width: 330; height: 165 ; anchors.bottomMargin: 165 }
+            PropertyChanges { target: tiltDownLimitSetMouseArea; width: 330; height: 165 ; anchors.bottomMargin: 0 }
+            PropertyChanges { target: tiltDownLimitSetItem; visible: true}
         }
     ]
-    // end of Dashboard Button
+    onStateChanged: {
+        if(dashboard_config_mode) {tilt_log("Change to Config Mode")} else {tilt_log("Return to Dashboard mode")}
+    }
+
 
     /* function calc_rotate_angle_tilt(_x, _y)
        @brief: get the angle to rotate the setpoint handler
        @input: (_x, _y) = (mouse.x, mouse.y)
        @output: angle for setpoint handle image to rotate
+       @note:   interact area is a donus with inside radius = 0.7 base circle radius, outside radius = base circle radius
       */
     function calc_rotate_angle_tilt(_x, _y){
         var rot_angle_deg;
@@ -588,11 +661,29 @@ Item {
         else {
             rot_angle_deg = -360;
         }
-        if(tilt_set_enabled) {
-            if(rot_angle_deg !== -360) {
-                if(rot_angle_deg > 180){ rot_angle_deg = rot_angle_deg - 360}
-                tilt_setpoint_angle = rot_angle_deg;
-                tilt_log("Tilting camera to angle: " + tilt_setpoint_angle);
+        if(dashboard_config_mode){ // in Config Mode, show both Up (use Control handle) and Down limit
+            if(tilt_set_enabled) {
+                if(rot_angle_deg !== -360) {
+                    if(rot_angle_deg > 180){ rot_angle_deg = rot_angle_deg - 360}
+                    tilt_up_limit_set_angle = rot_angle_deg;
+                    tilt_log("Setting tilt up limit to angle: " + tilt_up_limit_set_angle);
+                }
+            }
+            if(tilt_down_limit_set_enabled){
+                if(rot_angle_deg !== -360) {
+                    if(rot_angle_deg > 180){ rot_angle_deg = rot_angle_deg - 360}
+                    tilt_down_limit_set_angle = rot_angle_deg;
+                    tilt_log("Setting tilt down limit to angle: " + tilt_down_limit_set_angle);
+                }
+            }
+        }
+        else{       // in Dashboard Mode, only show Control Handle
+            if(tilt_set_enabled) {
+                if(rot_angle_deg !== -360) {
+                    if(rot_angle_deg > 180){ rot_angle_deg = rot_angle_deg - 360}
+                    tilt_setpoint_angle = rot_angle_deg;
+                    tilt_log("Tilting camera to angle: " + tilt_setpoint_angle);
+                }
             }
         }
     } // end of function

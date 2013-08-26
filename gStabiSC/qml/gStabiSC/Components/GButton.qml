@@ -17,6 +17,7 @@ Rectangle{
         font.bold: true
         font.pixelSize: 16
         text: button.text
+        Behavior on color { ColorAnimation { duration: 200 }}
 
     }
     MouseArea{
@@ -32,4 +33,5 @@ Rectangle{
             buttonLabel.color = "#00e3f9"
         }
     }
+    Behavior on color {ColorAnimation {duration: 200 }}
 } // end of button
