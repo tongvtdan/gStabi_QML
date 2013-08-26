@@ -615,25 +615,11 @@ Item {
 
     GConfigDialog{
         id: tiltConfigDialog
-        anchors.top: tilt_gauge.bottom ; anchors.topMargin: 0
-        Behavior on visible{
-            SequentialAnimation {
-                NumberAnimation { target: tiltConfigDialog; property: "scale"; to: 0.5; duration: 150}
-                NumberAnimation { target: tiltConfigDialog; property: "scale"; to: 1.5; duration: 150}
-                NumberAnimation { target: tiltConfigDialog; property: "scale"; to: 1.0; duration: 150}
-            }
-        }
+        anchors.top: tilt_gauge.bottom ; anchors.topMargin: -20
+//        anchors.verticalCenter: tilt_gauge.verticalCenter
+        opacity: 0
 
     }
-
-//    GSlider{
-//        id: powerSlider
-//        width: 300
-//        height: 20
-//        lowerLimit: 0; upperLimit: 100
-//        anchors.top: tilt_gauge.bottom ; anchors.topMargin: 0
-
-//    }
 
 
     // end of Config Button
@@ -643,7 +629,7 @@ Item {
             PropertyChanges { target: modeSelectionButton; text: "Config >>"}
             PropertyChanges { target: tiltDownLimitSetMouseArea; visible: false}
             PropertyChanges { target: tiltDownLimitSetItem; visible: false}
-            PropertyChanges { target: tiltConfigDialog; visible: false}
+            PropertyChanges { target: tiltConfigDialog; opacity: 0}
 
         },
         State {
@@ -654,7 +640,33 @@ Item {
             PropertyChanges { target: tiltMouseArea; width: 330; height: 165 ; anchors.bottomMargin: 165 }
             PropertyChanges { target: tiltDownLimitSetMouseArea; width: 330; height: 165 ; anchors.bottomMargin: 0 }
             PropertyChanges { target: tiltDownLimitSetItem; visible: true}
-            PropertyChanges { target: tiltConfigDialog; visible: true}
+            PropertyChanges { target: tiltConfigDialog; opacity: 1}
+        }
+    ]
+    transitions: [
+        Transition {
+            from: "Config"
+            to: "Dashboard"
+            ParallelAnimation{
+                NumberAnimation { target: tiltConfigDialog; property: "opacity";  duration: 400;}
+                SequentialAnimation{
+                    NumberAnimation { target: tiltConfigDialog; property: "scale"; from: 1; to: 1.5; duration: 200; }
+                    NumberAnimation { target: tiltConfigDialog; property: "scale"; from: 1.5; to: 0.5; duration: 200; }
+                }
+            }
+        }
+        ,Transition {
+            from: "Dashboard"
+            to: "Config"
+            ParallelAnimation{
+                NumberAnimation { target: tiltConfigDialog; property: "opacity"; duration: 600; }
+                SequentialAnimation{
+                    NumberAnimation { target: tiltConfigDialog; property: "scale"; from: 0.5; to: 1; duration: 200; }
+                    NumberAnimation { target: tiltConfigDialog; property: "scale"; from: 1; to: 1.5; duration: 200; }
+                    NumberAnimation { target: tiltConfigDialog; property: "scale"; from: 1.5; to: 1; duration: 200;}
+                }
+            }
+
         }
     ]
     onStateChanged: {

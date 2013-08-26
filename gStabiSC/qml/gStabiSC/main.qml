@@ -37,7 +37,10 @@ Rectangle {
         anchors.top: gstabiBackgroundImage.top
         anchors.topMargin: 60
         onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
-
+        onStateChanged: {
+            if(gDashboard.state == "Config") comportSettingPanel.state = "hide";
+            else comportSettingPanel.state = "show";
+        }
 
     }
     AnimatedImage{
@@ -53,7 +56,8 @@ Rectangle {
     }
     CommSetting{
         id: comportSettingPanel
-        x: 50
+//        x: 50
+        anchors.right: textConsole.left
         y: mainWindow.height - comportSettingPanel.height - 60
         state: "show"
         height: 200 ; width: 300
@@ -79,12 +83,17 @@ Rectangle {
         anchors.bottom: gstabiBackgroundImage.bottom; anchors.bottomMargin: 0
         anchors.left: gstabiBackgroundImage.left; anchors.leftMargin: 50
         GImageButton{
-            id: openSerialDialog
+            id: serialSettingDialog
             anchors.left: parent.left; anchors.leftMargin: 0
             text: "Port"
             onClicked: {
                 comportSettingPanel.visible == true ? comportSettingPanel.visible = false : comportSettingPanel.visible = true
             }
+        }
+        GImageButton{
+            id: pidSettingDialog
+            text: "PID"
+            anchors.left: serialSettingDialog.right; anchors.leftMargin: 20
         }
     }   // end of buttons Panel
     onMain_log_msgChanged: {

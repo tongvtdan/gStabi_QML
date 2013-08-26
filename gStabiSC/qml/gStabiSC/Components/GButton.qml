@@ -25,11 +25,11 @@ Rectangle{
         anchors.fill: parent; hoverEnabled: true
         onClicked: button.clicked();
         onEntered: {
-            button.border.color =  "cyan"
+            button.border.color = "#009dff"
             buttonLabel.color = "red"
         }
         onExited: {
-            button.border.color ="#009dff"
+            button.border.color = "cyan"
             buttonLabel.color = "#00e3f9"            
         }
         onPressed: button.border.width = 3

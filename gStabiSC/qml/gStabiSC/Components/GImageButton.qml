@@ -4,7 +4,7 @@ Item{
     id: rootItem
 
     property string imageNormal : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_released_button.png"
-    property string imageHover  : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_pressed_button.png"
+    property string imageHover  : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_released_button.png"
     property string imagePressed: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_pressed_button.png"
     property string text: "ImgButton"
     signal clicked
@@ -47,15 +47,18 @@ Item{
     states: [
         State {
             name: "pressed"
-            PropertyChanges { target: buttonImage; source: imagePressed  }
+            PropertyChanges { target: buttonImage; source: imagePressed; }
+            PropertyChanges {target: rootItem; scale: 1.2  }
         }
         ,State {
             name: "normal"
-            PropertyChanges { target: buttonImage; source: imageNormal }
+            PropertyChanges { target: buttonImage; source: imageNormal;  }
+            PropertyChanges {target: rootItem; scale: 1  }
         }
         ,State {
             name: "hover"
-            PropertyChanges { target: buttonImage; source: imageHover }
+            PropertyChanges { target: buttonImage; source: imageHover; }
+            PropertyChanges {target: rootItem; scale: 1.5  }
         }
 
     ]

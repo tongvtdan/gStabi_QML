@@ -74,14 +74,14 @@ Item{
     transitions: [ Transition {
             from: "show"
             to:   "hide"
-            NumberAnimation{ target: consoleLog; properties: "scale"; from: 1.0; to: 0.5; duration: 500}
-            NumberAnimation { target: consoleLog; property: "opacity"; duration: 200; easing.type: Easing.InOutQuad }
+            NumberAnimation{ target: consoleLog; properties: "scale"; from: 1.0; to: 0.5; duration: 500;}
+            NumberAnimation { target: consoleLog; property: "opacity"; duration: 200;  }
         },
         Transition{
             from: "hide"
             to: "show"
             NumberAnimation { target: consoleLog; properties: "scale" ; from: 0.5; to: 1.0; duration: 500}
-            NumberAnimation { target: consoleLog; property: "opacity"; duration: 200; easing.type: Easing.InOutQuad }
+            NumberAnimation { target: consoleLog; property: "opacity"; duration: 200;  }
         }
     ]
     MouseArea{
