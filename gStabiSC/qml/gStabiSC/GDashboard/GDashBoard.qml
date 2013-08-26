@@ -615,6 +615,8 @@ Item {
             root.state = dashboard_config_mode? "Config" : "Dashboard"
         }
     }
+
+
     GSlider{
         id: powerSlider
         width: 300

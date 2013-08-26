@@ -5,7 +5,7 @@ import QtQuick.Controls.Styles 1.0
 import "AppHeader"
 import "Comm"
 import "GDashboard"
-//import "Dashboard"
+import "Components"
 
 Rectangle {
     id: mainWindow
@@ -75,42 +75,59 @@ Rectangle {
         msg_history: main_log_msg
     }
 
-    Button{
-        id: openSerialSettingButton
-        text: "Port"
+
+//    Button{
+//        id: openSerialSettingButton
+//        text: "Port"
+//        anchors.bottom: gstabiBackgroundImage.bottom
+//        anchors.bottomMargin: 10
+//        anchors.left: gstabiBackgroundImage.left
+//        anchors.leftMargin: 50
+
+
+//        style: ButtonStyle{
+//            background: BorderImage {
+//                source: control.pressed ? "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_pressed_button.png" : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_released_button.png"
+//                border.left: 4 ; border.right: 4 ; border.top: 4 ; border.bottom: 4
+//            }
+//            label: Text{
+//                Row {
+//                    id: row
+//                    anchors.centerIn: parent
+//                    spacing: 2
+//                    Image {
+//                        source: control.iconSource
+//                        anchors.verticalCenter: parent.verticalCenter
+//                        scale: 0.8
+//                    }
+//                    Text {
+//                        renderType: Text.NativeRendering
+//                        anchors.verticalCenter: parent.verticalCenter
+//                        text: control.text
+//                        color: "white"
+//                    }
+//                }
+//            }
+//        }
+
+//        onClicked: comportSettingPanel.visible == true ? comportSettingPanel.visible = false : comportSettingPanel.visible = true
+//    }// comport Open/Close
+    Item {
+        width: 150
+        height: 70
         anchors.bottom: gstabiBackgroundImage.bottom
-        anchors.bottomMargin: 10
+        anchors.bottomMargin: 0
         anchors.left: gstabiBackgroundImage.left
         anchors.leftMargin: 50
-
-
-        style: ButtonStyle{
-            background: BorderImage {
-                source: control.pressed ? "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_pressed_button.png" : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_released_button.png"
-                border.left: 4 ; border.right: 4 ; border.top: 4 ; border.bottom: 4
-            }
-            label: Text{
-                Row {
-                    id: row
-                    anchors.centerIn: parent
-                    spacing: 2
-                    Image {
-                        source: control.iconSource
-                        anchors.verticalCenter: parent.verticalCenter
-                        scale: 0.8
-                    }
-                    Text {
-                        renderType: Text.NativeRendering
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: control.text
-                        color: "white"
-                    }
-                }
+        GImageButton{
+            id: openSerialDialog
+            anchors.left: parent.left; anchors.leftMargin: 0
+            text: "Port"
+            onClicked: {
+                comportSettingPanel.visible == true ? comportSettingPanel.visible = false : comportSettingPanel.visible = true
             }
         }
-
-        onClicked: comportSettingPanel.visible == true ? comportSettingPanel.visible = false : comportSettingPanel.visible = true
-    }// comport Open/Close
+    }
     onMain_log_msgChanged: {
         if(main_log_msg.length >=10000){
             main_log_msg = "Log data cleared "

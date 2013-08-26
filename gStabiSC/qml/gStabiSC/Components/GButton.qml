@@ -30,8 +30,10 @@ Rectangle{
         }
         onExited: {
             button.border.color ="#009dff"
-            buttonLabel.color = "#00e3f9"
+            buttonLabel.color = "#00e3f9"            
         }
+        onPressed: button.border.width = 3
+        onReleased:  button.border.width = 1
     }
     Behavior on color {ColorAnimation {duration: 200 }}
 } // end of button
