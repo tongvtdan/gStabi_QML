@@ -195,11 +195,9 @@ Item {
         // This item will be use to set range limit accompany with tiltControlItem
         Item{
             id: tiltDownLimitSetItem
-//            anchors.fill: parent
             rotation: tilt_down_limit_set_angle
             width: 330; height: 165
             anchors.horizontalCenter: parent.horizontalCenter
-//            rotation: 0
             transformOrigin: Item.Top
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 0
@@ -210,7 +208,6 @@ Item {
                 anchors.right: tiltDownRangeSelectHandlerImage.right
                 source: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_roll_handle_selected.png"  // to get different color from roll
 //                            source: "../images/gauges/gStabiUI_3.2_roll_handle_selected.png"
-//                visible: false
                 Behavior on visible{
                     SequentialAnimation {
                         NumberAnimation { target: tiltDownRangeHandleSelectedImage; property: "scale"; to: 0.5; duration: 150}
@@ -616,15 +613,27 @@ Item {
         }
     }
 
-
-    GSlider{
-        id: powerSlider
-        width: 300
-        height: 20
-        lowerLimit: 0; upperLimit: 100
+    GConfigDialog{
+        id: tiltConfigDialog
         anchors.top: tilt_gauge.bottom ; anchors.topMargin: 0
+        Behavior on visible{
+            SequentialAnimation {
+                NumberAnimation { target: tiltConfigDialog; property: "scale"; to: 0.5; duration: 150}
+                NumberAnimation { target: tiltConfigDialog; property: "scale"; to: 1.5; duration: 150}
+                NumberAnimation { target: tiltConfigDialog; property: "scale"; to: 1.0; duration: 150}
+            }
+        }
 
     }
+
+//    GSlider{
+//        id: powerSlider
+//        width: 300
+//        height: 20
+//        lowerLimit: 0; upperLimit: 100
+//        anchors.top: tilt_gauge.bottom ; anchors.topMargin: 0
+
+//    }
 
 
     // end of Config Button
@@ -634,6 +643,7 @@ Item {
             PropertyChanges { target: modeSelectionButton; text: "Config >>"}
             PropertyChanges { target: tiltDownLimitSetMouseArea; visible: false}
             PropertyChanges { target: tiltDownLimitSetItem; visible: false}
+            PropertyChanges { target: tiltConfigDialog; visible: false}
 
         },
         State {
@@ -644,6 +654,7 @@ Item {
             PropertyChanges { target: tiltMouseArea; width: 330; height: 165 ; anchors.bottomMargin: 165 }
             PropertyChanges { target: tiltDownLimitSetMouseArea; width: 330; height: 165 ; anchors.bottomMargin: 0 }
             PropertyChanges { target: tiltDownLimitSetItem; visible: true}
+            PropertyChanges { target: tiltConfigDialog; visible: true}
         }
     ]
     onStateChanged: {

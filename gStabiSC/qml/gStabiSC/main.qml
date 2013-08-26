@@ -1,6 +1,6 @@
-import QtQuick 2.1
-import QtQuick.Controls 1.0
-import QtQuick.Controls.Styles 1.0
+import QtQuick 2.0
+//import QtQuick.Controls 1.0
+//import QtQuick.Controls.Styles 1.0
 
 import "AppHeader"
 import "Comm"
@@ -30,8 +30,6 @@ Rectangle {
         implicitHeight: gstabiBackgroundImage.height
         implicitWidth: gstabiBackgroundImage.width
     }
-
-
     GDashBoard{
         id: gDashboard
         anchors.horizontalCenterOffset: 15
@@ -74,51 +72,12 @@ Rectangle {
         dragMaxY: gstabiBackgroundImage.height - textConsole.height
         msg_history: main_log_msg
     }
-
-
-//    Button{
-//        id: openSerialSettingButton
-//        text: "Port"
-//        anchors.bottom: gstabiBackgroundImage.bottom
-//        anchors.bottomMargin: 10
-//        anchors.left: gstabiBackgroundImage.left
-//        anchors.leftMargin: 50
-
-
-//        style: ButtonStyle{
-//            background: BorderImage {
-//                source: control.pressed ? "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_pressed_button.png" : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_released_button.png"
-//                border.left: 4 ; border.right: 4 ; border.top: 4 ; border.bottom: 4
-//            }
-//            label: Text{
-//                Row {
-//                    id: row
-//                    anchors.centerIn: parent
-//                    spacing: 2
-//                    Image {
-//                        source: control.iconSource
-//                        anchors.verticalCenter: parent.verticalCenter
-//                        scale: 0.8
-//                    }
-//                    Text {
-//                        renderType: Text.NativeRendering
-//                        anchors.verticalCenter: parent.verticalCenter
-//                        text: control.text
-//                        color: "white"
-//                    }
-//                }
-//            }
-//        }
-
-//        onClicked: comportSettingPanel.visible == true ? comportSettingPanel.visible = false : comportSettingPanel.visible = true
-//    }// comport Open/Close
     Item {
+        id: buttonsPanel
         width: 150
         height: 70
-        anchors.bottom: gstabiBackgroundImage.bottom
-        anchors.bottomMargin: 0
-        anchors.left: gstabiBackgroundImage.left
-        anchors.leftMargin: 50
+        anchors.bottom: gstabiBackgroundImage.bottom; anchors.bottomMargin: 0
+        anchors.left: gstabiBackgroundImage.left; anchors.leftMargin: 50
         GImageButton{
             id: openSerialDialog
             anchors.left: parent.left; anchors.leftMargin: 0
@@ -127,7 +86,7 @@ Rectangle {
                 comportSettingPanel.visible == true ? comportSettingPanel.visible = false : comportSettingPanel.visible = true
             }
         }
-    }
+    }   // end of buttons Panel
     onMain_log_msgChanged: {
         if(main_log_msg.length >=10000){
             main_log_msg = "Log data cleared "
