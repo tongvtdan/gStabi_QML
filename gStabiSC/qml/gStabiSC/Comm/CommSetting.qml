@@ -122,18 +122,13 @@ GDialog{
             }
         } // end of ListView
     } // end of list
-    ListModel {
-        id: comportList
-    }
+    ListModel {  id: comportList }
 
     Timer{
         id: getPortListTimer
-        interval: 100
+        interval: 100;  repeat: false   // run once at start up
         running: true
-        repeat: false   // run once at start up
-        onTriggered: {
-            getPortNameList();
-        }
+        onTriggered: getPortNameList();
     }
     function getPortNameList()
     {
@@ -145,9 +140,7 @@ GDialog{
             }
         }
     }
-    onPortUpdatedChanged: {
-        getPortNameList();
-    }
+    onPortUpdatedChanged: { getPortNameList();}
     onStateChanged: {
         if(state == "show"){
             getPortNameList()

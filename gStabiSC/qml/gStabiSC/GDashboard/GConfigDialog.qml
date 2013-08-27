@@ -102,4 +102,41 @@ Item{
         anchors.left: parent.left
         anchors.leftMargin: 20
     }
+
+    states:[
+        State{
+            name: "showDialog"
+            PropertyChanges { target: dialogContainer; opacity: 1; }
+        }
+        ,State {
+            name: "hideDialog"
+            PropertyChanges {target: dialogContainer; opacity: 0;}
+        }
+
+    ]
+    transitions: [
+        Transition {
+            from: "showDialog" ; to:   "hideDialog"
+            ParallelAnimation{
+                NumberAnimation { target: dialogContainer; property: "opacity";  duration: 400;}
+                SequentialAnimation{
+                    NumberAnimation { target: dialogContainer; property: "scale"; from: 1; to: 1.5; duration: 200; }
+                    NumberAnimation { target: dialogContainer; property: "scale"; from: 1.5; to: 0.5; duration: 200; }
+                }
+            }
+        }
+        ,Transition {
+            from: "hideDialog" ; to: "showDialog"
+            ParallelAnimation{
+                NumberAnimation { target: dialogContainer; property: "opacity"; duration: 600; }
+                SequentialAnimation{
+                    NumberAnimation { target: dialogContainer; property: "scale"; from: 0.5; to: 1; duration: 200; }
+                    NumberAnimation { target: dialogContainer; property: "scale"; from: 1; to: 1.5; duration: 200; }
+                    NumberAnimation { target: dialogContainer; property: "scale"; from: 1.5; to: 1; duration: 200;}
+                }
+            }
+
+        }
+    ]
+
 }

@@ -23,7 +23,12 @@ public:
     {
         return APPLICATION_VERSION;
     }
-
+    Q_INVOKABLE int application_width(){
+        return APPLICATION_WIDTH;
+    }
+    Q_INVOKABLE int application_height(){
+        return APPLICATION_HEIGHT;
+    }
 
 
 signals:

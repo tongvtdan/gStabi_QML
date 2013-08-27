@@ -38,8 +38,14 @@ Rectangle {
         anchors.topMargin: 60
         onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
         onStateChanged: {
-            if(gDashboard.state == "Config") comportSettingPanel.state = "hide";
-            else comportSettingPanel.state = "show";
+            if(gDashboard.state == "Config") {
+//                textConsole.state = "smaller"
+                comportSettingPanel.state = "smaller";
+            }
+            else {
+//                textConsole.state = "focus"
+                comportSettingPanel.state = "focus";
+            }
         }
 
     }
@@ -56,10 +62,10 @@ Rectangle {
     }
     CommSetting{
         id: comportSettingPanel
-//        x: 50
-        anchors.right: textConsole.left
-        y: mainWindow.height - comportSettingPanel.height - 60
-        state: "show"
+        x: gstabiBackgroundImage.width - comportSettingPanel.width - textConsole.width - 10
+        focus_state_posY:  gstabiBackgroundImage.height - comportSettingPanel.height - 60
+        unfocus_state_posY: gstabiBackgroundImage.height - comportSettingPanel.height +100
+        state: "focus"
         height: 200 ; width: 300
         dragMaxX: gstabiBackgroundImage.width - comportSettingPanel.width
         dragMaxY: gstabiBackgroundImage.height - comportSettingPanel.height
@@ -68,9 +74,10 @@ Rectangle {
     Console{
         id: textConsole
         x: gstabiBackgroundImage.x + gstabiBackgroundImage.width - textConsole.width - 10
-        y: 400
         opacity: 1
-        state: "show"
+        state: "focus"
+        focus_state_posY: gstabiBackgroundImage.height - textConsole.height - 50
+        unfocus_state_posY: gstabiBackgroundImage.height - textConsole.height + 100
         height: 200; width:  300
         dragMaxX: gstabiBackgroundImage.width - textConsole.width
         dragMaxY: gstabiBackgroundImage.height - textConsole.height

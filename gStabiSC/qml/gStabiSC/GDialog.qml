@@ -12,6 +12,8 @@ Item{
     property string title_normal_color: "cyan"
     property string title_hover_color: "yellow"
     property string title: "Dialog"
+    property int  focus_state_posY      : 500
+    property int  unfocus_state_posY    : 600
 
     implicitHeight: 200
     implicitWidth: 300
@@ -40,13 +42,14 @@ Item{
     states:[
         State {
             name: "focus"
-            PropertyChanges {target: gDialog; scale: 1.0; opacity: 1; }
+            PropertyChanges {target: gDialog; scale: 1.0; opacity: 1; y: focus_state_posY }
 
         }
         ,State {
             name: "smaller"
-            PropertyChanges {target: gDialog; scale: 0.5 ; opacity: 0.5; }
+            PropertyChanges {target: gDialog; scale: 0.5 ; opacity: 0.5; y: unfocus_state_posY}
         }
+
 
     ]
     transitions: [ Transition {
@@ -54,9 +57,11 @@ Item{
             to:   "smaller"
             ParallelAnimation{
                 NumberAnimation { target: gDialog; property: "opacity"; duration: 400;  }
+                NumberAnimation { target: gDialog; property: "y"; duration: 400; easing.type: Easing.InOutQuad }
                 SequentialAnimation{
                     NumberAnimation{ target: gDialog; properties: "scale"; from: 1.0; to: 1.5; duration: 200;}
                     NumberAnimation{ target: gDialog; properties: "scale"; from: 1.5; to: 0.5; duration: 200;}
+
                 }
 
             }
@@ -66,10 +71,12 @@ Item{
             to: "focus"
             ParallelAnimation{
                 NumberAnimation { target: gDialog; property: "opacity"; duration: 600;  }
+                NumberAnimation { target: gDialog; property: "y"; duration: 600; easing.type: Easing.InOutQuad }
                 SequentialAnimation{
                     NumberAnimation{ target: gDialog; properties: "scale"; from: 0.5; to: 1.0; duration: 200;}
                     NumberAnimation{ target: gDialog; properties: "scale"; from: 1.0; to: 1.5; duration: 200;}
                     NumberAnimation{ target: gDialog; properties: "scale"; from: 1.5; to: 1; duration: 200;}
+
                 }
             }
         }
