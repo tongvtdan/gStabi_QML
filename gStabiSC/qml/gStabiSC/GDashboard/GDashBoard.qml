@@ -730,8 +730,8 @@ Item {
             PropertyChanges { target: modeSelectionButton; text: "Config >>"}
             PropertyChanges { target: writeConfigParamsToMCU; visible: false }
             PropertyChanges { target: readConfigParamsFromMCU; visible: false }
-            PropertyChanges { target: tiltDownLimitSetMouseArea; visible: false}
-            PropertyChanges { target: tiltDownLimitSetItem; visible: false}
+//            PropertyChanges { target: tiltDownLimitSetMouseArea; visible: false}
+//            PropertyChanges { target: tiltDownLimitSetItem; visible: false}
             PropertyChanges { target: tiltConfigDialog; state  : "hideDialog"}
             PropertyChanges { target: panConfigDialog;  state  : "hideDialog"}
             PropertyChanges { target: rollConfigDialog; state  : "hideDialog"}
@@ -742,11 +742,11 @@ Item {
             PropertyChanges { target: modeSelectionButton; text: "<< Dashboard" }
             PropertyChanges { target: writeConfigParamsToMCU; visible: true }
             PropertyChanges { target: readConfigParamsFromMCU; visible: true }
-            PropertyChanges { target: tiltDownLimitSetMouseArea; visible: true}
+//            PropertyChanges { target: tiltDownLimitSetMouseArea; visible: true}
 
 //            PropertyChanges { target: tiltGauge; gauge_control_area_height: 165 ;  }
-            PropertyChanges { target: tiltDownLimitSetMouseArea; width: 330; height: 165 ; anchors.bottomMargin: 0 }
-            PropertyChanges { target: tiltDownLimitSetItem; visible: true}
+//            PropertyChanges { target: tiltDownLimitSetMouseArea; width: 330; height: 165 ; anchors.bottomMargin: 0 }
+//            PropertyChanges { target: tiltDownLimitSetItem; visible: true}
             PropertyChanges { target: tiltConfigDialog; state: "showDialog"}
             PropertyChanges { target: panConfigDialog;  state: "showDialog"}
             PropertyChanges { target: rollConfigDialog; state: "showDialog"}

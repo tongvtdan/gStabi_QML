@@ -16,9 +16,12 @@ int main(int argc, char *argv[])
 
     QtQuick2ApplicationViewer viewer;
 //    QQuickView viewer;
-//    viewer.setMainQmlFile(QStringLiteral("qrc:/qml/gStabiSC/main.qml"));
-    viewer.setSource(QUrl("qrc:/qml/gStabiSC/main.qml"));
-    viewer.addImportPath("qrc:/qml/gStabiSC");
+    // using as normal
+    viewer.setMainQmlFile(QStringLiteral("qml/gStabiSC/main.qml"));
+
+    // using qml files form resources file
+//    viewer.setSource(QUrl("qrc:/qml/gStabiSC/main.qml"));
+//    viewer.addImportPath("qrc:/qml/gStabiSC");
 
     viewer.setTitle(QString("%1 %2").arg(APPLICATION_NAME).arg(APPLICATION_VERSION));
     viewer.setMinimumSize(QSize(APPLICATION_WIDTH,APPLICATION_HEIGHT));

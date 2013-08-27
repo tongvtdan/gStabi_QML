@@ -29,6 +29,13 @@ Item{
     property string down_limit_handle_normal    : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_roll_setpoint_handle.png"
     property string down_limit_handle_pressed   : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_roll_handle_selected.png"
 
+    property double  handle1X: 0
+    property double  handle2X: 0
+    property double  handle1Y: 0
+    property double  handle2Y: 0
+    property bool  select_handle2: false
+    property bool  select_handle1: false
+
 
     property string  gauge_log_message: "Gauge Log"
 
@@ -254,6 +261,7 @@ Item{
         onPositionChanged:
         {
             calc_rotate_angle_gauge(mouse.x, mouse.y)
+
         }
         onEntered:
         {
@@ -285,13 +293,14 @@ Item{
         onPositionChanged:
         {
             calc_rotate_angle_gauge(mouse.x, mouse.y)
+
         }
         onEntered:
         {
             gauge_log_message = ("<b><i>axis of gStabi</i></b>")
         }
         onClicked: {
-            if(mouse.y <= 165){
+            if(select_handle1){
             gauge_control_handler_no_of_clicks = gauge_control_handler_no_of_clicks + 1
             if(gauge_control_handler_no_of_clicks == 1){
                 gauge_set_enabled = true;
@@ -306,8 +315,12 @@ Item{
                 gauge_control_handler_no_of_clicks = 0;
                 if(gauge_config_mode) gauge_log_message = ("<b>Stop setting up angle limit for the camera</b>")
                 else gauge_log_message = ("<b>Stop moving camera</b>");
+
+                handle1X = gauge_center_x + gauge_radius*Math.cos(gauge_up_limit_set_angle*Math.PI/180)
+                handle1Y = gauge_center_x + gauge_radius*Math.sin(gauge_up_limit_set_angle*Math.PI/180)
+                console.log("Last pos handle1: " + handle1X+","+handle1Y)
             }
-            } else{
+            } else if(select_handle2){
                 gauge_control_handler_no_of_clicks = gauge_control_handler_no_of_clicks + 1
                 if(gauge_control_handler_no_of_clicks == 1){
                     gauge_down_limit_set_enabled = true;
@@ -319,6 +332,10 @@ Item{
                     gauge_down_limit_set_enabled = false;
                     gauge_log_message = ("<b>Stop setting down angle limit for the camera</b>");
                     gaugeDownRangeHandleSelectedImage.state = "limit_normal"
+
+                    handle2X = gauge_center_x + gauge_radius*Math.cos(gauge_down_limit_set_angle*Math.PI/180)
+                    handle2Y = gauge_center_x + gauge_radius*Math.sin(gauge_down_limit_set_angle*Math.PI/180)
+                    console.log("Last pos handle2: " + handle2X+","+handle2Y)
 
                 }
             }
@@ -362,6 +379,14 @@ Item{
                 var x_angle = gauge_center_x + gauge_radius*Math.cos(angle*Math.PI/180);
                 var y_angle = gauge_center_y + gauge_radius*Math.sin(angle*Math.PI/180);
                 var distanceFromPress = Math.sqrt((x_angle - _x)*(x_angle - _x) + (y_angle - _y)*(y_angle - _y));
+
+                var disFromPressToHandle1 = Math.sqrt((handle1X - _x)*(handle1X - _x) + (handle1Y - _y)*(handle1Y - _y));
+                var disFromPressToHandle2 = Math.sqrt((handle2X - _x)*(handle2X - _x) + (handle2Y - _y)*(handle2Y - _y));
+                console.log("dis1: " + disFromPressToHandle1);
+                console.log("dis2: " + disFromPressToHandle2)
+                if(disFromPressToHandle1 <= disFromPressToHandle2) { console.log("Select 1"); select_handle1 = true; select_handle2 = false}
+                else {console.log("Select 2");  select_handle1 = false; select_handle2 =true}
+
                 if(distanceFromPress < minDistanceFromPress){
                     minDistanceFromPress = distanceFromPress;
                     rot_angle_deg = angle;
@@ -376,21 +401,26 @@ Item{
             if(gauge_config_mode){ // in Config Mode, show both Up (use Control handle) and Down limit
                 if(gauge_set_enabled) {
                     gauge_up_limit_set_angle = rot_angle_deg;
+
+                    console.log("handle1: " + handle1X.toFixed(angle_precision) +", " + handle1Y.toFixed(angle_precision) )
                     gauge_log_message = ("Setting up limit to angle: " + gauge_up_limit_set_angle);
                 }
                 if(gauge_down_limit_set_enabled){
-                    //                    if(rot_angle_deg > 180){ rot_angle_deg = rot_angle_deg - 360}
                     gauge_down_limit_set_angle = rot_angle_deg;
+
+                    console.log("handle2: " + handle2X.toFixed(angle_precision) + ", " + handle2Y.toFixed(angle_precision))
                     gauge_log_message = ("Setting down limit to angle: " + gauge_down_limit_set_angle);
                 }
             }
             else{       // in Dashboard Mode, only show Control Handle
                 if(gauge_set_enabled) {
-                    //                    if(rot_angle_deg > 180){ rot_angle_deg = rot_angle_deg - 360}
                     gauge_setpoint_angle = rot_angle_deg;
+                    handle1X = gauge_center_x + gauge_radius*Math.cos(rot_angle_deg*Math.PI/180)
+                    console.log("handle1X: " + handle1X.toFixed(angle_precision))
                     gauge_log_message = ("Rotating the camera to angle: " + gauge_setpoint_angle);
                 }
             }
+
         }
     } // end of function
 }   // end of gauge Gauge
