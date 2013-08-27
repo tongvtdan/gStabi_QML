@@ -38,10 +38,22 @@ Item{
         GSlider{
             id: powerSlider
             lowerLimit: 0 ; upperLimit: 100
-            width: 200; height: 20
+            width: 180; height: 20
             anchors.verticalCenter: parent.verticalCenter
-            value: value
+            value: 50
         }
+        Text {
+            id: powerLevelLabel
+            width: 45
+            height: 20
+            color : "#00e3f9"
+            font.family: "Segoe UI Symbol"
+            font.bold: true
+            font.pixelSize: 16
+            anchors.verticalCenter: parent.verticalCenter
+            text: qsTr(powerSlider.value.toFixed(0)+ "%")
+        }
+
     }
     Row{
         id: polesRow
@@ -64,9 +76,30 @@ Item{
         GSlider{
             id: polesSlider
             lowerLimit: 0 ; upperLimit: 100
-            width: 200; height: 20
+            width: 180; height: 20
             anchors.verticalCenter: parent.verticalCenter
-            value: value
+            step: 2
+            value: 24
         }
+        Text{
+            id: polesNumLabel
+            width: 45
+            height: 20
+            color : "#00e3f9"
+            font.family: "Segoe UI Symbol"
+            font.bold: true
+            font.pixelSize: 16
+            anchors.verticalCenter: parent.verticalCenter
+            text: { if((polesSlider.value.toFixed(0) % polesSlider.step) == 0) {return ("#" + polesSlider.value.toFixed(0))}}
+
+        }
+    }
+    GButton{
+        id: reverseButton
+        text: "Reverse"
+        anchors.top: polesRow.bottom
+        anchors.topMargin: 40
+        anchors.left: parent.left
+        anchors.leftMargin: 20
     }
 }

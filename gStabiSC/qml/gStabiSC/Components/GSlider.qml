@@ -11,13 +11,14 @@ property int lowerLimit: The lower limit of the slider.
 property int upperLimit: The upper limit of the slider.
 */
 Rectangle {
-    property double   value: 0
+    property double value   : 0
+    property double step    : 1
     property int fill_width: 0
     property int lowerLimit: 0
     property int upperLimit: 0
     property int  handle_offset_x: handle.width/2
 
-    property double  convert_ratio: (background.width - 2*background.border.width)/(Math.abs(upperLimit) - Math.abs(lowerLimit))
+    property double  convert_ratio: (handleMouseArea.drag.maximumX - handleMouseArea.drag.minimumX)/(Math.abs(upperLimit) - Math.abs(lowerLimit))
 
     id: background
     color: "#00000000"
@@ -36,7 +37,9 @@ Rectangle {
         clip: true
         Rectangle {
             id: fillRect
-            height: parent.height;  width: fill_width
+            height: parent.height;
+//            width: fill_width
+            width: (value - lowerLimit)*convert_ratio
             color: "#04ffde"
             anchors.left: parent.left
             anchors.leftMargin: background.border.width/2
@@ -46,7 +49,7 @@ Rectangle {
     Item {
         id: handle
         height:  40; width: 40
-        x: -handle_offset_x + background.border.width
+        x: -handle_offset_x + background.border.width + fillRect.width
         anchors.top: grooveRect.bottom; anchors.topMargin: 0
         Image{
             id: handleReleasedImage
@@ -77,9 +80,10 @@ Rectangle {
             onReleased: { handlePressedImage.visible = false}
             onPositionChanged: {
                 fill_width = handle.x + handle_offset_x  - background.border.width
-                value = lowerLimit + (fill_width )/(drag.maximumX - drag.minimumX)*(Math.abs(upperLimit) - Math.abs(lowerLimit));
+                value = lowerLimit + (fill_width )/convert_ratio    //(drag.maximumX - drag.minimumX)*(Math.abs(upperLimit) - Math.abs(lowerLimit));
                 console.log("Handle pos x: "+ handle.x + ", Fill width: " + fill_width +  ", Slider pos: " + value)
             }
+//            onDragChanged:
         }
     }
 
