@@ -1,9 +1,35 @@
-import QtQuick 2.1
-import QtQuick.Controls 1.0
-import QtQuick.Layouts 1.0
-import QtQuick.Controls.Styles 1.0
+import QtQuick 2.0
+//import QtQuick.Controls 1.0
+//import QtQuick.Layouts 1.0
+//import QtQuick.Controls.Styles 1.0
 
+GDialog{
+    Flickable{
+        id: flickArea
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 10
+        width: 280
+        height: 150
+        contentWidth: Math.max(parent.width,logText.paintedWidth)
+        contentHeight: Math.max(parent.height,logText.paintedHeight+10)
+        flickableDirection: Flickable.VerticalFlick
+        pressDelay: 300
+        clip: true
+        Text{
+            id: logText
+            width: 280
+            height: 150
+            wrapMode: Text.WordWrap
+            anchors.fill: parent
+            color: "cyan"
+            textFormat: Text.RichText
+            text: msg_history
+        }
+    }
+}
 
+/*
 Item{
     id: consoleLog
     property string msg_history: "Init done \n"         // all other QML file will refer to this variable to display message in conole
@@ -13,6 +39,9 @@ Item{
     property int anchor_rightMargin : 10
     property int  dragMaxX          : 500
     property int dragMaxY           : 500
+    property string title_normal_color: "cyan"
+    property string title_hover_color: "yellow"
+
     implicitHeight: 200
     implicitWidth: 300
     BorderImage {
@@ -25,9 +54,10 @@ Item{
         border.right: 5; border.bottom: 5
     }
     Text {
+        id: dialogTitle
         font.family: "Ubuntu"
         font.bold: true
-        color: "cyan"
+        color: title_normal_color
         text: "Console"
         font.pixelSize: 12
         anchors.top: parent.top
@@ -86,20 +116,15 @@ Item{
     ]
     MouseArea{
         id: dragConsolWindowArea
-        width: parent.width
-        height: 30
-        anchors.top: parent.top
-        anchors.horizontalCenter: parent.horizontalCenter
+        width: parent.width ; height: 30
+        anchors.top: parent.top;  anchors.horizontalCenter: parent.horizontalCenter
         drag.target: parent
-        drag.minimumX: 0
-        drag.minimumY: 0
-        drag.maximumX: dragMaxX
-        drag.maximumY: dragMaxY
-
+        drag.minimumX: 0; drag.minimumY: 0
+        drag.maximumX: dragMaxX ;  drag.maximumY: dragMaxY
+        hoverEnabled: true
+        onEntered: dialogTitle.color = title_hover_color
+        onExited: dialogTitle.color = title_normal_color
         onDoubleClicked: consoleLog.state == "hide"? consoleLog.state = "show" : consoleLog.state = "hide"
-
-
     }
-
-
 }
+*/

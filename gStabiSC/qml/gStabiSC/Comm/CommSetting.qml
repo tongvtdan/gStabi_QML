@@ -20,6 +20,8 @@ Item{
     property int  dragMaxY          : 500
 
     property string msg_log: ""
+    property string title_normal_color: "cyan"
+    property string title_hover_color: "yellow"
 
 
     implicitHeight: 200
@@ -37,7 +39,7 @@ Item{
         id: dialogTitle
         font.family: "Ubuntu"
         font.bold: true
-        color: "cyan"
+        color: title_normal_color
         text: "Serial Ports"
         font.pixelSize: 12
         anchors.top: parent.top
@@ -212,12 +214,13 @@ Item{
     MouseArea{
         id: windowMouseArea
         width: parent.width ; height: 30
-        anchors.top: parent.top
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top; anchors.horizontalCenter: parent.horizontalCenter
         drag.target: parent
         drag.minimumX: 0; drag.minimumY: 0
-        drag.maximumX: dragMaxX
-        drag.maximumY: dragMaxY
+        drag.maximumX: dragMaxX; drag.maximumY: dragMaxY
+        hoverEnabled: true
+        onEntered: dialogTitle.color = title_hover_color
+        onExited: dialogTitle.color = title_normal_color
         onDoubleClicked: comportSettings.state == "hide"? comportSettings.state = "show" : comportSettings.state = "hide"
 
 

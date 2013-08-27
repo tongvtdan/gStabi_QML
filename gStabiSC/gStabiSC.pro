@@ -40,7 +40,8 @@ OTHER_FILES += \
     qml/gStabiSC/Components/GButton.qml \
     qml/gStabiSC/Components/GSlider.qml \
     qml/gStabiSC/GDashboard/GConfigDialog.qml \
-    qml/gStabiSC/Components/GImageButton.qml
+    qml/gStabiSC/Components/GImageButton.qml \
+    qml/gStabiSC/GDialog.qml
 
 HEADERS += \
     src/configuration.h \
