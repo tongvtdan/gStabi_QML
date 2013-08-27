@@ -51,6 +51,16 @@ Item {
         opacity: 0.5
         anchors.fill: parent
     }
+    GGauge{
+        id: tiltGauge
+        gauge_width: root.gauge_width; gauge_height:root.gauge_height
+        anchors.left: parent.left; anchors.leftMargin: 0
+        anchors.top: parent.top; anchors.topMargin: 0
+        gauge_config_mode: dashboard_config_mode
+        onGauge_log_messageChanged: tilt_log(gauge_log_message)
+    }
+
+    /*
     // tilt
     Item{
         id: tilt_gauge
@@ -354,6 +364,7 @@ Item {
 
 
     }   // end of Tilt Gauge
+    */
 //    Roll
     Item{
         id: roll_gauge
@@ -696,8 +707,8 @@ Item {
     }
     GConfigDialog{
         id: tiltConfigDialog
-        anchors.horizontalCenter: tilt_gauge.horizontalCenter
-        anchors.top: tilt_gauge.bottom ; anchors.topMargin: -20
+        anchors.horizontalCenter: tiltGauge.horizontalCenter
+        anchors.top: tiltGauge.bottom ; anchors.topMargin: -20
         opacity: 0
     }
     GConfigDialog{
@@ -719,8 +730,8 @@ Item {
             PropertyChanges { target: modeSelectionButton; text: "Config >>"}
             PropertyChanges { target: writeConfigParamsToMCU; visible: false }
             PropertyChanges { target: readConfigParamsFromMCU; visible: false }
-            PropertyChanges { target: tiltDownLimitSetMouseArea; visible: false}
-            PropertyChanges { target: tiltDownLimitSetItem; visible: false}
+//            PropertyChanges { target: tiltDownLimitSetMouseArea; visible: false}
+//            PropertyChanges { target: tiltDownLimitSetItem; visible: false}
             PropertyChanges { target: tiltConfigDialog; state  : "hideDialog"}
             PropertyChanges { target: panConfigDialog;  state  : "hideDialog"}
             PropertyChanges { target: rollConfigDialog; state  : "hideDialog"}
@@ -733,9 +744,9 @@ Item {
             PropertyChanges { target: readConfigParamsFromMCU; visible: true }
             PropertyChanges { target: tiltDownLimitSetMouseArea; visible: true}
 
-            PropertyChanges { target: tiltMouseArea; width: 330; height: 165 ; anchors.bottomMargin: 165 }
-            PropertyChanges { target: tiltDownLimitSetMouseArea; width: 330; height: 165 ; anchors.bottomMargin: 0 }
-            PropertyChanges { target: tiltDownLimitSetItem; visible: true}
+//            PropertyChanges { target: tiltGauge; gauge_control_area_height: 165 ;  }
+//            PropertyChanges { target: tiltDownLimitSetMouseArea; width: 330; height: 165 ; anchors.bottomMargin: 0 }
+//            PropertyChanges { target: tiltDownLimitSetItem; visible: true}
             PropertyChanges { target: tiltConfigDialog; state: "showDialog"}
             PropertyChanges { target: panConfigDialog;  state: "showDialog"}
             PropertyChanges { target: rollConfigDialog; state: "showDialog"}
