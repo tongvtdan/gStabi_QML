@@ -246,37 +246,9 @@ Item{
     }
     MouseArea{
         id: gaugeDownLimitSetMouseArea
-        width: parent.gauge_width; height: parent.gauge_height/2
-        anchors.bottom: parent.bottom; anchors.bottomMargin: 0
-        hoverEnabled: true
-        onPositionChanged:
-        {
-            calc_rotate_angle_gauge(mouse.x, mouse.y)
-        }
-        onEntered:
-        {
-            gauge_log_message = ("<b><i>axis of gStabi</i></b>")
-        }
-        onClicked: {
-            gauge_down_limit_handle_no_of_clicks = gauge_down_limit_handle_no_of_clicks + 1
-            if(gauge_down_limit_handle_no_of_clicks == 1){
-                gauge_down_limit_set_enabled = true;
-                gauge_log_message = ("<b>Start to set down angle limit for the camera</b>")
-                gaugeDownRangeHandleSelectedImage.state = "limit_focus"
-            }
-            else if(gauge_down_limit_handle_no_of_clicks == 2){
-                gauge_down_limit_set_enabled = false;
-                gauge_log_message = ("<b>Stop setting down angle limit for the camera</b>");
-                gaugeDownRangeHandleSelectedImage.state = "limit_normal"
-                gauge_down_limit_handle_no_of_clicks = 0;
-            }
-        }
-    }
-    MouseArea{
-        id: gaugeMouseArea
-//        anchors.fill: parent
-        width:  gauge_width ; height: gauge_height
-        anchors.top: parent.top; anchors.topMargin: 0
+        anchors.fill: parent
+//        width: parent.gauge_width; height: parent.gauge_height/2
+//        anchors.bottom: parent.bottom; anchors.bottomMargin: 0
 
         hoverEnabled: true
         onPositionChanged:
@@ -288,6 +260,38 @@ Item{
             gauge_log_message = ("<b><i>axis of gStabi</i></b>")
         }
         onClicked: {
+            gauge_control_handler_no_of_clicks = gauge_control_handler_no_of_clicks + 1
+            if(gauge_control_handler_no_of_clicks == 1){
+                gauge_down_limit_set_enabled = true;
+                gauge_log_message = ("<b>Start to set down angle limit for the camera</b>")
+                gaugeDownRangeHandleSelectedImage.state = "limit_focus"
+            }
+            else if(gauge_control_handler_no_of_clicks == 2){
+                gauge_control_handler_no_of_clicks = 0;
+                gauge_down_limit_set_enabled = false;
+                gauge_log_message = ("<b>Stop setting down angle limit for the camera</b>");
+                gaugeDownRangeHandleSelectedImage.state = "limit_normal"
+
+            }
+        }
+    }
+    MouseArea{
+        id: gaugeMouseArea
+        anchors.fill: parent
+//        width:  gauge_width ; height: gauge_height
+//        anchors.top: parent.top; anchors.topMargin: 0
+
+        hoverEnabled: true
+        onPositionChanged:
+        {
+            calc_rotate_angle_gauge(mouse.x, mouse.y)
+        }
+        onEntered:
+        {
+            gauge_log_message = ("<b><i>axis of gStabi</i></b>")
+        }
+        onClicked: {
+            if(mouse.y <= 165){
             gauge_control_handler_no_of_clicks = gauge_control_handler_no_of_clicks + 1
             if(gauge_control_handler_no_of_clicks == 1){
                 gauge_set_enabled = true;
@@ -303,6 +307,21 @@ Item{
                 if(gauge_config_mode) gauge_log_message = ("<b>Stop setting up angle limit for the camera</b>")
                 else gauge_log_message = ("<b>Stop moving camera</b>");
             }
+            } else{
+                gauge_control_handler_no_of_clicks = gauge_control_handler_no_of_clicks + 1
+                if(gauge_control_handler_no_of_clicks == 1){
+                    gauge_down_limit_set_enabled = true;
+                    gauge_log_message = ("<b>Start to set down angle limit for the camera</b>")
+                    gaugeDownRangeHandleSelectedImage.state = "limit_focus"
+                }
+                else if(gauge_control_handler_no_of_clicks == 2){
+                    gauge_control_handler_no_of_clicks = 0;
+                    gauge_down_limit_set_enabled = false;
+                    gauge_log_message = ("<b>Stop setting down angle limit for the camera</b>");
+                    gaugeDownRangeHandleSelectedImage.state = "limit_normal"
+
+                }
+            }
         }
     }
     onGauge_config_modeChanged: {
@@ -313,14 +332,17 @@ Item{
         State{
             name: "dash"
             when: !gauge_config_mode
-            PropertyChanges { target: gaugeDownLimitSetMouseArea; visible: false}
             PropertyChanges { target: gaugeDownLimitSetItem; visible: false}
+            PropertyChanges { target: gaugeDownLimitSetMouseArea; enabled: false}
+
         }
         ,State{
             name: "config"
             when: gauge_config_mode
-//            PropertyChanges { target: gaugeDownLimitSetMouseArea; x: 0; y: 165; width: 330; visible: true; height: gauge_height/2; anchors.topMargin: 165; anchors.bottomMargin: 0}
-            PropertyChanges { target: gaugeMouseArea; height: gauge_height/2; anchors.topMargin: 0}
+            PropertyChanges { target: gaugeDownLimitSetItem; visible: true}
+//            PropertyChanges { target: gaugeDownLimitSetMouseArea; enabled: true;}
+//            PropertyChanges { target: gaugeDownLimitSetMouseArea; enabled: true; width: 330; height: 165; anchors.bottomMargin: 0}
+//            PropertyChanges { target: gaugeMouseArea; width: 330; height: 165 ; anchors.bottomMargin: 165 }
 
         }
     ]

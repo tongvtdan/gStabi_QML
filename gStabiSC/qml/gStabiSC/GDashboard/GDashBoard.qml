@@ -60,10 +60,10 @@ Item {
         onGauge_log_messageChanged: tilt_log(gauge_log_message)
     }
 
-    /*
+/*
     // tilt
     Item{
-        id: tilt_gauge
+        id: tiltGauge
 
         width: gauge_width
         height: gauge_height
@@ -364,7 +364,7 @@ Item {
 
 
     }   // end of Tilt Gauge
-    */
+*/
 //    Roll
     Item{
         id: roll_gauge
@@ -730,8 +730,8 @@ Item {
             PropertyChanges { target: modeSelectionButton; text: "Config >>"}
             PropertyChanges { target: writeConfigParamsToMCU; visible: false }
             PropertyChanges { target: readConfigParamsFromMCU; visible: false }
-//            PropertyChanges { target: tiltDownLimitSetMouseArea; visible: false}
-//            PropertyChanges { target: tiltDownLimitSetItem; visible: false}
+            PropertyChanges { target: tiltDownLimitSetMouseArea; visible: false}
+            PropertyChanges { target: tiltDownLimitSetItem; visible: false}
             PropertyChanges { target: tiltConfigDialog; state  : "hideDialog"}
             PropertyChanges { target: panConfigDialog;  state  : "hideDialog"}
             PropertyChanges { target: rollConfigDialog; state  : "hideDialog"}
@@ -742,11 +742,11 @@ Item {
             PropertyChanges { target: modeSelectionButton; text: "<< Dashboard" }
             PropertyChanges { target: writeConfigParamsToMCU; visible: true }
             PropertyChanges { target: readConfigParamsFromMCU; visible: true }
-//            PropertyChanges { target: tiltDownLimitSetMouseArea; visible: true}
+            PropertyChanges { target: tiltDownLimitSetMouseArea; visible: true}
 
 //            PropertyChanges { target: tiltGauge; gauge_control_area_height: 165 ;  }
-//            PropertyChanges { target: tiltDownLimitSetMouseArea; width: 330; height: 165 ; anchors.bottomMargin: 0 }
-//            PropertyChanges { target: tiltDownLimitSetItem; visible: true}
+            PropertyChanges { target: tiltDownLimitSetMouseArea; width: 330; height: 165 ; anchors.bottomMargin: 0 }
+            PropertyChanges { target: tiltDownLimitSetItem; visible: true}
             PropertyChanges { target: tiltConfigDialog; state: "showDialog"}
             PropertyChanges { target: panConfigDialog;  state: "showDialog"}
             PropertyChanges { target: rollConfigDialog; state: "showDialog"}
@@ -762,7 +762,7 @@ Item {
        @output: angle for setpoint handle image to rotate
        @note:   interact area is a donus with inside radius = 0.7 base circle radius, outside radius = base circle radius
       */
-    /*
+/*
     function calc_rotate_angle_tilt(_x, _y){
         var rot_angle_deg;
         var distanceFromCenterToPressedPoint = Math.sqrt((_x - gauge_center_x)*(_x - gauge_center_x) + (_y - gauge_center_y)*(_y - gauge_center_y));
@@ -808,7 +808,7 @@ Item {
             }
         }
     } // end of function
-    */
+*/
     /* function calc_rotate_angle_roll(_x, _y)
        @brief: get the angle to rotate the setpoint handler
        @input: (_x, _y) = (mouse.x, mouse.y)
