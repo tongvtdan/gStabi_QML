@@ -39,11 +39,11 @@ Rectangle {
         onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
         onStateChanged: {
             if(gDashboard.state == "Config") {
-//                textConsole.state = "smaller"
+                textConsole.state = "smaller"
                 comportSettingPanel.state = "smaller";
             }
             else {
-//                textConsole.state = "focus"
+                textConsole.state = "focus"
                 comportSettingPanel.state = "focus";
             }
         }

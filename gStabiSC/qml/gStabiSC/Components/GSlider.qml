@@ -60,14 +60,43 @@ Rectangle {
             id: handlePressedImage
             anchors.fill: parent
             source: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.2_pressed_slider_handle.png"
-            visible: false
-            Behavior on visible{
-                SequentialAnimation {
-                    NumberAnimation { target: handlePressedImage; property: "scale"; to: 0.5; duration: 150}
-                    NumberAnimation { target: handlePressedImage; property: "scale"; to: 1.5; duration: 150}
-                    NumberAnimation { target: handlePressedImage; property: "scale"; to: 1.0; duration: 150}
+//            visible: false
+            state: "normal"
+            states:[
+                State {
+                    name: "focus"
+                    PropertyChanges {target: handlePressedImage; opacity: 1; }
                 }
-            }
+                ,State {
+                    name: "normal"
+                    PropertyChanges {target: handlePressedImage; opacity: 0; }
+                }
+            ]
+            transitions: [ Transition {
+                    from: "focus"
+                    to:   "normal"
+                    ParallelAnimation{
+                        NumberAnimation { target: handlePressedImage; property: "opacity"; duration: 200;  }
+                        SequentialAnimation{
+                            NumberAnimation{ target: handlePressedImage; properties: "scale"; to: 1.5; duration: 100;}
+                            NumberAnimation{ target: handlePressedImage; properties: "scale"; to: 0.5; duration: 100;}
+                        }
+                    }
+                },
+                Transition{
+                    from: "normal"
+                    to: "focus"
+                    ParallelAnimation{
+                        NumberAnimation { target: handlePressedImage; property: "opacity"; duration: 300;  }
+                        SequentialAnimation{
+                            NumberAnimation{ target: handlePressedImage; properties: "scale"; to: 1.0; duration: 100;}
+                            NumberAnimation{ target: handlePressedImage; properties: "scale"; to: 1.5; duration: 100;}
+                            NumberAnimation{ target: handlePressedImage; properties: "scale"; to: 1; duration: 100;}
+
+                        }
+                    }
+                }
+            ]
         }
         MouseArea {
             id: handleMouseArea
@@ -76,16 +105,16 @@ Rectangle {
             drag.axis: Drag.XAxis
             drag.minimumX: -handle_offset_x + background.border.width
             drag.maximumX: background.width - handle_offset_x - background.border.width
-            onPressed: { handlePressedImage.visible = true }
-            onReleased: { handlePressedImage.visible = false}
+            onPressed: { handlePressedImage.state  = "focus" }
+            onReleased: { handlePressedImage.state = "normal"}
             onPositionChanged: {
                 fill_width = handle.x + handle_offset_x  - background.border.width
                 value = lowerLimit + (fill_width )/convert_ratio    //(drag.maximumX - drag.minimumX)*(Math.abs(upperLimit) - Math.abs(lowerLimit));
                 console.log("Handle pos x: "+ handle.x + ", Fill width: " + fill_width +  ", Slider pos: " + value)
             }
-//            onDragChanged:
         }
     }
+
 
 }
 

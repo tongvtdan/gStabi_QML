@@ -10,7 +10,7 @@ import "../Components"
 Item {
     id: root
 
-    width: 960
+    width: 990
     height: 340
 
     property int gauge_width: 330
@@ -78,10 +78,14 @@ Item {
             source: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_needle_tilt.png"
 //            source: "../images/gauges/gStabiUI_3.2_needle_tilt.png" // enable for design UI only
             rotation: {
-                if(dashboard_config_mode == false){ return _mavlink_manager.tilt_angle; }
-                else if(tilt_set_enabled == true) {return tilt_up_limit_set_angle;}
-                else if(tilt_down_limit_set_enabled == true) {return tilt_down_limit_set_angle;}
-                else {return _mavlink_manager.tilt_angle;}
+                if(dashboard_config_mode == false){
+                    if(tilt_set_enabled) { return tilt_setpoint_angle;}
+                    else return _mavlink_manager.tilt_angle;
+                } else if(tilt_set_enabled == true)
+                        {return tilt_up_limit_set_angle;}
+                    else if(tilt_down_limit_set_enabled == true)
+                            {return tilt_down_limit_set_angle;}
+                        else {return _mavlink_manager.tilt_angle;}
             }
 
         }
@@ -173,14 +177,42 @@ Item {
                 anchors.verticalCenter: tiltControlHandleImage.verticalCenter
                 source: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_tilt_handle_selected.png"
 //                            source: "../images/gauges/gStabiUI_3.2_tilt_handle_selected.png"
-                visible: false
-                Behavior on visible{
-                    SequentialAnimation {
-                        NumberAnimation { target: tiltHandleSelectedImage; property: "scale"; to: 0.5; duration: 150}
-                        NumberAnimation { target: tiltHandleSelectedImage; property: "scale"; to: 1.5; duration: 150}
-                        NumberAnimation { target: tiltHandleSelectedImage; property: "scale"; to: 1.0; duration: 150}
+                state: "normal"
+                states:[
+                    State {
+                        name: "focus"
+                        PropertyChanges {target: tiltHandleSelectedImage; opacity: 1; }
                     }
-                }
+                    ,State {
+                        name: "normal"
+                        PropertyChanges {target: tiltHandleSelectedImage; opacity: 0; }
+                    }
+                ]
+                transitions: [ Transition {
+                        from: "focus"
+                        to:   "normal"
+                        ParallelAnimation{
+                            NumberAnimation { target: tiltHandleSelectedImage; property: "opacity"; duration: 200;  }
+                            SequentialAnimation{
+                                NumberAnimation{ target: tiltHandleSelectedImage; properties: "scale"; to: 1.5; duration: 100;}
+                                NumberAnimation{ target: tiltHandleSelectedImage; properties: "scale"; to: 0.5; duration: 100;}
+                            }
+                        }
+                    },
+                    Transition{
+                        from: "normal"
+                        to: "focus"
+                        ParallelAnimation{
+                            NumberAnimation { target: tiltHandleSelectedImage; property: "opacity"; duration: 300;  }
+                            SequentialAnimation{
+                                NumberAnimation{ target: tiltHandleSelectedImage; properties: "scale"; to: 1.0; duration: 100;}
+                                NumberAnimation{ target: tiltHandleSelectedImage; properties: "scale"; to: 1.5; duration: 100;}
+                                NumberAnimation{ target: tiltHandleSelectedImage; properties: "scale"; to: 1; duration: 100;}
+
+                            }
+                        }
+                    }
+                ]
             }
             Image{
                 id: tiltControlHandleImage
@@ -208,13 +240,42 @@ Item {
                 anchors.right: tiltDownRangeSelectHandlerImage.right
                 source: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_roll_handle_selected.png"  // to get different color from roll
 //                            source: "../images/gauges/gStabiUI_3.2_roll_handle_selected.png"
-                Behavior on visible{
-                    SequentialAnimation {
-                        NumberAnimation { target: tiltDownRangeHandleSelectedImage; property: "scale"; to: 0.5; duration: 150}
-                        NumberAnimation { target: tiltDownRangeHandleSelectedImage; property: "scale"; to: 1.5; duration: 150}
-                        NumberAnimation { target: tiltDownRangeHandleSelectedImage; property: "scale"; to: 1.0; duration: 150}
+                state: "normal"
+                states:[
+                    State {
+                        name: "focus"
+                        PropertyChanges {target: tiltDownRangeHandleSelectedImage; opacity: 1; }
                     }
-                }
+                    ,State {
+                        name: "normal"
+                        PropertyChanges {target: tiltDownRangeHandleSelectedImage; opacity: 0; }
+                    }
+                ]
+                transitions: [ Transition {
+                        from: "focus"
+                        to:   "normal"
+                        ParallelAnimation{
+                            NumberAnimation { target: tiltDownRangeHandleSelectedImage; property: "opacity"; duration: 200;  }
+                            SequentialAnimation{
+                                NumberAnimation{ target: tiltDownRangeHandleSelectedImage; properties: "scale"; to: 1.5; duration: 100;}
+                                NumberAnimation{ target: tiltDownRangeHandleSelectedImage; properties: "scale"; to: 0.5; duration: 100;}
+                            }
+                        }
+                    },
+                    Transition{
+                        from: "normal"
+                        to: "focus"
+                        ParallelAnimation{
+                            NumberAnimation { target: tiltDownRangeHandleSelectedImage; property: "opacity"; duration: 300;  }
+                            SequentialAnimation{
+                                NumberAnimation{ target: tiltDownRangeHandleSelectedImage; properties: "scale"; to: 1.0; duration: 100;}
+                                NumberAnimation{ target: tiltDownRangeHandleSelectedImage; properties: "scale"; to: 1.5; duration: 100;}
+                                NumberAnimation{ target: tiltDownRangeHandleSelectedImage; properties: "scale"; to: 1; duration: 100;}
+
+                            }
+                        }
+                    }
+                ]
             }
             Image{
                 id: tiltDownRangeSelectHandlerImage
@@ -246,12 +307,14 @@ Item {
                 if(tilt_control_handler_no_of_clicks == 1){
                     tilt_down_limit_set_enabled = true;
                     tilt_log("<b>Start to set tilt down angle limit for the camera</b>")
-                    tiltDownRangeHandleSelectedImage.visible = true
+//                    tiltDownRangeHandleSelectedImage.visible = true
+                    tiltDownRangeHandleSelectedImage.state = "focus"
                 }
                 else if(tilt_control_handler_no_of_clicks == 2){
                     tilt_down_limit_set_enabled = false;
                     tilt_log("<b>Stop setting tilt down angle limit for the camera</b>");
-                    tiltDownRangeHandleSelectedImage.visible = false
+//                    tiltDownRangeHandleSelectedImage.visible = false
+                    tiltDownRangeHandleSelectedImage.state = "normal"
                     tilt_control_handler_no_of_clicks = 0;
                 }
             }
@@ -272,14 +335,16 @@ Item {
                 tilt_control_handler_no_of_clicks = tilt_control_handler_no_of_clicks + 1
                 if(tilt_control_handler_no_of_clicks == 1){
                     tilt_set_enabled = true;
-                    tiltHandleSelectedImage.visible = true
+//                    tiltHandleSelectedImage.visible = true
+                    tiltHandleSelectedImage.state = "focus"
                     if(dashboard_config_mode) tilt_log("<b>Start to set tilt up angle limit for the camera</b>")
                     else tilt_log("<b>Start to tilt camera</b>")
 
                 }
                 else if(tilt_control_handler_no_of_clicks == 2){
                     tilt_set_enabled = false;
-                    tiltHandleSelectedImage.visible = false
+//                    tiltHandleSelectedImage.visible = false
+                    tiltHandleSelectedImage.state = "normal"
                     tilt_control_handler_no_of_clicks = 0;
                     if(dashboard_config_mode) tilt_log("<b>Stop setting tilt up angle limit for the camera</b>")
                     else tilt_log("<b>Stop tilting camera</b>");
@@ -297,7 +362,7 @@ Item {
         anchors.top: parent.top
         anchors.topMargin: 0
         anchors.right : parent.right
-        anchors.rightMargin: 20
+        anchors.rightMargin: 0
         Image {
             id: rollBackImage
             anchors.horizontalCenter: parent.horizontalCenter
@@ -599,73 +664,83 @@ Item {
         } // end of MouseArea
 
     } // end of Pan Gauge
-
-    // Config Button
-    GButton{
-        id: modeSelectionButton
+    Item{
+        id: configButtonsPanel
         anchors.right: parent.right; anchors.rightMargin: 50
         anchors.top: parent.top; anchors.topMargin: -20
-        width: 120; height: 30
-        text: "Config"
-        onClicked: {
-            dashboard_config_mode = !dashboard_config_mode;
-            root.state = dashboard_config_mode? "Config" : "Dashboard"
+        width: 400; height: 40
+        Row{
+            id: buttonsRow
+            anchors.top: parent.top; anchors.topMargin: 5
+            spacing: 5
+            GButton{
+                id: modeSelectionButton
+                width: 120; height: 30
+                text: "Config"
+                onClicked: {
+                    dashboard_config_mode = !dashboard_config_mode;
+                    root.state = dashboard_config_mode? "Config" : "Dashboard"
+                }
+            }
+            GButton{
+                id: writeConfigParamsToMCU
+                width: 100; height: 30
+                text: "Write"
+            }
+            GButton{
+                id: readConfigParamsFromMCU
+                width: 100; height: 30
+                text: "Read"
+            }
         }
     }
-
     GConfigDialog{
         id: tiltConfigDialog
+        anchors.horizontalCenter: tilt_gauge.horizontalCenter
         anchors.top: tilt_gauge.bottom ; anchors.topMargin: -20
         opacity: 0
     }
+    GConfigDialog{
+        id: panConfigDialog
+        anchors.horizontalCenter: pan_gauge.horizontalCenter
+        anchors.top: pan_gauge.bottom ; anchors.topMargin: -20
+        opacity: 0
+    }
+    GConfigDialog{
+        id: rollConfigDialog
+        anchors.horizontalCenter: roll_gauge.horizontalCenter
+        anchors.top: roll_gauge.bottom ; anchors.topMargin: -20
+        opacity: 0
+    }
 
-
-    // end of Config Button
     states: [
         State {
             name: "Dashboard"
             PropertyChanges { target: modeSelectionButton; text: "Config >>"}
+            PropertyChanges { target: writeConfigParamsToMCU; visible: false }
+            PropertyChanges { target: readConfigParamsFromMCU; visible: false }
             PropertyChanges { target: tiltDownLimitSetMouseArea; visible: false}
             PropertyChanges { target: tiltDownLimitSetItem; visible: false}
             PropertyChanges { target: tiltConfigDialog; state  : "hideDialog"}
+            PropertyChanges { target: panConfigDialog;  state  : "hideDialog"}
+            PropertyChanges { target: rollConfigDialog; state  : "hideDialog"}
 
         },
         State {
             name: "Config"
             PropertyChanges { target: modeSelectionButton; text: "<< Dashboard" }
+            PropertyChanges { target: writeConfigParamsToMCU; visible: true }
+            PropertyChanges { target: readConfigParamsFromMCU; visible: true }
             PropertyChanges { target: tiltDownLimitSetMouseArea; visible: true}
 
             PropertyChanges { target: tiltMouseArea; width: 330; height: 165 ; anchors.bottomMargin: 165 }
             PropertyChanges { target: tiltDownLimitSetMouseArea; width: 330; height: 165 ; anchors.bottomMargin: 0 }
             PropertyChanges { target: tiltDownLimitSetItem; visible: true}
             PropertyChanges { target: tiltConfigDialog; state: "showDialog"}
+            PropertyChanges { target: panConfigDialog;  state: "showDialog"}
+            PropertyChanges { target: rollConfigDialog; state: "showDialog"}
         }
     ]
-//    transitions: [
-//        Transition {
-//            from: "Config"
-//            to: "Dashboard"
-//            ParallelAnimation{
-//                NumberAnimation { target: tiltConfigDialog; property: "opacity";  duration: 400;}
-//                SequentialAnimation{
-//                    NumberAnimation { target: tiltConfigDialog; property: "scale"; from: 1; to: 1.5; duration: 200; }
-//                    NumberAnimation { target: tiltConfigDialog; property: "scale"; from: 1.5; to: 0.5; duration: 200; }
-//                }
-//            }
-//        }
-//        ,Transition {
-//            from: "Dashboard"
-//            to: "Config"
-//            ParallelAnimation{
-//                NumberAnimation { target: tiltConfigDialog; property: "opacity"; duration: 600; }
-//                SequentialAnimation{
-//                    NumberAnimation { target: tiltConfigDialog; property: "scale"; from: 0.5; to: 1; duration: 200; }
-//                    NumberAnimation { target: tiltConfigDialog; property: "scale"; from: 1; to: 1.5; duration: 200; }
-//                    NumberAnimation { target: tiltConfigDialog; property: "scale"; from: 1.5; to: 1; duration: 200;}
-//                }
-//            }
-//        }
-//    ]
     onStateChanged: {
         if(dashboard_config_mode) {tilt_log("Change to Config Mode")} else {tilt_log("Return to Dashboard mode")}
     }
