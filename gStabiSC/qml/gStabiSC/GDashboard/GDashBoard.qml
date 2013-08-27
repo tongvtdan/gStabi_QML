@@ -20,14 +20,14 @@ Item {
     property double gauge_radius: gauge_width - gauge_center_x
     property int  angle_precision: 1        // number after dot
 
-    property double     tilt_setpoint_angle         : 0         // to control the tilt angle of camera
-    property double     tilt_down_limit_set_angle   : 30
-    property double     tilt_up_limit_set_angle     : -10
-    property bool       tilt_down_limit_set_enabled : false
-    property bool       tilt_set_enabled            : false
-    property double tilt_angle_delta        : tiltNeedleImage.rotation - tilt_setpoint_angle
-    property double tilt_old_angle_value    : 0
-    property int    tilt_control_handler_no_of_clicks: 0
+//    property double     tilt_setpoint_angle         : 0         // to control the tilt angle of camera
+//    property double     tilt_down_limit_set_angle   : 30
+//    property double     tilt_up_limit_set_angle     : -10
+//    property bool       tilt_down_limit_set_enabled : false
+//    property bool       tilt_set_enabled            : false
+//    property double tilt_angle_delta        : tiltNeedleImage.rotation - tilt_setpoint_angle
+//    property double tilt_old_angle_value    : 0
+//    property int    tilt_control_handler_no_of_clicks: 0
 
     property double roll_setpoint_angle     : 0
     property bool   roll_set_enabled        : false
@@ -742,7 +742,7 @@ Item {
             PropertyChanges { target: modeSelectionButton; text: "<< Dashboard" }
             PropertyChanges { target: writeConfigParamsToMCU; visible: true }
             PropertyChanges { target: readConfigParamsFromMCU; visible: true }
-            PropertyChanges { target: tiltDownLimitSetMouseArea; visible: true}
+//            PropertyChanges { target: tiltDownLimitSetMouseArea; visible: true}
 
 //            PropertyChanges { target: tiltGauge; gauge_control_area_height: 165 ;  }
 //            PropertyChanges { target: tiltDownLimitSetMouseArea; width: 330; height: 165 ; anchors.bottomMargin: 0 }
@@ -762,6 +762,7 @@ Item {
        @output: angle for setpoint handle image to rotate
        @note:   interact area is a donus with inside radius = 0.7 base circle radius, outside radius = base circle radius
       */
+    /*
     function calc_rotate_angle_tilt(_x, _y){
         var rot_angle_deg;
         var distanceFromCenterToPressedPoint = Math.sqrt((_x - gauge_center_x)*(_x - gauge_center_x) + (_y - gauge_center_y)*(_y - gauge_center_y));
@@ -807,6 +808,7 @@ Item {
             }
         }
     } // end of function
+    */
     /* function calc_rotate_angle_roll(_x, _y)
        @brief: get the angle to rotate the setpoint handler
        @input: (_x, _y) = (mouse.x, mouse.y)
