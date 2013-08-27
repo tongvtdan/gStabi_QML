@@ -1,11 +1,13 @@
-import QtQuick 2.1
-import QtQuick.Controls 1.0
-import QtQuick.Layouts 1.0
-import QtQuick.Controls.Styles 1.0
+import QtQuick 2.0
+//import QtQuick.Controls 1.0
+//import QtQuick.Layouts 1.0
+//import QtQuick.Controls.Styles 1.0
 import "../Components"
+import "../"
 
-Item{
-    id: comportSettings
+GDialog{
+    id: serialSettingDialog
+    title: "Serial Setting"
     property string portname: ""    // used to store portname in getPortNameList()
     property string selected_portname: ""
     property int  selected_port_index: 1
@@ -16,37 +18,9 @@ Item{
     property int anchor_leftMargin  : 10
     property int anchor_rightMargin : 10
 
-    property int  dragMaxX          : 500
-    property int  dragMaxY          : 500
-
     property string msg_log: ""
-    property string title_normal_color: "cyan"
-    property string title_hover_color: "yellow"
 
 
-    implicitHeight: 200
-    implicitWidth: 300
-    BorderImage {
-        id: commBorderImage
-        source: "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_serial_setting_dialog.png"
-//        source: "../images/gStabiUI_3.2_serial_setting_dialog.png"
-        width: 300; height: 200
-
-        border.left: 5; border.top: 5
-        border.right: 5; border.bottom: 5
-    }
-    Text {
-        id: dialogTitle
-        font.family: "Ubuntu"
-        font.bold: true
-        color: title_normal_color
-        text: "Serial Ports"
-        font.pixelSize: 12
-        anchors.top: parent.top
-        anchors.topMargin: 8
-        anchors.left: parent.left
-        anchors.leftMargin: 30
-    }
     // Open Close Port Button
     GButton{
         id: openCloseComportButton
@@ -76,18 +50,15 @@ Item{
     Rectangle{
         id: listBackGround
         width: 100; height: 88;
-//        anchors.horizontalCenter: parent.horizontalCenter;
         anchors.left: parent.left; anchors.leftMargin: 10
         anchors.bottom: parent.bottom; anchors.bottomMargin: 50
         color: "#00000000"
-
         Component {
             id: portListDelegate
             Rectangle {
                 id: wrapper
                 width: 70 ; height: 20; color: "#00000000"
                 border.width: 1 ; border.color: "cyan"
-
                 Text {
                     id: portNameListText
                     anchors.verticalCenter: parent.verticalCenter
@@ -102,7 +73,6 @@ Item{
                 }
                 transitions: Transition { NumberAnimation { property: "x"; duration: 200; }
                 }
-
                 MouseArea{
                     anchors.fill: parent; hoverEnabled: true
                     onClicked: {
@@ -148,15 +118,8 @@ Item{
             focus: true
             spacing: 2
             onCountChanged: {
-//                var i;
-//                for(i=0;i<comportList.count;i++){
-//                    if(selected_port_index == i){
-                        currentIndex = selected_port_index;
-//                    }
-//                }
+                currentIndex = selected_port_index;
             }
-
-
         } // end of ListView
     } // end of list
     ListModel {
@@ -185,46 +148,6 @@ Item{
     onPortUpdatedChanged: {
         getPortNameList();
     }
-
-    // State and transition for view the dialog
-
-    states:[
-        State {
-            name: "show"
-            PropertyChanges {target: comportSettings; scale: 1.0; opacity: 1; }
-
-        }
-        ,State {
-            name: "hide"
-            PropertyChanges {target: comportSettings; scale: 0.5 ; opacity: 0.5; }
-        }
-
-    ]
-    transitions: [ Transition {
-            from: "show" ; to:   "hide"
-            NumberAnimation{ target: comportSettings; properties: "scale"; from: 1.0; to: 0.5; duration: 500}
-            NumberAnimation { target: comportSettings; property: "opacity"; duration: 200; easing.type: Easing.InOutQuad }
-        },
-        Transition{
-            from: "hide"; to: "show"
-            NumberAnimation { target: comportSettings; properties: "scale" ; from: 0.5; to: 1.0; duration: 500}
-            NumberAnimation { target: comportSettings; property: "opacity"; duration: 200; easing.type: Easing.InOutQuad }
-        }
-    ]
-    MouseArea{
-        id: windowMouseArea
-        width: parent.width ; height: 30
-        anchors.top: parent.top; anchors.horizontalCenter: parent.horizontalCenter
-        drag.target: parent
-        drag.minimumX: 0; drag.minimumY: 0
-        drag.maximumX: dragMaxX; drag.maximumY: dragMaxY
-        hoverEnabled: true
-        onEntered: dialogTitle.color = title_hover_color
-        onExited: dialogTitle.color = title_normal_color
-        onDoubleClicked: comportSettings.state == "hide"? comportSettings.state = "show" : comportSettings.state = "hide"
-
-
-    }
     onStateChanged: {
         if(state == "show"){
             getPortNameList()
@@ -234,4 +157,6 @@ Item{
     function serial_dialog_log(_message){
         msg_log = "<font color=\"cyan\">" + _message+ "</font><br>";
     }
+
 }
+

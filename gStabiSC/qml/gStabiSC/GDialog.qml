@@ -11,9 +11,11 @@ Item{
     property int dragMaxY           : 500
     property string title_normal_color: "cyan"
     property string title_hover_color: "yellow"
+    property string title: "Dialog"
 
     implicitHeight: 200
     implicitWidth: 300
+    scale: 1.0
     BorderImage {
         id: background
         x: 0
@@ -22,6 +24,18 @@ Item{
         width: 300; height: 200
         border.left: 5; border.top: 5
         border.right: 5; border.bottom: 5
+    }
+    Text {
+        id: dialogTitle
+        font.family: "Segoe UI Symbol"
+        font.bold: true
+        color: title_normal_color
+        text: title
+        font.pixelSize: 12
+        anchors.top: parent.top
+        anchors.topMargin: 10
+        anchors.left: parent.left
+        anchors.leftMargin: 20
     }
     states:[
         State {
