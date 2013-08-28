@@ -12,6 +12,9 @@ Item{
     property int    gauge_width                 : 330
     property int    gauge_height                : 330
     property bool   gauge_config_mode           : false
+    property double gauge_sensor_value          : 0
+    property int    gauge_type                  : 1      // 1: Tilt, 2: pan; 3: roll
+    property int    gauge_offset                : 90
 //    property string gauge_back                  : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_back_tilt.png"
 //    property string gauge_needle                : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_needle_tilt.png"
 //    property string gauge_handle_normal         : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_normal_green_handle.png"
@@ -58,12 +61,12 @@ Item{
         rotation: {
             if(gauge_config_mode == false){
                 if(gauge_set_enabled) { return gauge_setpoint_angle;}
-                else return _mavlink_manager.tilt_angle;
+                else return gauge_sensor_value;
             } else if(gauge_set_enabled == true)
                     {return gauge_up_limit_set_angle;}
                 else if(gauge_down_limit_set_enabled == true)
                         {return gauge_down_limit_set_angle;}
-                    else {return _mavlink_manager.tilt_angle;}
+                    else {return gauge_sensor_value;}
         }
     }
     // text display current angle value, sensor angle value
@@ -120,7 +123,7 @@ Item{
     Item{
         id: gaugeControlItem
         anchors.fill: parent
-        rotation: gauge_config_mode? gauge_up_limit_set_angle : gauge_setpoint_angle
+        rotation: (gauge_config_mode? gauge_up_limit_set_angle : gauge_setpoint_angle) - gauge_offset
         Image {
             id: gaugeHandlePressedImage
             anchors.right: parent.right; anchors.rightMargin: -10
@@ -175,7 +178,8 @@ Item{
     Item{
         id: gaugeDownLimitSetItem
         anchors.fill: parent
-        rotation: gauge_down_limit_set_angle
+        rotation: gauge_down_limit_set_angle - gauge_offset
+        //{if(gauge_type == 2) {return (gauge_down_limit_set_angle - 90) } else return gauge_down_limit_set_angle}
         Image {
             id: gaugeDownRangeHandleSelectedImage
             anchors.right: parent.right
@@ -232,7 +236,11 @@ Item{
         anchors.fill: parent
         hoverEnabled: true
         onPositionChanged:  calc_rotate_angle_gauge(mouse.x, mouse.y)
-        onEntered: gauge_log_message = ("<b><i>axis of gStabi</i></b>")
+        onEntered: {
+            if     (gauge_type == 1)  {gauge_log_message = "<b><i> Tilt axis of gStabi</i></b>";}
+            else if(gauge_type == 2)  {gauge_log_message = "<b><i> Pan axis of gStabi</i></b>";}
+            else if(gauge_type == 3)  {gauge_log_message = "<b><i> Roll axis of gStabi</i></b>";}
+        }
         onClicked: {
             if(select_handle1){
                 gauge_control_handler_no_of_clicks = gauge_control_handler_no_of_clicks + 1
@@ -299,13 +307,15 @@ Item{
                 var distanceFromPress = Math.sqrt((x_angle - _x)*(x_angle - _x) + (y_angle - _y)*(y_angle - _y));
                 if(distanceFromPress < minDistanceFromPress){
                     minDistanceFromPress = distanceFromPress;
-                    rot_angle_deg = angle;      // get a rotation angle
+                    rot_angle_deg = angle + gauge_offset;      // get a rotation angle
+                    console.log("Rotation A: " + rot_angle_deg)
                 }
             }
         }
         else {
             rot_angle_deg = -360;
         }
+//        if(gauge_type !==2)  // if not a Pan, do convert
         if(rot_angle_deg > 180){ rot_angle_deg = rot_angle_deg - 360} // convert angle > 180 to negative angle, e.g: 190 --> -10
         if(rot_angle_deg !== -360){
             var diff_angle_1 = Math.abs(gauge_up_limit_set_angle - rot_angle_deg) // calc the different angle between current angle and previous position
