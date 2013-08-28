@@ -1,34 +1,29 @@
 
 import QtQuick 2.0
 /**
-This file defines a simple slider. Since only seems to support horizontal
-gradients the background of the slider is a slightly rotated rectangle
-with a gradient that is clipped by a rectangle defining the actual slider
-box.
 
 property int fill_width:      The fill_width that the slider currently has.
 property int lowerLimit: The lower limit of the slider.
 property int upperLimit: The upper limit of the slider.
 */
 Rectangle {
-    property double value   : 0
-    property double step    : 1
-    property int fill_width: 0
-    property int lowerLimit: 0
-    property int upperLimit: 0
-    property int  handle_offset_x: handle.width/2
-
-    property double  convert_ratio: (handleMouseArea.drag.maximumX - handleMouseArea.drag.minimumX)/(Math.abs(upperLimit) - Math.abs(lowerLimit))
+    property double value       : 0
+    property double step        : 1
+    property int    fill_width  : 0
+    property int    lowerLimit  : 0
+    property int    upperLimit  : 0
+    property int    handle_offset_x: handle.width/2
+    property double convert_ratio: (handleMouseArea.drag.maximumX - handleMouseArea.drag.minimumX)/(Math.abs(upperLimit) - Math.abs(lowerLimit))
+    property string handle_normal   : "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.2_normal_slider_handle.png"
+    property string handle_pressed  : "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.2_pressed_slider_handle.png"
 
     id: background
     color: "#00000000"
     smooth: true
-//    radius: 2
+    radius: 4
     border.width: 2
-    border.color: "dodgerblue"
+    border.color: "cyan"
     implicitHeight: 20; implicitWidth: 300
-
-
     Item {
         id: grooveRect
         width: parent.width - parent.border.width
@@ -38,29 +33,27 @@ Rectangle {
         Rectangle {
             id: fillRect
             height: parent.height;
-//            width: fill_width
             width: (value - lowerLimit)*convert_ratio
+            radius: background.radius/2
             color: "#04ffde"
-            anchors.left: parent.left
-            anchors.leftMargin: background.border.width/2
+            opacity: 0.8
+            anchors.left: parent.left; anchors.leftMargin: background.border.width/2
         }
     }
-
     Item {
         id: handle
-        height:  40; width: 40
+        height:  25 ; width: 25
         x: -handle_offset_x + background.border.width + fillRect.width
         anchors.top: grooveRect.bottom; anchors.topMargin: 0
         Image{
             id: handleReleasedImage
             anchors.fill: parent
-            source: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.2_released_slider_handle.png"
+            source: handle_normal
         }
         Image{
             id: handlePressedImage
             anchors.fill: parent
-            source: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.2_pressed_slider_handle.png"
-//            visible: false
+            source: handle_pressed
             state: "normal"
             states:[
                 State {
@@ -114,7 +107,6 @@ Rectangle {
             }
         }
     }
-
 
 }
 

@@ -14,7 +14,7 @@ Item{
     property bool   gauge_config_mode           : false
     property double gauge_sensor_value          : 0
     property int    gauge_type                  : 1      // 1: Tilt, 2: pan; 3: roll
-    property int    gauge_offset                : 90
+    property int    gauge_offset                : 0
 //    property string gauge_back                  : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_back_tilt.png"
 //    property string gauge_needle                : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_needle_tilt.png"
 //    property string gauge_handle_normal         : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_normal_green_handle.png"

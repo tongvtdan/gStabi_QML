@@ -42,7 +42,8 @@ OTHER_FILES += \
     qml/gStabiSC/GDashboard/GConfigDialog.qml \
     qml/gStabiSC/Components/GImageButton.qml \
     qml/gStabiSC/GDialog.qml \
-    qml/gStabiSC/GDashboard/GGauge.qml
+    qml/gStabiSC/GDashboard/GGauge.qml \
+    qml/gStabiSC/GPIDDialog.qml
 
 HEADERS += \
     src/configuration.h \
