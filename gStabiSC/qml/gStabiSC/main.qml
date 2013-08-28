@@ -13,8 +13,7 @@ Rectangle {
     BorderImage {
         id: gstabiBackgroundImage
         width: 1044;  height: 700
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.centerIn: parent
         source: "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_background.png"
     }
     AppHeader{
@@ -76,6 +75,11 @@ Rectangle {
         dragMaxY: gstabiBackgroundImage.height - textConsole.height
         msg_history: main_log_msg
     }
+    GPIDDialog{
+        id: pidSettingDialog
+        visible: false
+    }
+
     Item {
         id: buttonsPanel
         width: 150; height: 70
@@ -90,9 +94,10 @@ Rectangle {
             }
         }
         GImageButton{
-            id: pidSettingDialog
+            id: pidSettingsButton
             text: "PID"
             anchors.left: serialSettingDialog.right; anchors.leftMargin: 20
+            onClicked: pidSettingDialog.visible = !pidSettingDialog.visible
         }
     }   // end of buttons Panel
     onMain_log_msgChanged: {
