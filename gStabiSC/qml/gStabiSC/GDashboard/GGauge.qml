@@ -1,11 +1,32 @@
 import QtQuick 2.0
-
-// gauge
+/*
+ Gauge Component
+ Usage:
+  - Replace image source file accordingly.
+  - Set gauge_width, gauge_height if change
+*/
 Item{
     id: gauge_container
-
-    property int    gauge_width     : 330
-    property int    gauge_height    : 330
+//[!] Variables can be change in using code
+    property string gauge_log_message           : "Gauge Log"
+    property int    gauge_width                 : 330
+    property int    gauge_height                : 330
+    property bool   gauge_config_mode           : false
+//    property string gauge_back                  : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_back_tilt.png"
+//    property string gauge_needle                : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_needle_tilt.png"
+//    property string gauge_handle_normal         : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_normal_green_handle.png"
+//    property string gauge_handle_pressed        : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_pressed_green_handle.png"
+//    property string down_limit_handle_normal    : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_normal_red_handle.png"
+//    property string down_limit_handle_pressed   : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_pressed_red_handle.png"
+    //[!] Enable these images source for design UI
+        property string gauge_back                  : "../images/gauges/gStabiUI_3.2_back_tilt.png"
+        property string gauge_needle                : "../images/gauges/gStabiUI_3.2_needle_tilt.png"
+        property string gauge_handle_normal         : "../images/gauges/gStabiUI_3.2_normal_green_handle.png"
+        property string gauge_handle_pressed        : "../images/gauges/gStabiUI_3.2_pressed_green_handle.png"
+        property string down_limit_handle_normal    : "../images/gauges/gStabiUI_3.2_normal_red_handle.png"
+        property string down_limit_handle_pressed   : "../images/gauges/gStabiUI_3.2_pressed_red_handle.png"
+    //[!]
+// [!]
     property double gauge_center_x  : gauge_width/2
     property double gauge_center_y  : gauge_height/2
     property double gauge_radius    : gauge_width - gauge_center_x
@@ -17,36 +38,16 @@ Item{
     property bool       gauge_down_limit_set_enabled        : false
     property bool       gauge_set_enabled                   : false
     property double     gauge_angle_delta                   : gaugeNeedleImage.rotation - gauge_setpoint_angle
-    property double     gauge_old_angle_value               : 0
     property int        gauge_control_handler_no_of_clicks  : 0
     property int        gauge_down_limit_handle_no_of_clicks: 0
-    property bool       gauge_config_mode: false
-
-//    property string gauge_back                  : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_back_tilt.png"
-//    property string gauge_needle                : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_needle_tilt.png"
-//    property string gauge_handle_pressed        : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_tilt_handle_selected.png"
-//    property string gauge_handle_normal         : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_tilt_setpoint_handle.png"
-//    property string down_limit_handle_normal    : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_roll_setpoint_handle.png"
-//    property string down_limit_handle_pressed   : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_roll_handle_selected.png"
-// Use these image source for design UI
-    property string gauge_back                  : "../images/gauges/gStabiUI_3.2_back_tilt.png"
-    property string gauge_needle                : "../images/gauges/gStabiUI_3.2_needle_tilt.png"
-    property string gauge_handle_pressed        : "../images/gauges/gStabiUI_3.2_tilt_handle_selected.png"
-    property string gauge_handle_normal         : "../images/gauges/gStabiUI_3.2_tilt_setpoint_handle.png"
-    property string down_limit_handle_normal    : "../images/gauges/gStabiUI_3.2_roll_setpoint_handle.png"
-    property string down_limit_handle_pressed   : "../images/gauges/gStabiUI_3.2_roll_handle_selected.png"
 
     property bool  select_handle2: false
     property bool  select_handle1: false
 
-
-    property string  gauge_log_message: "Gauge Log"
-
     implicitWidth: gauge_width; implicitHeight: gauge_height
-
     Image {
         id: gaugeBackImage
-        anchors.horizontalCenter: parent.horizontalCenter; anchors.verticalCenter: parent.verticalCenter
+        anchors.fill: parent
         source: gauge_back
     }
     Image {
@@ -68,47 +69,31 @@ Item{
     // text display current angle value, sensor angle value
     Text{
         id: gaugeAngleValueText
-        width: 20
-        height: 13
+        width: 20; height: 13
         color: "#00ffff"
-        font.pixelSize: 20
-        font.family:"Segoe UI Symbol"
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
-        font.bold: true
-        verticalAlignment: Text.AlignVCenter
-        horizontalAlignment: Text.AlignHCenter
+        font.pixelSize: 20 ; font.family:"Segoe UI Symbol" ; font.bold: true
+        anchors.centerIn: parent
+        verticalAlignment: Text.AlignVCenter ; horizontalAlignment: Text.AlignHCenter
         style: Text.Normal
         text: gaugeNeedleImage.rotation.toFixed(angle_precision)
     }
     // display different value from setpoint
     Text{
         id: gaugeAngleDeltaText
-        width: 20
-        height: 13
+        width: 20; height: 13
         color: "#ff0000"
-        font.pixelSize: 12
-        font.family: "Segoe UI Symbol"
+        font.pixelSize: 12; font.family: "Segoe UI Symbol"; font.bold: true
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: gaugeAngleValueText.bottom
-        anchors.topMargin: 35
-        font.bold: true
-        verticalAlignment: Text.AlignVCenter
-        horizontalAlignment: Text.AlignHCenter
-//        text: gauge_angle_delta.toFixed(angle_precision)
-        text: "0.0"
+        anchors.top: gaugeAngleValueText.bottom; anchors.topMargin: 35
+        verticalAlignment: Text.AlignVCenter; horizontalAlignment: Text.AlignHCenter
+        text: gauge_angle_delta.toFixed(angle_precision)
     }
     Rectangle{
         id: gaugeAngleDeltaNumDisplay
         color: "#00000000"
-        height: 15
-        width: 50
-        radius: 4
-        border.width: 2
-        border.color: "#06f7b3"
-        anchors.verticalCenterOffset: 49
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
+        height: 15 ; width: 50; radius: 4
+        border.width: 2 ; border.color: "#06f7b3"
+        anchors.centerIn: parent ;anchors.verticalCenterOffset: 49
     }
     // Display different from setpoint, positive delta
     Rectangle{
@@ -138,8 +123,8 @@ Item{
         rotation: gauge_config_mode? gauge_up_limit_set_angle : gauge_setpoint_angle
         Image {
             id: gaugeHandlePressedImage
-            anchors.right: gaugeControlHandleImage.right; anchors.rightMargin: 2
-            anchors.verticalCenter: gaugeControlHandleImage.verticalCenter
+            anchors.right: parent.right; anchors.rightMargin: -10
+            anchors.verticalCenter: parent.verticalCenter
             source: gauge_handle_pressed
             state: "normal"
             states:[
@@ -180,7 +165,9 @@ Item{
         }
         Image{
             id: gaugeControlHandleImage
-            anchors.centerIn: parent
+            rotation: 0
+            anchors.right: parent.right; anchors.rightMargin: -10
+            anchors.verticalCenter: parent.verticalCenter
             source: gauge_handle_normal
         }
     }
@@ -188,16 +175,12 @@ Item{
     Item{
         id: gaugeDownLimitSetItem
         anchors.fill: parent
-
-//        width: gauge_width; height: gauge_height/2
-//        anchors.horizontalCenter: parent.horizontalCenter
-//        transformOrigin: Item.Top
-//        anchors.bottom: parent.bottom; anchors.bottomMargin: 0
         rotation: gauge_down_limit_set_angle
         Image {
             id: gaugeDownRangeHandleSelectedImage
-            anchors.verticalCenter: gaugeDownRangeSelectHandlerImage.verticalCenter
-            anchors.right: gaugeDownRangeSelectHandlerImage.right
+            anchors.right: parent.right
+            anchors.rightMargin: -10
+            anchors.verticalCenter: parent.verticalCenter
             source: down_limit_handle_pressed
             state: "limit_normal"
             states:[
@@ -238,48 +221,12 @@ Item{
         }
         Image{
             id: gaugeDownRangeSelectHandlerImage
-            anchors.centerIn: parent
-//            anchors.horizontalCenterOffset: 0
-//            anchors.top: parent.top
-//            anchors.topMargin: -20
-//            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.right: parent.right
+            anchors.rightMargin: -10
+            anchors.verticalCenter: parent.verticalCenter
             source: down_limit_handle_normal
         }
     }
-    /*
-    MouseArea{
-        id: gaugeDownLimitSetMouseArea
-        anchors.fill: parent
-//        width: parent.gauge_width; height: parent.gauge_height/2
-//        anchors.bottom: parent.bottom; anchors.bottomMargin: 0
-
-        hoverEnabled: true
-        onPositionChanged:
-        {
-            calc_rotate_angle_gauge(mouse.x, mouse.y)
-
-        }
-        onEntered:
-        {
-            gauge_log_message = ("<b><i>axis of gStabi</i></b>")
-        }
-        onClicked: {
-            gauge_control_handler_no_of_clicks = gauge_control_handler_no_of_clicks + 1
-            if(gauge_control_handler_no_of_clicks == 1){
-                gauge_down_limit_set_enabled = true;
-                gauge_log_message = ("<b>Start to set down angle limit for the camera</b>")
-                gaugeDownRangeHandleSelectedImage.state = "limit_focus"
-            }
-            else if(gauge_control_handler_no_of_clicks == 2){
-                gauge_control_handler_no_of_clicks = 0;
-                gauge_down_limit_set_enabled = false;
-                gauge_log_message = ("<b>Stop setting down angle limit for the camera</b>");
-                gaugeDownRangeHandleSelectedImage.state = "limit_normal"
-
-            }
-        }
-    }
-    */
     MouseArea{
         id: gaugeMouseArea
         anchors.fill: parent
@@ -327,20 +274,14 @@ Item{
             name: "dash"
             when: !gauge_config_mode
             PropertyChanges { target: gaugeDownLimitSetItem; visible: false}
-//            PropertyChanges { target: gaugeDownLimitSetMouseArea; enabled: false}
-
         }
         ,State{
             name: "config"
             when: gauge_config_mode
             PropertyChanges { target: gaugeDownLimitSetItem; visible: true}
-//            PropertyChanges { target: gaugeDownLimitSetMouseArea; enabled: true;}
-//            PropertyChanges { target: gaugeDownLimitSetMouseArea; enabled: true; width: 330; height: 165; anchors.bottomMargin: 0}
-//            PropertyChanges { target: gaugeMouseArea; width: 330; height: 165 ; anchors.bottomMargin: 165 }
-
         }
     ]
-    /* function calc_rotate_angle_tilt(_x, _y)
+    /* function calc_rotate_angle_gauge(_x, _y)
        @brief: get the angle to rotate the setpoint handler
        @input: (_x, _y) = (mouse.x, mouse.y)
        @output: angle for setpoint handle image to rotate
@@ -365,18 +306,12 @@ Item{
         else {
             rot_angle_deg = -360;
         }
-        if(rot_angle_deg > 180){ rot_angle_deg = rot_angle_deg - 360}
+        if(rot_angle_deg > 180){ rot_angle_deg = rot_angle_deg - 360} // convert angle > 180 to negative angle, e.g: 190 --> -10
         if(rot_angle_deg !== -360){
-
-            var diff_angle_1 = Math.abs(gauge_up_limit_set_angle - rot_angle_deg)
+            var diff_angle_1 = Math.abs(gauge_up_limit_set_angle - rot_angle_deg) // calc the different angle between current angle and previous position
             var diff_angle_2 = Math.abs(gauge_down_limit_set_angle - rot_angle_deg)
-//            console.log("Current angle: " + rot_angle_deg + ", Diff from A1: " + diff_angle_1 + ", Diff from A2: " + diff_angle_2)
-
-
-
             if(gauge_config_mode){ // in Config Mode, show both Up (use Control handle) and Down limit
-
-                if(diff_angle_1 <= diff_angle_2) {
+                if(diff_angle_1 <= diff_angle_2) {      // select the handle to interact
                     select_handle1 = true; select_handle2 = false;//console.log("Select 1")
                 } else {
                     select_handle2 = true; select_handle1 = false; //console.log("Select 2");
@@ -397,9 +332,7 @@ Item{
                     gauge_setpoint_angle = rot_angle_deg;
                     gauge_log_message = ("Rotating the camera to angle: " + gauge_setpoint_angle);
                 }
-
             }
-
         }
     } // end of function
 }   // end of gauge Gauge
