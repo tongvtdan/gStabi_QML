@@ -1,7 +1,6 @@
 import QtQuick 2.0
 
-import "AppHeader"
-import "Comm"
+
 import "GDashboard"
 import "Components"
 
@@ -16,7 +15,7 @@ Item {
         anchors.centerIn: parent
         source: "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_background.png"
     }
-    AppHeader{
+    GAppHeader{
         id: header
         anchors.top: gstabiBackgroundImage.top ; anchors.topMargin: 20
         anchors.left: gstabiBackgroundImage.left ; anchors.leftMargin: 30
@@ -49,7 +48,7 @@ Item {
             }
         }
     } // end of dashboard
-    CommSetting{
+    GSerialSettings{
         id: comportSettingPanel
         x: gstabiBackgroundImage.width - comportSettingPanel.width - textConsole.width - 10
         focus_state_posY:  gstabiBackgroundImage.height - comportSettingPanel.height - 60
@@ -60,7 +59,7 @@ Item {
         dragMaxY: gstabiBackgroundImage.height - comportSettingPanel.height
         onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
     }
-    Console{
+    GConsole{
         id: textConsole
         x: gstabiBackgroundImage.x + gstabiBackgroundImage.width - textConsole.width - 10
         opacity: 1
