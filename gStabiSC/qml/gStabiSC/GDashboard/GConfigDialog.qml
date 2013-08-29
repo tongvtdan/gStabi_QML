@@ -8,23 +8,44 @@ Item{
     property int    poles_num   : 24
     property int    max_value   : 10
     property int    min_value   : -10
-    implicitWidth: 300; implicitHeight: 200
+
+    //    property string border_normal   : "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_normal_parameters_dialog.png"
+    //    property string border_hover    : "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_hover_parameters_dialog.png"
+    property string border_normal   : "../images/gStabiUI_3.2_normal_parameters_dialog.png"
+    property string border_hover    : "../images/gStabiUI_3.2_hover_parameters_dialog.png"
+
+
+    implicitWidth: 310; implicitHeight: 210
+
+    MouseArea{
+        anchors.fill: parent
+        hoverEnabled: true
+        onEntered: boarderHoverImg.visible = true
+        onExited: boarderHoverImg.visible = false
+    }
     BorderImage {
-        id: dialogImage
-        source: "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_tilt_config_dialog.png"
-//        source: "../images/gStabiUI_3.2_tilt_config_dialog.png"
+        id: boardNormalImg
+        width: parent.width ; height: parent.height
+        border.left: 5; border.top: 5 ;border.right: 5; border.bottom: 5
+        anchors.top: parent.top;
+        source: border_normal
+    }
+    BorderImage {
+        id: boarderHoverImg
         width: parent.width ; height: parent.height
         border.left: 5; border.top: 5
         border.right: 5; border.bottom: 5
         anchors.top: parent.top;
+        source: border_hover
+        visible: false
     }
+
+
     Row{
         id: powerRow
         width: 300
-        anchors.top: dialogImage.top
-        anchors.topMargin: 30
-        anchors.left: dialogImage.left
-        anchors.leftMargin: 5
+        anchors.top: boardNormalImg.top; anchors.topMargin: 40
+        anchors.left: boardNormalImg.left ; anchors.leftMargin: 8
         spacing: 5
         Text{
             id: powerLabel
@@ -34,6 +55,7 @@ Item{
             font.bold: true
             font.pixelSize: 12
             text: "Power (%)"
+            horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             anchors.verticalCenter: parent.verticalCenter
         }
@@ -62,13 +84,19 @@ Item{
                 text: power_level
                 validator: IntValidator{bottom: 0; top: 100;}
                 focus: true
+                Keys.onPressed: {
+                    if ((event.key === Qt.Key_Return) || (event.key === Qt.Key_Enter)) {
+                                 powerSlider.value = text
+                                 event.accepted = true;
+                             }
+                }
             }
         }
     }
     Row{
         id: polesRow
         anchors.top: powerRow.bottom; anchors.topMargin: 40
-        anchors.left: dialogImage.left; anchors.leftMargin: 10
+        anchors.left: boardNormalImg.left; anchors.leftMargin: 10
         spacing: 10
         Text{
             id: polesLabel

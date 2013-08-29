@@ -16,19 +16,19 @@ Item{
     property int    gauge_type                  : 1      // 1: Tilt, 2: pan; 3: roll
     property string gauge_tilte                 : "Tilt"
     property int    gauge_offset                : 0
-//    property string gauge_back                  : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_back_tilt.png"
-//    property string gauge_needle                : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_needle_tilt.png"
-//    property string gauge_handle_normal         : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_normal_green_handle.png"
-//    property string gauge_handle_pressed        : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_pressed_green_handle.png"
-//    property string down_limit_handle_normal    : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_normal_red_handle.png"
-//    property string down_limit_handle_pressed   : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_pressed_red_handle.png"
+    property string gauge_back                  : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_back_tilt.png"
+    property string gauge_needle                : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_needle_tilt.png"
+    property string gauge_handle_normal         : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_normal_green_handle.png"
+    property string gauge_handle_pressed        : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_pressed_green_handle.png"
+    property string down_limit_handle_normal    : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_normal_red_handle.png"
+    property string down_limit_handle_pressed   : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_pressed_red_handle.png"
     //[!] Enable these images source for design UI
-        property string gauge_back                  : "../images/gauges/gStabiUI_3.2_back_tilt.png"
-        property string gauge_needle                : "../images/gauges/gStabiUI_3.2_needle_tilt.png"
-        property string gauge_handle_normal         : "../images/gauges/gStabiUI_3.2_normal_green_handle.png"
-        property string gauge_handle_pressed        : "../images/gauges/gStabiUI_3.2_pressed_green_handle.png"
-        property string down_limit_handle_normal    : "../images/gauges/gStabiUI_3.2_normal_red_handle.png"
-        property string down_limit_handle_pressed   : "../images/gauges/gStabiUI_3.2_pressed_red_handle.png"
+//        property string gauge_back                  : "../images/gauges/gStabiUI_3.2_back_tilt.png"
+//        property string gauge_needle                : "../images/gauges/gStabiUI_3.2_needle_tilt.png"
+//        property string gauge_handle_normal         : "../images/gauges/gStabiUI_3.2_normal_green_handle.png"
+//        property string gauge_handle_pressed        : "../images/gauges/gStabiUI_3.2_pressed_green_handle.png"
+//        property string down_limit_handle_normal    : "../images/gauges/gStabiUI_3.2_normal_red_handle.png"
+//        property string down_limit_handle_pressed   : "../images/gauges/gStabiUI_3.2_pressed_red_handle.png"
     //[!]
 // [!]
     property double gauge_center_x  : gauge_width/2
