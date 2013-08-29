@@ -38,21 +38,19 @@ Rectangle {
             radius: background.radius
             gradient: Gradient {
                 GradientStop {
-                    position: 0
-                    color: "#08f7dc"
+                    position: 0.00;
+                    color: "#08f7dc";
                 }
-
                 GradientStop {
-                    position: 0.5
-                    color: "#7d000000"
+                    position: 0.50;
+                    color: "#000000";
                 }
-
                 GradientStop {
-                    position: 1
-                    color: "#07f7db"
+                    position: 1.00;
+                    color: "#07f7db";
                 }
             }
-//            color: "#04ffde"
+            //            color: "#04ffde"
 
             opacity: 0.8
             anchors.left: parent.left; anchors.leftMargin: background.border.width/2

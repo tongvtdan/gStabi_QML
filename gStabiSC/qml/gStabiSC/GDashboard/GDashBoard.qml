@@ -105,7 +105,7 @@ Item {
             }
         }
     }
-    GConfigDialog{
+    GMotorConfig{
         id: tiltConfigDialog
         anchors.horizontalCenter: tiltGauge.horizontalCenter
         anchors.top: tiltGauge.bottom ; anchors.topMargin: -10
@@ -113,7 +113,7 @@ Item {
         max_value: tiltGauge.gauge_down_limit_set_angle
         min_value: tiltGauge.gauge_up_limit_set_angle
     }
-    GConfigDialog{
+    GMotorConfig{
         id: panConfigDialog
         anchors.horizontalCenter: panGauge.horizontalCenter
         anchors.top: panGauge.bottom ; anchors.topMargin: -10
@@ -122,7 +122,7 @@ Item {
         min_value: panGauge.gauge_up_limit_set_angle
 
     }
-    GConfigDialog{
+    GMotorConfig{
         id: rollConfigDialog
         anchors.horizontalCenter: rollGauge.horizontalCenter
         anchors.top: rollGauge.bottom ; anchors.topMargin: -10

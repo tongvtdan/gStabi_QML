@@ -51,7 +51,6 @@ Item {
     } // end of dashboard
     CommSetting{
         id: comportSettingPanel
-        z: 1
         x: gstabiBackgroundImage.width - comportSettingPanel.width - textConsole.width - 10
         focus_state_posY:  gstabiBackgroundImage.height - comportSettingPanel.height - 60
         unfocus_state_posY: gstabiBackgroundImage.height - comportSettingPanel.height +100
@@ -63,7 +62,6 @@ Item {
     }
     Console{
         id: textConsole
-        z: 5
         x: gstabiBackgroundImage.x + gstabiBackgroundImage.width - textConsole.width - 10
         opacity: 1
         state: "focus"
@@ -76,7 +74,6 @@ Item {
     }
     GPIDDialog{
         id: pidSettingDialog
-        z: 10
         state: "hideDialog"
         dragMaxX: gstabiBackgroundImage.width - pidSettingDialog.width
         dragMaxY: gstabiBackgroundImage.height - pidSettingDialog.height
@@ -103,10 +100,13 @@ Item {
             onClicked: {
                 if(pidSettingDialog.state === "hideDialog") {
                     pidSettingDialog.state = "showDialog" ;
-                    gDashboard.enabled = false
+                    pidSettingDialog.z = 100;   // on top of others
+
+//                    gDashboard.enabled = false
                 } else {
                     pidSettingDialog.state = "hideDialog";
-                    gDashboard.enabled = true
+                    pidSettingDialog.z = -1 // lower
+//                    gDashboard.enabled = true
                 }
             }
         }
