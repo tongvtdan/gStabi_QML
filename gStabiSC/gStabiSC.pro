@@ -43,7 +43,8 @@ OTHER_FILES += \
     qml/gStabiSC/Components/GImageButton.qml \
     qml/gStabiSC/GDialog.qml \
     qml/gStabiSC/GDashboard/GGauge.qml \
-    qml/gStabiSC/GPIDDialog.qml
+    qml/gStabiSC/GPIDDialog.qml \
+    qml/gStabiSC/Components/ParametersContainer.qml
 
 HEADERS += \
     src/configuration.h \

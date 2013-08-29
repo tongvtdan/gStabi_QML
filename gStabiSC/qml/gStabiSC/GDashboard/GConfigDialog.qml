@@ -214,11 +214,6 @@ Item{
             ParallelAnimation{
                 NumberAnimation { target: dialogContainer; property: "opacity";  duration: 500; }
                 NumberAnimation { target: dialogContainer; property: "scale"; to: 0.5; duration: 500; easing.type: Easing.Bezier}
-
-//                SequentialAnimation{
-//                    NumberAnimation { target: dialogContainer; property: "scale"; to: 1.5; duration: 200; }
-//                    NumberAnimation { target: dialogContainer; property: "scale"; to: 0.5; duration: 200; }
-//                }
             }
         }
         ,Transition {
@@ -226,12 +221,6 @@ Item{
             ParallelAnimation{
                 NumberAnimation { target: dialogContainer; property: "opacity"; duration: 1000; }
                 NumberAnimation { target: dialogContainer; property: "scale"; to: 1; duration: 1000; easing.type: Easing.OutElastic}
-
-//                SequentialAnimation{
-//                    NumberAnimation { target: dialogContainer; property: "scale"; from: 0.5; to: 1; duration: 200; }
-//                    NumberAnimation { target: dialogContainer; property: "scale"; from: 1; to: 1.5; duration: 200; }
-//                    NumberAnimation { target: dialogContainer; property: "scale"; from: 1.5; to: 1; duration: 200;}
-//                }
             }
 
         }

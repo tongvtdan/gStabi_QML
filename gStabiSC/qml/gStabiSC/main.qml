@@ -103,10 +103,10 @@ Item {
             onClicked: {
                 if(pidSettingDialog.state === "hideDialog") {
                     pidSettingDialog.state = "showDialog" ;
-                    pidSettingDialog.focus = true;
+                    gDashboard.enabled = false
                 } else {
                     pidSettingDialog.state = "hideDialog";
-                    pidSettingDialog.focus = false;
+                    gDashboard.enabled = true
                 }
             }
         }
