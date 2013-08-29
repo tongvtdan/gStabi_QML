@@ -5,11 +5,11 @@ import "Comm"
 import "GDashboard"
 import "Components"
 
-Rectangle {
+Item {
     id: mainWindow
     property int header_height: 30
     property string main_log_msg: ""
-    color: "#242424"
+//    color: "#242424"
     BorderImage {
         id: gstabiBackgroundImage
         width: 1044;  height: 700
@@ -22,25 +22,6 @@ Rectangle {
         anchors.left: gstabiBackgroundImage.left ; anchors.leftMargin: 30
         implicitHeight: gstabiBackgroundImage.height ; implicitWidth: gstabiBackgroundImage.width
     }
-    GDashBoard{
-        id: gDashboard
-        anchors.horizontalCenterOffset: 15
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: gstabiBackgroundImage.top
-        anchors.topMargin: 60
-        onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
-        onStateChanged: {
-            if(gDashboard.state == "Config") {
-                textConsole.state = "smaller"
-                comportSettingPanel.state = "smaller";
-            }
-            else {
-                textConsole.state = "focus"
-                comportSettingPanel.state = "focus";
-            }
-        }
-
-    }
     AnimatedImage{
         id: waitingForConnection
         width: 30
@@ -52,8 +33,25 @@ Rectangle {
         paused: true
 
     }
+    GDashBoard{
+        id: gDashboard
+        anchors.horizontalCenter: parent.horizontalCenter; anchors.horizontalCenterOffset: 15
+        anchors.top: gstabiBackgroundImage.top; anchors.topMargin: 60
+        onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
+        onStateChanged: {
+            if(gDashboard.state == "Config") {
+                textConsole.state = "smaller"
+                comportSettingPanel.state = "smaller";
+            }
+            else {
+                textConsole.state = "focus"
+                comportSettingPanel.state = "focus";
+            }
+        }
+    } // end of dashboard
     CommSetting{
         id: comportSettingPanel
+        z: 1
         x: gstabiBackgroundImage.width - comportSettingPanel.width - textConsole.width - 10
         focus_state_posY:  gstabiBackgroundImage.height - comportSettingPanel.height - 60
         unfocus_state_posY: gstabiBackgroundImage.height - comportSettingPanel.height +100
@@ -65,6 +63,7 @@ Rectangle {
     }
     Console{
         id: textConsole
+        z: 5
         x: gstabiBackgroundImage.x + gstabiBackgroundImage.width - textConsole.width - 10
         opacity: 1
         state: "focus"
@@ -77,9 +76,13 @@ Rectangle {
     }
     GPIDDialog{
         id: pidSettingDialog
-        visible: false
+        z: 10
+        state: "hideDialog"
+        dragMaxX: gstabiBackgroundImage.width - pidSettingDialog.width
+        dragMaxY: gstabiBackgroundImage.height - pidSettingDialog.height
+        x: (gstabiBackgroundImage.x + gstabiBackgroundImage.width)/2 - width/2;
+        y: (gstabiBackgroundImage.y + gstabiBackgroundImage.height)/2 - height/2;
     }
-
     Item {
         id: buttonsPanel
         width: 150; height: 70
@@ -97,7 +100,15 @@ Rectangle {
             id: pidSettingsButton
             text: "PID"
             anchors.left: serialSettingDialog.right; anchors.leftMargin: 20
-            onClicked: pidSettingDialog.visible = !pidSettingDialog.visible
+            onClicked: {
+                if(pidSettingDialog.state === "hideDialog") {
+                    pidSettingDialog.state = "showDialog" ;
+                    pidSettingDialog.focus = true;
+                } else {
+                    pidSettingDialog.state = "hideDialog";
+                    pidSettingDialog.focus = false;
+                }
+            }
         }
     }   // end of buttons Panel
     onMain_log_msgChanged: {

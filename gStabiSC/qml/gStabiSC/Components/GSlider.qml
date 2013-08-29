@@ -20,7 +20,7 @@ Rectangle {
     id: background
     color: "#00000000"
     smooth: true
-    radius: 4
+    radius: height/2
     border.width: 2
     border.color: "cyan"
     implicitHeight: 20; implicitWidth: 300
@@ -34,8 +34,26 @@ Rectangle {
             id: fillRect
             height: parent.height;
             width: (value - lowerLimit)*convert_ratio
-            radius: background.radius/2
-            color: "#04ffde"
+//            width: 250
+            radius: background.radius
+            gradient: Gradient {
+                GradientStop {
+                    position: 0
+                    color: "#08f7dc"
+                }
+
+                GradientStop {
+                    position: 0.5
+                    color: "#7d000000"
+                }
+
+                GradientStop {
+                    position: 1
+                    color: "#07f7db"
+                }
+            }
+//            color: "#04ffde"
+
             opacity: 0.8
             anchors.left: parent.left; anchors.leftMargin: background.border.width/2
         }

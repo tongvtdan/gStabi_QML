@@ -14,6 +14,7 @@ Item{
     property bool   gauge_config_mode           : false
     property double gauge_sensor_value          : 0
     property int    gauge_type                  : 1      // 1: Tilt, 2: pan; 3: roll
+    property string gauge_tilte                 : "Tilt"
     property int    gauge_offset                : 0
 //    property string gauge_back                  : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_back_tilt.png"
 //    property string gauge_needle                : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_needle_tilt.png"
@@ -236,11 +237,7 @@ Item{
         anchors.fill: parent
         hoverEnabled: true
         onPositionChanged:  calc_rotate_angle_gauge(mouse.x, mouse.y)
-        onEntered: {
-            if     (gauge_type == 1)  {gauge_log_message = "<b><i> Tilt axis of gStabi</i></b>";}
-            else if(gauge_type == 2)  {gauge_log_message = "<b><i> Pan axis of gStabi</i></b>";}
-            else if(gauge_type == 3)  {gauge_log_message = "<b><i> Roll axis of gStabi</i></b>";}
-        }
+        onEntered: gauge_log_message = "<b><i>" + gauge_tilte + " axis of gStabi</i></b>"
         onClicked: {
             if(select_handle1){
                 gauge_control_handler_no_of_clicks = gauge_control_handler_no_of_clicks + 1
@@ -273,10 +270,7 @@ Item{
             }
         } // end of onClicked
     }
-    onGauge_config_modeChanged: {
-        console.log("Mode Changed")
-    }
-
+    onGauge_config_modeChanged: {   console.log("Mode Changed")   }
     states: [
         State{
             name: "dash"
@@ -308,7 +302,7 @@ Item{
                 if(distanceFromPress < minDistanceFromPress){
                     minDistanceFromPress = distanceFromPress;
                     rot_angle_deg = angle + gauge_offset;      // get a rotation angle
-                    console.log("Rotation A: " + rot_angle_deg)
+//                    console.log("Rotation A: " + rot_angle_deg)
                 }
             }
         }
@@ -340,7 +334,7 @@ Item{
                 select_handle2 = false
                 if(gauge_set_enabled) {
                     gauge_setpoint_angle = rot_angle_deg;
-                    gauge_log_message = ("Rotating the camera to angle: " + gauge_setpoint_angle);
+                    gauge_log_message = ("Rotating " + gauge_tilte + " axis of the camera to angle: " + gauge_setpoint_angle);
                 }
             }
         }

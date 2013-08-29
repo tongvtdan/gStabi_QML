@@ -26,6 +26,7 @@ Item {
 //    }
     GGauge{
         id: tiltGauge
+        gauge_tilte: "Tilt"
         gauge_type: 1; gauge_offset: 0
         gauge_width: root.gauge_width; gauge_height:root.gauge_height
         anchors.top: parent.top; anchors.topMargin: 0
@@ -36,12 +37,13 @@ Item {
         gauge_handle_pressed: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_pressed_green_handle.png"
         gauge_config_mode: dashboard_config_mode
         gauge_sensor_value: _mavlink_manager.tilt_angle
-        onGauge_log_messageChanged: tilt_log(gauge_log_message)
+        onGauge_log_messageChanged: tilt_log(tiltGauge.gauge_log_message)
 //        onGauge_down_limit_set_angleChanged: tiltConfigDialog.max_value = gauge_down_limit_set_angle
 //        onGauge_up_limit_set_angleChanged:   tiltConfigDialog.min_value = gauge_up_limit_set_angle
     }
     GGauge{
         id: panGauge
+        gauge_tilte: "Pan"
         gauge_type: 2; gauge_offset: 90
         gauge_width: root.gauge_width; gauge_height:root.gauge_height
         anchors.top: parent.top; anchors.topMargin: 0
@@ -52,12 +54,13 @@ Item {
         gauge_handle_pressed: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_pressed_blue_handle.png"
         gauge_config_mode: dashboard_config_mode
         gauge_sensor_value: _mavlink_manager.yaw_angle
-        onGauge_log_messageChanged: pan_log(gauge_log_message)
+        onGauge_log_messageChanged: pan_log(panGauge.gauge_log_message)
 //        onGauge_down_limit_set_angleChanged: panConfigDialog.max_value = gauge_down_limit_set_angle
 //        onGauge_up_limit_set_angleChanged:   panConfigDialog.min_value = gauge_up_limit_set_angle
     }
     GGauge{
         id: rollGauge
+        gauge_tilte: "Roll"
         gauge_type: 3; gauge_offset: 0
         gauge_width: root.gauge_width; gauge_height:root.gauge_height
         anchors.top: parent.top; anchors.topMargin: 0
@@ -68,7 +71,7 @@ Item {
         gauge_handle_pressed: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_pressed_cyan_handle.png"
         gauge_config_mode: dashboard_config_mode
         gauge_sensor_value: _mavlink_manager.roll_angle
-        onGauge_log_messageChanged: roll_log(gauge_log_message)
+        onGauge_log_messageChanged: roll_log(rollGauge.gauge_log_message)
 //        onGauge_down_limit_set_angleChanged: rollConfigDialog.max_value = gauge_down_limit_set_angle
 //        onGauge_up_limit_set_angleChanged:   rollConfigDialog.min_value = gauge_up_limit_set_angle
     }

@@ -8,7 +8,7 @@ Item{
     property int anchor_leftMargin  : 10
     property int anchor_rightMargin : 10
     property int  dragMaxX          : 500
-    property int dragMaxY           : 500
+    property int  dragMaxY           : 500
     property string title_normal_color: "cyan"
     property string title_hover_color: "yellow"
     property string title: "Dialog"
@@ -17,7 +17,19 @@ Item{
 
     implicitHeight: 200
     implicitWidth: 300
-    scale: 1.0
+    MouseArea{
+        id: dragConsolWindowArea
+//        width: parent.width ; height: 30
+        anchors.fill: parent
+        anchors.top: parent.top;  anchors.horizontalCenter: parent.horizontalCenter
+        drag.target: parent
+        drag.minimumX: 0; drag.minimumY: 0
+        drag.maximumX: dragMaxX ;  drag.maximumY: dragMaxY
+        hoverEnabled: true
+        onEntered: dialogTitle.color = title_hover_color
+        onExited: dialogTitle.color = title_normal_color
+        onDoubleClicked: gDialog.state == "smaller"? gDialog.state = "focus" : gDialog.state = "smaller"
+    }
     BorderImage {
         id: background
         x: 0
@@ -82,16 +94,5 @@ Item{
         }
     ]
 
-    MouseArea{
-        id: dragConsolWindowArea
-        width: parent.width ; height: 30
-        anchors.top: parent.top;  anchors.horizontalCenter: parent.horizontalCenter
-        drag.target: parent
-        drag.minimumX: 0; drag.minimumY: 0
-        drag.maximumX: dragMaxX ;  drag.maximumY: dragMaxY
-        hoverEnabled: true
-        onEntered: dialogTitle.color = title_hover_color
-        onExited: dialogTitle.color = title_normal_color
-        onDoubleClicked: gDialog.state == "smaller"? gDialog.state = "focus" : gDialog.state = "smaller"
-    }
+
 }

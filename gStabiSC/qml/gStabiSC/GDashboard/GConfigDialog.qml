@@ -193,7 +193,7 @@ Item{
     GButton{
         id: reverseButton
         text: "Reverse"
-        anchors.top: polesRow.bottom ; anchors.topMargin: 0
+        anchors.top: polesRow.bottom ; anchors.topMargin: 10
         anchors.left: polesRow.left;  anchors.leftMargin: 0
     }
 
@@ -212,22 +212,26 @@ Item{
         Transition {
             from: "showDialog" ; to:   "hideDialog"
             ParallelAnimation{
-                NumberAnimation { target: dialogContainer; property: "opacity";  duration: 400;}
-                SequentialAnimation{
-                    NumberAnimation { target: dialogContainer; property: "scale"; from: 1; to: 1.5; duration: 200; }
-                    NumberAnimation { target: dialogContainer; property: "scale"; from: 1.5; to: 0.5; duration: 200; }
-                }
+                NumberAnimation { target: dialogContainer; property: "opacity";  duration: 500; }
+                NumberAnimation { target: dialogContainer; property: "scale"; to: 0.5; duration: 500; easing.type: Easing.Bezier}
+
+//                SequentialAnimation{
+//                    NumberAnimation { target: dialogContainer; property: "scale"; to: 1.5; duration: 200; }
+//                    NumberAnimation { target: dialogContainer; property: "scale"; to: 0.5; duration: 200; }
+//                }
             }
         }
         ,Transition {
             from: "hideDialog" ; to: "showDialog"
             ParallelAnimation{
-                NumberAnimation { target: dialogContainer; property: "opacity"; duration: 600; }
-                SequentialAnimation{
-                    NumberAnimation { target: dialogContainer; property: "scale"; from: 0.5; to: 1; duration: 200; }
-                    NumberAnimation { target: dialogContainer; property: "scale"; from: 1; to: 1.5; duration: 200; }
-                    NumberAnimation { target: dialogContainer; property: "scale"; from: 1.5; to: 1; duration: 200;}
-                }
+                NumberAnimation { target: dialogContainer; property: "opacity"; duration: 1000; }
+                NumberAnimation { target: dialogContainer; property: "scale"; to: 1; duration: 1000; easing.type: Easing.OutElastic}
+
+//                SequentialAnimation{
+//                    NumberAnimation { target: dialogContainer; property: "scale"; from: 0.5; to: 1; duration: 200; }
+//                    NumberAnimation { target: dialogContainer; property: "scale"; from: 1; to: 1.5; duration: 200; }
+//                    NumberAnimation { target: dialogContainer; property: "scale"; from: 1.5; to: 1; duration: 200;}
+//                }
             }
 
         }
