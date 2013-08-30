@@ -40,7 +40,6 @@ Item{
         visible: false
     }
 
-
     Row{
         id: powerRow
         width: 300
@@ -51,7 +50,7 @@ Item{
             id: powerLabel
             width: 50; height: 20
             color : "#00e3f9"
-            font.family: "Segoe UI Symbol"
+            font.family: "Segoe UI"
             font.bold: true
             font.pixelSize: 12
             text: "Power (%)"
@@ -67,31 +66,13 @@ Item{
             value: power_level
             onValueChanged: power_level = powerSlider.value
         }
-        Rectangle{
-            width: 45;  height: 20
-            color: "#00000000"
-            smooth: true
-            radius: height/2
-            border.width: 1;border.color: "cyan"
-            anchors.verticalCenter: parent.verticalCenter
-            TextInput {
-                id: powerLevelInput
-                anchors.centerIn: parent
-                color : "#00e3f9"
-                font.family: "Segoe UI Symbol"
-                font.bold: true
-                font.pixelSize: 16
-                text: power_level
-                validator: IntValidator{bottom: 0; top: 100;}
-                focus: true
-                Keys.onPressed: {
-                    if ((event.key === Qt.Key_Return) || (event.key === Qt.Key_Enter)) {
-                                 powerSlider.value = text
-                                 event.accepted = true;
-                             }
-                }
-            }
+        GTextInput{
+            id: powerLevelInput
+            bottom_value: 0; top_value: 100
+            text_value: power_level
+            onText_valueChanged: power_level = text_value
         }
+
     }
     Row{
         id: polesRow
@@ -102,30 +83,18 @@ Item{
             id: polesLabel
             width: 45; height: 20
             color : "#00e3f9"
-            font.family: "Segoe UI Symbol"
+            font.family: "Segoe UI"
             font.bold: true
-            font.pixelSize: 12
+            font.pixelSize: 16
             text: "Poles:"
             verticalAlignment: Text.AlignVCenter
             anchors.verticalCenter: parent.verticalCenter
         }
-        Rectangle{
-            width: 45;  height: 20
-            color: "#00000000"
-            smooth: true;            radius: 6
-            border.width: 1;border.color: "cyan"
-            anchors.verticalCenter: parent.verticalCenter
-            TextInput {
-                id: polesNumInput
-                anchors.centerIn: parent
-                color : "#00e3f9"
-                font.family: "Segoe UI Symbol"
-                font.bold: true
-                font.pixelSize: 16
-                validator: IntValidator{bottom: 0; top: 100;}
-                text: poles_num
-
-            }
+        GTextInput{
+            id: polesNumInput
+            bottom_value: 0; top_value: 100
+            text_value: poles_num
+            onText_valueChanged: poles_num = text_value
         }
     }
     Column{
@@ -150,27 +119,15 @@ Item{
             anchors.top: parent.top
             anchors.topMargin: 0
         }
-        Rectangle{
-            width: 45;  height: 20
-            color: "#00000000"
-            smooth: true
-            radius: height/2
+        GTextInput{
+            id: maxLimitInput
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 0
-            border.width: 1;border.color: "cyan"
-            TextInput {
-                anchors.centerIn: parent
-                color : "#00e3f9"
-                font.family: "Segoe UI Symbol"
-                font.bold: true
-                font.pixelSize: 16
-                text: max_value
-                validator: IntValidator{bottom: 0; top: 100;}
-                focus: true
-            }
+            bottom_value: 0; top_value:  180
+            text_value: max_value
+            onText_valueChanged: max_value = text_value
         }
-
     }
     Column{
         id: minColumn
@@ -195,29 +152,16 @@ Item{
             anchors.top: parent.top
             anchors.topMargin: 0
         }
-        Rectangle{
-            width: 45;  height: 20
-            color: "#00000000"
-            smooth: true
-            radius: height/2
+        GTextInput {
+            id: minLimitInput
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 0
-            border.width: 1;border.color: "cyan"
-            TextInput {
-                anchors.centerIn: parent
-                color : "#00e3f9"
-                font.family: "Segoe UI Symbol"
-                font.bold: true
-                font.pixelSize: 16
-                text: min_value
-                validator: IntValidator{bottom: 0; top: 100;}
-                focus: true
-            }
+            bottom_value: -180; top_value: 0
+            text_value: min_value
+            onText_valueChanged: min_value = text_value
         }
-
     }
-
     GButton{
         id: reverseButton
         text: "Reverse"

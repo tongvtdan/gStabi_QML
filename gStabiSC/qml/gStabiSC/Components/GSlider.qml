@@ -36,21 +36,21 @@ Rectangle {
             width: (value - lowerLimit)*convert_ratio
 //            width: 250
             radius: background.radius
-            gradient: Gradient {
-                GradientStop {
-                    position: 0.00;
-                    color: "#08f7dc";
-                }
-                GradientStop {
-                    position: 0.50;
-                    color: "#000000";
-                }
-                GradientStop {
-                    position: 1.00;
-                    color: "#07f7db";
-                }
-            }
-            //            color: "#04ffde"
+//            gradient: Gradient {
+//                GradientStop {
+//                    position: 0.00;
+//                    color: "#08f7dc";
+//                }
+//                GradientStop {
+//                    position: 0.50;
+//                    color: "#000000";
+//                }
+//                GradientStop {
+//                    position: 1.00;
+//                    color: "#07f7db";
+//                }
+//            }
+                        color: "#04ffde"
 
             opacity: 0.8
             anchors.left: parent.left; anchors.leftMargin: background.border.width/2
@@ -119,7 +119,7 @@ Rectangle {
             onPositionChanged: {
                 fill_width = handle.x + handle_offset_x  - background.border.width
                 value = lowerLimit + (fill_width )/convert_ratio    //(drag.maximumX - drag.minimumX)*(Math.abs(upperLimit) - Math.abs(lowerLimit));
-                console.log("Handle pos x: "+ handle.x + ", Fill width: " + fill_width +  ", Slider pos: " + value)
+//                console.log("Handle pos x: "+ handle.x + ", Fill width: " + fill_width +  ", Slider pos: " + value)
             }
         }
     }

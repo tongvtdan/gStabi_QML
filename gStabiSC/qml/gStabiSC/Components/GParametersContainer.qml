@@ -3,10 +3,8 @@ import QtQuick 2.0
 Item{
     id: dialogContainer
 
-    property int    power_level : 50
+    property int    p_value     : 10
     property int    poles_num   : 24
-    property int    max_value   : 10
-    property int    min_value   : -10
 
 //    property string border_normal   : "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_normal_parameters_dialog.png"
 //    property string border_hover    : "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_hover_parameters_dialog.png"
@@ -44,10 +42,10 @@ Item{
         Text{
             id: pLabel
             width: 20; height: 20
-            color : "#d308fb"
+            color : "#00e3f9"
             font.family: "Segoe UI"
             font.bold: true
-            font.pixelSize: 12
+            font.pixelSize: 16
             text: "P:"
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
@@ -58,8 +56,8 @@ Item{
             lowerLimit: 0 ; upperLimit: 100
             width: 180; height: 20
             anchors.verticalCenter: parent.verticalCenter
-            value: power_level
-            onValueChanged: power_level = pSlider.value
+            value: p_value
+            onValueChanged: p_value = pSlider.value
         }
         Rectangle{
             width: 45;  height: 20
@@ -75,7 +73,7 @@ Item{
                 font.family: "Segoe UI"
                 font.bold: true
                 font.pixelSize: 16
-                text: power_level
+                text: p_value
                 validator: IntValidator{bottom: 0; top: 100;}
                 focus: true
 

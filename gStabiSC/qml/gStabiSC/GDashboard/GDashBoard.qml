@@ -111,7 +111,9 @@ Item {
         anchors.top: tiltGauge.bottom ; anchors.topMargin: -10
         opacity: 0
         max_value: tiltGauge.gauge_down_limit_set_angle
+        onMax_valueChanged: tiltGauge.gauge_down_limit_set_angle = max_value
         min_value: tiltGauge.gauge_up_limit_set_angle
+        onMin_valueChanged: tiltGauge.gauge_up_limit_set_angle = min_value
     }
     GMotorConfig{
         id: panConfigDialog

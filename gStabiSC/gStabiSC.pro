@@ -32,18 +32,20 @@ qtcAddDeployment()
 
 include(thirdParty/qextserialport/src/qextserialport.pri)
 
-OTHER_FILES += \
-    qml/gStabiSC/Header/AppHeader.qml \
-    qml/gStabiSC/Communication/CommSetting.qml \
-    qml/gStabiSC/GDashboard/GDashBoard.qml \
-    qml/gStabiSC/Console.qml \
-    qml/gStabiSC/Components/GButton.qml \
-    qml/gStabiSC/Components/GSlider.qml \
-    qml/gStabiSC/Components/GImageButton.qml \
-    qml/gStabiSC/GDialog.qml \
-    qml/gStabiSC/GDashboard/GGauge.qml \
-    qml/gStabiSC/GPIDDialog.qml \
-    qml/gStabiSC/Components/ParametersContainer.qml
+#OTHER_FILES += \
+#    qml/gStabiSC/Header/AppHeader.qml \
+#    qml/gStabiSC/Communication/CommSetting.qml \
+#    qml/gStabiSC/GDashboard/GDashBoard.qml \
+
+#    qml/gStabiSC/Console.qml \
+#    qml/gStabiSC/Components/GButton.qml \
+#    qml/gStabiSC/Components/GSlider.qml \
+#    qml/gStabiSC/Components/GImageButton.qml \
+#    qml/gStabiSC/GDialog.qml \
+#    qml/gStabiSC/GDashboard/GGauge.qml \
+#    qml/gStabiSC/GPIDDialog.qml \
+#    qml/gStabiSC/Components/ParametersContainer.qml \
+#    qml/gStabiSC/Components/GTextInput.qml
 
 HEADERS += \
     src/configuration.h \

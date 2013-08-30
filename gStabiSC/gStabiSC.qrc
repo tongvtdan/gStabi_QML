@@ -41,8 +41,8 @@
         <file>qml/gStabiSC/GDashboard/GMotorConfig.qml</file>
         <file>qml/gStabiSC/GAppHeader.qml</file>
         <file>qml/gStabiSC/GConsole.qml</file>
-        <file>qml/gStabiSC/GMotorConfig.qml</file>
         <file>qml/gStabiSC/GPIDDialog.qml</file>
         <file>qml/gStabiSC/GSerialSettings.qml</file>
+        <file>qml/gStabiSC/Components/GTextInput.qml</file>
     </qresource>
 </RCC>

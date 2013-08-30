@@ -13,7 +13,7 @@ Rectangle{
         id: buttonLabel
         anchors.centerIn: parent
         color : "#00e3f9"
-        font.family: "Segoe UI Symbol"
+        font.family: "Segoe UI"
         font.bold: true
         font.pixelSize: 16
         text: button.text

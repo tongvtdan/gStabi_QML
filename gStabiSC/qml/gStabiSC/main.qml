@@ -73,6 +73,7 @@ Item {
     }
     GPIDDialog{
         id: pidSettingDialog
+        z: -1
         state: "hideDialog"
         dragMaxX: gstabiBackgroundImage.width - pidSettingDialog.width
         dragMaxY: gstabiBackgroundImage.height - pidSettingDialog.height
