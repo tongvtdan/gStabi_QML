@@ -3,30 +3,30 @@ import QtQuick 2.0
 Item{
     id: dialogContainer
     // variables for P
-    property int  p_value   : 10
+    property int  p_value   : 45
     property int  p_min     : 0;
     property int  p_max     : 255;
     // variables for i
-    property int  i_value   : 1
+    property int  i_value   : 12
     property int  i_min     : 0;
     property int  i_max     : 255;
     // variables for d
-    property int  d_value   : 5
+    property int  d_value   : 25
     property int  d_min     : 0;
     property int  d_max     : 255;
     // variables for follow
-    property int  follow_value   : 0
+    property int  follow_value   : 30
     property int  follow_min     : 0;
     property int  follow_max     : 255;
     // variables for filter
-    property int  filter_value   : 0
+    property int  filter_value   : 54
     property int  filter_min     : 0;
     property int  filter_max     : 255;
 
 
 // uncomment these lines to use resources
-    property string border_normal   : "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_normal_parameters_dialog.png"
-    property string border_hover    : "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_hover_parameters_dialog.png"
+    property string border_normal   : "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_normal_controller_params_frame.png"
+    property string border_hover    : "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_hover_controller_params_frame.png"
 //    property string border_normal   : "../images/gStabiUI_3.2_normal_parameters_dialog.png"
 //    property string border_hover    : "../images/gStabiUI_3.2_hover_parameters_dialog.png"
 

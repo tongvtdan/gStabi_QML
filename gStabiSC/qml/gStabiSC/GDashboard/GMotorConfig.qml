@@ -9,10 +9,10 @@ Item{
     property int    max_value   : 10
     property int    min_value   : -10
 
-    //    property string border_normal   : "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_normal_parameters_dialog.png"
-    //    property string border_hover    : "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_hover_parameters_dialog.png"
-    property string border_normal   : "../images/gStabiUI_3.2_normal_parameters_dialog.png"
-    property string border_hover    : "../images/gStabiUI_3.2_hover_parameters_dialog.png"
+    property string border_normal   : "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_normal_parameters_dialog.png"
+    property string border_hover    : "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_hover_parameters_dialog.png"
+//    property string border_normal   : "../images/gStabiUI_3.2_normal_parameters_dialog.png"
+//    property string border_hover    : "../images/gStabiUI_3.2_hover_parameters_dialog.png"
 
 
     implicitWidth: 310; implicitHeight: 210

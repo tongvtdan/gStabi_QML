@@ -15,10 +15,10 @@ Item{
 
     property string  border_normal: "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_normal_setting_dialog.png"
     property string border_hover : "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_hover_setting_dialog.png"
-//    property string  border_normal: "images/gStabiUI_3.2_normal_setting_dialog.png"
-//    property string border_hover: "images/gStabiUI_3.2_hover_setting_dialog.png"
+//    property string  border_normal  : "../images/gStabiUI_3.2_normal_setting_dialog.png"
+//    property string border_hover    : "../images/gStabiUI_3.2_hover_setting_dialog.png"
 
-    implicitWidth: 620; implicitHeight: 410
+    implicitWidth: 940; implicitHeight: 500
     MouseArea{
         id: windowMouseArea
         anchors.fill: parent
@@ -54,14 +54,14 @@ Item{
     }
     Text {
         id: dialogTitle
+        color: "#042eff"
         font.family: "Segoe UI"
         font.bold: true
-        color: title_normal_color
         text: title
         verticalAlignment: Text.AlignVCenter
         style: Text.Normal
-        font.pixelSize: 12
-        anchors.top: parent.top ; anchors.topMargin: 5
+        font.pixelSize: 20
+        anchors.top: dialogBorderImg.top; anchors.topMargin: 9
         anchors.horizontalCenter: parent.horizontalCenter; anchors.horizontalCenterOffset: 0
         horizontalAlignment: Text.AlignHCenter
     }

@@ -16,12 +16,6 @@ Item {
 
     state: "Dashboard"
 
-//    BorderImage {
-//        id: dashboardPanelImage
-//        source: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_dashboard_panel.png"
-//        opacity: 0.5
-//        anchors.fill: parent
-//    }
     GGauge{
         id: tiltGauge
         gauge_tilte: "Tilt"

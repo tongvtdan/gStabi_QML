@@ -238,37 +238,31 @@ Item{
         hoverEnabled: true
         onPositionChanged:  calc_rotate_angle_gauge(mouse.x, mouse.y)
         onEntered: gauge_log_message = "<b><i>" + gauge_tilte + " axis of gStabi</i></b>"
-        onClicked: {
+        onExited: gauge_log_message = ""
+        onPressed: {
             if(select_handle1){
-                gauge_control_handler_no_of_clicks = gauge_control_handler_no_of_clicks + 1
-                if(gauge_control_handler_no_of_clicks == 1){
-                    gauge_set_enabled = true;
-                    gaugeHandlePressedImage.state = "focus"
-                    if(gauge_config_mode) gauge_log_message = ("<b>Start to set up angle limit for the camera</b>")
-                    else gauge_log_message = ("<b>Start to move camera</b>")
-                }
-                else if(gauge_control_handler_no_of_clicks == 2){
-                    gauge_set_enabled = false;
-                    gaugeHandlePressedImage.state = "normal"
-                    gauge_control_handler_no_of_clicks = 0;
-                    if(gauge_config_mode) gauge_log_message = ("<b>Stop setting up angle limit for the camera</b>")
-                    else gauge_log_message = ("<b>Stop moving camera</b>");
-                }
+                gauge_set_enabled = true;
+                gaugeHandlePressedImage.state = "focus"
+                if(gauge_config_mode) gauge_log_message = ("<b>Start to set up angle limit for the camera</b>")
+                else gauge_log_message = ("<b>Start to move camera</b>")
             } else if(select_handle2){
-                gauge_control_handler_no_of_clicks = gauge_control_handler_no_of_clicks + 1
-                if(gauge_control_handler_no_of_clicks == 1){
-                    gauge_down_limit_set_enabled = true;
-                    gauge_log_message = ("<b>Start to set down angle limit for the camera</b>")
-                    gaugeDownRangeHandleSelectedImage.state = "limit_focus"
-                }
-                else if(gauge_control_handler_no_of_clicks == 2){
-                    gauge_control_handler_no_of_clicks = 0;
-                    gauge_down_limit_set_enabled = false;
-                    gauge_log_message = ("<b>Stop setting down angle limit for the camera</b>");
-                    gaugeDownRangeHandleSelectedImage.state = "limit_normal"
-                }
+                gauge_down_limit_set_enabled = true;
+                gauge_log_message = ("<b>Start to set down angle limit for the camera</b>")
+                gaugeDownRangeHandleSelectedImage.state = "limit_focus"
             }
-        } // end of onClicked
+        } // end of onPressed
+        onReleased:{
+            if(select_handle1){
+                gauge_set_enabled = false;
+                gaugeHandlePressedImage.state = "normal"
+                if(gauge_config_mode) gauge_log_message = ("<b>Stop setting up angle limit for the camera</b>")
+                else gauge_log_message = ("<b>Stop moving camera</b>");
+            } else if(select_handle2){
+                gauge_down_limit_set_enabled = false;
+                gauge_log_message = ("<b>Stop setting down angle limit for the camera</b>");
+                gaugeDownRangeHandleSelectedImage.state = "limit_normal"
+            }
+        }  // end of onReleased
     }
     onGauge_config_modeChanged: {   console.log("Mode Changed")   }
     states: [

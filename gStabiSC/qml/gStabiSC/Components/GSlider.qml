@@ -20,8 +20,8 @@ Rectangle {
     id: background
     color: "#00000000"
     smooth: true
-    radius: height/2
-    border.width: 2
+    radius: 0.7*height/2
+    border.width: 1
     border.color: "cyan"
     implicitHeight: 20; implicitWidth: 300
     Item {
