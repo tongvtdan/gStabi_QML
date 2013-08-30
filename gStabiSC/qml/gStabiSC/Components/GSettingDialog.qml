@@ -39,16 +39,14 @@ Item{
     }
     BorderImage {
         id: dialogBorderImg
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.fill: parent
         source: border_normal
         border.left: 5; border.top: 5
         border.right: 5; border.bottom: 5
     }
     BorderImage {
         id: dialogHoverBorderImg
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.fill: parent
         source: border_hover
         border.left: 5; border.top: 5
         border.right: 5; border.bottom: 5

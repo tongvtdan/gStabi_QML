@@ -2,16 +2,41 @@ import QtQuick 2.0
 
 Item{
     id: dialogContainer
+    // variables for P
+    property int  p_value   : 10
+    property int  p_min     : 0;
+    property int  p_max     : 255;
+    // variables for i
+    property int  i_value   : 1
+    property int  i_min     : 0;
+    property int  i_max     : 255;
+    // variables for d
+    property int  d_value   : 5
+    property int  d_min     : 0;
+    property int  d_max     : 255;
+    // variables for follow
+    property int  follow_value   : 0
+    property int  follow_min     : 0;
+    property int  follow_max     : 255;
+    // variables for filter
+    property int  filter_value   : 0
+    property int  filter_min     : 0;
+    property int  filter_max     : 255;
 
-    property int    p_value     : 10
-    property int    poles_num   : 24
 
-//    property string border_normal   : "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_normal_parameters_dialog.png"
-//    property string border_hover    : "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_hover_parameters_dialog.png"
-    property string border_normal   : "../images/gStabiUI_3.2_normal_parameters_dialog.png"
-    property string border_hover    : "../images/gStabiUI_3.2_hover_parameters_dialog.png"
+// uncomment these lines to use resources
+    property string border_normal   : "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_normal_parameters_dialog.png"
+    property string border_hover    : "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_hover_parameters_dialog.png"
+//    property string border_normal   : "../images/gStabiUI_3.2_normal_parameters_dialog.png"
+//    property string border_hover    : "../images/gStabiUI_3.2_hover_parameters_dialog.png"
 
-    implicitWidth: 300; implicitHeight: 200
+    implicitWidth: 300; implicitHeight: 350
+    MouseArea{
+        anchors.fill: parent
+        hoverEnabled: true
+        onEntered: dialogHoverBorderImg.visible = true
+        onExited: dialogHoverBorderImg.visible = false
+    }
     BorderImage {
         id: dialogBorderImg
         anchors.fill: parent
@@ -31,13 +56,15 @@ Item{
         focus: true
         onFocusChanged: focus? dialogHoverBorderImg.visible = true : dialogHoverBorderImg.visible = false
     }
+    // p parameters
     Row{
         id: pParamsRow
+        x: 21
+        y: 50
         width: 300
-        anchors.top: dialogBorderImg.top
-        anchors.topMargin: 30
-        anchors.left: dialogBorderImg.left
-        anchors.leftMargin: 20
+        anchors.right: parent.right
+        anchors.rightMargin: -30
+        anchors.top: dialogBorderImg.top; anchors.topMargin: 50;
         spacing: 5
         Text{
             id: pLabel
@@ -53,33 +80,156 @@ Item{
         }
         GSlider{
             id: pSlider
-            lowerLimit: 0 ; upperLimit: 100
-            width: 180; height: 20
+            lowerLimit: p_min ; upperLimit: p_max
+            width: 180; height: 20; value: p_value;
             anchors.verticalCenter: parent.verticalCenter
-            value: p_value
-            onValueChanged: p_value = pSlider.value
+            onValueChanged: { p_value = value; console.log("P: " + p_value )}
         }
-        Rectangle{
-            width: 45;  height: 20
-            color: "#00000000"
-            smooth: true
-            radius: height/2
-            border.width: 1;border.color: "cyan"
-            anchors.verticalCenter: parent.verticalCenter
-            TextInput {
-                id: pInput
-                anchors.centerIn: parent
-                color : "#00e3f9"
-                font.family: "Segoe UI"
-                font.bold: true
-                font.pixelSize: 16
-                text: p_value
-                validator: IntValidator{bottom: 0; top: 100;}
-                focus: true
-
-            }
+        GTextInput{
+            id: pValueInput
+            bottom_value: p_min; top_value: p_max; text_value: p_value
+            onText_valueChanged: p_value = text_value
         }
     }
+    onP_valueChanged: {pSlider.value = p_value; pValueInput.text_value = p_value}
+    // i parameters
+    Row{
+        id: iParamsRow
+        width: 300
+        anchors.right: parent.right
+        anchors.rightMargin: -30
+        anchors.top: pParamsRow.bottom; anchors.topMargin: 30
+        spacing: 5
+        Text{
+            id: iLabel
+            width: 20; height: 20
+            color : "#00e3f9"
+            font.family: "Segoe UI"
+            font.bold: true
+            font.pixelSize: 16
+            text: "I:"
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            anchors.verticalCenter: parent.verticalCenter
+        }
+        GSlider{
+            id: iSlider
+            lowerLimit: i_min ; upperLimit: i_max
+            width: 180; height: 20; value: i_value;
+            anchors.verticalCenter: parent.verticalCenter
+            onValueChanged: { i_value = value; console.log("I: " + i_value )}
+        }
+        GTextInput{
+            id: iValueInput
+            bottom_value: i_min; top_value: i_max; text_value: i_value
+            onText_valueChanged: i_value = text_value
+        }
+    }
+    onI_valueChanged: {iSlider.value = i_value; iValueInput.text_value = i_value}
+    // d parameters
+    Row{
+        id: dParamsRow
+        width: 300
+        anchors.right: parent.right
+        anchors.rightMargin: -30
+        anchors.top: iParamsRow.bottom; anchors.topMargin: 30
+        spacing: 5
+        Text{
+            id: dLabel
+            width: 20; height: 20
+            color : "#00e3f9"
+            font.family: "Segoe UI"
+            font.bold: true
+            font.pixelSize: 16
+            text: "D:"
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            anchors.verticalCenter: parent.verticalCenter
+        }
+        GSlider{
+            id: dSlider
+            lowerLimit: d_min ; upperLimit: d_max
+            width: 180; height: 20; value: d_value;
+            anchors.verticalCenter: parent.verticalCenter
+            onValueChanged: { d_value = value; console.log("D: " + d_value )}
+        }
+        GTextInput{
+            id: dValueInput
+            bottom_value: d_min; top_value: d_max; text_value: d_value
+            onText_valueChanged: d_value = text_value
+        }
+    }
+    onD_valueChanged: {dSlider.value = d_value; dValueInput.text_value = d_value}
+
+    // follow parameters
+    Row{
+        id: followParamsRow
+        width: 300
+        anchors.right: parent.right
+        anchors.rightMargin: -30
+        anchors.top: dParamsRow.bottom; anchors.topMargin: 30
+        spacing: 5
+        Text{
+            id: followLabel
+            width: 20; height: 20
+            color : "#00e3f9"
+            font.family: "Segoe UI"
+            font.bold: true
+            font.pixelSize: 12
+            text: "Follow:"
+            horizontalAlignment: Text.AlignRight
+            verticalAlignment: Text.AlignVCenter
+            anchors.verticalCenter: parent.verticalCenter
+        }
+        GSlider{
+            id: followSlider
+            lowerLimit: follow_min ; upperLimit: follow_max
+            width: 180; height: 20; value: follow_value;
+            anchors.verticalCenter: parent.verticalCenter
+            onValueChanged: { follow_value = value; console.log("Follow: " + follow_value )}
+        }
+        GTextInput{
+            id: followValueInput
+            bottom_value: follow_min; top_value: follow_max; text_value: follow_value
+            onText_valueChanged: follow_value = text_value
+        }
+    }
+    onFollow_valueChanged: {followSlider.value = follow_value; followValueInput.text_value = follow_value}
+
+    // filter parameters
+    Row{
+        id: filterParamsRow
+        width: 300
+        anchors.right: parent.right
+        anchors.rightMargin: -30
+        anchors.top: followParamsRow.bottom; anchors.topMargin: 30
+        spacing: 5
+        Text{
+            id: filterLabel
+            width: 20; height: 20
+            color : "#00e3f9"
+            font.family: "Segoe UI"
+            font.bold: true
+            font.pixelSize: 12
+            text: "Filter:"
+            horizontalAlignment: Text.AlignRight
+            verticalAlignment: Text.AlignVCenter
+            anchors.verticalCenter: parent.verticalCenter
+        }
+        GSlider{
+            id: filterSlider
+            lowerLimit: filter_min ; upperLimit: filter_max
+            width: 180; height: 20; value: filter_value;
+            anchors.verticalCenter: parent.verticalCenter
+            onValueChanged: { filter_value = value; console.log("Filter: " + filter_value )}
+        }
+        GTextInput{
+            id: filterValueInput
+            bottom_value: filter_min; top_value: filter_max; text_value: filter_value
+            onText_valueChanged: filter_value = text_value
+        }
+    }
+    onFilter_valueChanged: {filterSlider.value = filter_value; filterValueInput.text_value = filter_value}
 
     states:[
         State{

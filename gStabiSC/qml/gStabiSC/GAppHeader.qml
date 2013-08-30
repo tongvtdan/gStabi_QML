@@ -1,5 +1,5 @@
 import QtQuick 2.1
-import QtQuick.Controls 1.0
+//import QtQuick.Controls 1.0
 //import QtQuick.Layouts 1.0
 //import QtQuick.Controls.Styles 1.0
 
@@ -45,7 +45,7 @@ Item {
     }
     */
 
-    Label{
+    Text{
         id: applicationName
         color: "#00ffff"
         anchors.left: header.left

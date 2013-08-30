@@ -1,27 +1,36 @@
 #include <QtGui/QGuiApplication>
 #include "qtquick2applicationviewer.h"
 
+
+
+
 #include <QQmlContext> // for setContextProperty
-//#include <QUrl>
-//#include <QtQuick>
 
 #include "configuration.h"
 #include "SerialLink.h"
 #include "MavLinkManager.hpp"
 #include "gLinkManager.h"
 
+#include "piechart.h"
+#include "pieslice.h"
+
+
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
+    qmlRegisterType<PieChart>("Charts", 1, 0, "PieChart");
+    qmlRegisterType<PieSlice>("Charts", 1, 0, "PieSlice");
 
     QtQuick2ApplicationViewer viewer;
 //    QQuickView viewer;
     // using as normal
-    viewer.setMainQmlFile(QStringLiteral("qml/gStabiSC/main.qml"));
+//    viewer.setMainQmlFile(QStringLiteral("qml/gStabiSC/main.qml"));
 
-    // using qml files form resources file
-//    viewer.setSource(QUrl("qrc:/qml/gStabiSC/main.qml"));
-//    viewer.addImportPath("qrc:/qml/gStabiSC");
+    // using qml files form resources file, uncomment this to compile all qml file to .exe
+    viewer.setSource(QUrl("qrc:/qml/gStabiSC/main.qml"));
+    viewer.addImportPath("qrc:/qml/gStabiSC");
+    viewer.addImportPath("qrc:/qml/gStabiSC/Components");
+    viewer.addImportPath("qrc:/qml/gStabiSC/GDashboard");
 
     viewer.setTitle(QString("%1 %2").arg(APPLICATION_NAME).arg(APPLICATION_VERSION));
     viewer.setMinimumSize(QSize(APPLICATION_WIDTH,APPLICATION_HEIGHT));

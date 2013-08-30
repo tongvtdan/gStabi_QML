@@ -1,6 +1,4 @@
 import QtQuick 2.0
-//import QtQuick.Controls 1.0
-//import QtQuick.Controls.Styles 1.0
 
 
 import "../Components"
@@ -38,8 +36,9 @@ Item {
         gauge_config_mode: dashboard_config_mode
         gauge_sensor_value: _mavlink_manager.tilt_angle
         onGauge_log_messageChanged: tilt_log(tiltGauge.gauge_log_message)
-//        onGauge_down_limit_set_angleChanged: tiltConfigDialog.max_value = gauge_down_limit_set_angle
-//        onGauge_up_limit_set_angleChanged:   tiltConfigDialog.min_value = gauge_up_limit_set_angle
+        onGauge_up_limit_set_angleChanged: tiltConfigDialog.min_value = gauge_up_limit_set_angle;
+        onGauge_down_limit_set_angleChanged: tiltConfigDialog.max_value = gauge_down_limit_set_angle;
+
     }
     GGauge{
         id: panGauge
@@ -55,8 +54,8 @@ Item {
         gauge_config_mode: dashboard_config_mode
         gauge_sensor_value: _mavlink_manager.yaw_angle
         onGauge_log_messageChanged: pan_log(panGauge.gauge_log_message)
-//        onGauge_down_limit_set_angleChanged: panConfigDialog.max_value = gauge_down_limit_set_angle
-//        onGauge_up_limit_set_angleChanged:   panConfigDialog.min_value = gauge_up_limit_set_angle
+        onGauge_down_limit_set_angleChanged: panConfigDialog.max_value = gauge_down_limit_set_angle
+        onGauge_up_limit_set_angleChanged:   panConfigDialog.min_value = gauge_up_limit_set_angle
     }
     GGauge{
         id: rollGauge
@@ -72,8 +71,8 @@ Item {
         gauge_config_mode: dashboard_config_mode
         gauge_sensor_value: _mavlink_manager.roll_angle
         onGauge_log_messageChanged: roll_log(rollGauge.gauge_log_message)
-//        onGauge_down_limit_set_angleChanged: rollConfigDialog.max_value = gauge_down_limit_set_angle
-//        onGauge_up_limit_set_angleChanged:   rollConfigDialog.min_value = gauge_up_limit_set_angle
+        onGauge_down_limit_set_angleChanged: rollConfigDialog.max_value = gauge_down_limit_set_angle
+        onGauge_up_limit_set_angleChanged:   rollConfigDialog.min_value = gauge_up_limit_set_angle
     }
     Item{
         id: configButtonsPanel
@@ -110,9 +109,7 @@ Item {
         anchors.horizontalCenter: tiltGauge.horizontalCenter
         anchors.top: tiltGauge.bottom ; anchors.topMargin: -10
         opacity: 0
-        max_value: tiltGauge.gauge_down_limit_set_angle
         onMax_valueChanged: tiltGauge.gauge_down_limit_set_angle = max_value
-        min_value: tiltGauge.gauge_up_limit_set_angle
         onMin_valueChanged: tiltGauge.gauge_up_limit_set_angle = min_value
     }
     GMotorConfig{
@@ -120,17 +117,16 @@ Item {
         anchors.horizontalCenter: panGauge.horizontalCenter
         anchors.top: panGauge.bottom ; anchors.topMargin: -10
         opacity: 0
-        max_value: panGauge.gauge_down_limit_set_angle
-        min_value: panGauge.gauge_up_limit_set_angle
-
+        onMax_valueChanged: panGauge.gauge_down_limit_set_angle = max_value
+        onMin_valueChanged: panGauge.gauge_up_limit_set_angle = min_value
     }
     GMotorConfig{
         id: rollConfigDialog
         anchors.horizontalCenter: rollGauge.horizontalCenter
         anchors.top: rollGauge.bottom ; anchors.topMargin: -10
         opacity: 0
-        max_value: rollGauge.gauge_down_limit_set_angle
-        min_value: rollGauge.gauge_up_limit_set_angle
+        onMax_valueChanged: rollGauge.gauge_down_limit_set_angle = max_value
+        onMin_valueChanged: rollGauge.gauge_up_limit_set_angle = min_value
     }
     states: [
         State {
@@ -138,11 +134,10 @@ Item {
             PropertyChanges { target: modeSelectionButton; text: "Config >>"}
             PropertyChanges { target: writeConfigParamsToMCU; visible: false }
             PropertyChanges { target: readConfigParamsFromMCU; visible: false }
-//            PropertyChanges { target: tiltDownLimitSetMouseArea; visible: false}
-//            PropertyChanges { target: tiltDownLimitSetItem; visible: false}
             PropertyChanges { target: tiltConfigDialog; state  : "hideDialog"}
             PropertyChanges { target: panConfigDialog;  state  : "hideDialog"}
             PropertyChanges { target: rollConfigDialog; state  : "hideDialog"}
+
 
         },
         State {
@@ -150,14 +145,11 @@ Item {
             PropertyChanges { target: modeSelectionButton; text: "<< Dashboard" }
             PropertyChanges { target: writeConfigParamsToMCU; visible: true }
             PropertyChanges { target: readConfigParamsFromMCU; visible: true }
-//            PropertyChanges { target: tiltDownLimitSetMouseArea; visible: true}
-
-//            PropertyChanges { target: tiltGauge; gauge_control_area_height: 165 ;  }
-//            PropertyChanges { target: tiltDownLimitSetMouseArea; width: 330; height: 165 ; anchors.bottomMargin: 0 }
-//            PropertyChanges { target: tiltDownLimitSetItem; visible: true}
             PropertyChanges { target: tiltConfigDialog; state: "showDialog"}
             PropertyChanges { target: panConfigDialog;  state: "showDialog"}
             PropertyChanges { target: rollConfigDialog; state: "showDialog"}
+
+
         }
     ]
     onStateChanged: {

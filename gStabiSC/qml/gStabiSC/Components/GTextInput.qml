@@ -2,9 +2,10 @@ import QtQuick 2.0
 
 Rectangle{
     id: container
-    property double  text_value     : 10
+    property string text_value      : "10"
     property int    bottom_value    : 0
     property int    top_value       : 100
+    property bool   read_only       : false
     signal clicked
     width: 45; height: 20;
     implicitWidth: 45; implicitHeight: 20
@@ -26,13 +27,13 @@ Rectangle{
         validator: IntValidator{bottom: bottom_value; top: top_value;}
         focus: true
         text: text_value
-
+        readOnly: read_only
         Behavior on color {ColorAnimation {duration: 200 }}
         Keys.onPressed: {
             if ((event.key === Qt.Key_Return) || (event.key === Qt.Key_Enter)) {
-                         text_value = text
-                         event.accepted = true;
-                     }
+                text_value = text
+                event.accepted = true;
+            }
         }
     }
 

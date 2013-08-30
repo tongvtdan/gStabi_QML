@@ -29,7 +29,7 @@ Item {
         anchors.leftMargin: 5
         anchors.verticalCenter: parent.verticalCenter
         source: "qrc:/images/qml/gStabiSC/images/animation.gif"
-        paused: true
+        onFrameChanged: if(currentFrame == 5) {paused = true}
 
     }
     GDashBoard{

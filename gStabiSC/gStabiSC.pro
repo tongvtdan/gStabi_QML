@@ -21,7 +21,9 @@ SOURCES += main.cpp \
     src/configuration.cpp \
     src/SerialLink.cpp \
     src/MavLinkManager.cpp \
-    src/gLinkManager.cpp
+    src/gLinkManager.cpp \
+    src/pieslice.cpp \
+    src/piechart.cpp
 
 # Installation path
 # target.path =
@@ -51,7 +53,9 @@ HEADERS += \
     src/configuration.h \
     src/SerialLink.h \
     src/MavLinkManager.hpp \
-    src/gLinkManager.h
+    src/gLinkManager.h \
+    src/pieslice.h \
+    src/piechart.h
 
 RESOURCES += \
     gStabiSC.qrc
@@ -59,3 +63,6 @@ RESOURCES += \
 #ICON = resources/icon64.png
 #macx: ICON = resources/icon.icns
 win32: RC_FILE = resources/appicon.rc
+
+OTHER_FILES += \
+    qml/gStabiSC/Components/RangeSelectedPie.qml
