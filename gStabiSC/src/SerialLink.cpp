@@ -148,7 +148,5 @@ QString SerialLink::getSerialPortMsg()
 
 void SerialLink::portPrepareToClose()
 {
-//    serialport->setRts(0);
-//    serialport->setDtr(0);
-//    serialport->setDtr(1);
+    // do something before SerialPort close
 }
