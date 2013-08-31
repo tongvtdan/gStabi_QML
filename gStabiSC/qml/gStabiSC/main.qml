@@ -99,12 +99,12 @@ Item {
             onClicked: {
                 if(pidSettingDialog.state === "hideDialog") {
                     pidSettingDialog.state = "showDialog" ;
-                    pidSettingDialog.z = 100;   // on top of others
+//                    pidSettingDialog.z = 100;   // on top of others
 
 //                    gDashboard.enabled = false
                 } else {
                     pidSettingDialog.state = "hideDialog";
-                    pidSettingDialog.z = -1 // lower
+//                    pidSettingDialog.z = -1 // lower
 //                    gDashboard.enabled = true
                 }
             }

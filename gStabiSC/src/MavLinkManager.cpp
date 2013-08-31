@@ -281,10 +281,6 @@ void MavLinkManager::update_all_parameters(uint8_t index, float value)
         break;
     }
 
-    //    ui->information_box->clear();
-    //    ui->information_box->setPlainText("Read Parameters completed.");
-    //    ui->readParam->setEnabled(true);
-
 }
 
 
@@ -297,7 +293,14 @@ void MavLinkManager::update_all_parameters_to_UI()
         settiltKp(current_params_on_board.pitchKp);
         settiltKi(current_params_on_board.pitchKi);
         settiltKd(current_params_on_board.pitchKd);
+        // send ro console log in QML file
         setmavlink_message_log(QString("Tilt(Kp,Ki,Kid): %1, %2, %3").arg(current_params_on_board.pitchKp).arg(current_params_on_board.pitchKi).arg(current_params_on_board.pitchKd));
+        settiltPower(current_params_on_board.pitchPower);
+        settiltFilter(current_params_on_board.tiltFilter);
+        settiltFollow(current_params_on_board.pitchFollow);
+        setdirMotortilt(current_params_on_board.dirMotorPitch);
+        setnPolestilt(current_params_on_board.nPolesPitch);
+        setmavlink_message_log(QString("Tilt(Pwr, #poles, dir, filter, follow): %1, %2, %3, %4, %5").arg(tiltPower()).arg(nPolestilt()).arg(dirMotortilt()).arg(tiltFilter()).arg(tiltFollow()));
     }
     else setmavlink_message_log("Waiting for reading parameters...");
 }
@@ -326,6 +329,22 @@ void MavLinkManager::get_attitude_data()
     setroll_angle(attitude_degree.roll); // set value to Q_PROPERTY variables so they can be read from QML
     settilt_angle(attitude_degree.pitch);           // set value to Q_PROPERTY variables so they can be read from QML
     setyaw_angle(attitude_degree.yaw);              // set value to Q_PROPERTY variables so they can be read from QML
+
+}
+
+void MavLinkManager::write_params_to_board()
+{
+    uint16_t len;
+    mavlink_message_t msg;
+    uint8_t buf[MAVLINK_MAX_PACKET_LEN];
+    if(tiltPower() != current_params_on_board.pitchPower){  // if power level changed, it will be store in params
+        mavlink_msg_param_set_pack(SYSTEM_ID, MAV_COMP_ID_SERVO1, &msg, TARGET_SYSTEM_ID, \
+                                   MAV_COMP_ID_IMU, "PITCH_POWER", tiltPower(), MAVLINK_TYPE_INT16_T);
+        len = mavlink_msg_to_send_buffer(buf, &msg);
+        emit messge_write_to_comport_ready((const char*)buf, len);
+        setmavlink_message_log("Writing tilt motor power level to board...Done");
+        current_params_on_board.pitchPower = tiltPower();   // update current value to params
+    }
 
 }
 
@@ -456,4 +475,59 @@ void MavLinkManager::settiltKd(float _kd)
 {
     m_tiltKd = _kd;
     emit tiltKdChanged(m_tiltKd);
+}
+
+float MavLinkManager::tiltPower() const
+{
+    return m_tiltPower;
+}
+
+void MavLinkManager::settiltPower(float _power)
+{
+    m_tiltPower = _power;
+    emit tiltPowerChanged(m_tiltPower);
+}
+
+float MavLinkManager::tiltFollow() const
+{
+    return m_tiltFollow;
+}
+
+void MavLinkManager::settiltFollow(float _follow)
+{
+    m_tiltFollow = _follow;
+    emit tiltFollowChanged(m_tiltFollow);
+}
+
+float MavLinkManager::tiltFilter() const
+{
+    return m_tiltFilter;
+}
+
+void MavLinkManager::settiltFilter(float _filter)
+{
+    m_tiltFilter = _filter;
+    emit tiltFilterChanged(m_tiltFilter);
+}
+
+int MavLinkManager::dirMotortilt() const
+{
+    return m_dirMotortilt;
+}
+
+void MavLinkManager::setdirMotortilt(int _dir)
+{
+    m_dirMotortilt = _dir;
+    emit dirMotortiltChanged(m_dirMotortilt);
+}
+
+uint MavLinkManager::nPolestilt() const
+{
+    return m_nPolestilt;
+}
+
+void MavLinkManager::setnPolestilt(uint _poles)
+{
+    m_nPolestilt = _poles;
+    emit nPolestiltChanged(m_nPolestilt);
 }

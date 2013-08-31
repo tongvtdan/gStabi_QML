@@ -49,7 +49,6 @@ Rectangle{
             PropertyChanges { target: inputText; color: "#00e3f9"   }
 
         }
-
     ]
     Behavior on color {ColorAnimation {duration: 200 }}
 } // end of container

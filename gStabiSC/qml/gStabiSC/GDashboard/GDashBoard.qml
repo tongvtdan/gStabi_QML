@@ -90,6 +90,9 @@ Item {
                 id: writeConfigParamsToMCU
                 width: 100; height: 30
                 text: "Write"
+                onClicked: {
+                    _mavlink_manager.write_params_to_board();
+                }
             }
             GButton{
                 id: readConfigParamsFromMCU
@@ -105,6 +108,9 @@ Item {
         opacity: 0
         onMax_valueChanged: tiltGauge.gauge_down_limit_set_angle = max_value
         onMin_valueChanged: tiltGauge.gauge_up_limit_set_angle = min_value
+        onPower_levelChanged:   _mavlink_manager.tiltPower = power_level;
+        onPoles_numChanged:     _mavlink_manager.nPolestilt = poles_num;
+        onMotor_dirChanged:     _mavlink_manager.dirMotortilt = motor_dir;
     }
     GMotorConfig{
         id: panConfigDialog
@@ -149,6 +155,15 @@ Item {
     onStateChanged: {
         if(dashboard_config_mode) {tilt_log("Change to Config Mode")} else {tilt_log("Return to Dashboard mode")}
     }
+
+    Connections{
+        target: _mavlink_manager
+        onTiltPowerChanged:     tiltConfigDialog.power_level = _mavlink_manager.tiltPower;
+        onNPolestiltChanged:    tiltConfigDialog.poles_num   = _mavlink_manager.nPolestilt;
+        onDirMotortiltChanged:  tiltConfigDialog.motor_dir   = _mavlink_manager.dirMotortilt;
+    }
+
+
     /* function tilt_log(_message)
        @brief: put message to log
        @input: message

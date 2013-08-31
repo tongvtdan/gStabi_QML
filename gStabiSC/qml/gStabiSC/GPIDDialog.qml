@@ -90,15 +90,18 @@ GSettingDialog{
 
             GButton {
                 id: runCheckButton
-                text: "Run Check"
+                text: "Close"
+                onClicked: {pidDialog.state = "hideDialog";}
             }
         }
     }
     Connections{
         target: _mavlink_manager
-        onPitchKpChanged: tiltParameters.p_value = _mavlink_manager.pitchKp
-        onPitchKiChanged: tiltParameters.i_value = _mavlink_manager.pitchKi
-        onPitchKdChanged: tiltParameters.d_value = _mavlink_manager.pitchKd
+        onTiltKpChanged: tiltParameters.p_value = _mavlink_manager.tiltKp
+        onTiltKiChanged: tiltParameters.i_value = _mavlink_manager.tiltKi
+        onTiltKdChanged: tiltParameters.d_value = _mavlink_manager.tiltKd
+        onTiltFollowChanged: tiltParameters.follow_value = _mavlink_manager.tiltFollow
+        onTiltFilterChanged: tiltParameters.filter_value = _mavlink_manager.tiltFilter
     }
 
 }

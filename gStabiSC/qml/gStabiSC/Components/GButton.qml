@@ -24,16 +24,28 @@ Rectangle{
         id: mouseArea
         anchors.fill: parent; hoverEnabled: true
         onClicked: button.clicked();
-        onEntered: {
-            button.border.color = "#009dff"
-            buttonLabel.color = "red"
-        }
-        onExited: {
-            button.border.color = "cyan"
-            buttonLabel.color = "#00e3f9"            
-        }
-        onPressed: button.border.width = 3
-        onReleased:  button.border.width = 1
+//        onEntered: { button.state = "pressed"
+////            button.border.color = "#009dff"
+////            buttonLabel.color = "red"
+//        }
+//        onExited: { button.state = "released"
+////            button.border.color = "cyan"
+////            buttonLabel.color = "#00e3f9"
+//        }
+        onPressed: button.state = "pressed"
+        onReleased:  button.state = "released"
     }
     Behavior on color {ColorAnimation {duration: 200 }}
+    states: [
+        State{
+            name: "pressed"
+            PropertyChanges {target: button; border.color: "#009dff"; border.width: 2}
+            PropertyChanges { target: buttonLabel; color: "red"   }
+        }
+        ,State {
+            name: "released"
+            PropertyChanges {target: button; border.color: "cyan"; border.width: 1 }
+            PropertyChanges { target: buttonLabel; color: "#00e3f9"   }
+        }
+    ]
 } // end of button

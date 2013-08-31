@@ -68,11 +68,11 @@ Item{
     states:[
         State{
             name: "showDialog"
-            PropertyChanges { target: dialogContainer; opacity: 1; scale: 1;  }
+            PropertyChanges { target: dialogContainer; opacity: 1; scale: 1; z: 100  }
         }
         ,State {
             name: "hideDialog"
-            PropertyChanges {target: dialogContainer; opacity: 0; scale: 0; }
+            PropertyChanges {target: dialogContainer; opacity: 0; scale: 0; z: -1}
         }
     ]
     transitions: [
@@ -81,6 +81,7 @@ Item{
             ParallelAnimation{
                 NumberAnimation { target: dialogContainer; property: "opacity";  duration: 500;}
                 NumberAnimation { target: dialogContainer; property: "scale"; duration: 500; easing.type: Easing.Bezier}
+                NumberAnimation { target: dialogContainer; property: "z"; duration: 500; easing.type: Easing.Bezier}
             }
         }
         ,Transition {
@@ -88,6 +89,7 @@ Item{
             ParallelAnimation{
                 PropertyAnimation{ target: dialogContainer; property : "opacity"; duration: 500;}
                 NumberAnimation { target: dialogContainer; property: "scale"; duration: 500; easing.type: Easing.OutElastic}
+                NumberAnimation { target: dialogContainer; property: "z"; duration: 500; easing.type: Easing.Bezier}
 
             }
 

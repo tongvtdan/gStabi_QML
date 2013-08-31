@@ -83,7 +83,7 @@ Item{
             lowerLimit: p_min ; upperLimit: p_max
             width: 180; height: 20; value: p_value;
             anchors.verticalCenter: parent.verticalCenter
-            onValueChanged: { p_value = value; console.log("P: " + p_value )}
+            onValueChanged: { p_value = value; }
         }
         GTextInput{
             id: pValueInput
@@ -117,7 +117,7 @@ Item{
             lowerLimit: i_min ; upperLimit: i_max
             width: 180; height: 20; value: i_value;
             anchors.verticalCenter: parent.verticalCenter
-            onValueChanged: { i_value = value; console.log("I: " + i_value )}
+            onValueChanged: { i_value = value; }
         }
         GTextInput{
             id: iValueInput
@@ -151,7 +151,7 @@ Item{
             lowerLimit: d_min ; upperLimit: d_max
             width: 180; height: 20; value: d_value;
             anchors.verticalCenter: parent.verticalCenter
-            onValueChanged: { d_value = value; console.log("D: " + d_value )}
+            onValueChanged: { d_value = value; }
         }
         GTextInput{
             id: dValueInput
@@ -186,7 +186,7 @@ Item{
             lowerLimit: follow_min ; upperLimit: follow_max
             width: 180; height: 20; value: follow_value;
             anchors.verticalCenter: parent.verticalCenter
-            onValueChanged: { follow_value = value; console.log("Follow: " + follow_value )}
+            onValueChanged: { follow_value = value; }
         }
         GTextInput{
             id: followValueInput
@@ -221,7 +221,7 @@ Item{
             lowerLimit: filter_min ; upperLimit: filter_max
             width: 180; height: 20; value: filter_value;
             anchors.verticalCenter: parent.verticalCenter
-            onValueChanged: { filter_value = value; console.log("Filter: " + filter_value )}
+            onValueChanged: { filter_value = value; }
         }
         GTextInput{
             id: filterValueInput

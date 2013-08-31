@@ -8,6 +8,8 @@ Item{
     property int    poles_num   : 24
     property int    max_value   : 10
     property int    min_value   : -10
+    property int    motor_dir   : 0
+
 
     property string border_normal   : "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_normal_parameters_dialog.png"
     property string border_hover    : "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_hover_parameters_dialog.png"
@@ -165,8 +167,13 @@ Item{
     GButton{
         id: reverseButton
         text: "Reverse"
+        state: motor_dir === 1? "pressed" : "released"
         anchors.top: polesRow.bottom ; anchors.topMargin: 10
         anchors.left: polesRow.left;  anchors.leftMargin: 0
+        onClicked: {
+            if(motor_dir === 0) {motor_dir = 1; reverseButton.state = "pressed"}
+            else {motor_dir = 0; reverseButton.state = "released";}
+        }
     }
 
     states:[
@@ -197,4 +204,5 @@ Item{
 
         }
     ]
+
 }

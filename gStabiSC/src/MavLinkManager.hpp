@@ -32,8 +32,8 @@ class MavLinkManager : public QObject
     Q_PROPERTY(float tiltPower READ tiltPower WRITE settiltPower NOTIFY tiltPowerChanged)
     Q_PROPERTY(float tiltFollow READ tiltFollow WRITE settiltFollow NOTIFY tiltFollowChanged)
     Q_PROPERTY(float tiltFilter READ tiltFilter WRITE settiltFilter NOTIFY tiltFilterChanged)
-    Q_PROPERTY(int8_t dirMotortilt READ dirMotortilt WRITE setdirMotortilt NOTIFY dirMotortiltChanged)
-    Q_PROPERTY(uint8_t nPolestilt READ nPolestilt WRITE setnPolestilt NOTIFY nPolestiltChanged)
+    Q_PROPERTY(int dirMotortilt READ dirMotortilt WRITE setdirMotortilt NOTIFY dirMotortiltChanged)
+    Q_PROPERTY(uint nPolestilt READ nPolestilt WRITE setnPolestilt NOTIFY nPolestiltChanged)
 
 
 
@@ -82,11 +82,11 @@ public:
     float tiltFilter() const;
     void settiltFilter(float _filter);
 
-    int8_t dirMotortilt() const;
-    void setdirMotortilt(int8_t);
+    int dirMotortilt() const;
+    void setdirMotortilt(int _dir);
 
-    uint8_t nPolestilt() const;
-    void setnPolestilt(uint8_t);
+    uint nPolestilt() const;
+    void setnPolestilt(uint _poles);
 
 
 
@@ -96,7 +96,10 @@ public:
     void get_firmware_version();
     void get_hardware_serial_number();
     void get_attitude_data();
-    
+
+// function can be called form QML
+    Q_INVOKABLE void write_params_to_board();
+
 signals:
     void mavlink_data_ready(QByteArray data);
 
@@ -169,6 +172,8 @@ private:
 
     // Parameters on board
     float m_tiltKp, m_tiltKi, m_tiltKd, m_tiltPower, m_tiltFollow, m_tiltFilter;
+    int m_dirMotortilt;
+    uint m_nPolestilt;
 
 
 //    [1!
