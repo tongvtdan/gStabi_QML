@@ -26,7 +26,11 @@ GDialog{
         text: "Open"
         onClicked: {
             _serialLink.open_close_comport();
-            if(_serialLink.isConnected) serial_dialog_log("Open Serialport: " + selected_portname);
+            if(_serialLink.isConnected) {
+                serial_dialog_log("Open Serialport: " + selected_portname);
+                serial_dialog_log("Waiting response from controller board...");
+
+            }
             else serial_dialog_log("Close Serialport: " + selected_portname)
 
         }

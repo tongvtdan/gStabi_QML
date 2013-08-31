@@ -25,6 +25,19 @@ class MavLinkManager : public QObject
     Q_PROPERTY(float roll_angle READ roll_angle WRITE setroll_angle NOTIFY roll_angleChanged)
     Q_PROPERTY(float tilt_angle READ tilt_angle WRITE settilt_angle NOTIFY tilt_angleChanged)
     Q_PROPERTY(float yaw_angle READ yaw_angle WRITE setyaw_angle NOTIFY yaw_angleChanged)
+    // Parameters data
+    Q_PROPERTY(float tiltKp READ tiltKp WRITE settiltKp NOTIFY tiltKpChanged)
+    Q_PROPERTY(float tiltKi READ tiltKi WRITE settiltKi NOTIFY tiltKiChanged)
+    Q_PROPERTY(float tiltKd READ tiltKd WRITE settiltKd NOTIFY tiltKdChanged)
+    Q_PROPERTY(float tiltPower READ tiltPower WRITE settiltPower NOTIFY tiltPowerChanged)
+    Q_PROPERTY(float tiltFollow READ tiltFollow WRITE settiltFollow NOTIFY tiltFollowChanged)
+    Q_PROPERTY(float tiltFilter READ tiltFilter WRITE settiltFilter NOTIFY tiltFilterChanged)
+    Q_PROPERTY(int8_t dirMotortilt READ dirMotortilt WRITE setdirMotortilt NOTIFY dirMotortiltChanged)
+    Q_PROPERTY(uint8_t nPolestilt READ nPolestilt WRITE setnPolestilt NOTIFY nPolestiltChanged)
+
+
+
+
 
 public:
     explicit MavLinkManager(QObject *parent = 0);
@@ -50,11 +63,39 @@ public:
 
     float yaw_angle() const;
     void setyaw_angle(float _angle);
+    // Parameters on board
+    float tiltKp() const;
+    void settiltKp(float _kp);
+
+    float tiltKi() const;
+    void settiltKi(float _ki);
+
+    float tiltKd() const;
+    void settiltKd(float _kd);
+
+    float tiltPower() const;
+    void settiltPower(float _power);
+
+    float tiltFollow() const;
+    void settiltFollow(float _follow);
+
+    float tiltFilter() const;
+    void settiltFilter(float _filter);
+
+    int8_t dirMotortilt() const;
+    void setdirMotortilt(int8_t);
+
+    uint8_t nPolestilt() const;
+    void setnPolestilt(uint8_t);
+
+
+
     //[!]  Q_PROPERTY
 
     void update_all_parameters_to_UI();
     void get_firmware_version();
     void get_hardware_serial_number();
+    void get_attitude_data();
     
 signals:
     void mavlink_data_ready(QByteArray data);
@@ -67,6 +108,18 @@ signals:
     void roll_angleChanged(float);
     void tilt_angleChanged(float);
     void yaw_angleChanged(float);
+
+    // Parameters on board;
+    void tiltKpChanged(float);
+    void tiltKiChanged(float);
+    void tiltKdChanged(float);
+    void tiltPowerChanged(float);
+    void tiltFollowChanged(float);
+    void tiltFilterChanged(float);
+    void dirMotortiltChanged(int8_t);
+    void nPolestiltChanged(uint8_t);
+
+
     //[!]
     // signal will trigger a slot in SerialLink, signal-slot connection is created in gLinkManager
     void messge_write_to_comport_ready(const char *_buf, unsigned int _len);
@@ -110,8 +163,13 @@ private:
     bool m_hb_pulse;
     bool m_board_connection_state;
     QString m_mavlink_message_log;
+
     // IMU data
     float m_roll_angle, m_tilt_angle, m_yaw_angle;
+
+    // Parameters on board
+    float m_tiltKp, m_tiltKi, m_tiltKd, m_tiltPower, m_tiltFollow, m_tiltFilter;
+
 
 //    [1!
     QTimer *linkConnectionTimer; // this timer will monitor message on mavlink, if timer timeout, lost connection.

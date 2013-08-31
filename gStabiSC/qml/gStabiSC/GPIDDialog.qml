@@ -94,6 +94,11 @@ GSettingDialog{
             }
         }
     }
-
+    Connections{
+        target: _mavlink_manager
+        onPitchKpChanged: tiltParameters.p_value = _mavlink_manager.pitchKp
+        onPitchKiChanged: tiltParameters.i_value = _mavlink_manager.pitchKi
+        onPitchKdChanged: tiltParameters.d_value = _mavlink_manager.pitchKd
+    }
 
 }

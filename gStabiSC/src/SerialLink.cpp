@@ -78,6 +78,13 @@ void SerialLink::fillSerialPortInfo()
        if(portInfo.portName !=""){
             port_name_list << portInfo.portName;
        }
+       qDebug() << "port name:"       << portInfo.portName;
+       qDebug() << "friendly name:"   << portInfo.friendName;
+       qDebug() << "physical name:"   << portInfo.physName;
+       qDebug() << "enumerator name:" << portInfo.enumName;
+       qDebug() << "vendor ID:"       << portInfo.vendorID;
+       qDebug() << "product ID:"      << portInfo.productID;
+       qDebug() << "===================================";
    }
    selected_port_name = port_name_list.at(0); // get the latest port
 //   m_ports_updated = !m_ports_updated;
@@ -101,17 +108,6 @@ void SerialLink::portSettings()
 
 void SerialLink::updatePortStatus(bool connection_state)
 {
-    /*
-    if(connection_state)
-    {
-        qDebug()<< "Port "<< serialport->portName() << " is opened";
-
-    }
-    else
-    {
-         qDebug()<< "Port "<< serialport->portName() << " is closed";
-    }
-    */
     setisConnected(connection_state);
 
 }
