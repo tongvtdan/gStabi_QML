@@ -67,7 +67,7 @@ signals:
     void mavlink_data_ready(QByteArray data);
 //    [!] Q_PROPERTY
     void isConnectedChanged(bool state);
-    void isPortListUpdatedChanged(bool update_state);
+    void isPortListUpdatedChanged();
 
 //    [!]
 private slots:

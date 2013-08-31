@@ -29,8 +29,7 @@ Item {
         anchors.leftMargin: 5
         anchors.verticalCenter: parent.verticalCenter
         source: "qrc:/images/qml/gStabiSC/images/animation.gif"
-        onFrameChanged: if(currentFrame == 5) {paused = true}
-
+        paused: !_mavlink_manager.board_connection_state
     }
     GDashBoard{
         id: gDashboard

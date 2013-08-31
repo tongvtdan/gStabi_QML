@@ -115,15 +115,15 @@ Item{
             text: "Max"
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: parent.top
-            anchors.topMargin: 0
+//            anchors.horizontalCenter: parent.horizontalCenter
+//            anchors.top: parent.top
+//            anchors.topMargin: 0
         }
         GTextInput{
             id: maxLimitInput
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
+//            anchors.horizontalCenter: parent.horizontalCenter
+//            anchors.bottom: parent.bottom
+//            anchors.bottomMargin: 0
             bottom_value: 0; top_value:  180
             text_value: max_value
             onText_valueChanged: max_value = text_value
@@ -148,15 +148,15 @@ Item{
             text: "Min"
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: parent.top
-            anchors.topMargin: 0
+//            anchors.horizontalCenter: parent.horizontalCenter
+//            anchors.top: parent.top
+//            anchors.topMargin: 0
         }
         GTextInput {
             id: minLimitInput
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
+//            anchors.horizontalCenter: parent.horizontalCenter
+//            anchors.bottom: parent.bottom
+//            anchors.bottomMargin: 0
             bottom_value: -180; top_value: 0
             text_value: min_value
             onText_valueChanged: min_value = text_value

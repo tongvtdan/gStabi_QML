@@ -23,14 +23,15 @@ GDialog{
         width: 60; height: 30;
         anchors.left: listBackGround.right; anchors.leftMargin: 30
         anchors.top: parent.top; anchors.topMargin: 50
-        text: _serialLink.isConnected? "Close" : "Open"
+        text: "Open"
         onClicked: {
             _serialLink.open_close_comport();
-            if(_serialLink.isConnected) serial_dialog_log("Open Serialport");
-            else serial_dialog_log("Close Serialport")
+            if(_serialLink.isConnected) serial_dialog_log("Open Serialport: " + selected_portname);
+            else serial_dialog_log("Close Serialport: " + selected_portname)
 
         }
     } // end of Open Close Port Button
+    /*
     // Refresh Button
     GButton{
         id: refreshButton
@@ -43,6 +44,7 @@ GDialog{
             serial_dialog_log("Refresh port list")
         }
     } // end of Refresh Button
+    */
     Rectangle{
         id: listBackGround
         width: 100; height: 88;
@@ -56,7 +58,7 @@ GDialog{
                 width: 70 ; height: 20; color: "#00000000"
                 border.width: 1 ; border.color: "cyan"
                 Text {
-                    id: portNameListText
+                    id: portNameText
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
                     color : "#00e3f9"
@@ -73,21 +75,20 @@ GDialog{
                     anchors.fill: parent; hoverEnabled: true
                     onClicked: {
                         wrapper.ListView.view.currentIndex = index
-                        selected_portname = portNameListText.text;
+                        selected_portname = portNameText.text;
                         selected_port_index = index
-                        _serialLink.update_comport_settings(selected_portname); // update portname
-                        serial_dialog_log("Selected: " + selected_portname )
                     }
                     onEntered: {
-                        wrapper.border.color =  "cyan"
-                        portNameListText.color = "red"
+                        wrapper.border.color   = "#009dff"
+                        portNameText.color = "red"
                     }
                     onExited: {
-                        wrapper.border.color ="#009dff"
-                        portNameListText.color = "#00e3f9"
+                        wrapper.border.color   = "cyan"
+                        portNameText.color = "#00e3f9"
                     }
                 }
             }
+
         } // end of Component
         Component {
             id: highlightBar
@@ -106,16 +107,12 @@ GDialog{
             id: portListView
             width: 100; height: parent.height
             x: 10
-
             model: comportList
             delegate: portListDelegate
-            highlightFollowsCurrentItem: false
+            highlightFollowsCurrentItem: true
             highlight: highlightBar
             focus: true
             spacing: 2
-            onCountChanged: {
-                currentIndex = selected_port_index;
-            }
         } // end of ListView
     } // end of list
     ListModel {  id: comportList }
@@ -126,23 +123,44 @@ GDialog{
         running: true
         onTriggered: getPortNameList();
     }
+
+//    onPortUpdatedChanged: { getPortNameList();}
+    onStateChanged: {
+        if(state == "show"){
+            getPortNameList()
+        }
+    }
+    // this code cause warning when run the app, but it works
+    Connections{
+        target: _serialLink
+        onIsPortListUpdatedChanged: {
+            getPortNameList() // update portlist when there is a change
+            for(var i=0; i < portListView.count; i++){
+                if(selected_port_index === i){
+                    portListView.currentIndex = i
+                    selected_portname = comportList.get(i).port
+                }
+            }
+        }
+        onIsConnectedChanged:{
+            if(_serialLink.isConnected){ openCloseComportButton.text = "Close"} else {openCloseComportButton.text = "Open"}
+        }
+    }
+    onSelected_portnameChanged: {
+        _serialLink.update_comport_settings(selected_portname);
+        serial_dialog_log("Reselected port to: "+ selected_portname)
+    }
+
     function getPortNameList()
     {
         comportList.clear()
-        for(var i=0 ; i < 5 ; i++){
+        for(var i=0 ; i < 10 ; i++){
             portname = _serialLink.getPortName(i);
             if(portname !== "NA"){
                 comportList.append({"port": portname});
             }
         }
     }
-    onPortUpdatedChanged: { getPortNameList();}
-    onStateChanged: {
-        if(state == "show"){
-            getPortNameList()
-        }
-    }
-
     function serial_dialog_log(_message){
         msg_log = "<font color=\"cyan\">" + _message+ "</font><br>";
     }

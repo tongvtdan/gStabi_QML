@@ -26,6 +26,7 @@ SerialLink::SerialLink(QObject *parent) :
 
 void SerialLink::PortAddedRemoved()
 {
+    if(serialport->isOpen()) {serialport->close();}
     updatePortStatus(false);
     fillSerialPortInfo();
 }
@@ -48,6 +49,7 @@ void SerialLink::open_close_comport()
     else
     {
         serialport->open(QIODevice::ReadWrite);
+        //Hardware trigger
         serialport->setRts(1); // 0V output on boot0
         serialport->setDtr(1); // 0v output on reset
         serialport->setDtr(0); // 3V3 output on reset
@@ -78,7 +80,8 @@ void SerialLink::fillSerialPortInfo()
        }
    }
    selected_port_name = port_name_list.at(0); // get the latest port
-   m_ports_updated = !m_ports_updated;
+//   m_ports_updated = !m_ports_updated;
+   setisPortListUpdated(true);
 }
 
 
@@ -132,20 +135,20 @@ bool SerialLink::isPortListUpdated() const
 void SerialLink::setisPortListUpdated(bool update_state)
 {
     m_ports_updated = update_state;
-    emit isPortListUpdatedChanged(m_ports_updated);
+    emit isPortListUpdatedChanged();
 }
 
 QString SerialLink::getSerialPortMsg()
 {
     QByteArray serial_data = serialport->readAll();
-    qDebug()<< QString::fromUtf8(serial_data.data());
+//    qDebug()<< QString::fromUtf8(serial_data.data());
     emit mavlink_data_ready(serial_data);
     return QString::fromUtf8(serial_data.data());
 }
 
 void SerialLink::portPrepareToClose()
 {
-    serialport->setRts(0);
-    serialport->setDtr(0);
-    serialport->setDtr(1);
+//    serialport->setRts(0);
+//    serialport->setDtr(0);
+//    serialport->setDtr(1);
 }
