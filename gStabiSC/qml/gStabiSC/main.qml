@@ -112,8 +112,12 @@ Item {
     }   // end of buttons Panel
     onMain_log_msgChanged: {
         if(main_log_msg.length >=10000){
-            main_log_msg = "Log data cleared "
+            main_log_msg = "Log data cleared"
         }
+    }
+    Connections{
+        target: _mavlink_manager;
+        onMavlink_message_logChanged: {main_log_msg = _mavlink_manager.mavlink_message_log + "<br>" + main_log_msg}
     }
 
 }

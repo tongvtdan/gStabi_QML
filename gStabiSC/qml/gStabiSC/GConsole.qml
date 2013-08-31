@@ -28,5 +28,6 @@ GDialog{
             text: msg_history
         }
     }
+
 }
 

@@ -142,6 +142,7 @@ QString SerialLink::getSerialPortMsg()
 {
     QByteArray serial_data = serialport->readAll();
 //    qDebug()<< QString::fromUtf8(serial_data.data());
+    serialport->flush();
     emit mavlink_data_ready(serial_data);
     return QString::fromUtf8(serial_data.data());
 }
@@ -149,4 +150,14 @@ QString SerialLink::getSerialPortMsg()
 void SerialLink::portPrepareToClose()
 {
     // do something before SerialPort close
+}
+
+void SerialLink::send_message_to_comport(const char *_buf, unsigned int _len)
+{
+    if(serialport->isOpen()){
+        serialport->write(_buf, _len);
+    }
+    else {
+        qDebug("Please check the connection then open the Comport");
+    }
 }

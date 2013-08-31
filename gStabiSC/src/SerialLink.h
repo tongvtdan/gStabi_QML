@@ -63,6 +63,10 @@ public slots:
     QString getSerialPortMsg();
     void portPrepareToClose();
 
+    // send a message from mavlink to comport
+    void send_message_to_comport(const char *_buf, unsigned int _len);
+
+
 signals:
     void mavlink_data_ready(QByteArray data);
 //    [!] Q_PROPERTY

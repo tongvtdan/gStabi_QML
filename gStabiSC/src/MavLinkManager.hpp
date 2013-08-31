@@ -20,7 +20,7 @@ class MavLinkManager : public QObject
     // interface with QML
     Q_PROPERTY(bool hb_pulse READ hb_pulse WRITE sethb_pulse NOTIFY hb_pulseChanged)
     Q_PROPERTY(bool board_connection_state READ board_connection_state WRITE setboard_connection_state NOTIFY board_connection_stateChanged )
-    Q_PROPERTY(QString msg_received READ msg_received WRITE setmsg_received NOTIFY msg_receivedChanged)
+    Q_PROPERTY(QString mavlink_message_log READ mavlink_message_log WRITE setmavlink_message_log NOTIFY mavlink_message_logChanged)
     // IMU data
     Q_PROPERTY(float roll_angle READ roll_angle WRITE setroll_angle NOTIFY roll_angleChanged)
     Q_PROPERTY(float tilt_angle READ tilt_angle WRITE settilt_angle NOTIFY tilt_angleChanged)
@@ -37,10 +37,11 @@ public:
     bool board_connection_state() const;
     void setboard_connection_state(bool _state);
 
-    QString msg_received() const;
-    void setmsg_received(QString msg_data);
+    QString mavlink_message_log() const;
+    void setmavlink_message_log(QString msg_data);
 
-    // IMU data
+
+    //IMU data
     float roll_angle() const;
     void setroll_angle(float _angle);
 
@@ -49,8 +50,11 @@ public:
 
     float yaw_angle() const;
     void setyaw_angle(float _angle);
+    //[!]  Q_PROPERTY
 
-    //[!]
+    void update_all_parameters_to_UI();
+    void get_firmware_version();
+    void get_hardware_serial_number();
     
 signals:
     void mavlink_data_ready(QByteArray data);
@@ -58,23 +62,27 @@ signals:
     //[!] Q_PROPERTY
     void hb_pulseChanged(bool);
     void board_connection_stateChanged(bool);
-    void msg_receivedChanged(QString);
+    void mavlink_message_logChanged(QString);
     // IMU data
     void roll_angleChanged(float);
     void tilt_angleChanged(float);
     void yaw_angleChanged(float);
-
     //[!]
+    // signal will trigger a slot in SerialLink, signal-slot connection is created in gLinkManager
+    void messge_write_to_comport_ready(const char *_buf, unsigned int _len);
+
 public slots:
-    void process_seriallink_data(QByteArray);
+    void process_mavlink_message(QByteArray);
 
     void connection_timeout(); // trigger when lost connection
     void link_connection_state_changed(bool connection_state);
-
+    void update_all_parameters(uint8_t index, float value);
 
 private:
     void mavlink_init();
     void RestartLinkConnectionTimer(int msec);
+    void request_all_params();      // function to read parameters from controller board
+
 
 private:
     /// mavlink variables
@@ -97,19 +105,22 @@ private:
     mavlink_acc_calib_status_t acc_calib_sta;
     mavlink_gyro_calib_status_t gyro_calib_sta;
     global_struct global_data;
-    gConfig_t oldParamConfig;
+    gConfig_t current_params_on_board;
 //    [!] Q_PROPERTY
     bool m_hb_pulse;
     bool m_board_connection_state;
-    QString m_msg_received;
+    QString m_mavlink_message_log;
     // IMU data
     float m_roll_angle, m_tilt_angle, m_yaw_angle;
 
-
 //    [1!
     QTimer *linkConnectionTimer; // this timer will monitor message on mavlink, if timer timeout, lost connection.
-    bool isConnected;
+    bool isConnected;            // use to monitor the status of board's connection to control the timer
     QString system_msg_log;             // system log message
+
+    bool first_data_pack;        // this will be check when mavlink message was received, to check whether it's 1st time to received the message
+                                // if true: Request to Read all parameters to display on UI and store in current parameters.
+                                // if false: continue to parse message to get data.
 
 };
 
