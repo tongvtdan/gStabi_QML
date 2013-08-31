@@ -34,20 +34,6 @@ qtcAddDeployment()
 
 include(thirdParty/qextserialport/src/qextserialport.pri)
 
-#OTHER_FILES += \
-#    qml/gStabiSC/Header/AppHeader.qml \
-#    qml/gStabiSC/Communication/CommSetting.qml \
-#    qml/gStabiSC/GDashboard/GDashBoard.qml \
-
-#    qml/gStabiSC/Console.qml \
-#    qml/gStabiSC/Components/GButton.qml \
-#    qml/gStabiSC/Components/GSlider.qml \
-#    qml/gStabiSC/Components/GImageButton.qml \
-#    qml/gStabiSC/GDialog.qml \
-#    qml/gStabiSC/GDashboard/GGauge.qml \
-#    qml/gStabiSC/GPIDDialog.qml \
-#    qml/gStabiSC/Components/ParametersContainer.qml \
-#    qml/gStabiSC/Components/GTextInput.qml
 
 HEADERS += \
     src/configuration.h \
@@ -65,4 +51,18 @@ RESOURCES += \
 win32: RC_FILE = resources/appicon.rc
 
 OTHER_FILES += \
-    qml/gStabiSC/Components/RangeSelectedPie.qml
+    qml/gStabiSC/Components/GButton.qml                 \
+    qml/gStabiSC/Components/GDialog.qml                 \
+    qml/gStabiSC/Components/GGauge.qml                  \
+    qml/gStabiSC/Components/GImageButton.qml            \
+    qml/gStabiSC/Components/GParametersContainer.qml    \
+    qml/gStabiSC/Components/GSettingDialog.qml          \
+    qml/gStabiSC/Components/GSlider.qml                 \
+    qml/gStabiSC/Components/GTextInput.qml              \
+    qml/gStabiSC/Components/RangeSelectedPie.qml        \
+    qml/gStabiSC/GDashboard/GDashboard.qml              \
+    qml/gStabiSC/GDashboard/GMotorConfig.qml            \
+    qml/gStabiSC/GAppHeader.qml \
+    qml/gStabiSC/GConsole.qml   \
+    qml/gStabiSC/GPIDDialog.qml \
+    qml/gStabiSC/GSerialSettings.qml
