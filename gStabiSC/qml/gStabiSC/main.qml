@@ -99,15 +99,16 @@ Item {
             onClicked: {
                 if(pidSettingDialog.state === "hideDialog") {
                     pidSettingDialog.state = "showDialog" ;
-//                    pidSettingDialog.z = 100;   // on top of others
-
-//                    gDashboard.enabled = false
                 } else {
                     pidSettingDialog.state = "hideDialog";
-//                    pidSettingDialog.z = -1 // lower
-//                    gDashboard.enabled = true
                 }
             }
+        }
+        GImageButton{
+            id: systemInfo
+            text: "SysInfo"
+            anchors.left: pidSettingsButton.right; anchors.leftMargin: 20
+            onClicked: _mavlink_manager.get_mavlink_info();
         }
     }   // end of buttons Panel
     onMain_log_msgChanged: {

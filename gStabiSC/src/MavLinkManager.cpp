@@ -1,5 +1,6 @@
 #include "MavLinkManager.hpp"
 #include <QDebug>
+#include "configuration.h"
 
 MavLinkManager::MavLinkManager(QObject *parent) :
     QObject(parent)
@@ -33,11 +34,10 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
             }
             switch (message.msgid)
             {
+
             case MAVLINK_MSG_ID_HEARTBEAT:{ // get Heartbeat
-                mavlink_heartbeat_t heartbeat;
-                heartbeat.mavlink_version = 0;
-                mavlink_msg_heartbeat_decode(&message,&heartbeat);
-                if(heartbeat.mavlink_version == MAVLINK_VERSION ){
+                mavlink_msg_heartbeat_decode(&message,&m_mavlink_heartbeat);
+                if(m_mavlink_heartbeat.mavlink_version == MAVLINK_VERSION ){
                     sethb_pulse(true);
                 }
                 else
@@ -276,6 +276,7 @@ void MavLinkManager::update_all_parameters(uint8_t index, float value)
         break;
     case PARAM_RC_YAW_MODE:     current_params_on_board.rcYawMode = value;
         update_all_parameters_to_UI();
+        get_mavlink_info();
         break;
     default:
         break;
@@ -293,14 +294,13 @@ void MavLinkManager::update_all_parameters_to_UI()
         settiltKp(current_params_on_board.pitchKp);
         settiltKi(current_params_on_board.pitchKi);
         settiltKd(current_params_on_board.pitchKd);
-        // send ro console log in QML file
-        setmavlink_message_log(QString("Tilt(Kp,Ki,Kid): %1, %2, %3").arg(current_params_on_board.pitchKp).arg(current_params_on_board.pitchKi).arg(current_params_on_board.pitchKd));
         settiltPower(current_params_on_board.pitchPower);
         settiltFilter(current_params_on_board.tiltFilter);
         settiltFollow(current_params_on_board.pitchFollow);
         setdirMotortilt(current_params_on_board.dirMotorPitch);
         setnPolestilt(current_params_on_board.nPolesPitch);
-        setmavlink_message_log(QString("Tilt(Pwr, #poles, dir, filter, follow): %1, %2, %3, %4, %5").arg(tiltPower()).arg(nPolestilt()).arg(dirMotortilt()).arg(tiltFilter()).arg(tiltFollow()));
+        settravelMinTilt(current_params_on_board.travelMinPitch);
+        settravelMaxTilt(current_params_on_board.travelMaxPitch);
     }
     else setmavlink_message_log("Waiting for reading parameters...");
 }
@@ -334,19 +334,52 @@ void MavLinkManager::get_attitude_data()
 
 void MavLinkManager::write_params_to_board()
 {
+    if(tiltPower() != current_params_on_board.pitchPower){  // if power level changed, it will be store in params
+        write_a_param_to_board("PITCH_POWER", tiltPower());
+        current_params_on_board.pitchPower = tiltPower();   // update current value to params
+    }
+    if(dirMotortilt() != current_params_on_board.dirMotorPitch){  // if power level changed, it will be store in params
+        write_a_param_to_board("DIR_MOTOR_PITCH", dirMotortilt());
+        current_params_on_board.dirMotorPitch = dirMotortilt();   // update current value to params
+    }
+    if(travelMinTilt() != current_params_on_board.travelMinPitch){  // if power level changed, it will be store in params
+        write_a_param_to_board("TRAVEL_MIN_PIT",  travelMinTilt());
+        current_params_on_board.travelMinPitch = travelMinTilt();   // update current value to params
+    }
+    if(travelMaxTilt() != current_params_on_board.travelMaxPitch){  // if power level changed, it will be store in params
+        write_a_param_to_board("TRAVEL_MAX_PIT", travelMaxTilt());
+        current_params_on_board.travelMaxPitch = travelMaxTilt();   // update current value to params
+    }
+    if(nPolestilt() != current_params_on_board.nPolesPitch){  // if power level changed, it will be store in params
+        write_a_param_to_board("NPOLES_PITCH", nPolestilt());
+        current_params_on_board.nPolesPitch = nPolestilt();   // update current value to params
+    }
+}
+
+void MavLinkManager::get_mavlink_info()
+{
+    Configuration m_config;
+    setmavlink_message_log(QString("Onboard MAVlink Protocol Ver.: %1").arg(m_mavlink_heartbeat.mavlink_version));
+    setmavlink_message_log(QString("Software MAVlink Protocol Ver.: %1").arg(MAVLINK_VERSION));
+    setmavlink_message_log(QString("MAVlink Library Ver.: %1").arg(m_config.get_mavlink_lib_version()));
+    setmavlink_message_log(QString("MAVlink for gStabi Build date: %1").arg(MAVLINK_BUILD_DATE));
+
+}
+
+void MavLinkManager::write_a_param_to_board(const char *param_id, float _value)
+{
     uint16_t len;
     mavlink_message_t msg;
     uint8_t buf[MAVLINK_MAX_PACKET_LEN];
-    if(tiltPower() != current_params_on_board.pitchPower){  // if power level changed, it will be store in params
-        mavlink_msg_param_set_pack(SYSTEM_ID, MAV_COMP_ID_SERVO1, &msg, TARGET_SYSTEM_ID, \
-                                   MAV_COMP_ID_IMU, "PITCH_POWER", tiltPower(), MAVLINK_TYPE_INT16_T);
-        len = mavlink_msg_to_send_buffer(buf, &msg);
-        emit messge_write_to_comport_ready((const char*)buf, len);
-        setmavlink_message_log("Writing tilt motor power level to board...Done");
-        current_params_on_board.pitchPower = tiltPower();   // update current value to params
-    }
+
+    mavlink_msg_param_set_pack(SYSTEM_ID, MAV_COMP_ID_SERVO1, &msg, TARGET_SYSTEM_ID, MAV_COMP_ID_IMU, \
+                               param_id, _value, MAVLINK_TYPE_INT16_T);
+    len = mavlink_msg_to_send_buffer(buf, &msg);
+    emit messge_write_to_comport_ready((const char*)buf, len);      // send signal
+    setmavlink_message_log("Writing a param to board...Done");
 
 }
+
 
 void MavLinkManager::mavlink_init()
 {
@@ -375,6 +408,8 @@ void MavLinkManager::request_all_params()
     emit messge_write_to_comport_ready((const char*)buf, len);
     setmavlink_message_log("Requesting all parameters on board...");
 }
+
+
 
 bool MavLinkManager::hb_pulse() const
 {
@@ -521,13 +556,35 @@ void MavLinkManager::setdirMotortilt(int _dir)
     emit dirMotortiltChanged(m_dirMotortilt);
 }
 
-uint MavLinkManager::nPolestilt() const
+int MavLinkManager::nPolestilt() const
 {
     return m_nPolestilt;
 }
 
-void MavLinkManager::setnPolestilt(uint _poles)
+void MavLinkManager::setnPolestilt(int _poles)
 {
     m_nPolestilt = _poles;
     emit nPolestiltChanged(m_nPolestilt);
+}
+
+int MavLinkManager::travelMinTilt() const
+{
+   return m_travelMinTilt;
+}
+
+void MavLinkManager::settravelMinTilt(int _min)
+{
+    m_travelMinTilt = _min;
+    emit travelMinTiltChanged(m_travelMinTilt);
+}
+
+int MavLinkManager::travelMaxTilt() const
+{
+    return m_travelMaxTilt;
+}
+
+void MavLinkManager::settravelMaxTilt(int _max)
+{
+    m_travelMaxTilt = _max;
+    emit travelMaxTiltChanged(m_travelMaxTilt);
 }

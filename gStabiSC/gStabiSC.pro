@@ -14,7 +14,8 @@ QT       += serialport
 
 INCLUDEPATH += src \
                thirdParty/mavlink/v1.0/gremsyBGC \
-               thirdParty/mavlink/v1.0
+               thirdParty/mavlink/v1.0 \
+               thirdParty/mavlink
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
@@ -41,7 +42,8 @@ HEADERS += \
     src/MavLinkManager.hpp \
     src/gLinkManager.h \
     src/pieslice.h \
-    src/piechart.h
+    src/piechart.h \
+    thirdParty/mavlink/config.h
 
 RESOURCES += \
     gStabiSC.qrc

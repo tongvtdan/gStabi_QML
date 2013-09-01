@@ -20,7 +20,7 @@ SerialLink::SerialLink(QObject *parent) :
     connect(serialport, SIGNAL(readyRead()),this, SLOT(getSerialPortMsg()));
     connect(serialport, SIGNAL(aboutToClose()), this, SLOT(portPrepareToClose()));
     connect(enumerator, SIGNAL(deviceDiscovered(QextPortInfo)), SLOT(PortAddedRemoved()));
-    connect(enumerator, SIGNAL(deviceRemoved(QextPortInfo)), SLOT(PortAddedRemoved()));    
+    connect(enumerator, SIGNAL(deviceRemoved(QextPortInfo)), SLOT(PortAddedRemoved()));
 
 }
 
@@ -75,9 +75,7 @@ void SerialLink::fillSerialPortInfo()
    // Add the ports in reverse order, because we prepend them to the list
    for(int i = ports.size() - 1; i >= 0; i--){
        QextPortInfo portInfo = ports.at(i);
-       if(portInfo.portName !=""){
-            port_name_list << portInfo.portName;
-       }
+
        qDebug() << "port name:"       << portInfo.portName;
        qDebug() << "friendly name:"   << portInfo.friendName;
        qDebug() << "physical name:"   << portInfo.physName;
@@ -85,6 +83,10 @@ void SerialLink::fillSerialPortInfo()
        qDebug() << "vendor ID:"       << portInfo.vendorID;
        qDebug() << "product ID:"      << portInfo.productID;
        qDebug() << "===================================";
+
+       if(portInfo.portName !=""){
+            port_name_list << portInfo.portName;
+       }
    }
    selected_port_name = port_name_list.at(0); // get the latest port
 //   m_ports_updated = !m_ports_updated;

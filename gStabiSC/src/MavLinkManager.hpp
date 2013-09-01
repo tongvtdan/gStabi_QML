@@ -3,9 +3,7 @@
 
 #include <QObject>
 #include <QTimer>
-//#include "gremsyBGC/mavlink.h"
-//#include "globalData.h"
-//#include "gMavlinkV1_0.h"
+
 #include "thirdParty/mavlink/v1.0/gremsyBGC/mavlink.h"
 #include "thirdParty/mavlink/v1.0/globalData.h"
 #include "thirdParty/mavlink/v1.0/gMavlinkV1_0.h"
@@ -26,6 +24,9 @@ class MavLinkManager : public QObject
     Q_PROPERTY(float tilt_angle READ tilt_angle WRITE settilt_angle NOTIFY tilt_angleChanged)
     Q_PROPERTY(float yaw_angle READ yaw_angle WRITE setyaw_angle NOTIFY yaw_angleChanged)
     // Parameters data
+    //General
+//    Q_PROPERTY(int motorFreq READ motorFreq WRITE setmotorFreq NOTIFY motorFreqChanged)
+    //Tilt Motor
     Q_PROPERTY(float tiltKp READ tiltKp WRITE settiltKp NOTIFY tiltKpChanged)
     Q_PROPERTY(float tiltKi READ tiltKi WRITE settiltKi NOTIFY tiltKiChanged)
     Q_PROPERTY(float tiltKd READ tiltKd WRITE settiltKd NOTIFY tiltKdChanged)
@@ -33,7 +34,13 @@ class MavLinkManager : public QObject
     Q_PROPERTY(float tiltFollow READ tiltFollow WRITE settiltFollow NOTIFY tiltFollowChanged)
     Q_PROPERTY(float tiltFilter READ tiltFilter WRITE settiltFilter NOTIFY tiltFilterChanged)
     Q_PROPERTY(int dirMotortilt READ dirMotortilt WRITE setdirMotortilt NOTIFY dirMotortiltChanged)
-    Q_PROPERTY(uint nPolestilt READ nPolestilt WRITE setnPolestilt NOTIFY nPolestiltChanged)
+    Q_PROPERTY(int nPolestilt READ nPolestilt WRITE setnPolestilt NOTIFY nPolestiltChanged)
+    Q_PROPERTY(int travelMinTilt READ travelMinTilt WRITE settravelMinTilt NOTIFY travelMinTiltChanged)
+    Q_PROPERTY(int  travelMaxTilt READ travelMaxTilt WRITE settravelMaxTilt NOTIFY travelMaxTiltChanged)
+//    Q_PROPERTY(int  rcTiltLPF READ rcTiltLPF WRITE setrcTiltLPF NOTIFY rcTiltLPFChanged)
+//    Q_PROPERTY(int  sbusTiltChan READ sbusTiltChan WRITE setsbusTiltChan NOTIFY sbusTiltChanChanged)
+//    Q_PROPERTY(int  rcTiltTrim READ rcTiltTrim WRITE setrcTiltTrim NOTIFY rcTiltTrimChanged)
+//    Q_PROPERTY(int  rcTiltMode READ rcTiltMode WRITE setrcTiltMode NOTIFY rcTiltModeChanged)
 
 
 
@@ -85,9 +92,14 @@ public:
     int dirMotortilt() const;
     void setdirMotortilt(int _dir);
 
-    uint nPolestilt() const;
-    void setnPolestilt(uint _poles);
+    int nPolestilt() const;
+    void setnPolestilt(int _poles);
 
+    int travelMinTilt() const;
+    void settravelMinTilt(int _min);
+
+    int travelMaxTilt() const;
+    void settravelMaxTilt(int _max);
 
 
     //[!]  Q_PROPERTY
@@ -99,6 +111,7 @@ public:
 
 // function can be called form QML
     Q_INVOKABLE void write_params_to_board();
+    Q_INVOKABLE void get_mavlink_info();
 
 signals:
     void mavlink_data_ready(QByteArray data);
@@ -121,8 +134,10 @@ signals:
     void tiltFilterChanged(float);
     void dirMotortiltChanged(int8_t);
     void nPolestiltChanged(uint8_t);
+    void travelMinTiltChanged(int);
+    void travelMaxTiltChanged(int);
 
-
+;
     //[!]
     // signal will trigger a slot in SerialLink, signal-slot connection is created in gLinkManager
     void messge_write_to_comport_ready(const char *_buf, unsigned int _len);
@@ -138,6 +153,7 @@ private:
     void mavlink_init();
     void RestartLinkConnectionTimer(int msec);
     void request_all_params();      // function to read parameters from controller board
+    void write_a_param_to_board(const char *param_id, float _value);
 
 
 private:
@@ -162,6 +178,7 @@ private:
     mavlink_gyro_calib_status_t gyro_calib_sta;
     global_struct global_data;
     gConfig_t current_params_on_board;
+    mavlink_heartbeat_t m_mavlink_heartbeat;
 //    [!] Q_PROPERTY
     bool m_hb_pulse;
     bool m_board_connection_state;
@@ -172,8 +189,7 @@ private:
 
     // Parameters on board
     float m_tiltKp, m_tiltKi, m_tiltKd, m_tiltPower, m_tiltFollow, m_tiltFilter;
-    int m_dirMotortilt;
-    uint m_nPolestilt;
+    int m_dirMotortilt, m_travelMinTilt, m_travelMaxTilt, m_nPolestilt;
 
 
 //    [1!

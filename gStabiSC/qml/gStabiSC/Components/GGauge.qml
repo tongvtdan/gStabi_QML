@@ -48,6 +48,9 @@ Item{
     property bool  select_handle2: false
     property bool  select_handle1: false
 
+    property bool out_of_range: false
+
+
     implicitWidth: gauge_width; implicitHeight: gauge_height
     Image {
         id: gaugeBackImage
@@ -59,23 +62,27 @@ Item{
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         source: gauge_needle
-        rotation: {
-            if(gauge_config_mode == false){
-                if(gauge_set_enabled) { return gauge_setpoint_angle;}
-                else return gauge_sensor_value;
-            } else if(gauge_set_enabled == true)
-                    {return gauge_up_limit_set_angle;}
-                else if(gauge_down_limit_set_enabled == true)
-                        {return gauge_down_limit_set_angle;}
-                    else {return gauge_sensor_value;}
-        }
+        rotation: get_rotation_angle();
     }
+    Text{
+        id: outOfRangeLabel
+        width: 20; height: 13
+        color: "#ff0000"
+        font.pixelSize: 20 ; font.family:"Segoe UI" ; font.bold: true
+        anchors.centerIn: parent
+        verticalAlignment: Text.AlignVCenter ; horizontalAlignment: Text.AlignHCenter
+        style: Text.Normal
+        text: "Out of range"
+        anchors.verticalCenterOffset: -50
+        visible: out_of_range
+    }
+
     // text display current angle value, sensor angle value
     Text{
         id: gaugeAngleValueText
         width: 20; height: 13
         color: "#00ffff"
-        font.pixelSize: 20 ; font.family:"Segoe UI Symbol" ; font.bold: true
+        font.pixelSize: 20 ; font.family:"Segoe UI" ; font.bold: true
         anchors.centerIn: parent
         verticalAlignment: Text.AlignVCenter ; horizontalAlignment: Text.AlignHCenter
         style: Text.Normal
@@ -332,5 +339,60 @@ Item{
                 }
             }
         }
+    } // end of function
+    function get_rotation_angle(){
+        var rot_angle;
+        if(gauge_config_mode == false){ // in dashboard display mode
+            if(gauge_set_enabled) {  // control the camera with setpoint angle
+                rot_angle = gauge_setpoint_angle;
+                if(rot_angle >= gauge_down_limit_set_angle) { // check whether the setpoint is in travel range
+                    gauge_log_message = "Reach max travel limit";
+                    out_of_range = true;
+                    return gauge_down_limit_set_angle;
+                } else if(rot_angle <=gauge_up_limit_set_angle){
+                    gauge_log_message = "Reach min travel limit";
+                    out_of_range = true;
+                    return gauge_up_limit_set_angle;
+                } else {                    // the setpoint is in travel limit
+                    out_of_range = false;
+                    return rot_angle;
+                }
+            }
+            else { // or let it get the value of sensor readings
+                // only notify user the sensor show that an axis is out of range now
+                // the needle still rotate to sensor reading as realtime
+                rot_angle = gauge_sensor_value;
+                if(rot_angle >= gauge_down_limit_set_angle) {
+                    gauge_log_message = "Reach max travel limit";
+                    out_of_range = true;
+                } else if(rot_angle <=gauge_up_limit_set_angle){
+                    gauge_log_message = "Reach min travel limit";
+                    out_of_range = true;
+                } else {
+                    out_of_range = false;
+                }
+                return rot_angle;
+            }
+
+        }else                      // in Motor Config mode
+            if(gauge_set_enabled == true){ // use control handle as up limit setting
+                return gauge_up_limit_set_angle;
+            }
+            else if(gauge_down_limit_set_enabled == true){ // setting down_limit
+                return gauge_down_limit_set_angle;
+            }else {  // finished config motor mode
+                // notify user out of range if sensor value is out of travel limit
+                rot_angle = gauge_sensor_value;
+                if(rot_angle >= gauge_down_limit_set_angle) {
+                    gauge_log_message = "Reach max travel limit";
+                    out_of_range = true;
+                } else if(rot_angle <=gauge_up_limit_set_angle){
+                    gauge_log_message = "Reach min travel limit";
+                    out_of_range = true;
+                } else {
+                    out_of_range = false;
+                }
+                return rot_angle;
+            }
     } // end of function
 }   // end of gauge Gauge
