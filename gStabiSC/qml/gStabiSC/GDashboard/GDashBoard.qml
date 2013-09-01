@@ -1,6 +1,5 @@
 import QtQuick 2.0
 
-
 import "../Components"
 /*
   All angles value unit are Degree
@@ -28,11 +27,9 @@ Item {
         gauge_handle_normal: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_normal_green_handle.png"
         gauge_handle_pressed: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_pressed_green_handle.png"
         gauge_config_mode: dashboard_config_mode
-//        gauge_sensor_value: _mavlink_manager.tilt_angle
         onGauge_log_messageChanged: tilt_log(tiltGauge.gauge_log_message)
         onGauge_up_limit_set_angleChanged: tiltConfigDialog.min_value = gauge_up_limit_set_angle;
-        onGauge_down_limit_set_angleChanged: tiltConfigDialog.max_value = gauge_down_limit_set_angle;
-
+        onGauge_down_limit_set_angleChanged:  tiltConfigDialog.max_value = gauge_down_limit_set_angle;
     }
     GGauge{
         id: panGauge
@@ -46,7 +43,8 @@ Item {
         gauge_handle_normal: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_normal_blue_handle.png"
         gauge_handle_pressed: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_pressed_blue_handle.png"
         gauge_config_mode: dashboard_config_mode
-//        gauge_sensor_value: _mavlink_manager.yaw_angle
+        up_limit_pie_color: "green"
+        down_limit_pie_color: "chartreuse"
         onGauge_log_messageChanged: pan_log(panGauge.gauge_log_message)
         onGauge_down_limit_set_angleChanged: panConfigDialog.max_value = gauge_down_limit_set_angle
         onGauge_up_limit_set_angleChanged:   panConfigDialog.min_value = gauge_up_limit_set_angle
@@ -63,7 +61,6 @@ Item {
         gauge_handle_normal: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_normal_cyan_handle.png"
         gauge_handle_pressed: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_pressed_cyan_handle.png"
         gauge_config_mode: dashboard_config_mode
-//        gauge_sensor_value: _mavlink_manager.roll_angle
         onGauge_log_messageChanged: roll_log(rollGauge.gauge_log_message)
         onGauge_down_limit_set_angleChanged: rollConfigDialog.max_value = gauge_down_limit_set_angle
         onGauge_up_limit_set_angleChanged:   rollConfigDialog.min_value = gauge_up_limit_set_angle
@@ -135,6 +132,7 @@ Item {
         onMax_valueChanged: rollGauge.gauge_down_limit_set_angle = max_value
         onMin_valueChanged: rollGauge.gauge_up_limit_set_angle = min_value
     }
+
     states: [
         State {
             name: "Dashboard"

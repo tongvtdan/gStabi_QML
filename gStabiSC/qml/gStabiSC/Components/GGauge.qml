@@ -1,9 +1,12 @@
 import QtQuick 2.0
+import Charts 1.0
+
 /*
  Gauge Component
  Usage:
   - Replace image source file accordingly.
   - Set gauge_width, gauge_height if change
+  - Change gauge_offset for Gauge type, e.g.: Pan will has gauge_offset = 90 to rotate some visual element
 */
 Item{
     id: gauge_container
@@ -49,7 +52,10 @@ Item{
     property bool  select_handle1: false
 
     property bool out_of_range: false
-
+    property double   scale_ratio: 0.8          // use to scale element inside the gauge
+    property string  up_limit_pie_color     : "blue"
+    property string  down_limit_pie_color   : "cyan"
+    property double  range_limit_opacity: 0.5
 
     implicitWidth: gauge_width; implicitHeight: gauge_height
     Image {
@@ -187,7 +193,6 @@ Item{
         id: gaugeDownLimitSetItem
         anchors.fill: parent
         rotation: gauge_down_limit_set_angle - gauge_offset
-        //{if(gauge_type == 2) {return (gauge_down_limit_set_angle - 90) } else return gauge_down_limit_set_angle}
         Image {
             id: gaugeDownRangeHandleSelectedImage
             anchors.right: parent.right
@@ -237,6 +242,30 @@ Item{
             anchors.rightMargin: -10
             anchors.verticalCenter: parent.verticalCenter
             source: down_limit_handle_normal
+        }
+    }
+    Item {
+        id: rangeSelectedPies
+        width: scale_ratio*gauge_width; height: scale_ratio*gauge_height; // smaller than parent
+        anchors.centerIn: parent
+        z:-1
+        opacity: range_limit_opacity
+        PieSlice {
+            id: pieDown
+            anchors.fill: parent
+            color: down_limit_pie_color
+            fromAngle: gauge_offset;
+            angleSpan: -gauge_down_limit_set_angle
+            onAngleSpanChanged: update()
+        }
+        PieSlice {
+            id: pieUp
+            anchors.fill: parent
+            color: up_limit_pie_color
+            fromAngle: gauge_offset;
+            angleSpan: -gauge_up_limit_set_angle
+            onAngleSpanChanged: update()
+
         }
     }
     MouseArea{
@@ -310,7 +339,6 @@ Item{
         else {
             rot_angle_deg = -360;
         }
-//        if(gauge_type !==2)  // if not a Pan, do convert
         if(rot_angle_deg > 180){ rot_angle_deg = rot_angle_deg - 360} // convert angle > 180 to negative angle, e.g: 190 --> -10
         if(rot_angle_deg !== -360){
             var diff_angle_1 = Math.abs(gauge_up_limit_set_angle - rot_angle_deg) // calc the different angle between current angle and previous position
@@ -340,10 +368,35 @@ Item{
             }
         }
     } // end of function
-    function get_rotation_angle(){
+    function get_rotation_angle()
+    {
         var rot_angle;
-        if(gauge_config_mode == false){ // in dashboard display mode
-            if(gauge_set_enabled) {  // control the camera with setpoint angle
+        if(gauge_config_mode) // dashboard change to Config mode
+        {
+//             user change rotate up limit,
+//             in Config mode, this handle is up travel limit setting handle
+//             in Dashboard mode, this handle is Rotate setpoint
+            if(gauge_set_enabled)
+            {
+                return gauge_up_limit_set_angle;
+            } else
+            if(gauge_down_limit_set_enabled)      // down limit setting
+            {
+                return gauge_down_limit_set_angle;
+            } else {
+                rot_angle = gauge_sensor_value;      // no travel limit handle change, return the sensor reading value
+                check_sensor_value_is_out_of_range(rot_angle);
+                return rot_angle;
+            }
+        } else // in Dashboard mode
+        {
+            if(!gauge_set_enabled)
+            {
+                rot_angle = gauge_sensor_value;
+                check_sensor_value_is_out_of_range(rot_angle);
+                return rot_angle;
+            }else
+            {
                 rot_angle = gauge_setpoint_angle;
                 if(rot_angle >= gauge_down_limit_set_angle) { // check whether the setpoint is in travel range
                     gauge_log_message = "Reach max travel limit";
@@ -358,41 +411,18 @@ Item{
                     return rot_angle;
                 }
             }
-            else { // or let it get the value of sensor readings
-                // only notify user the sensor show that an axis is out of range now
-                // the needle still rotate to sensor reading as realtime
-                rot_angle = gauge_sensor_value;
-                if(rot_angle >= gauge_down_limit_set_angle) {
-                    gauge_log_message = "Reach max travel limit";
-                    out_of_range = true;
-                } else if(rot_angle <=gauge_up_limit_set_angle){
-                    gauge_log_message = "Reach min travel limit";
-                    out_of_range = true;
-                } else {
-                    out_of_range = false;
-                }
-                return rot_angle;
-            }
-
-        }else                      // in Motor Config mode
-            if(gauge_set_enabled == true){ // use control handle as up limit setting
-                return gauge_up_limit_set_angle;
-            }
-            else if(gauge_down_limit_set_enabled == true){ // setting down_limit
-                return gauge_down_limit_set_angle;
-            }else {  // finished config motor mode
-                // notify user out of range if sensor value is out of travel limit
-                rot_angle = gauge_sensor_value;
-                if(rot_angle >= gauge_down_limit_set_angle) {
-                    gauge_log_message = "Reach max travel limit";
-                    out_of_range = true;
-                } else if(rot_angle <=gauge_up_limit_set_angle){
-                    gauge_log_message = "Reach min travel limit";
-                    out_of_range = true;
-                } else {
-                    out_of_range = false;
-                }
-                return rot_angle;
-            }
+        }
     } // end of function
+    function check_sensor_value_is_out_of_range(_angle_value)
+    {
+        if(_angle_value >= gauge_down_limit_set_angle) {
+            gauge_log_message = "Reach max travel limit";
+            out_of_range = true;
+        } else if(_angle_value <=gauge_up_limit_set_angle){
+            gauge_log_message = "Reach min travel limit";
+            out_of_range = true;
+        } else {
+            out_of_range = false;
+        }
+    }
 }   // end of gauge Gauge
