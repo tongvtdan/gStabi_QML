@@ -29,6 +29,8 @@
         <file>qml/gStabiSC/images/gStabiUI_3.2_normal_parameters_dialog.png</file>
         <file>qml/gStabiSC/images/gStabiUI_3.2_hover_controller_params_frame.png</file>
         <file>qml/gStabiSC/images/gStabiUI_3.2_normal_controller_params_frame.png</file>
+        <file>qml/gStabiSC/images/gStabiUI_3.2_normal_serial_setting_dialog.png</file>
+        <file>qml/gStabiSC/images/gStabiUI_3.2_normal_console_border.png</file>
     </qresource>
     <qresource prefix="/">
         <file>qml/gStabiSC/main.qml</file>

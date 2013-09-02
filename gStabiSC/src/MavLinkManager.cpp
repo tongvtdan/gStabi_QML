@@ -1,10 +1,12 @@
 #include "MavLinkManager.hpp"
 #include <QDebug>
 #include "configuration.h"
+#include "gSBMotor.hpp"
 
 MavLinkManager::MavLinkManager(QObject *parent) :
     QObject(parent)
 {
+//    m_tilt_motor = new gSBMotor(this);
     linkConnectionTimer = new QTimer(this);
     linkConnectionTimer->setSingleShot(true);
 
@@ -588,3 +590,9 @@ void MavLinkManager::settilt_down_limit_angle(int _max)
     m_tilt_down_limit_angle = _max;
     emit tilt_down_limit_angleChanged(m_tilt_down_limit_angle);
 }
+
+
+
+
+
+

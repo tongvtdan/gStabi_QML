@@ -37,7 +37,7 @@ Item {
         anchors.top: gstabiBackgroundImage.top; anchors.topMargin: 60
         onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
         onStateChanged: {
-            if(gDashboard.state == "Config") {
+            if(gDashboard.state === "Config") {
                 textConsole.state = "smaller"
                 comportSettingPanel.state = "smaller";
             }
@@ -49,13 +49,8 @@ Item {
     } // end of dashboard
     GSerialSettings{
         id: comportSettingPanel
-        x: gstabiBackgroundImage.width - comportSettingPanel.width - textConsole.width - 10
-        focus_state_posY:  gstabiBackgroundImage.height - comportSettingPanel.height - 60
-        unfocus_state_posY: gstabiBackgroundImage.height - comportSettingPanel.height +100
         state: "focus"
-        height: 200 ; width: 300
-        dragMaxX: gstabiBackgroundImage.width - comportSettingPanel.width
-        dragMaxY: gstabiBackgroundImage.height - comportSettingPanel.height
+        anchors.left: parent.left; anchors.leftMargin: 50; anchors.bottom: parent.bottom; anchors.bottomMargin: 70;
         onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
     }
     GConsole{
@@ -63,7 +58,7 @@ Item {
         x: gstabiBackgroundImage.x + gstabiBackgroundImage.width - textConsole.width - 10
         opacity: 1
         state: "focus"
-        focus_state_posY: gstabiBackgroundImage.height - textConsole.height - 50
+        focus_state_posY: gstabiBackgroundImage.height - textConsole.height - 70
         unfocus_state_posY: gstabiBackgroundImage.height - textConsole.height + 100
         height: 200; width:  300
         dragMaxX: gstabiBackgroundImage.width - textConsole.width
@@ -119,6 +114,21 @@ Item {
     Connections{
         target: _mavlink_manager;
         onMavlink_message_logChanged: {main_log_msg = _mavlink_manager.mavlink_message_log + "<br>" + main_log_msg}
+    }
+
+    Text {
+        id: gremsyText
+        x: 342
+        y: 324
+        color: "#0cf708"
+        text: qsTr("Developed by Gremsy Co., Ltd")
+        anchors.right: gstabiBackgroundImage.right
+        anchors.rightMargin: 20
+        anchors.bottom: gstabiBackgroundImage.bottom
+        anchors.bottomMargin: 15
+        font.bold: true
+        font.family: "Segoe UI"
+        font.pixelSize: 12
     }
 
 }

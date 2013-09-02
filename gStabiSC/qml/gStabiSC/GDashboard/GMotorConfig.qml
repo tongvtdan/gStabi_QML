@@ -9,6 +9,7 @@ Item{
     property int    max_value   : 10
     property int    min_value   : -10
     property int    motor_dir   : 0
+    property int    rc_lpf      : 0
 
 
     property string border_normal   : "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_normal_parameters_dialog.png"
@@ -174,6 +175,15 @@ Item{
             if(motor_dir === 0) {motor_dir = 1; reverseButton.state = "pressed"}
             else {motor_dir = 0; reverseButton.state = "released";}
         }
+    }
+    Text{
+        id: lpfValue
+        x: 136
+        y: 173
+        anchors.top: reverseButton.bottom ; anchors.topMargin: 17
+        anchors.left: polesRow.left;  anchors.leftMargin: 126
+        text: rc_lpf
+        color: "red"
     }
 
     states:[

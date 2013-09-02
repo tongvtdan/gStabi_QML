@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QTimer>
 
+#include "gSBMotor.hpp"
+
 #include "thirdParty/mavlink/v1.0/gremsyBGC/mavlink.h"
 #include "thirdParty/mavlink/v1.0/globalData.h"
 #include "thirdParty/mavlink/v1.0/gMavlinkV1_0.h"
@@ -16,9 +18,11 @@
 #define TARGET_SYSTEM_ID 10
 #define ONLINE true
 #define OFFLINE false
+
 class MavLinkManager : public QObject
 {
     Q_OBJECT
+
     // interface with QML
     Q_PROPERTY(bool hb_pulse READ hb_pulse WRITE sethb_pulse NOTIFY hb_pulseChanged)
     Q_PROPERTY(bool board_connection_state READ board_connection_state WRITE setboard_connection_state NOTIFY board_connection_stateChanged )
@@ -31,27 +35,29 @@ class MavLinkManager : public QObject
 //    Q_PROPERTY(int motorFreq READ motorFreq WRITE setmotorFreq NOTIFY motorFreqChanged)
     //Pitch axis, Tilt Motor
     Q_PROPERTY(float pitch_angle READ pitch_angle   WRITE setpitch_angle    NOTIFY pitch_angleChanged)
+        // use in QML, PIDConfigDialog
+    Q_PROPERTY(float tilt_kp        READ tilt_kp     WRITE settilt_kp     NOTIFY tilt_kpChanged)
+    Q_PROPERTY(float tilt_ki        READ tilt_ki     WRITE settilt_ki     NOTIFY tilt_kiChanged)
+    Q_PROPERTY(float tilt_kd        READ tilt_kd     WRITE settilt_kd     NOTIFY tilt_kdChanged)
+    Q_PROPERTY(float tilt_follow    READ tilt_follow WRITE settilt_follow NOTIFY tilt_followChanged)
+    Q_PROPERTY(float tilt_filter    READ tilt_filter WRITE settilt_filter NOTIFY tilt_filterChanged)
+        // use in QML, MotorConfigDialog
+    Q_PROPERTY(float tilt_power         READ tilt_power             WRITE settilt_power             NOTIFY tilt_powerChanged)
+    Q_PROPERTY(int motor_tilt_dir       READ motor_tilt_dir         WRITE setmotor_tilt_dir         NOTIFY motor_tilt_dirChanged)
+    Q_PROPERTY(int motor_tilt_num_poles READ motor_tilt_num_poles   WRITE setmotor_tilt_num_poles   NOTIFY motor_tilt_num_polesChanged)
+    Q_PROPERTY(int tilt_up_limit_angle  READ tilt_up_limit_angle    WRITE settilt_up_limit_angle    NOTIFY tilt_up_limit_angleChanged)
+    Q_PROPERTY(int tilt_down_limit_angle READ tilt_down_limit_angle WRITE settilt_down_limit_angle  NOTIFY tilt_down_limit_angleChanged)
+        // use in QML, others dialog
+//    Q_PROPERTY(int  tilt_rc_lpf     READ tilt_rc_lpf    WRITE settilt_rc_lpf    NOTIFY tilt_rc_lpfChanged)
+//    Q_PROPERTY(int  tilt_rc_trim    READ tilt_rc_trim   WRITE settilt_rc_trim   NOTIFY tilt_rc_trimChanged)
+//    Q_PROPERTY(int  tilt_rc_mode    READ tilt_rc_mode   WRITE settilt_rc_mode   NOTIFY tilt_rc_modeChanged)
+//    Q_PROPERTY(int  tilt_sbus_chan  READ tilt_sbus_chan WRITE settilt_sbus_chan NOTIFY tilt_sbus_chanChanged)
 
-    Q_PROPERTY(float tilt_kp READ tilt_kp WRITE settilt_kp NOTIFY tilt_kpChanged)
-    Q_PROPERTY(float tilt_ki READ tilt_ki WRITE settilt_ki NOTIFY tilt_kiChanged)
-    Q_PROPERTY(float tilt_kd READ tilt_kd WRITE settilt_kd NOTIFY tilt_kdChanged)
-    Q_PROPERTY(float tilt_power READ tilt_power WRITE settilt_power NOTIFY tilt_powerChanged)
-    Q_PROPERTY(float tilt_follow READ tilt_follow WRITE settilt_follow NOTIFY tilt_followChanged)
-    Q_PROPERTY(float tilt_filter READ tilt_filter WRITE settilt_filter NOTIFY tilt_filterChanged)
-    Q_PROPERTY(int motor_tilt_dir READ motor_tilt_dir WRITE setmotor_tilt_dir NOTIFY motor_tilt_dirChanged)
-    Q_PROPERTY(int motor_tilt_num_poles READ motor_tilt_num_poles WRITE setmotor_tilt_num_poles NOTIFY motor_tilt_num_polesChanged)
-    Q_PROPERTY(int tilt_up_limit_angle READ tilt_up_limit_angle WRITE settilt_up_limit_angle NOTIFY tilt_up_limit_angleChanged)
-    Q_PROPERTY(int tilt_down_limit_angle READ tilt_down_limit_angle WRITE settilt_down_limit_angle NOTIFY tilt_down_limit_angleChanged)
-//    Q_PROPERTY(int  rcTiltLPF READ rcTiltLPF WRITE setrcTiltLPF NOTIFY rcTiltLPFChanged)
-//    Q_PROPERTY(int  sbusTiltChan READ sbusTiltChan WRITE setsbusTiltChan NOTIFY sbusTiltChanChanged)
-//    Q_PROPERTY(int  rcTiltTrim READ rcTiltTrim WRITE setrcTiltTrim NOTIFY rcTiltTrimChanged)
-//    Q_PROPERTY(int  rcTiltMode READ rcTiltMode WRITE setrcTiltMode NOTIFY rcTiltModeChanged)
 
 
 
 public:
     explicit MavLinkManager(QObject *parent = 0);
-
 
     //[!] Q_PROPERTY functions
     bool hb_pulse() const;
@@ -140,7 +146,8 @@ signals:
     void tilt_up_limit_angleChanged(int);
     void tilt_down_limit_angleChanged(int);
 
-;
+
+
     //[!]
     // signal will trigger a slot in SerialLink, signal-slot connection is created in gLinkManager
     void messge_write_to_comport_ready(const char *_buf, unsigned int _len);
@@ -193,7 +200,6 @@ private:
     // Parameters on board
     float m_tilt_kp, m_tilt_ki, m_tilt_kd, m_tilt_power, m_tilt_follow, m_tilt_filter;
     int m_dirMotortilt, m_tilt_up_limit_angle, m_tilt_down_limit_angle, m_motor_tilt_num_poles;
-
 
 //    [1!
     QTimer *linkConnectionTimer; // this timer will monitor message on mavlink, if timer timeout, lost connection.

@@ -32,6 +32,8 @@ public:
      * @note:  the index will be check to make sure it is the range of ports size
     **/
     Q_INVOKABLE QString getPortName(int idx);
+
+    Q_INVOKABLE QString get_selected_port_details(int idx);
     /**
      * @brief: open and close comport, this function can be called from QML
      * @return: bool port status, true if port is opened, false if port is close
@@ -78,7 +80,8 @@ private slots:
     void PortAddedRemoved();
 private:
 
-    QList<QString> port_name_list;
+//    QList<QString> port_name_list;
+    QList<QextPortInfo> serial_port_info;
     PortSettings m_port_settings;
     QString selected_port_name;
 

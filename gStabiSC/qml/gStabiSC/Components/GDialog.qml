@@ -14,8 +14,9 @@ Item{
     property string title: "Dialog"
     property int  focus_state_posY      : 500
     property int  unfocus_state_posY    : 600
-
-    implicitHeight: 200
+//    property string  border_normal: "../images/gStabiUI_3.2_normal_serial_setting_dialog.png"
+    property string  border_normal :  "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_normal_serial_setting_dialog.png"
+    implicitHeight: 300
     implicitWidth: 300
     MouseArea{
         id: dragConsolWindowArea
@@ -34,22 +35,23 @@ Item{
         id: background
         x: 0
         y: 2
-        source: "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_serial_setting_dialog.png"
-        width: 300; height: 200
+//        width: 150; height: 200
+        anchors.fill: parent
+        source: border_normal
         border.left: 5; border.top: 5
         border.right: 5; border.bottom: 5
     }
     Text {
         id: dialogTitle
-        font.family: "Segoe UI Symbol"
+        font.family: "Segoe UI"
         font.bold: true
         color: title_normal_color
         text: title
+        anchors.horizontalCenter: parent.horizontalCenter
         font.pixelSize: 12
         anchors.top: parent.top
-        anchors.topMargin: 10
-        anchors.left: parent.left
-        anchors.leftMargin: 20
+        anchors.topMargin: 2
+
     }
     states:[
         State {
@@ -93,6 +95,4 @@ Item{
             }
         }
     ]
-
-
 }

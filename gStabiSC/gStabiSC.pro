@@ -24,7 +24,8 @@ SOURCES += main.cpp \
     src/MavLinkManager.cpp \
     src/gLinkManager.cpp \
     src/pieslice.cpp \
-    src/piechart.cpp
+    src/piechart.cpp \
+    src/gSBMotor.cpp
 
 # Installation path
 # target.path =
@@ -43,7 +44,8 @@ HEADERS += \
     src/gLinkManager.h \
     src/pieslice.h \
     src/piechart.h \
-    thirdParty/mavlink/config.h
+    thirdParty/mavlink/config.h \
+    src/gSBMotor.hpp
 
 RESOURCES += \
     gStabiSC.qrc
@@ -61,10 +63,10 @@ OTHER_FILES += \
     qml/gStabiSC/Components/GSettingDialog.qml          \
     qml/gStabiSC/Components/GSlider.qml                 \
     qml/gStabiSC/Components/GTextInput.qml              \
-    qml/gStabiSC/Components/RangeSelectedPie.qml        \
-    qml/gStabiSC/GDashboard/GDashboard.qml              \
     qml/gStabiSC/GDashboard/GMotorConfig.qml            \
     qml/gStabiSC/GAppHeader.qml \
     qml/gStabiSC/GConsole.qml   \
     qml/gStabiSC/GPIDDialog.qml \
-    qml/gStabiSC/GSerialSettings.qml
+    qml/gStabiSC/GSerialSettings.qml \
+    qml/gStabiSC/GDashboard/GDashBoard.qml \
+    qml/gStabiSC/Components/GSerialPortListHeader.qml

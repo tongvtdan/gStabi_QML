@@ -33,11 +33,30 @@ void SerialLink::PortAddedRemoved()
 
 QString SerialLink::getPortName(int idx)
 {
-    if(idx < port_name_list.size()){
-        return port_name_list.at(idx);
-    } else {
-        return "NA";
+    if(idx < serial_port_info.size()){
+        return serial_port_info.at(idx).portName;
     }
+    else {return "NA";}
+}
+/**
+ * @brief SerialLink::get_selected_port_details
+ * @param idx
+ * @return
+ *  QString portName;   ///< Port name.
+    QString physName;   ///< Physical name.
+    QString friendName; ///< Friendly name.
+    QString enumName;   ///< Enumerator name.
+    int vendorID;       ///< Vendor ID.
+    int productID;      ///< Product ID
+ */
+QString SerialLink::get_selected_port_details(int idx)
+{
+    QString m_details;
+    if(idx < serial_port_info.size()){
+        m_details = QString("Port name: %1 \nPhysical name: %2 \nFriendly name: %3 \nEnumerator name: %4\nVender ID: %5 \nProduct ID: %6").arg(serial_port_info.at(idx).portName).arg(serial_port_info.at(idx).physName).arg(serial_port_info.at(idx).friendName).arg(serial_port_info.at(idx).enumName).arg(serial_port_info.at(idx).vendorID).arg(serial_port_info.at(idx).productID);
+        return m_details;
+    }
+    else {return "NA";}
 }
 
 void SerialLink::open_close_comport()
@@ -62,34 +81,25 @@ void SerialLink::update_comport_settings(QString portname_str)
     if(serialport->isOpen()){
         serialport->close();
     }
-//    qDebug()<< "COM Port selected:" << portname_str;
     selected_port_name = portname_str;
     serialport->setPortName(selected_port_name);
 }
 
 void SerialLink::fillSerialPortInfo()
 {
-    port_name_list.clear();
-    // Get the ports available on this system
-   QList<QextPortInfo> ports = QextSerialEnumerator::getPorts();
-   // Add the ports in reverse order, because we prepend them to the list
-   for(int i = ports.size() - 1; i >= 0; i--){
-       QextPortInfo portInfo = ports.at(i);
 
-       qDebug() << "port name:"       << portInfo.portName;
-       qDebug() << "friendly name:"   << portInfo.friendName;
-       qDebug() << "physical name:"   << portInfo.physName;
-       qDebug() << "enumerator name:" << portInfo.enumName;
-       qDebug() << "vendor ID:"       << portInfo.vendorID;
-       qDebug() << "product ID:"      << portInfo.productID;
-       qDebug() << "===================================";
-
-       if(portInfo.portName !=""){
-            port_name_list << portInfo.portName;
+//    port_name_list.clear();
+    serial_port_info = QextSerialEnumerator::getPorts();
+//    // Get the ports available on this system
+//   QList<QextPortInfo> ports = QextSerialEnumerator::getPorts();
+//   // Add the ports in reverse order, because we prepend them to the list
+   for(int i = serial_port_info.size() - 1; i >= 0; i--){
+       QextPortInfo portInfo = serial_port_info.at(i);
+       if(portInfo.portName == ""){
+           serial_port_info.removeAt(i);    // remove all dummy serial ports
        }
    }
-   selected_port_name = port_name_list.at(0); // get the latest port
-//   m_ports_updated = !m_ports_updated;
+   selected_port_name = serial_port_info.at(0).portName; // get the latest port
    setisPortListUpdated(true);
 }
 

@@ -24,14 +24,8 @@ Rectangle{
         id: mouseArea
         anchors.fill: parent; hoverEnabled: true
         onClicked: button.clicked();
-//        onEntered: { button.state = "pressed"
-////            button.border.color = "#009dff"
-////            buttonLabel.color = "red"
-//        }
-//        onExited: { button.state = "released"
-////            button.border.color = "cyan"
-////            buttonLabel.color = "#00e3f9"
-//        }
+        onEntered: { button.state = "pressed"   }
+        onExited: { button.state = "released"   }
         onPressed: button.state = "pressed"
         onReleased:  button.state = "released"
     }

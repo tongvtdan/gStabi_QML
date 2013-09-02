@@ -169,7 +169,6 @@ Item {
         onTilt_up_limit_angleChanged:   tiltConfigDialog.min_value   = _mavlink_manager.tilt_up_limit_angle;
         onTilt_down_limit_angleChanged: tiltConfigDialog.max_value   = _mavlink_manager.tilt_down_limit_angle;
         onPitch_angleChanged:           tiltGauge.gauge_sensor_value = _mavlink_manager.pitch_angle;
-
         onYaw_angleChanged:     panGauge.gauge_sensor_value = _mavlink_manager.yaw_angle;
         onRoll_angleChanged:    rollGauge.gauge_sensor_value = _mavlink_manager.roll_angle;
     }
