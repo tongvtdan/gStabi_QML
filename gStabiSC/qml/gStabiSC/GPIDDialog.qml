@@ -97,11 +97,11 @@ GSettingDialog{
     }
     Connections{
         target: _mavlink_manager
-        onTiltKpChanged: tiltParameters.p_value = _mavlink_manager.tiltKp
-        onTiltKiChanged: tiltParameters.i_value = _mavlink_manager.tiltKi
-        onTiltKdChanged: tiltParameters.d_value = _mavlink_manager.tiltKd
-        onTiltFollowChanged: tiltParameters.follow_value = _mavlink_manager.tiltFollow
-        onTiltFilterChanged: tiltParameters.filter_value = _mavlink_manager.tiltFilter
+        onTilt_kpChanged: tiltParameters.p_value = _mavlink_manager.tilt_kp
+        onTilt_kiChanged: tiltParameters.i_value = _mavlink_manager.tilt_ki
+        onTilt_kdChanged: tiltParameters.d_value = _mavlink_manager.tilt_kd
+        onTilt_followChanged: tiltParameters.follow_value = _mavlink_manager.tilt_follow
+        onTilt_filterChanged: tiltParameters.filter_value = _mavlink_manager.tilt_filter
     }
 
 }

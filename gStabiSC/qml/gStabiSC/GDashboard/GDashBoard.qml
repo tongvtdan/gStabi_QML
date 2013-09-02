@@ -104,16 +104,16 @@ Item {
         anchors.top: tiltGauge.bottom ; anchors.topMargin: -10
         opacity: 0
         onMax_valueChanged: {
-            _mavlink_manager.travelMaxTilt = max_value;
+            _mavlink_manager.tilt_down_limit_angle = max_value;
             tiltGauge.gauge_down_limit_set_angle = max_value
         }
         onMin_valueChanged: {
-            _mavlink_manager.travelMinTilt = min_value;
+            _mavlink_manager.tilt_up_limit_angle = min_value;
             tiltGauge.gauge_up_limit_set_angle = min_value;
         }
-        onPower_levelChanged:   _mavlink_manager.tiltPower = power_level;
-        onPoles_numChanged:     _mavlink_manager.nPolestilt = poles_num;
-        onMotor_dirChanged:     _mavlink_manager.dirMotortilt = motor_dir;
+        onPower_levelChanged:   _mavlink_manager.tilt_power = power_level;
+        onPoles_numChanged:     _mavlink_manager.motor_tilt_num_poles = poles_num;
+        onMotor_dirChanged:     _mavlink_manager.motor_tilt_dir = motor_dir;
 
     }
     GMotorConfig{
@@ -163,14 +163,14 @@ Item {
 
     Connections{
         target: _mavlink_manager
-        onTiltPowerChanged:     tiltConfigDialog.power_level = _mavlink_manager.tiltPower;
-        onNPolestiltChanged:    tiltConfigDialog.poles_num   = _mavlink_manager.nPolestilt;
-        onDirMotortiltChanged:  tiltConfigDialog.motor_dir   = _mavlink_manager.dirMotortilt;
-        onTravelMinTiltChanged: tiltConfigDialog.min_value   = _mavlink_manager.travelMinTilt;
-        onTravelMaxTiltChanged: tiltConfigDialog.max_value   = _mavlink_manager.travelMaxTilt;
-        onTilt_angleChanged:    tiltGauge.gauge_sensor_value = _mavlink_manager.tilt_angle;
+        onTilt_powerChanged:             tiltConfigDialog.power_level = _mavlink_manager.tilt_power;
+        onMotor_tilt_num_polesChanged:  tiltConfigDialog.poles_num   = _mavlink_manager.motor_tilt_num_poles;
+        onMotor_tilt_dirChanged:        tiltConfigDialog.motor_dir   = _mavlink_manager.motor_tilt_dir;
+        onTilt_up_limit_angleChanged:   tiltConfigDialog.min_value   = _mavlink_manager.tilt_up_limit_angle;
+        onTilt_down_limit_angleChanged: tiltConfigDialog.max_value   = _mavlink_manager.tilt_down_limit_angle;
+        onPitch_angleChanged:           tiltGauge.gauge_sensor_value = _mavlink_manager.pitch_angle;
 
-        onYaw_angleChanged:    panGauge.gauge_sensor_value = _mavlink_manager.yaw_angle;
+        onYaw_angleChanged:     panGauge.gauge_sensor_value = _mavlink_manager.yaw_angle;
         onRoll_angleChanged:    rollGauge.gauge_sensor_value = _mavlink_manager.roll_angle;
     }
 

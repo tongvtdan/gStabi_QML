@@ -291,16 +291,16 @@ void MavLinkManager::update_all_parameters_to_UI()
     {
         get_firmware_version();
         get_hardware_serial_number();
-        settiltKp(current_params_on_board.pitchKp);
-        settiltKi(current_params_on_board.pitchKi);
-        settiltKd(current_params_on_board.pitchKd);
-        settiltPower(current_params_on_board.pitchPower);
-        settiltFilter(current_params_on_board.tiltFilter);
-        settiltFollow(current_params_on_board.pitchFollow);
-        setdirMotortilt(current_params_on_board.dirMotorPitch);
-        setnPolestilt(current_params_on_board.nPolesPitch);
-        settravelMinTilt(current_params_on_board.travelMinPitch);
-        settravelMaxTilt(current_params_on_board.travelMaxPitch);
+        settilt_kp(current_params_on_board.pitchKp);
+        settilt_ki(current_params_on_board.pitchKi);
+        settilt_kd(current_params_on_board.pitchKd);
+        settilt_power(current_params_on_board.pitchPower);
+        settilt_filter(current_params_on_board.tiltFilter);
+        settilt_follow(current_params_on_board.pitchFollow);
+        setmotor_tilt_dir(current_params_on_board.dirMotorPitch);
+        setmotor_tilt_num_poles(current_params_on_board.nPolesPitch);
+        settilt_up_limit_angle(current_params_on_board.travelMinPitch);
+        settilt_down_limit_angle(current_params_on_board.travelMaxPitch);
     }
     else setmavlink_message_log("Waiting for reading parameters...");
 }
@@ -327,32 +327,32 @@ void MavLinkManager::get_hardware_serial_number()
 void MavLinkManager::get_attitude_data()
 {
     setroll_angle(attitude_degree.roll); // set value to Q_PROPERTY variables so they can be read from QML
-    settilt_angle(attitude_degree.pitch);           // set value to Q_PROPERTY variables so they can be read from QML
+    setpitch_angle(attitude_degree.pitch);           // set value to Q_PROPERTY variables so they can be read from QML
     setyaw_angle(attitude_degree.yaw);              // set value to Q_PROPERTY variables so they can be read from QML
 
 }
 
 void MavLinkManager::write_params_to_board()
 {
-    if(tiltPower() != current_params_on_board.pitchPower){  // if power level changed, it will be store in params
-        write_a_param_to_board("PITCH_POWER", tiltPower());
-        current_params_on_board.pitchPower = tiltPower();   // update current value to params
+    if(tilt_power() != current_params_on_board.pitchPower){  // if power level changed, it will be store in params
+        write_a_param_to_board("PITCH_POWER", tilt_power());
+        current_params_on_board.pitchPower = tilt_power();   // update current value to params
     }
-    if(dirMotortilt() != current_params_on_board.dirMotorPitch){  // if power level changed, it will be store in params
-        write_a_param_to_board("DIR_MOTOR_PITCH", dirMotortilt());
-        current_params_on_board.dirMotorPitch = dirMotortilt();   // update current value to params
+    if(motor_tilt_dir() != current_params_on_board.dirMotorPitch){  // if power level changed, it will be store in params
+        write_a_param_to_board("DIR_MOTOR_PITCH", motor_tilt_dir());
+        current_params_on_board.dirMotorPitch = motor_tilt_dir();   // update current value to params
     }
-    if(travelMinTilt() != current_params_on_board.travelMinPitch){  // if power level changed, it will be store in params
-        write_a_param_to_board("TRAVEL_MIN_PIT",  travelMinTilt());
-        current_params_on_board.travelMinPitch = travelMinTilt();   // update current value to params
+    if(tilt_up_limit_angle() != current_params_on_board.travelMinPitch){  // if power level changed, it will be store in params
+        write_a_param_to_board("TRAVEL_MIN_PIT",  tilt_up_limit_angle());
+        current_params_on_board.travelMinPitch = tilt_up_limit_angle();   // update current value to params
     }
-    if(travelMaxTilt() != current_params_on_board.travelMaxPitch){  // if power level changed, it will be store in params
-        write_a_param_to_board("TRAVEL_MAX_PIT", travelMaxTilt());
-        current_params_on_board.travelMaxPitch = travelMaxTilt();   // update current value to params
+    if(tilt_down_limit_angle() != current_params_on_board.travelMaxPitch){  // if power level changed, it will be store in params
+        write_a_param_to_board("TRAVEL_MAX_PIT", tilt_down_limit_angle());
+        current_params_on_board.travelMaxPitch = tilt_down_limit_angle();   // update current value to params
     }
-    if(nPolestilt() != current_params_on_board.nPolesPitch){  // if power level changed, it will be store in params
-        write_a_param_to_board("NPOLES_PITCH", nPolestilt());
-        current_params_on_board.nPolesPitch = nPolestilt();   // update current value to params
+    if(motor_tilt_num_poles() != current_params_on_board.nPolesPitch){  // if power level changed, it will be store in params
+        write_a_param_to_board("NPOLES_PITCH", motor_tilt_num_poles());
+        current_params_on_board.nPolesPitch = motor_tilt_num_poles();   // update current value to params
     }
 }
 
@@ -457,15 +457,15 @@ void MavLinkManager::setroll_angle(float _angle)
     emit roll_angleChanged(m_roll_angle);
 }
 
-float MavLinkManager::tilt_angle() const
+float MavLinkManager::pitch_angle() const
 {
-    return m_tilt_angle;
+    return m_pitch_angle;
 }
 
-void MavLinkManager::settilt_angle(float _angle)
+void MavLinkManager::setpitch_angle(float _angle)
 {
-    m_tilt_angle = _angle;
-    emit tilt_angleChanged(m_tilt_angle);
+    m_pitch_angle = _angle;
+    emit pitch_angleChanged(m_pitch_angle);
 }
 
 float MavLinkManager::yaw_angle() const
@@ -479,112 +479,112 @@ void MavLinkManager::setyaw_angle(float _angle)
     emit yaw_angleChanged(m_yaw_angle);
 }
 
-float MavLinkManager::tiltKp() const
+float MavLinkManager::tilt_kp() const
 {
-    return m_tiltKp;
+    return m_tilt_kp;
 }
 
-void MavLinkManager::settiltKp(float _kp)
+void MavLinkManager::settilt_kp(float _kp)
 {
-    m_tiltKp = _kp;
-    emit tiltKpChanged(m_tiltKp);
+    m_tilt_kp = _kp;
+    emit tilt_kpChanged(m_tilt_kp);
 }
 
-float MavLinkManager::tiltKi() const
+float MavLinkManager::tilt_ki() const
 {
-    return m_tiltKi;
+    return m_tilt_ki;
 }
 
-void MavLinkManager::settiltKi(float _ki)
+void MavLinkManager::settilt_ki(float _ki)
 {
-    m_tiltKi = _ki;
-    emit tiltKiChanged(m_tiltKi);
+    m_tilt_ki = _ki;
+    emit tilt_kiChanged(m_tilt_ki);
 }
 
-float MavLinkManager::tiltKd() const
+float MavLinkManager::tilt_kd() const
 {
-    return m_tiltKd;
+    return m_tilt_kd;
 }
 
-void MavLinkManager::settiltKd(float _kd)
+void MavLinkManager::settilt_kd(float _kd)
 {
-    m_tiltKd = _kd;
-    emit tiltKdChanged(m_tiltKd);
+    m_tilt_kd = _kd;
+    emit tilt_kdChanged(m_tilt_kd);
 }
 
-float MavLinkManager::tiltPower() const
+float MavLinkManager::tilt_power() const
 {
-    return m_tiltPower;
+    return m_tilt_power;
 }
 
-void MavLinkManager::settiltPower(float _power)
+void MavLinkManager::settilt_power(float _power)
 {
-    m_tiltPower = _power;
-    emit tiltPowerChanged(m_tiltPower);
+    m_tilt_power = _power;
+    emit tilt_powerChanged(m_tilt_power);
 }
 
-float MavLinkManager::tiltFollow() const
+float MavLinkManager::tilt_follow() const
 {
-    return m_tiltFollow;
+    return m_tilt_follow;
 }
 
-void MavLinkManager::settiltFollow(float _follow)
+void MavLinkManager::settilt_follow(float _follow)
 {
-    m_tiltFollow = _follow;
-    emit tiltFollowChanged(m_tiltFollow);
+    m_tilt_follow = _follow;
+    emit tilt_followChanged(m_tilt_follow);
 }
 
-float MavLinkManager::tiltFilter() const
+float MavLinkManager::tilt_filter() const
 {
-    return m_tiltFilter;
+    return m_tilt_filter;
 }
 
-void MavLinkManager::settiltFilter(float _filter)
+void MavLinkManager::settilt_filter(float _filter)
 {
-    m_tiltFilter = _filter;
-    emit tiltFilterChanged(m_tiltFilter);
+    m_tilt_filter = _filter;
+    emit tilt_filterChanged(m_tilt_filter);
 }
 
-int MavLinkManager::dirMotortilt() const
+int MavLinkManager::motor_tilt_dir() const
 {
     return m_dirMotortilt;
 }
 
-void MavLinkManager::setdirMotortilt(int _dir)
+void MavLinkManager::setmotor_tilt_dir(int _dir)
 {
     m_dirMotortilt = _dir;
-    emit dirMotortiltChanged(m_dirMotortilt);
+    emit motor_tilt_dirChanged(m_dirMotortilt);
 }
 
-int MavLinkManager::nPolestilt() const
+int MavLinkManager::motor_tilt_num_poles() const
 {
-    return m_nPolestilt;
+    return m_motor_tilt_num_poles;
 }
 
-void MavLinkManager::setnPolestilt(int _poles)
+void MavLinkManager::setmotor_tilt_num_poles(int _poles)
 {
-    m_nPolestilt = _poles;
-    emit nPolestiltChanged(m_nPolestilt);
+    m_motor_tilt_num_poles = _poles;
+    emit motor_tilt_num_polesChanged(m_motor_tilt_num_poles);
 }
 
-int MavLinkManager::travelMinTilt() const
+int MavLinkManager::tilt_up_limit_angle() const
 {
-   return m_travelMinTilt;
+   return m_tilt_up_limit_angle;
 }
 
-void MavLinkManager::settravelMinTilt(int _min)
+void MavLinkManager::settilt_up_limit_angle(int _min)
 {
-    m_travelMinTilt = _min;
-    emit travelMinTiltChanged(m_travelMinTilt);
+    m_tilt_up_limit_angle = _min;
+    emit tilt_up_limit_angleChanged(m_tilt_up_limit_angle);
 }
 
-int MavLinkManager::travelMaxTilt() const
+int MavLinkManager::tilt_down_limit_angle() const
 {
-    return m_travelMaxTilt;
+    return m_tilt_down_limit_angle;
 }
 
-void MavLinkManager::settravelMaxTilt(int _max)
+void MavLinkManager::settilt_down_limit_angle(int _max)
 {
-    m_travelMaxTilt = _max;
-    emit travelMaxTiltChanged(m_travelMaxTilt);
+    m_tilt_down_limit_angle = _max;
+    emit tilt_down_limit_angleChanged(m_tilt_down_limit_angle);
 }

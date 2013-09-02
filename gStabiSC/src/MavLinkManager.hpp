@@ -7,7 +7,11 @@
 #include "thirdParty/mavlink/v1.0/gremsyBGC/mavlink.h"
 #include "thirdParty/mavlink/v1.0/globalData.h"
 #include "thirdParty/mavlink/v1.0/gMavlinkV1_0.h"
-
+/*
+ * Some names are equal:
+ *  Pitch   = Tilt
+ *  Yaw     = Pan
+ */
 
 #define TARGET_SYSTEM_ID 10
 #define ONLINE true
@@ -20,29 +24,28 @@ class MavLinkManager : public QObject
     Q_PROPERTY(bool board_connection_state READ board_connection_state WRITE setboard_connection_state NOTIFY board_connection_stateChanged )
     Q_PROPERTY(QString mavlink_message_log READ mavlink_message_log WRITE setmavlink_message_log NOTIFY mavlink_message_logChanged)
     // IMU data
-    Q_PROPERTY(float roll_angle READ roll_angle WRITE setroll_angle NOTIFY roll_angleChanged)
-    Q_PROPERTY(float tilt_angle READ tilt_angle WRITE settilt_angle NOTIFY tilt_angleChanged)
-    Q_PROPERTY(float yaw_angle READ yaw_angle WRITE setyaw_angle NOTIFY yaw_angleChanged)
+    Q_PROPERTY(float roll_angle  READ roll_angle    WRITE setroll_angle     NOTIFY roll_angleChanged)
+    Q_PROPERTY(float yaw_angle   READ yaw_angle     WRITE setyaw_angle      NOTIFY yaw_angleChanged)
     // Parameters data
     //General
 //    Q_PROPERTY(int motorFreq READ motorFreq WRITE setmotorFreq NOTIFY motorFreqChanged)
-    //Tilt Motor
-    Q_PROPERTY(float tiltKp READ tiltKp WRITE settiltKp NOTIFY tiltKpChanged)
-    Q_PROPERTY(float tiltKi READ tiltKi WRITE settiltKi NOTIFY tiltKiChanged)
-    Q_PROPERTY(float tiltKd READ tiltKd WRITE settiltKd NOTIFY tiltKdChanged)
-    Q_PROPERTY(float tiltPower READ tiltPower WRITE settiltPower NOTIFY tiltPowerChanged)
-    Q_PROPERTY(float tiltFollow READ tiltFollow WRITE settiltFollow NOTIFY tiltFollowChanged)
-    Q_PROPERTY(float tiltFilter READ tiltFilter WRITE settiltFilter NOTIFY tiltFilterChanged)
-    Q_PROPERTY(int dirMotortilt READ dirMotortilt WRITE setdirMotortilt NOTIFY dirMotortiltChanged)
-    Q_PROPERTY(int nPolestilt READ nPolestilt WRITE setnPolestilt NOTIFY nPolestiltChanged)
-    Q_PROPERTY(int travelMinTilt READ travelMinTilt WRITE settravelMinTilt NOTIFY travelMinTiltChanged)
-    Q_PROPERTY(int  travelMaxTilt READ travelMaxTilt WRITE settravelMaxTilt NOTIFY travelMaxTiltChanged)
+    //Pitch axis, Tilt Motor
+    Q_PROPERTY(float pitch_angle READ pitch_angle   WRITE setpitch_angle    NOTIFY pitch_angleChanged)
+
+    Q_PROPERTY(float tilt_kp READ tilt_kp WRITE settilt_kp NOTIFY tilt_kpChanged)
+    Q_PROPERTY(float tilt_ki READ tilt_ki WRITE settilt_ki NOTIFY tilt_kiChanged)
+    Q_PROPERTY(float tilt_kd READ tilt_kd WRITE settilt_kd NOTIFY tilt_kdChanged)
+    Q_PROPERTY(float tilt_power READ tilt_power WRITE settilt_power NOTIFY tilt_powerChanged)
+    Q_PROPERTY(float tilt_follow READ tilt_follow WRITE settilt_follow NOTIFY tilt_followChanged)
+    Q_PROPERTY(float tilt_filter READ tilt_filter WRITE settilt_filter NOTIFY tilt_filterChanged)
+    Q_PROPERTY(int motor_tilt_dir READ motor_tilt_dir WRITE setmotor_tilt_dir NOTIFY motor_tilt_dirChanged)
+    Q_PROPERTY(int motor_tilt_num_poles READ motor_tilt_num_poles WRITE setmotor_tilt_num_poles NOTIFY motor_tilt_num_polesChanged)
+    Q_PROPERTY(int tilt_up_limit_angle READ tilt_up_limit_angle WRITE settilt_up_limit_angle NOTIFY tilt_up_limit_angleChanged)
+    Q_PROPERTY(int tilt_down_limit_angle READ tilt_down_limit_angle WRITE settilt_down_limit_angle NOTIFY tilt_down_limit_angleChanged)
 //    Q_PROPERTY(int  rcTiltLPF READ rcTiltLPF WRITE setrcTiltLPF NOTIFY rcTiltLPFChanged)
 //    Q_PROPERTY(int  sbusTiltChan READ sbusTiltChan WRITE setsbusTiltChan NOTIFY sbusTiltChanChanged)
 //    Q_PROPERTY(int  rcTiltTrim READ rcTiltTrim WRITE setrcTiltTrim NOTIFY rcTiltTrimChanged)
 //    Q_PROPERTY(int  rcTiltMode READ rcTiltMode WRITE setrcTiltMode NOTIFY rcTiltModeChanged)
-
-
 
 
 
@@ -65,41 +68,41 @@ public:
     float roll_angle() const;
     void setroll_angle(float _angle);
 
-    float tilt_angle() const;
-    void settilt_angle(float _angle);
+    float pitch_angle() const;
+    void setpitch_angle(float _angle);
 
     float yaw_angle() const;
     void setyaw_angle(float _angle);
     // Parameters on board
-    float tiltKp() const;
-    void settiltKp(float _kp);
+    float tilt_kp() const;
+    void settilt_kp(float _kp);
 
-    float tiltKi() const;
-    void settiltKi(float _ki);
+    float tilt_ki() const;
+    void settilt_ki(float _ki);
 
-    float tiltKd() const;
-    void settiltKd(float _kd);
+    float tilt_kd() const;
+    void settilt_kd(float _kd);
 
-    float tiltPower() const;
-    void settiltPower(float _power);
+    float tilt_power() const;
+    void settilt_power(float _power);
 
-    float tiltFollow() const;
-    void settiltFollow(float _follow);
+    float tilt_follow() const;
+    void settilt_follow(float _follow);
 
-    float tiltFilter() const;
-    void settiltFilter(float _filter);
+    float tilt_filter() const;
+    void settilt_filter(float _filter);
 
-    int dirMotortilt() const;
-    void setdirMotortilt(int _dir);
+    int motor_tilt_dir() const;
+    void setmotor_tilt_dir(int _dir);
 
-    int nPolestilt() const;
-    void setnPolestilt(int _poles);
+    int motor_tilt_num_poles() const;
+    void setmotor_tilt_num_poles(int _poles);
 
-    int travelMinTilt() const;
-    void settravelMinTilt(int _min);
+    int tilt_up_limit_angle() const;
+    void settilt_up_limit_angle(int _min);
 
-    int travelMaxTilt() const;
-    void settravelMaxTilt(int _max);
+    int tilt_down_limit_angle() const;
+    void settilt_down_limit_angle(int _max);
 
 
     //[!]  Q_PROPERTY
@@ -122,20 +125,20 @@ signals:
     void mavlink_message_logChanged(QString);
     // IMU data
     void roll_angleChanged(float);
-    void tilt_angleChanged(float);
+    void pitch_angleChanged(float);
     void yaw_angleChanged(float);
 
     // Parameters on board;
-    void tiltKpChanged(float);
-    void tiltKiChanged(float);
-    void tiltKdChanged(float);
-    void tiltPowerChanged(float);
-    void tiltFollowChanged(float);
-    void tiltFilterChanged(float);
-    void dirMotortiltChanged(int8_t);
-    void nPolestiltChanged(uint8_t);
-    void travelMinTiltChanged(int);
-    void travelMaxTiltChanged(int);
+    void tilt_kpChanged(float);
+    void tilt_kiChanged(float);
+    void tilt_kdChanged(float);
+    void tilt_powerChanged(float);
+    void tilt_followChanged(float);
+    void tilt_filterChanged(float);
+    void motor_tilt_dirChanged(int8_t);
+    void motor_tilt_num_polesChanged(uint8_t);
+    void tilt_up_limit_angleChanged(int);
+    void tilt_down_limit_angleChanged(int);
 
 ;
     //[!]
@@ -185,11 +188,11 @@ private:
     QString m_mavlink_message_log;
 
     // IMU data
-    float m_roll_angle, m_tilt_angle, m_yaw_angle;
+    float m_roll_angle, m_pitch_angle, m_yaw_angle;
 
     // Parameters on board
-    float m_tiltKp, m_tiltKi, m_tiltKd, m_tiltPower, m_tiltFollow, m_tiltFilter;
-    int m_dirMotortilt, m_travelMinTilt, m_travelMaxTilt, m_nPolestilt;
+    float m_tilt_kp, m_tilt_ki, m_tilt_kd, m_tilt_power, m_tilt_follow, m_tilt_filter;
+    int m_dirMotortilt, m_tilt_up_limit_angle, m_tilt_down_limit_angle, m_motor_tilt_num_poles;
 
 
 //    [1!
