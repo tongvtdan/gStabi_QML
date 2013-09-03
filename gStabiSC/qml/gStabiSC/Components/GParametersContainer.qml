@@ -23,6 +23,7 @@ Item{
     property int  filter_min     : 0;
     property int  filter_max     : 255;
 
+    property string text_color: "white"
 
 // uncomment these lines to use resources
     property string border_normal   : "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_normal_controller_params_frame.png"
@@ -69,7 +70,8 @@ Item{
         Text{
             id: pLabel
             width: 20; height: 20
-            color : "#00e3f9"
+//            color : "#00e3f9"
+            color: text_color
             font.family: "Segoe UI"
             font.bold: true
             font.pixelSize: 16
@@ -103,7 +105,8 @@ Item{
         Text{
             id: iLabel
             width: 20; height: 20
-            color : "#00e3f9"
+//            color : "#00e3f9"
+            color: text_color
             font.family: "Segoe UI"
             font.bold: true
             font.pixelSize: 16
@@ -137,7 +140,8 @@ Item{
         Text{
             id: dLabel
             width: 20; height: 20
-            color : "#00e3f9"
+//            color : "#00e3f9"
+            color: text_color
             font.family: "Segoe UI"
             font.bold: true
             font.pixelSize: 16
@@ -172,7 +176,8 @@ Item{
         Text{
             id: followLabel
             width: 20; height: 20
-            color : "#00e3f9"
+            color: text_color
+//            color : "#00e3f9"
             font.family: "Segoe UI"
             font.bold: true
             font.pixelSize: 12
@@ -207,7 +212,8 @@ Item{
         Text{
             id: filterLabel
             width: 20; height: 20
-            color : "#00e3f9"
+//            color : "#00e3f9"
+            color: text_color
             font.family: "Segoe UI"
             font.bold: true
             font.pixelSize: 12

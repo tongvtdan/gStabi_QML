@@ -10,6 +10,8 @@ Item{
     property int    min_value   : -10
     property int    motor_dir   : 0
     property int    rc_lpf      : 0
+    property string min_limit_label: "Min"
+    property string max_limit_label: "Max"
 
 
     property string border_normal   : "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_normal_parameters_dialog.png"
@@ -79,6 +81,7 @@ Item{
     }
     Row{
         id: polesRow
+        height: 20
         anchors.top: powerRow.bottom; anchors.topMargin: 40
         anchors.left: boardNormalImg.left; anchors.leftMargin: 10
         spacing: 10
@@ -102,31 +105,25 @@ Item{
     }
     Column{
         id: maxColumn
-        x: 240
-        y: 86
+        x: 194
+        y: 136
         width: 50; height: 45
-        anchors.right: parent.right
-        anchors.rightMargin: 10
+        anchors.horizontalCenterOffset: 70
+        anchors.horizontalCenter: parent.horizontalCenter
         spacing: 5
         Text{
             width: 40
             height: 20
             color : "#00e3f9"
-            font.family: "Segoe UI Symbol"
+            font.family: "Segoe UI"
             font.bold: true
             font.pixelSize: 16
-            text: "Max"
+            text: max_limit_label
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
-//            anchors.horizontalCenter: parent.horizontalCenter
-//            anchors.top: parent.top
-//            anchors.topMargin: 0
         }
         GTextInput{
             id: maxLimitInput
-//            anchors.horizontalCenter: parent.horizontalCenter
-//            anchors.bottom: parent.bottom
-//            anchors.bottomMargin: 0
             bottom_value: 0; top_value:  180
             text_value: max_value
             onText_valueChanged: max_value = text_value
@@ -134,32 +131,25 @@ Item{
     }
     Column{
         id: minColumn
-        x: 240
+        x: 55
+        y: 136
         width: 50; height: 45
-        anchors.top: maxColumn.bottom
-        anchors.topMargin: 5
-        anchors.right: parent.right
-        anchors.rightMargin: 10
+        anchors.horizontalCenterOffset: -70
+        anchors.horizontalCenter: parent.horizontalCenter
         spacing: 5
         Text{
             width: 40
             height: 20
             color : "#00e3f9"
-            font.family: "Segoe UI Symbol"
+            font.family: "Segoe UI"
             font.bold: true
             font.pixelSize: 16
-            text: "Min"
+            text: min_limit_label
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
-//            anchors.horizontalCenter: parent.horizontalCenter
-//            anchors.top: parent.top
-//            anchors.topMargin: 0
         }
         GTextInput {
             id: minLimitInput
-//            anchors.horizontalCenter: parent.horizontalCenter
-//            anchors.bottom: parent.bottom
-//            anchors.bottomMargin: 0
             bottom_value: -180; top_value: 0
             text_value: min_value
             onText_valueChanged: min_value = text_value
@@ -169,22 +159,22 @@ Item{
         id: reverseButton
         text: "Reverse"
         state: motor_dir === 1? "pressed" : "released"
-        anchors.top: polesRow.bottom ; anchors.topMargin: 10
-        anchors.left: polesRow.left;  anchors.leftMargin: 0
+        anchors.top: polesRow.top ; anchors.topMargin: 0
+        anchors.left: polesRow.right;  anchors.leftMargin: 20
         onClicked: {
             if(motor_dir === 0) {motor_dir = 1; reverseButton.state = "pressed"}
             else {motor_dir = 0; reverseButton.state = "released";}
         }
     }
-    Text{
-        id: lpfValue
-        x: 136
-        y: 173
-        anchors.top: reverseButton.bottom ; anchors.topMargin: 17
-        anchors.left: polesRow.left;  anchors.leftMargin: 126
-        text: rc_lpf
-        color: "red"
-    }
+//    Text{
+//        id: lpfValue
+//        x: 136
+//        y: 173
+//        anchors.top: reverseButton.bottom ; anchors.topMargin: 17
+//        anchors.left: polesRow.left;  anchors.leftMargin: 126
+//        text: rc_lpf
+//        color: "red"
+//    }
 
     states:[
         State{

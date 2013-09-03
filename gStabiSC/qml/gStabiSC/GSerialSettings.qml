@@ -16,6 +16,7 @@ GDialog{
     implicitWidth: portListView.width
     border_normal: ""
     title: ""
+    smaller_scale: 0
     // Open Close Port Button
     GButton{
         id: openCloseComportButton
@@ -28,7 +29,6 @@ GDialog{
             if(_serialLink.isConnected) {
                 serial_dialog_log("Open Serialport: " + selected_portname);
                 serial_dialog_log("Waiting response from controller board...");
-
             }
             else serial_dialog_log("Close Serialport: " + selected_portname)
 
@@ -109,94 +109,6 @@ GDialog{
         focus: true
         spacing: 2
     } // end of ListView
-    /*
-    Rectangle{
-        id: portListItem
-        width: 100; height: 100
-        anchors.left: parent.left; anchors.leftMargin: 15
-        color: "#00000000"
-        anchors.top: parent.top
-        anchors.topMargin: 0
-        Component {
-            id: portListDelegate
-            Rectangle {
-                id: wrapper
-                width: 70 ; height: 20; color: "#00000000"
-                border.width: 1 ; border.color: "cyan"
-                Text {
-                    id: portNameText
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    color : "#00e3f9"
-                    text: port
-                    Behavior on color{ ColorAnimation { } }
-                }
-                states: State{
-                    name: "Current" ; when: wrapper.ListView.isCurrentItem
-                    PropertyChanges {target: wrapper; x: 20}
-                }
-                transitions: Transition { NumberAnimation { property: "x"; duration: 200; }
-                }
-                MouseArea{
-                    anchors.fill: parent; hoverEnabled: true
-                    onClicked: {
-                        wrapper.ListView.view.currentIndex = index
-                        selected_portname = portNameText.text;
-                        selected_port_index = index
-                    }
-
-                    onEntered: {
-                        wrapper.border.color   = "#009dff"
-                        portNameText.color = "red"
-                        serial_port_info_details = _serialLink.get_selected_port_details(index);
-                        serialportInfoDetailsText.opacity = 1
-                    }
-                    onExited: {
-                        wrapper.border.color   = "cyan"
-                        portNameText.color = "#00e3f9"
-                        serial_port_info_details = _serialLink.get_selected_port_details(index);
-                        serialportInfoDetailsText.opacity = 0
-                    }
-                }
-            }
-
-        } // end of Component
-        Component {
-            id: highlightBar
-            Rectangle {
-                width: 70; height: 20
-                color: "cyan"
-                opacity: 0.5
-                y: portListView.currentItem.y;
-                x: portListView.currentItem.x;
-                Behavior on y { SpringAnimation { spring: 2; damping: 0.1 } }
-                Behavior on x { SpringAnimation { spring: 2; damping: 0.1 } }
-            }
-        }
-        Component{
-            id: headerBar
-            GSerialPortListHeader{
-            }
-        }
-
-        ListView{
-            id: portListView
-            width: 100; height: parent.height
-            anchors.top: parent.top ; anchors.topMargin: 0
-            anchors.horizontalCenter: parent.horizontalCenter
-            highlightRangeMode: QQuickItemView.ApplyRange
-            x: 10
-            model: comportList
-            delegate: portListDelegate
-            highlightFollowsCurrentItem: true
-            highlight: highlightBar
-            header: headerBar
-            focus: true
-            spacing: 2
-            contentHeight: parent.height; contentWidth: parent.width
-        } // end of ListView
-    } // end of list
-    */
     ListModel {  id: comportList }
 
     Timer{
@@ -204,13 +116,6 @@ GDialog{
         interval: 100;  repeat: false   // run once at start up
         running: true
         onTriggered: getPortNameList();
-    }
-
-//    onPortUpdatedChanged: { getPortNameList();}
-    onStateChanged: {
-        if(state == "show"){
-            getPortNameList()
-        }
     }
     // this code cause warning when run the app, but it works
     Connections{

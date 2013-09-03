@@ -9,6 +9,7 @@ GDialog{
     width: 250; height: 400
     Flickable{
         id: flickArea
+        anchors.rightMargin: 10
         anchors.topMargin: 20
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 10
@@ -23,10 +24,14 @@ GDialog{
         clip: true
         Text{
             id: logText
+            width: 220
+            height: 370
             wrapMode: Text.WordWrap
             color: "cyan"
             textFormat: Text.RichText
             text: msg_history
+            anchors.bottomMargin: 30
+            anchors.rightMargin: 30
             anchors.fill: parent
         }
     }

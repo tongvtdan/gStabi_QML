@@ -8,6 +8,7 @@ Item{
     property string imagePressed: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_pressed_button.png"
     property string text: "ImgButton"
     signal clicked
+    property string previous_state: ""
 
     implicitHeight: 20; implicitWidth: 100
     width: buttonImage.width; height: buttonImage.height
@@ -21,7 +22,7 @@ Item{
         text: rootItem.text
         anchors.centerIn: parent
         color : "#00e3f9"
-        font.family: "Segoe UI Symbol"
+        font.family: "Segoe UI"
         font.bold: true
         font.pixelSize: 16
     }
@@ -30,10 +31,11 @@ Item{
         anchors.fill: parent
         hoverEnabled: true
         onEntered: {
+            previous_state = rootItem.state
             rootItem.state = "hover"
         }
         onExited: {
-            rootItem.state = "normal"
+            rootItem.state = ""
         }
         onPressed: {
             rootItem.state = "pressed"
@@ -57,7 +59,7 @@ Item{
         }
         ,State {
             name: "hover"
-            PropertyChanges { target: buttonImage; source: imageHover; }
+//            PropertyChanges { target: buttonImage; source: imageHover; }
             PropertyChanges {target: rootItem; scale: 1.5  }
         }
 
@@ -65,45 +67,3 @@ Item{
 
 
 }
-/*
-Image {
-    id: button
-
-    property string theme: "Beryl"
-    property string imageNormal: "../pics/svgbutton/"+theme+"/normal.svg"
-    property string imageHover: "../pics/svgbutton/"+theme+"/hovered.svg"
-    property string imagePressed: "../pics/svgbutton/"+theme+"/pressed.svg"
-    property bool hover: false
-
-    source: hover ? imageHover : imageNormal
-
-    states: [
-        State {
-            name: "pressed"
-            PropertyChanges {
-                target: button
-                source: imagePressed
-            }
-        }
-    ]
-
-    MouseArea {
-        anchors.fill: parent
-        hoverEnabled: true
-
-        onEntered: {
-            button.hover = true
-        }
-        onExited: {
-            button.hover = false
-            button.state = ""
-        }
-        onPressed: {
-            button.state = "pressed"
-        }
-        onReleased: {
-            button.state = ""
-        }
-    }
-}
-  */

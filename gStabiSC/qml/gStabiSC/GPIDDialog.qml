@@ -3,6 +3,9 @@ import "Components"
 
 GSettingDialog{
     id: pidDialog
+
+    property string msg_log: "PID Dialog Log"
+
     title: "Controller Parameters"
     state:"showDialog"
     width: 930; height: 500
@@ -24,6 +27,11 @@ GSettingDialog{
             height: 350
             anchors.left: parent.left; anchors.leftMargin: 0
             anchors.top: parent.top; anchors.topMargin: 0
+            onP_valueChanged:       _mavlink_manager.tilt_kp     = p_value;
+            onI_valueChanged:       _mavlink_manager.tilt_ki     = i_value;
+            onD_valueChanged:       _mavlink_manager.tilt_kd     = d_value;
+            onFilter_valueChanged:  _mavlink_manager.tilt_filter = filter_value;
+            onFollow_valueChanged:  _mavlink_manager.tilt_follow = follow_value;
         }
     }
     // Pan Axis Motor
@@ -72,24 +80,31 @@ GSettingDialog{
         id: buttonsItem
         anchors.left: parent.left
         anchors.leftMargin: 200
-        anchors.bottom: parent.bottom; anchors.bottomMargin: 40
+        anchors.bottom: parent.bottom; anchors.bottomMargin: 60
         Row{
             spacing: 5
             GButton{
                 id: readButton
                 text: "Read"
                 onClicked: {
-
+                    if(_serialLink.isConnected){
+                        _mavlink_manager.request_all_params();
+                    }
+                    else {dialog_log("Controller board is not connected. Please connect PC to the board then try again")}
                 }
             }
             GButton{
                 id: writeButton
                 text: "Write"
-                onClicked: {}
+                onClicked: {
+                    if(_serialLink.isConnected) {
+                        _mavlink_manager.write_params_to_board();
+                    }
+                    else {dialog_log("Controller board is not connected. Please connect PC to the board then try again")}
+                }
             }
-
             GButton {
-                id: runCheckButton
+                id: closeDialogButton
                 text: "Close"
                 onClicked: {pidDialog.state = "hideDialog";}
             }
@@ -102,6 +117,14 @@ GSettingDialog{
         onTilt_kdChanged: tiltParameters.d_value = _mavlink_manager.tilt_kd
         onTilt_followChanged: tiltParameters.follow_value = _mavlink_manager.tilt_follow
         onTilt_filterChanged: tiltParameters.filter_value = _mavlink_manager.tilt_filter
+    }
+    /* function dialog_log(_message)
+       @brief: put message to log
+       @input: _message
+       @output: msg_log in HTML format
+      */
+    function dialog_log(_message){
+        msg_log = "<font color=\"red\">" + _message+ "</font><br>";
     }
 
 }

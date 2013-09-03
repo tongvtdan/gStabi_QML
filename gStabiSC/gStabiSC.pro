@@ -24,8 +24,7 @@ SOURCES += main.cpp \
     src/MavLinkManager.cpp \
     src/gLinkManager.cpp \
     src/pieslice.cpp \
-    src/piechart.cpp \
-    src/gSBMotor.cpp
+    src/piechart.cpp
 
 # Installation path
 # target.path =
@@ -44,8 +43,7 @@ HEADERS += \
     src/gLinkManager.h \
     src/pieslice.h \
     src/piechart.h \
-    thirdParty/mavlink/config.h \
-    src/gSBMotor.hpp
+    thirdParty/mavlink/config.h
 
 RESOURCES += \
     gStabiSC.qrc

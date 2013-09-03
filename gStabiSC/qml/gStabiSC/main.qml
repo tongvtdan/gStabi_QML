@@ -29,7 +29,7 @@ Item {
         anchors.leftMargin: 5
         anchors.verticalCenter: parent.verticalCenter
         source: "qrc:/images/qml/gStabiSC/images/animation.gif"
-        paused: !_mavlink_manager.board_connection_state
+        paused: true
     }
     GDashBoard{
         id: gDashboard
@@ -43,7 +43,7 @@ Item {
             }
             else {
                 textConsole.state = "focus"
-                comportSettingPanel.state = "focus";
+//                comportSettingPanel.state = "focus";
             }
         }
     } // end of dashboard
@@ -73,6 +73,7 @@ Item {
         dragMaxY: gstabiBackgroundImage.height - pidSettingDialog.height
         x: (gstabiBackgroundImage.x + gstabiBackgroundImage.width)/2 - width/2;
         y: (gstabiBackgroundImage.y + gstabiBackgroundImage.height)/2 - height/2;
+        onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
     }
     Item {
         id: buttonsPanel
@@ -84,8 +85,14 @@ Item {
             anchors.left: parent.left; anchors.leftMargin: 0
             text: "Port"
             onClicked: {
-                comportSettingPanel.visible == true ? comportSettingPanel.visible = false : comportSettingPanel.visible = true
+                if(comportSettingPanel.state === "focus"){
+                    comportSettingPanel.state = "smaller"
+                } else {
+                    comportSettingPanel.state = "focus"
+                    state = "pressed"
+                }
             }
+            onVisibleChanged: visible? serialSettingDialog.state = "pressed" : serialSettingDialog.state = "normal"
         }
         GImageButton{
             id: pidSettingsButton
@@ -114,6 +121,13 @@ Item {
     Connections{
         target: _mavlink_manager;
         onMavlink_message_logChanged: {main_log_msg = _mavlink_manager.mavlink_message_log + "<br>" + main_log_msg}
+        onBoard_connection_stateChanged: {
+            if(_mavlink_manager.board_connection_state){
+            comportSettingPanel.state = "smaller";
+            }
+            waitingForConnection.paused = !_mavlink_manager.board_connection_state;
+
+        }
     }
 
     Text {

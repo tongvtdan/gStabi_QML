@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QTimer>
 
-#include "gSBMotor.hpp"
 
 #include "thirdParty/mavlink/v1.0/gremsyBGC/mavlink.h"
 #include "thirdParty/mavlink/v1.0/globalData.h"
@@ -29,12 +28,13 @@ class MavLinkManager : public QObject
     Q_PROPERTY(QString mavlink_message_log READ mavlink_message_log WRITE setmavlink_message_log NOTIFY mavlink_message_logChanged)
     // IMU data
     Q_PROPERTY(float roll_angle  READ roll_angle    WRITE setroll_angle     NOTIFY roll_angleChanged)
+    Q_PROPERTY(float pitch_angle READ pitch_angle   WRITE setpitch_angle    NOTIFY pitch_angleChanged)
     Q_PROPERTY(float yaw_angle   READ yaw_angle     WRITE setyaw_angle      NOTIFY yaw_angleChanged)
-    // Parameters data
     //General
 //    Q_PROPERTY(int motorFreq READ motorFreq WRITE setmotorFreq NOTIFY motorFreqChanged)
+
+    // Parameters data
     //Pitch axis, Tilt Motor
-    Q_PROPERTY(float pitch_angle READ pitch_angle   WRITE setpitch_angle    NOTIFY pitch_angleChanged)
         // use in QML, PIDConfigDialog
     Q_PROPERTY(float tilt_kp        READ tilt_kp     WRITE settilt_kp     NOTIFY tilt_kpChanged)
     Q_PROPERTY(float tilt_ki        READ tilt_ki     WRITE settilt_ki     NOTIFY tilt_kiChanged)
@@ -52,6 +52,25 @@ class MavLinkManager : public QObject
 //    Q_PROPERTY(int  tilt_rc_trim    READ tilt_rc_trim   WRITE settilt_rc_trim   NOTIFY tilt_rc_trimChanged)
 //    Q_PROPERTY(int  tilt_rc_mode    READ tilt_rc_mode   WRITE settilt_rc_mode   NOTIFY tilt_rc_modeChanged)
 //    Q_PROPERTY(int  tilt_sbus_chan  READ tilt_sbus_chan WRITE settilt_sbus_chan NOTIFY tilt_sbus_chanChanged)
+
+    //Yaw axis, Pan Motor
+        // use in QML, PIDConfigDialog
+//    Q_PROPERTY(float pan_kp        READ pan_kp     WRITE setpan_kp     NOTIFY pan_kpChanged)
+//    Q_PROPERTY(float pan_ki        READ pan_ki     WRITE setpan_ki     NOTIFY pan_kiChanged)
+//    Q_PROPERTY(float pan_kd        READ pan_kd     WRITE setpan_kd     NOTIFY pan_kdChanged)
+//    Q_PROPERTY(float pan_follow    READ pan_follow WRITE setpan_follow NOTIFY pan_followChanged)
+//    Q_PROPERTY(float pan_filter    READ pan_filter WRITE setpan_filter NOTIFY pan_filterChanged)
+//        // use in QML, MotorConfigDialog
+//    Q_PROPERTY(float pan_power         READ pan_power             WRITE setpan_power             NOTIFY pan_powerChanged)
+//    Q_PROPERTY(int motor_pan_dir       READ motor_pan_dir         WRITE setmotor_pan_dir         NOTIFY motor_pan_dirChanged)
+//    Q_PROPERTY(int motor_pan_num_poles READ motor_pan_num_poles   WRITE setmotor_pan_num_poles   NOTIFY motor_pan_num_polesChanged)
+//    Q_PROPERTY(int pan_cw_limit_angle  READ pan_cw_limit_angle    WRITE setpan_cw_limit_angle    NOTIFY pan_cw_limit_angleChanged)
+//    Q_PROPERTY(int pan_ccw_limit_angle READ pan_ccw_limit_angle   WRITE setpan_down_limit_angle  NOTIFY pan_ccw_limit_angleChanged)
+        // use in QML, others dialog
+//    Q_PROPERTY(int  pan_rc_lpf     READ pan_rc_lpf    WRITE setpan_rc_lpf    NOTIFY pan_rc_lpfChanged)
+//    Q_PROPERTY(int  pan_rc_trim    READ pan_rc_trim   WRITE setpan_rc_trim   NOTIFY pan_rc_trimChanged)
+//    Q_PROPERTY(int  pan_rc_mode    READ pan_rc_mode   WRITE setpan_rc_mode   NOTIFY pan_rc_modeChanged)
+//    Q_PROPERTY(int  pan_sbus_chan  READ pan_sbus_chan WRITE setpan_sbus_chan NOTIFY pan_sbus_chanChanged)
 
 
 
@@ -121,6 +140,7 @@ public:
 // function can be called form QML
     Q_INVOKABLE void write_params_to_board();
     Q_INVOKABLE void get_mavlink_info();
+    Q_INVOKABLE void request_all_params();      // function to read parameters from controller board
 
 signals:
     void mavlink_data_ready(QByteArray data);
@@ -157,13 +177,13 @@ public slots:
 
     void connection_timeout(); // trigger when lost connection
     void link_connection_state_changed(bool connection_state);
-    void update_all_parameters(uint8_t index, float value);
+
 
 private:
     void mavlink_init();
     void RestartLinkConnectionTimer(int msec);
-    void request_all_params();      // function to read parameters from controller board
     void write_a_param_to_board(const char *param_id, float _value);
+    void update_all_parameters(uint8_t index, float value);
 
 
 private:

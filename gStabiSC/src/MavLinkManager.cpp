@@ -1,7 +1,6 @@
 #include "MavLinkManager.hpp"
 #include <QDebug>
 #include "configuration.h"
-#include "gSBMotor.hpp"
 
 MavLinkManager::MavLinkManager(QObject *parent) :
     QObject(parent)
@@ -336,26 +335,50 @@ void MavLinkManager::get_attitude_data()
 
 void MavLinkManager::write_params_to_board()
 {
+    // Motor config params
     if(tilt_power() != current_params_on_board.pitchPower){  // if power level changed, it will be store in params
-        write_a_param_to_board("PITCH_POWER", tilt_power());
-        current_params_on_board.pitchPower = tilt_power();   // update current value to params
+        current_params_on_board.pitchPower = tilt_power();   // update current value to params struct
+        write_a_param_to_board("PITCH_POWER", current_params_on_board.pitchPower);
     }
-    if(motor_tilt_dir() != current_params_on_board.dirMotorPitch){  // if power level changed, it will be store in params
-        write_a_param_to_board("DIR_MOTOR_PITCH", motor_tilt_dir());
-        current_params_on_board.dirMotorPitch = motor_tilt_dir();   // update current value to params
+    if(motor_tilt_dir() != current_params_on_board.dirMotorPitch){
+        current_params_on_board.dirMotorPitch = motor_tilt_dir();   // update current value to params struct
+        write_a_param_to_board("DIR_MOTOR_PITCH", current_params_on_board.dirMotorPitch);
     }
-    if(tilt_up_limit_angle() != current_params_on_board.travelMinPitch){  // if power level changed, it will be store in params
-        write_a_param_to_board("TRAVEL_MIN_PIT",  tilt_up_limit_angle());
-        current_params_on_board.travelMinPitch = tilt_up_limit_angle();   // update current value to params
+    if(motor_tilt_num_poles() != current_params_on_board.nPolesPitch){
+        current_params_on_board.nPolesPitch = motor_tilt_num_poles();   // update current value to params struct
+        write_a_param_to_board("NPOLES_PITCH", current_params_on_board.nPolesPitch);
     }
-    if(tilt_down_limit_angle() != current_params_on_board.travelMaxPitch){  // if power level changed, it will be store in params
-        write_a_param_to_board("TRAVEL_MAX_PIT", tilt_down_limit_angle());
-        current_params_on_board.travelMaxPitch = tilt_down_limit_angle();   // update current value to params
+    if(tilt_up_limit_angle() != current_params_on_board.travelMinPitch){
+        current_params_on_board.travelMinPitch = tilt_up_limit_angle();   // update current value to params struct
+        write_a_param_to_board("TRAVEL_MIN_PIT",  current_params_on_board.travelMinPitch);
     }
-    if(motor_tilt_num_poles() != current_params_on_board.nPolesPitch){  // if power level changed, it will be store in params
-        write_a_param_to_board("NPOLES_PITCH", motor_tilt_num_poles());
-        current_params_on_board.nPolesPitch = motor_tilt_num_poles();   // update current value to params
+    if(tilt_down_limit_angle() != current_params_on_board.travelMaxPitch){
+        current_params_on_board.travelMaxPitch = tilt_down_limit_angle();   // update current value to params struct
+        write_a_param_to_board("TRAVEL_MAX_PIT", current_params_on_board.travelMaxPitch);
     }
+    // Controller Setting Params
+    if(tilt_kp() != current_params_on_board.pitchKp){
+        current_params_on_board.pitchKp = tilt_kp();   // update current value to params struct
+        write_a_param_to_board("PITCH_P", current_params_on_board.pitchKp);
+    }
+    if(tilt_ki() != current_params_on_board.pitchKi){
+        current_params_on_board.pitchKi = tilt_ki();   // update current value to params struct
+        write_a_param_to_board("PITCH_I", current_params_on_board.pitchKi);
+    }
+    if(tilt_kd() != current_params_on_board.pitchKd){
+        current_params_on_board.pitchKd = tilt_kd();   // update current value to params struct
+        write_a_param_to_board("PITCH_D", current_params_on_board.pitchKd);
+    }
+    if(tilt_follow() != current_params_on_board.pitchFollow){
+        current_params_on_board.pitchFollow = tilt_follow();   // update current value to params struct
+        write_a_param_to_board("PITCH_FOLLOW", current_params_on_board.pitchFollow);
+    }
+    if(tilt_filter() != current_params_on_board.tiltFilter){
+        current_params_on_board.tiltFilter = tilt_filter();   // update current value to params struct
+        write_a_param_to_board("PITCH_FILTER", current_params_on_board.tiltFilter);
+    }
+    // other params
+
 }
 
 void MavLinkManager::get_mavlink_info()
@@ -378,7 +401,7 @@ void MavLinkManager::write_a_param_to_board(const char *param_id, float _value)
                                param_id, _value, MAVLINK_TYPE_INT16_T);
     len = mavlink_msg_to_send_buffer(buf, &msg);
     emit messge_write_to_comport_ready((const char*)buf, len);      // send signal
-    setmavlink_message_log("Writing a param to board...Done");
+//    setmavlink_message_log("Writing a param to board...Done");
 
 }
 
@@ -408,7 +431,7 @@ void MavLinkManager::request_all_params()
     mavlink_msg_param_request_list_pack(SYSTEM_ID, MAV_COMP_ID_SERVO1, &msg, TARGET_SYSTEM_ID, MAV_COMP_ID_IMU);
     len = mavlink_msg_to_send_buffer(buf, &msg);
     emit messge_write_to_comport_ready((const char*)buf, len);
-    setmavlink_message_log("Requesting all parameters on board...");
+    setmavlink_message_log("Requesting parameters on board...");
 }
 
 

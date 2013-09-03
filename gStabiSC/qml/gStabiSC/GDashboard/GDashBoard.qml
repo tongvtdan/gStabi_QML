@@ -88,13 +88,24 @@ Item {
                 width: 100; height: 30
                 text: "Write"
                 onClicked: {
-                    _mavlink_manager.write_params_to_board();
+                    if(_serialLink.isConnected) {
+                        _mavlink_manager.write_params_to_board();
+                    }else{
+                        dialog_log("Controller board is not connected. Please connect PC to the board then try again")
+                    }
+
                 }
             }
             GButton{
                 id: readConfigParamsFromMCU
                 width: 100; height: 30
                 text: "Read"
+                onClicked: {
+                    if(_serialLink.isConnected){
+                        _mavlink_manager.request_all_params();
+                    }
+                    else {dialog_log("Controller board is not connected. Please connect PC to the board then try again")}
+                }
             }
         }
     }
@@ -103,6 +114,8 @@ Item {
         anchors.horizontalCenter: tiltGauge.horizontalCenter
         anchors.top: tiltGauge.bottom ; anchors.topMargin: -10
         opacity: 0
+        min_limit_label: "Tilt up limit"
+        max_limit_label: "Tilt down limit"
         onMax_valueChanged: {
             _mavlink_manager.tilt_down_limit_angle = max_value;
             tiltGauge.gauge_down_limit_set_angle = max_value
@@ -121,6 +134,8 @@ Item {
         anchors.horizontalCenter: panGauge.horizontalCenter
         anchors.top: panGauge.bottom ; anchors.topMargin: -10
         opacity: 0
+        min_limit_label: "Pan left limit"
+        max_limit_label: "Pan right limit"
         onMax_valueChanged: panGauge.gauge_down_limit_set_angle = max_value
         onMin_valueChanged: panGauge.gauge_up_limit_set_angle = min_value
     }
@@ -129,6 +144,8 @@ Item {
         anchors.horizontalCenter: rollGauge.horizontalCenter
         anchors.top: rollGauge.bottom ; anchors.topMargin: -10
         opacity: 0
+        min_limit_label: "Roll up limit"
+        max_limit_label: "Roll down limit"
         onMax_valueChanged: rollGauge.gauge_down_limit_set_angle = max_value
         onMin_valueChanged: rollGauge.gauge_up_limit_set_angle = min_value
     }
@@ -180,7 +197,7 @@ Item {
        @output: msg_log in HTML format
       */
     function tilt_log(_message){
-        msg_log = "<font color=\"red\">" + _message+ "</font><br>";
+        msg_log = "<font color=\"yellow\">" + _message+ "</font><br>";
     }
     /* function roll_log(_message)
        @brief: put message to log
@@ -197,5 +214,13 @@ Item {
       */
     function pan_log(_message){
         msg_log = "<font color=\"deepskyblue\">" + _message+ "</font><br>";
+    }
+    /* function dialog_log(_message)
+       @brief: put message to log
+       @input: _message
+       @output: msg_log in HTML format
+      */
+    function dialog_log(_message){
+        msg_log = "<font color=\"red\">" + _message+ "</font><br>";
     }
 }

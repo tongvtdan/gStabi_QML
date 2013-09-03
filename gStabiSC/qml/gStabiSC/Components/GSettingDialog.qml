@@ -41,6 +41,7 @@ Item{
         id: dialogBorderImg
         anchors.fill: parent
         source: border_normal
+        opacity: 0.7
         border.left: 5; border.top: 5
         border.right: 5; border.bottom: 5
     }

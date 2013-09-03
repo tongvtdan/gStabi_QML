@@ -14,6 +14,7 @@ Item{
     property string title: "Dialog"
     property int  focus_state_posY      : 500
     property int  unfocus_state_posY    : 600
+    property double smaller_scale : 0.5
 //    property string  border_normal: "../images/gStabiUI_3.2_normal_serial_setting_dialog.png"
     property string  border_normal :  "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_normal_serial_setting_dialog.png"
     implicitHeight: 300
@@ -61,7 +62,7 @@ Item{
         }
         ,State {
             name: "smaller"
-            PropertyChanges {target: gDialog; scale: 0.5 ; opacity: 0.5; y: unfocus_state_posY}
+            PropertyChanges {target: gDialog; scale: smaller_scale ; opacity: 0.5; y: unfocus_state_posY}
         }
 
 
