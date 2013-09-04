@@ -92,11 +92,8 @@ Item {
                 width: 100; height: 30
                 text: "Write"
                 onClicked: {
-                    Storage.setSetting(database_table_name,"Tilt_power", tiltConfigDialog.power_level);
-
                     if(_serialLink.isConnected) {
                         _mavlink_manager.write_params_to_board();
-                        Storage.setSetting(database_table_name,"Tilt_power", tiltConfigDialog.power_level);
                     }
                     else{  dialog_log("Controller board is not connected. Please connect PC to the board then try again") }
                 }

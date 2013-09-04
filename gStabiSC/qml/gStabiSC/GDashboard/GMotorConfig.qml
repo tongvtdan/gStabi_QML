@@ -155,17 +155,17 @@ Item{
             onText_valueChanged: min_value = text_value
         }
     }
-    GButton{
-        id: reverseButton
-        text: "Reverse"
-        state: motor_dir === 1? "pressed" : "released"
-        anchors.top: polesRow.top ; anchors.topMargin: 0
+    GCheckBox{
+        id: reversedCheckBox
+        checkbox_text: "Reverse"
+        anchors.top: polesRow.top ; anchors.topMargin: -5
         anchors.left: polesRow.right;  anchors.leftMargin: 20
-        onClicked: {
-            if(motor_dir === 0) {motor_dir = 1; reverseButton.state = "pressed"}
-            else {motor_dir = 0; reverseButton.state = "released";}
+        state:  "unchecked"
+        onChecked_stateChanged: {
+            motor_dir = checked_state;
         }
     }
+
 
     states:[
         State{
@@ -201,6 +201,6 @@ Item{
     }
     onPoles_numChanged: {
         polesNumInput.text_value = poles_num;
-
     }
+    onMotor_dirChanged: reversedCheckBox.checked_state = motor_dir;
 }

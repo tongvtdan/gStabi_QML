@@ -10,10 +10,7 @@ GDialog{
 
     property string  msg_log: ""
     property string  serial_port_info_details: ""
-
-
-    implicitHeight: 200
-    implicitWidth: serialportNameList.width
+    height: 200;   width: 400
     border_normal: ""
     title: ""
     smaller_scale: 0
@@ -22,8 +19,10 @@ GDialog{
         id: openCloseComportButton
         width: 60; height: 30;
         text: "Open"
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom;  anchors.bottomMargin: 10
+        anchors.left: serialportNameList.right
+        anchors.leftMargin: 10
+        anchors.top: serialportNameList.top
+        anchors.topMargin: 0
         onClicked: {
             _serialLink.open_close_comport();
             if(_serialLink.isConnected) {
@@ -36,9 +35,7 @@ GDialog{
     } // end of Open Close Port Button
     GListView{
         id: serialportNameList
-        width: 100; height: 150;  anchors.top: parent.top ; anchors.topMargin: 0
-        anchors.horizontalCenter: parent.horizontalCenter
-        x: 10
+        width: 100; height: 150; anchors.left: parent.left; anchors.leftMargin: 10;  anchors.top: parent.top ; anchors.topMargin: 0
         list_header_title: "Serial Ports"
         onClicked: {
             selected_port_index = item_index;
@@ -65,10 +62,10 @@ GDialog{
         target: _serialLink
         onIsPortListUpdatedChanged: {
             getPortNameList() // update portlist when there is a change
-            for(var i=0; i < portListView.count; i++){
+            for(var i=0; i < serialportNameList.count; i++){
                 if(selected_port_index === i){
-                    portListView.currentIndex = i
-                    selected_portname = comportList.get(i).port // get port name from port name list model
+                    serialportNameList.currentIndex = i
+                    selected_portname = serialportNameList.list_model.get(i).port // get port name from port name list model
                 }
             }
         }
@@ -79,10 +76,8 @@ GDialog{
     Flickable{
         id: portDetails
         width: 250; height: 100
-        anchors.top: parent.top
-        anchors.topMargin: 20
-        anchors.left: parent.right
-        anchors.leftMargin: 0
+        anchors.top: serialportNameList.top; anchors.topMargin: 40
+        anchors.left: openCloseComportButton.left; anchors.leftMargin: 0
         pressDelay: 300
         clip: true
         flickableDirection: Flickable.HorizontalAndVerticalFlick
@@ -111,13 +106,12 @@ GDialog{
         for(var i=0 ; i < 10 ; i++){
             portname = _serialLink.getPortName(i);
             if(portname !== "NA"){
-                serialportNameList.list_model.append({"port": portname});
+                serialportNameList.list_model.append({"value": portname});
             }
         }
     }
     function serial_dialog_log(_message){
         msg_log = "<font color=\"cyan\">" + _message+ "</font><br>";
     }
-
 }
 

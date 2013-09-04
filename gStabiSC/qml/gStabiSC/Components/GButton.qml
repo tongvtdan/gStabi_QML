@@ -3,6 +3,7 @@ import QtQuick 2.0
 Rectangle{
     id: button
     property string  text   : "Button"
+    property bool hover_enabled: true
     signal clicked
     width: buttonLabel.width+20; height: buttonLabel.height + 5;
     border.width: 1; border.color: "cyan"
@@ -22,10 +23,12 @@ Rectangle{
     }
     MouseArea{
         id: mouseArea
-        anchors.fill: parent; hoverEnabled: true
+        anchors.fill: parent; hoverEnabled: hover_enabled
         onClicked: button.clicked();
         onPressed: button.state = "pressed"
         onReleased:  button.state = "released"
+        onEntered: button.state = "hover"
+        onExited: button.state = "exit"
     }
     Behavior on color {ColorAnimation {duration: 200 }}
     states: [
@@ -39,5 +42,17 @@ Rectangle{
             PropertyChanges {target: button; border.color: "cyan"; border.width: 1 }
             PropertyChanges { target: buttonLabel; color: "#00e3f9"   }
         }
+        ,State{
+            name: "hover"
+            PropertyChanges {target: button; border.color: "white"; border.width: 1}
+            PropertyChanges { target: buttonLabel; color: "chartreuse"   }
+        }
+        ,State{
+            name: "exit"
+            PropertyChanges {target: button; border.color: "cyan"; border.width: 1}
+            PropertyChanges { target: buttonLabel; color: "#00e3f9"   }
+
+        }
+
     ]
 } // end of button

@@ -7,21 +7,22 @@ Item{
     property string list_header_title: "List Header"
     property int    item_index: 0
     property string item_text: ""
+    property string hightlght_color: "cyan"
 
     property alias list_model: listView.model
-
+    implicitWidth: 100; implicitHeight: 100
     Component {
         id: listDelegate
         Rectangle {
             id: wrapper
-            width: 70 ; height: 20; color: "#00000000"
+            width: listItemLabel.contentWidth+20 ; height: listItemLabel.contentHeight + 10; color: "#00000000"
             border.width: 1 ; border.color: "cyan"
             Text {
                 id: listItemLabel
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
                 color : "#00e3f9"
-                text: port
+                text: value
                 Behavior on color{ ColorAnimation { } }
             }
             states: State{
@@ -57,8 +58,8 @@ Item{
     Component {
         id: highlightBar
         Rectangle {
-            width: 70; height: 20
-            color: "cyan"
+            width: listView.currentItem.width; height: listView.currentItem.height
+            color: hightlght_color
             opacity: 0.5
             y: listView.currentItem.y;
             x: listView.currentItem.x;
@@ -69,7 +70,7 @@ Item{
     Component{
         id: headerBar
         Rectangle {
-            width: 100; height: 20;
+            width: root.width; height: 20;
             gradient: Gradient {
                 GradientStop {
                     position: 0

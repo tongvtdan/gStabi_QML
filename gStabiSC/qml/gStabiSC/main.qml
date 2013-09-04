@@ -50,26 +50,31 @@ Item {
             }
             else {
                 textConsole.state = "focus"
-//                comportSettingPanel.state = "focus";
             }
         }
     } // end of dashboard
     GSerialSettings{
         id: comportSettingPanel
         state: "focus"
-        anchors.left: parent.left; anchors.leftMargin: 50; anchors.bottom: parent.bottom; anchors.bottomMargin: 70;
+        x: gstabiBackgroundImage.x + 50 ;
+        y: (gstabiBackgroundImage.y + gstabiBackgroundImage.height)/2 - height/2;
+        focus_state_posY: gstabiBackgroundImage.height - comportSettingPanel.height - 70
+        unfocus_state_posY: gstabiBackgroundImage.height - comportSettingPanel.height + 100
+        dragMinX: 50
+        dragMaxX: gstabiBackgroundImage.width - comportSettingPanel.width
+        dragMaxY: gstabiBackgroundImage.height - comportSettingPanel.height
         onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
     }
     GConsole{
         id: textConsole
-        x: gstabiBackgroundImage.x + gstabiBackgroundImage.width - textConsole.width - 10
+        x: 400
         opacity: 1
         state: "focus"
+        height: 200; width:  300
         focus_state_posY: gstabiBackgroundImage.height - textConsole.height - 70
         unfocus_state_posY: gstabiBackgroundImage.height - textConsole.height + 100
-        height: 200; width:  300
         dragMaxX: gstabiBackgroundImage.width - textConsole.width
-        dragMaxY: gstabiBackgroundImage.height - textConsole.height
+        dragMaxY: gstabiBackgroundImage.height - textConsole.height+100
         msg_history: main_log_msg
     }
     GPIDDialog{
@@ -84,19 +89,15 @@ Item {
     }
     GProfile{
         id: saveProfileDialog
-        visible: false;
+        state: "smaller";
         x: (gstabiBackgroundImage.x + gstabiBackgroundImage.width)/2 - width/2;
-        y: (gstabiBackgroundImage.y + gstabiBackgroundImage.height)/2 - height/2;
+        y: (gstabiBackgroundImage.y + gstabiBackgroundImage.height)/2 - height;
+        focus_state_posY: gstabiBackgroundImage.height - saveProfileDialog.height - 100
+        unfocus_state_posY: gstabiBackgroundImage.height - saveProfileDialog.height + 100
+        dragMaxX: gstabiBackgroundImage.width - saveProfileDialog.width
+        dragMaxY: gstabiBackgroundImage.height - saveProfileDialog.height
         save_profile: false
         onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
-        onSave_profileChanged: {
-            if(save_profile) {
-                table_name = text_value;
-                gDashboard.database_table_name = table_name;
-                Storage.initialize(table_name);
-                console.log(Storage.getTableName());
-            }
-        }
     }
 
     Item {
@@ -132,17 +133,23 @@ Item {
         }
         GImageButton{
             id: systemInfo
-            text: "SysInfo"
+            text: "Info"
             anchors.left: pidSettingsButton.right; anchors.leftMargin: 20
             onClicked: _mavlink_manager.get_mavlink_info();
         }
         GImageButton{
             id: saveSettingToPC
-            text: "Save"
+            text: "Profile"
             anchors.left: systemInfo.right; anchors.leftMargin: 20
             onClicked: {
                 saveProfileDialog.save_profile = false;
-                saveProfileDialog.visible = true;
+                if(saveProfileDialog.state  === "focus"){
+                    saveProfileDialog.state  = "smaller"
+                    textConsole.state = "focus"
+                }else {
+                    saveProfileDialog.state  = "focus";
+                    textConsole.state = "smaller"
+                }
             }
         }
     }   // end of buttons Panel

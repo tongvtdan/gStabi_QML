@@ -7,8 +7,10 @@ Item{
     property int anchor_bottomMargin: 10
     property int anchor_leftMargin  : 10
     property int anchor_rightMargin : 10
-    property int  dragMaxX          : 500
-    property int  dragMaxY           : 500
+    property int    dragMinX        : 0
+    property int    dragMinY        : 0
+    property int    dragMaxX        : 500
+    property int    dragMaxY        : 500
     property string title_normal_color: "cyan"
     property string title_hover_color: "yellow"
     property string title: "Dialog"
@@ -25,7 +27,7 @@ Item{
         anchors.fill: parent
         anchors.top: parent.top;  anchors.horizontalCenter: parent.horizontalCenter
         drag.target: parent
-        drag.minimumX: 0; drag.minimumY: 0
+        drag.minimumX: dragMinX; drag.minimumY: dragMinY
         drag.maximumX: dragMaxX ;  drag.maximumY: dragMaxY
         hoverEnabled: true
         onEntered: dialogTitle.color = title_hover_color
