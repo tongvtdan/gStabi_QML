@@ -8,8 +8,9 @@ Item{
     property int    item_index: 0
     property string item_text: ""
     property string hightlght_color: "cyan"
-
+    property alias list_count: listView.count;
     property alias list_model: listView.model
+    property alias  current_index: listView.currentIndex
     implicitWidth: 100; implicitHeight: 100
     Component {
         id: listDelegate
@@ -104,5 +105,5 @@ Item{
         spacing: 2
     } // end of ListView
     ListModel {  id: listModel }
-
+//    onItem_indexChanged: {console.log("Current Index: " + item_index); listView.currentIndex = item_index}
 }

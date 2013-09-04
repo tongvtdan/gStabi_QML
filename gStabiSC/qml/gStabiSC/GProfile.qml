@@ -147,7 +147,6 @@ GDialog{
     Component.onCompleted: {
         Storage.getDatabaseSync();
         update_table_name_list();
-
     }
     function update_table_name_list(){
         var m_list = Storage.getTableName();
@@ -156,6 +155,7 @@ GDialog{
         for(var i=0 ; i < m_list.rows.length ; i++){
             m_table_name = m_list.rows.item(i).name;
             profileNameList.list_model.append({"value": m_table_name});
+            if(profile_name === m_table_name) profileNameList.current_index = i;
 
         }
     }

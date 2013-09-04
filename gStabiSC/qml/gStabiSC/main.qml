@@ -13,7 +13,6 @@ Item {
     id: mainWindow
     property int header_height: 30
     property string main_log_msg: ""
-    property string table_name: "gStabi"
 
 //    color: "#242424"
     BorderImage {
@@ -88,14 +87,14 @@ Item {
         onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
     }
     GProfile{
-        id: saveProfileDialog
+        id: profileDialog
         state: "smaller";
         x: (gstabiBackgroundImage.x + gstabiBackgroundImage.width)/2 - width/2;
         y: (gstabiBackgroundImage.y + gstabiBackgroundImage.height)/2 - height;
-        focus_state_posY: gstabiBackgroundImage.height - saveProfileDialog.height - 100
-        unfocus_state_posY: gstabiBackgroundImage.height - saveProfileDialog.height + 100
-        dragMaxX: gstabiBackgroundImage.width - saveProfileDialog.width
-        dragMaxY: gstabiBackgroundImage.height - saveProfileDialog.height
+        focus_state_posY: gstabiBackgroundImage.height - profileDialog.height - 100
+        unfocus_state_posY: gstabiBackgroundImage.height - profileDialog.height + 100
+        dragMaxX: gstabiBackgroundImage.width - profileDialog.width
+        dragMaxY: gstabiBackgroundImage.height - profileDialog.height
         save_profile: false
         onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
     }
@@ -142,12 +141,12 @@ Item {
             text: "Profile"
             anchors.left: systemInfo.right; anchors.leftMargin: 20
             onClicked: {
-                saveProfileDialog.save_profile = false;
-                if(saveProfileDialog.state  === "focus"){
-                    saveProfileDialog.state  = "smaller"
+                profileDialog.save_profile = false;
+                if(profileDialog.state  === "focus"){
+                    profileDialog.state  = "smaller"
                     textConsole.state = "focus"
                 }else {
-                    saveProfileDialog.state  = "focus";
+                    profileDialog.state  = "focus";
                     textConsole.state = "smaller"
                 }
             }
@@ -184,5 +183,39 @@ Item {
         font.pixelSize: 12
     }
     Component.onCompleted: {
+        Storage.getSettingDatabaseSync();
+        Storage.initializeSettings();
+        if(Storage.getSetting("Port name") !== "NA"){   // if already exist, get it
+            comportSettingPanel.selected_portname = Storage.getSetting("Port name")
+        }
+        if(Storage.getSetting("Port index") !== "NA"){   // if already exist, get it
+            comportSettingPanel.selected_port_index = Storage.getSetting("Port index")
+        }
+        if(Storage.getSetting("Profile") !== "NA"){   // if already exist, get it
+            profileDialog.profile_name = Storage.getSetting("Profile")
+        }
+
+    }
+    Component.onDestruction: {
+        Storage.getSettingDatabaseSync();
+        Storage.initializeSettings();
+        if(Storage.getSetting("Port name") !== "NA"){ // already in table, do update
+            Storage.updateSetting("Port name", comportSettingPanel.selected_portname);
+        } else {
+            Storage.saveSetting("Port name", comportSettingPanel.selected_portname)
+        }
+
+        if(Storage.getSetting("Port index") !== "NA"){ // already in table, do update
+            Storage.updateSetting("Port index", comportSettingPanel.selected_port_index);
+        } else {
+            Storage.saveSetting("Port index", comportSettingPanel.selected_port_index)
+        }
+
+        if(Storage.getSetting("Profile") !== "NA"){ // already in table, do update
+            Storage.updateSetting("Profile", profileDialog.profile_name);
+        } else {        // else do create
+            Storage.saveSetting("Profile", profileDialog.profile_name)
+        }
+
     }
 }

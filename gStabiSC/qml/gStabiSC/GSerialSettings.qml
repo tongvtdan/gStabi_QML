@@ -49,6 +49,7 @@ GDialog{
             serial_port_info_details = _serialLink.get_selected_port_details(item_index);
             serialportInfoDetailsText.opacity = 0
         }
+//        onItem_indexChanged:
     }
 
     Timer{
@@ -62,10 +63,12 @@ GDialog{
         target: _serialLink
         onIsPortListUpdatedChanged: {
             getPortNameList() // update portlist when there is a change
-            for(var i=0; i < serialportNameList.count; i++){
+            for(var i=0; i < serialportNameList.list_count; i++){
+                console.log(i)
                 if(selected_port_index === i){
-                    serialportNameList.currentIndex = i
-                    selected_portname = serialportNameList.list_model.get(i).port // get port name from port name list model
+                    serialportNameList.current_index = i;
+                    selected_portname = serialportNameList.list_model.get(i).value // get port name from port name list model
+                    console.log("Selected Port: "+ selected_portname+ " Index: "+ i)
                 }
             }
         }
@@ -107,6 +110,7 @@ GDialog{
             portname = _serialLink.getPortName(i);
             if(portname !== "NA"){
                 serialportNameList.list_model.append({"value": portname});
+                if(selected_port_index === i) serialportNameList.current_index = i; // hightlight current port in the list
             }
         }
     }
