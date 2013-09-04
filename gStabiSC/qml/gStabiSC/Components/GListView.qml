@@ -5,8 +5,8 @@ Item{
     signal entered;
     signal exited;
     property string list_header_title: "List Header"
-    property string index: 0
-    property alias  list_item_text: listItemLabel.text;
+    property int    item_index: 0
+    property string item_text: ""
 
     property alias list_model: listView.model
 
@@ -32,11 +32,17 @@ Item{
             }
             MouseArea{
                 anchors.fill: parent; hoverEnabled: true
-                onClicked: root.clicked();
+                onClicked: {
+                    wrapper.ListView.view.currentIndex = index
+                    item_index = index;
+                    item_text = listItemLabel.text
+                    root.clicked();
+                }
 
                 onEntered: {
                     wrapper.border.color   = "#009dff"
                     listItemLabel.color = "red"
+                    item_index = index;
                     root.entered();
                 }
                 onExited: {
@@ -87,9 +93,7 @@ Item{
 
     ListView{
         id: listView
-        width: 100; height: 150;  anchors.top: parent.top ; anchors.topMargin: 0
-        anchors.horizontalCenter: parent.horizontalCenter
-        x: 10
+        implicitWidth: 100; implicitHeight: 150;
         model: listModel
         delegate: listDelegate
         highlightFollowsCurrentItem: false

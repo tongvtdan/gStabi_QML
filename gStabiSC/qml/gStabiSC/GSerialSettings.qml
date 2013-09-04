@@ -13,7 +13,7 @@ GDialog{
 
 
     implicitHeight: 200
-    implicitWidth: portListView.width
+    implicitWidth: serialportNameList.width
     border_normal: ""
     title: ""
     smaller_scale: 0
@@ -36,90 +36,24 @@ GDialog{
     } // end of Open Close Port Button
     GListView{
         id: serialportNameList
-        list_header_title: "Serial Ports"
-        onClicked: {
-
-        }
-    }
-
-  /*
-    Component {
-        id: portListDelegate
-        Rectangle {
-            id: wrapper
-            width: 70 ; height: 20; color: "#00000000"
-            border.width: 1 ; border.color: "cyan"
-            Text {
-                id: portNameText
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                color : "#00e3f9"
-                text: port
-                Behavior on color{ ColorAnimation { } }
-            }
-            states: State{
-                name: "Current" ; when: wrapper.ListView.isCurrentItem
-                PropertyChanges {target: wrapper; x: 20}
-            }
-            transitions: Transition { NumberAnimation { property: "x"; duration: 200; }
-            }
-            MouseArea{
-                anchors.fill: parent; hoverEnabled: true
-                onClicked: {
-                    wrapper.ListView.view.currentIndex = index
-                    selected_portname = portNameText.text;
-                    selected_port_index = index
-                }
-
-                onEntered: {
-                    wrapper.border.color   = "#009dff"
-                    portNameText.color = "red"
-                    serial_port_info_details = _serialLink.get_selected_port_details(index);
-                    serialportInfoDetailsText.opacity = 1
-                }
-                onExited: {
-                    wrapper.border.color   = "cyan"
-                    portNameText.color = "#00e3f9"
-                    serial_port_info_details = _serialLink.get_selected_port_details(index);
-                    serialportInfoDetailsText.opacity = 0
-                }
-            }
-        }
-
-    } // end of Component
-    Component {
-        id: highlightBar
-        Rectangle {
-            width: 70; height: 20
-            color: "cyan"
-            opacity: 0.5
-            y: portListView.currentItem.y;
-            x: portListView.currentItem.x;
-            Behavior on y { SpringAnimation { spring: 2; damping: 0.1 } }
-            Behavior on x { SpringAnimation { spring: 2; damping: 0.1 } }
-        }
-    }
-    Component{
-        id: headerBar
-        GSerialPortListHeader{
-        }
-    }
-
-    ListView{
-        id: portListView
         width: 100; height: 150;  anchors.top: parent.top ; anchors.topMargin: 0
         anchors.horizontalCenter: parent.horizontalCenter
         x: 10
-        model: comportList
-        delegate: portListDelegate
-        highlightFollowsCurrentItem: false
-        highlight: highlightBar
-        header: headerBar
-        focus: true
-        spacing: 2
-    } // end of ListView
-    ListModel {  id: comportList }
-*/
+        list_header_title: "Serial Ports"
+        onClicked: {
+            selected_port_index = item_index;
+            selected_portname   = item_text;
+        }
+        onEntered: {
+            serial_port_info_details = _serialLink.get_selected_port_details(item_index);
+            serialportInfoDetailsText.opacity = 1
+        }
+        onExited: {
+            serial_port_info_details = _serialLink.get_selected_port_details(item_index);
+            serialportInfoDetailsText.opacity = 0
+        }
+    }
+
     Timer{
         id: getPortListTimer
         interval: 100;  repeat: false   // run once at start up
@@ -173,11 +107,11 @@ GDialog{
 
     function getPortNameList()
     {
-        comportList.clear()
+        serialportNameList.list_model.clear()
         for(var i=0 ; i < 10 ; i++){
             portname = _serialLink.getPortName(i);
             if(portname !== "NA"){
-                comportList.append({"port": portname});
+                serialportNameList.list_model.append({"port": portname});
             }
         }
     }
