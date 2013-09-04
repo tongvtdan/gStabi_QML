@@ -48,9 +48,9 @@
         <file>qml/gStabiSC/GPIDDialog.qml</file>
         <file>qml/gStabiSC/GSerialSettings.qml</file>
         <file>qml/gStabiSC/Components/GTextInput.qml</file>
-        <file>qml/gStabiSC/Components/GSerialPortListHeader.qml</file>
-        <file>qml/gStabiSC/Components/GProfile.qml</file>
         <file>javascript/storage.js</file>
         <file>qml/gStabiSC/Components/GListView.qml</file>
+        <file>qml/gStabiSC/GProfile.qml</file>
+        <file>qml/gStabiSC/Components/GCheckBox.qml</file>
     </qresource>
 </RCC>

@@ -70,4 +70,5 @@ OTHER_FILES += \
     qml/gStabiSC/Components/GSerialPortListHeader.qml \
     qml/gStabiSC/Components/GProfile.qml \
     javascript/storage.js \
-    qml/gStabiSC/Components/GListView.qml
+    qml/gStabiSC/Components/GListView.qml \
+    qml/gStabiSC/Components/GCheckBox.qml
