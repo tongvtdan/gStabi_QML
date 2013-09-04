@@ -74,7 +74,7 @@ Item{
         GTextInput{
             id: powerLevelInput
             bottom_value: 0; top_value: 100
-            text_value: power_level
+//            text_value: power_level
             onText_valueChanged: power_level = text_value
         }
 
@@ -166,15 +166,6 @@ Item{
             else {motor_dir = 0; reverseButton.state = "released";}
         }
     }
-//    Text{
-//        id: lpfValue
-//        x: 136
-//        y: 173
-//        anchors.top: reverseButton.bottom ; anchors.topMargin: 17
-//        anchors.left: polesRow.left;  anchors.leftMargin: 126
-//        text: rc_lpf
-//        color: "red"
-//    }
 
     states:[
         State{
@@ -204,5 +195,12 @@ Item{
 
         }
     ]
+    onPower_levelChanged: {
+        powerLevelInput.text_value = power_level;
+        powerSlider.value = power_level;
+    }
+    onPoles_numChanged: {
+        polesNumInput.text_value = poles_num;
 
+    }
 }

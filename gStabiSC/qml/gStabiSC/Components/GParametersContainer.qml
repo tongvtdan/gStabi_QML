@@ -217,7 +217,7 @@ Item{
             font.family: "Segoe UI"
             font.bold: true
             font.pixelSize: 12
-            text: "Filter:"
+            text: "Smooth:"
             horizontalAlignment: Text.AlignRight
             verticalAlignment: Text.AlignVCenter
             anchors.verticalCenter: parent.verticalCenter

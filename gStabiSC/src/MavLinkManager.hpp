@@ -55,23 +55,41 @@ class MavLinkManager : public QObject
 
     //Yaw axis, Pan Motor
         // use in QML, PIDConfigDialog
-//    Q_PROPERTY(float pan_kp        READ pan_kp     WRITE setpan_kp     NOTIFY pan_kpChanged)
-//    Q_PROPERTY(float pan_ki        READ pan_ki     WRITE setpan_ki     NOTIFY pan_kiChanged)
-//    Q_PROPERTY(float pan_kd        READ pan_kd     WRITE setpan_kd     NOTIFY pan_kdChanged)
-//    Q_PROPERTY(float pan_follow    READ pan_follow WRITE setpan_follow NOTIFY pan_followChanged)
-//    Q_PROPERTY(float pan_filter    READ pan_filter WRITE setpan_filter NOTIFY pan_filterChanged)
-//        // use in QML, MotorConfigDialog
-//    Q_PROPERTY(float pan_power         READ pan_power             WRITE setpan_power             NOTIFY pan_powerChanged)
-//    Q_PROPERTY(int motor_pan_dir       READ motor_pan_dir         WRITE setmotor_pan_dir         NOTIFY motor_pan_dirChanged)
-//    Q_PROPERTY(int motor_pan_num_poles READ motor_pan_num_poles   WRITE setmotor_pan_num_poles   NOTIFY motor_pan_num_polesChanged)
-//    Q_PROPERTY(int pan_cw_limit_angle  READ pan_cw_limit_angle    WRITE setpan_cw_limit_angle    NOTIFY pan_cw_limit_angleChanged)
-//    Q_PROPERTY(int pan_ccw_limit_angle READ pan_ccw_limit_angle   WRITE setpan_down_limit_angle  NOTIFY pan_ccw_limit_angleChanged)
+    Q_PROPERTY(float pan_kp        READ pan_kp     WRITE setpan_kp     NOTIFY pan_kpChanged)
+    Q_PROPERTY(float pan_ki        READ pan_ki     WRITE setpan_ki     NOTIFY pan_kiChanged)
+    Q_PROPERTY(float pan_kd        READ pan_kd     WRITE setpan_kd     NOTIFY pan_kdChanged)
+    Q_PROPERTY(float pan_follow    READ pan_follow WRITE setpan_follow NOTIFY pan_followChanged)
+    Q_PROPERTY(float pan_filter    READ pan_filter WRITE setpan_filter NOTIFY pan_filterChanged)
+        // use in QML, MotorConfigDialog
+    Q_PROPERTY(float pan_power         READ pan_power             WRITE setpan_power             NOTIFY pan_powerChanged)
+    Q_PROPERTY(int motor_pan_dir       READ motor_pan_dir         WRITE setmotor_pan_dir         NOTIFY motor_pan_dirChanged)
+    Q_PROPERTY(int motor_pan_num_poles READ motor_pan_num_poles   WRITE setmotor_pan_num_poles   NOTIFY motor_pan_num_polesChanged)
+    Q_PROPERTY(int pan_cw_limit_angle  READ pan_cw_limit_angle    WRITE setpan_cw_limit_angle    NOTIFY pan_cw_limit_angleChanged)
+    Q_PROPERTY(int pan_ccw_limit_angle READ pan_ccw_limit_angle   WRITE setpan_ccw_limit_angle  NOTIFY pan_ccw_limit_angleChanged)
         // use in QML, others dialog
 //    Q_PROPERTY(int  pan_rc_lpf     READ pan_rc_lpf    WRITE setpan_rc_lpf    NOTIFY pan_rc_lpfChanged)
 //    Q_PROPERTY(int  pan_rc_trim    READ pan_rc_trim   WRITE setpan_rc_trim   NOTIFY pan_rc_trimChanged)
 //    Q_PROPERTY(int  pan_rc_mode    READ pan_rc_mode   WRITE setpan_rc_mode   NOTIFY pan_rc_modeChanged)
 //    Q_PROPERTY(int  pan_sbus_chan  READ pan_sbus_chan WRITE setpan_sbus_chan NOTIFY pan_sbus_chanChanged)
 
+    //Roll axis, Roll Motor
+        // use in QML, PIDConfigDialog
+    Q_PROPERTY(float roll_kp        READ roll_kp     WRITE setroll_kp     NOTIFY roll_kpChanged)
+    Q_PROPERTY(float roll_ki        READ roll_ki     WRITE setroll_ki     NOTIFY roll_kiChanged)
+    Q_PROPERTY(float roll_kd        READ roll_kd     WRITE setroll_kd     NOTIFY roll_kdChanged)
+    Q_PROPERTY(float roll_follow    READ roll_follow WRITE setroll_follow NOTIFY roll_followChanged)
+    Q_PROPERTY(float roll_filter    READ roll_filter WRITE setroll_filter NOTIFY roll_filterChanged)
+        // use in QML, MotorConfigDialog
+    Q_PROPERTY(float roll_power         READ roll_power             WRITE setroll_power             NOTIFY roll_powerChanged)
+    Q_PROPERTY(int motor_roll_dir       READ motor_roll_dir         WRITE setmotor_roll_dir         NOTIFY motor_roll_dirChanged)
+    Q_PROPERTY(int motor_roll_num_poles READ motor_roll_num_poles   WRITE setmotor_roll_num_poles   NOTIFY motor_roll_num_polesChanged)
+    Q_PROPERTY(int roll_up_limit_angle  READ roll_up_limit_angle    WRITE setroll_up_limit_angle    NOTIFY roll_up_limit_angleChanged)
+    Q_PROPERTY(int roll_down_limit_angle READ roll_down_limit_angle WRITE setroll_down_limit_angle  NOTIFY roll_down_limit_angleChanged)
+        // use in QML, others dialog
+//    Q_PROPERTY(int  roll_rc_lpf     READ roll_rc_lpf    WRITE setroll_rc_lpf    NOTIFY roll_rc_lpfChanged)
+//    Q_PROPERTY(int  roll_rc_trim    READ roll_rc_trim   WRITE setroll_rc_trim   NOTIFY roll_rc_trimChanged)
+//    Q_PROPERTY(int  roll_rc_mode    READ roll_rc_mode   WRITE setroll_rc_mode   NOTIFY roll_rc_modeChanged)
+//    Q_PROPERTY(int  roll_sbus_chan  READ roll_sbus_chan WRITE setroll_sbus_chan NOTIFY roll_sbus_chanChanged)
 
 
 
@@ -99,6 +117,7 @@ public:
     float yaw_angle() const;
     void setyaw_angle(float _angle);
     // Parameters on board
+    //[1] Tilt Motor
     float tilt_kp() const;
     void settilt_kp(float _kp);
 
@@ -128,6 +147,69 @@ public:
 
     int tilt_down_limit_angle() const;
     void settilt_down_limit_angle(int _max);
+//    [1]
+//    [2] Pan Motor
+    float pan_kp() const;
+    void setpan_kp(float _kp);
+
+    float pan_ki() const;
+    void setpan_ki(float _ki);
+
+    float pan_kd() const;
+    void setpan_kd(float _kd);
+
+    float pan_power() const;
+    void setpan_power(float _power);
+
+    float pan_follow() const;
+    void setpan_follow(float _follow);
+
+    float pan_filter() const;
+    void setpan_filter(float _filter);
+
+    int motor_pan_dir() const;
+    void setmotor_pan_dir(int _dir);
+
+    int motor_pan_num_poles() const;
+    void setmotor_pan_num_poles(int _poles);
+
+    int pan_cw_limit_angle() const;
+    void setpan_cw_limit_angle(int _min);
+
+    int pan_ccw_limit_angle() const;
+    void setpan_ccw_limit_angle(int _max);
+//    [2]
+    //[3] Roll Motor
+    float roll_kp() const;
+    void setroll_kp(float _kp);
+
+    float roll_ki() const;
+    void setroll_ki(float _ki);
+
+    float roll_kd() const;
+    void setroll_kd(float _kd);
+
+    float roll_power() const;
+    void setroll_power(float _power);
+
+    float roll_follow() const;
+    void setroll_follow(float _follow);
+
+    float roll_filter() const;
+    void setroll_filter(float _filter);
+
+    int motor_roll_dir() const;
+    void setmotor_roll_dir(int _dir);
+
+    int motor_roll_num_poles() const;
+    void setmotor_roll_num_poles(int _poles);
+
+    int roll_up_limit_angle() const;
+    void setroll_up_limit_angle(int _min);
+
+    int roll_down_limit_angle() const;
+    void setroll_down_limit_angle(int _max);
+//    [3]
 
 
     //[!]  Q_PROPERTY
@@ -155,16 +237,42 @@ signals:
     void yaw_angleChanged(float);
 
     // Parameters on board;
+//    [1] Tilt Motor
     void tilt_kpChanged(float);
     void tilt_kiChanged(float);
     void tilt_kdChanged(float);
     void tilt_powerChanged(float);
     void tilt_followChanged(float);
     void tilt_filterChanged(float);
-    void motor_tilt_dirChanged(int8_t);
-    void motor_tilt_num_polesChanged(uint8_t);
+    void motor_tilt_dirChanged(int);
+    void motor_tilt_num_polesChanged(int);
     void tilt_up_limit_angleChanged(int);
     void tilt_down_limit_angleChanged(int);
+//    [1]
+//    [2] pan Motor
+    void pan_kpChanged(float);
+    void pan_kiChanged(float);
+    void pan_kdChanged(float);
+    void pan_powerChanged(float);
+    void pan_followChanged(float);
+    void pan_filterChanged(float);
+    void motor_pan_dirChanged(int);
+    void motor_pan_num_polesChanged(int);
+    void pan_cw_limit_angleChanged(int);
+    void pan_ccw_limit_angleChanged(int);
+//    [2]
+//    [3] Roll Motor
+    void roll_kpChanged(float);
+    void roll_kiChanged(float);
+    void roll_kdChanged(float);
+    void roll_powerChanged(float);
+    void roll_followChanged(float);
+    void roll_filterChanged(float);
+    void motor_roll_dirChanged(int);
+    void motor_roll_num_polesChanged(int);
+    void roll_up_limit_angleChanged(int);
+    void roll_down_limit_angleChanged(int);
+//    [3]
 
 
 
@@ -210,6 +318,7 @@ private:
     gConfig_t current_params_on_board;
     mavlink_heartbeat_t m_mavlink_heartbeat;
 //    [!] Q_PROPERTY
+
     bool m_hb_pulse;
     bool m_board_connection_state;
     QString m_mavlink_message_log;
@@ -218,10 +327,17 @@ private:
     float m_roll_angle, m_pitch_angle, m_yaw_angle;
 
     // Parameters on board
+//    [1] Tilt Motor
     float m_tilt_kp, m_tilt_ki, m_tilt_kd, m_tilt_power, m_tilt_follow, m_tilt_filter;
-    int m_dirMotortilt, m_tilt_up_limit_angle, m_tilt_down_limit_angle, m_motor_tilt_num_poles;
+    int m_motor_tilt_dir, m_tilt_up_limit_angle, m_tilt_down_limit_angle, m_motor_tilt_num_poles;
+//    [2] Pan Motor
+    float m_pan_kp, m_pan_ki, m_pan_kd, m_pan_power, m_pan_follow, m_pan_filter;
+    int m_motor_pan_dir, m_pan_cw_limit_angle, m_pan_ccw_limit_angle, m_motor_pan_num_poles;
+//    [3] Roll Motor
+    float m_roll_kp, m_roll_ki, m_roll_kd, m_roll_power, m_roll_follow, m_roll_filter;
+    int m_motor_roll_dir, m_roll_up_limit_angle, m_roll_down_limit_angle, m_motor_roll_num_poles;
 
-//    [1!
+//    [!]
     QTimer *linkConnectionTimer; // this timer will monitor message on mavlink, if timer timeout, lost connection.
     bool isConnected;            // use to monitor the status of board's connection to control the timer
     QString system_msg_log;             // system log message

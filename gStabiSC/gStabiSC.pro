@@ -67,4 +67,7 @@ OTHER_FILES += \
     qml/gStabiSC/GPIDDialog.qml \
     qml/gStabiSC/GSerialSettings.qml \
     qml/gStabiSC/GDashboard/GDashBoard.qml \
-    qml/gStabiSC/Components/GSerialPortListHeader.qml
+    qml/gStabiSC/Components/GSerialPortListHeader.qml \
+    qml/gStabiSC/Components/GProfile.qml \
+    javascript/storage.js \
+    qml/gStabiSC/Components/GListView.qml

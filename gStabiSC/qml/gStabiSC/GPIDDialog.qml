@@ -53,6 +53,12 @@ GSettingDialog{
             height: 350
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.top; anchors.topMargin: 0
+            onP_valueChanged:       _mavlink_manager.pan_kp     = p_value;
+            onI_valueChanged:       _mavlink_manager.pan_ki     = i_value;
+            onD_valueChanged:       _mavlink_manager.pan_kd     = d_value;
+            onFilter_valueChanged:  _mavlink_manager.pan_filter = filter_value;
+            onFollow_valueChanged:  _mavlink_manager.pan_follow = follow_value;
+
         }
     }
     // Roll Axis Motor
@@ -74,6 +80,12 @@ GSettingDialog{
             height: 350
             anchors.right: parent.right; anchors.rightMargin: 0
             anchors.top: parent.top; anchors.topMargin: 0
+            onP_valueChanged:       _mavlink_manager.roll_kp     = p_value;
+            onI_valueChanged:       _mavlink_manager.roll_ki     = i_value;
+            onD_valueChanged:       _mavlink_manager.roll_kd     = d_value;
+            onFilter_valueChanged:  _mavlink_manager.roll_filter = filter_value;
+            onFollow_valueChanged:  _mavlink_manager.roll_follow = follow_value;
+
         }
     }
     Item{
@@ -117,6 +129,18 @@ GSettingDialog{
         onTilt_kdChanged: tiltParameters.d_value = _mavlink_manager.tilt_kd
         onTilt_followChanged: tiltParameters.follow_value = _mavlink_manager.tilt_follow
         onTilt_filterChanged: tiltParameters.filter_value = _mavlink_manager.tilt_filter
+
+        onPan_kpChanged: panParameters.p_value = _mavlink_manager.pan_kp
+        onPan_kiChanged: panParameters.i_value = _mavlink_manager.pan_ki
+        onPan_kdChanged: panParameters.d_value = _mavlink_manager.pan_kd
+        onPan_followChanged: panParameters.follow_value = _mavlink_manager.pan_follow
+        onPan_filterChanged: panParameters.filter_value = _mavlink_manager.pan_filter
+
+        onRoll_kpChanged: rollParameters.p_value = _mavlink_manager.roll_kp
+        onRoll_kiChanged: rollParameters.i_value = _mavlink_manager.roll_ki
+        onRoll_kdChanged: rollParameters.d_value = _mavlink_manager.roll_kd
+        onRoll_followChanged: rollParameters.follow_value = _mavlink_manager.roll_follow
+        onRoll_filterChanged: rollParameters.filter_value = _mavlink_manager.roll_filter
     }
     /* function dialog_log(_message)
        @brief: put message to log

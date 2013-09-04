@@ -1,6 +1,8 @@
 import QtQuick 2.0
+import QtQuick.LocalStorage 2.0
 
 import "../Components"
+import "../../../javascript/storage.js" as Storage
 /*
   All angles value unit are Degree
   */
@@ -12,6 +14,8 @@ Item {
     property int gauge_height: 330
     property string msg_log : "" // log the message to display on Console
     property bool   dashboard_config_mode : false   // if false: dashbord mode; if true: config mode
+    property string database_table_name: ""
+
 
     state: "Dashboard"
 
@@ -88,12 +92,13 @@ Item {
                 width: 100; height: 30
                 text: "Write"
                 onClicked: {
+                    Storage.setSetting(database_table_name,"Tilt_power", tiltConfigDialog.power_level);
+
                     if(_serialLink.isConnected) {
                         _mavlink_manager.write_params_to_board();
-                    }else{
-                        dialog_log("Controller board is not connected. Please connect PC to the board then try again")
+                        Storage.setSetting(database_table_name,"Tilt_power", tiltConfigDialog.power_level);
                     }
-
+                    else{  dialog_log("Controller board is not connected. Please connect PC to the board then try again") }
                 }
             }
             GButton{
@@ -101,9 +106,7 @@ Item {
                 width: 100; height: 30
                 text: "Read"
                 onClicked: {
-                    if(_serialLink.isConnected){
-                        _mavlink_manager.request_all_params();
-                    }
+                    if(_serialLink.isConnected){ _mavlink_manager.request_all_params(); }
                     else {dialog_log("Controller board is not connected. Please connect PC to the board then try again")}
                 }
             }
@@ -136,8 +139,18 @@ Item {
         opacity: 0
         min_limit_label: "Pan left limit"
         max_limit_label: "Pan right limit"
-        onMax_valueChanged: panGauge.gauge_down_limit_set_angle = max_value
-        onMin_valueChanged: panGauge.gauge_up_limit_set_angle = min_value
+        onMax_valueChanged: {
+            _mavlink_manager.pan_cw_limit_angle = max_value;
+            panGauge.gauge_down_limit_set_angle = max_value;
+        }
+        onMin_valueChanged: {
+            _mavlink_manager.pan_ccw_limit_angle = min_value;
+            panGauge.gauge_up_limit_set_angle = min_value;
+        }
+        onPower_levelChanged:   _mavlink_manager.pan_power = power_level;
+        onPoles_numChanged:     {_mavlink_manager.motor_pan_num_poles = poles_num; console.log("#Pole Changed")}
+        onMotor_dirChanged:     _mavlink_manager.motor_pan_dir = motor_dir;
+
     }
     GMotorConfig{
         id: rollConfigDialog
@@ -146,8 +159,18 @@ Item {
         opacity: 0
         min_limit_label: "Roll up limit"
         max_limit_label: "Roll down limit"
-        onMax_valueChanged: rollGauge.gauge_down_limit_set_angle = max_value
-        onMin_valueChanged: rollGauge.gauge_up_limit_set_angle = min_value
+        onMax_valueChanged: {
+            _mavlink_manager.roll_down_limit_angle = max_value;
+            rollGauge.gauge_down_limit_set_angle = max_value;
+        }
+        onMin_valueChanged: {
+            _mavlink_manager.roll_up_limit_angle = min_value;
+            rollGauge.gauge_up_limit_set_angle = min_value;
+        }
+        onPower_levelChanged:   _mavlink_manager.roll_power = power_level;
+        onPoles_numChanged:     _mavlink_manager.motor_roll_num_poles = poles_num;
+        onMotor_dirChanged:     _mavlink_manager.motor_roll_dir = motor_dir;
+
     }
 
     states: [
@@ -180,14 +203,27 @@ Item {
 
     Connections{
         target: _mavlink_manager
+
         onTilt_powerChanged:             tiltConfigDialog.power_level = _mavlink_manager.tilt_power;
         onMotor_tilt_num_polesChanged:  tiltConfigDialog.poles_num   = _mavlink_manager.motor_tilt_num_poles;
         onMotor_tilt_dirChanged:        tiltConfigDialog.motor_dir   = _mavlink_manager.motor_tilt_dir;
         onTilt_up_limit_angleChanged:   tiltConfigDialog.min_value   = _mavlink_manager.tilt_up_limit_angle;
         onTilt_down_limit_angleChanged: tiltConfigDialog.max_value   = _mavlink_manager.tilt_down_limit_angle;
         onPitch_angleChanged:           tiltGauge.gauge_sensor_value = _mavlink_manager.pitch_angle;
-        onYaw_angleChanged:     panGauge.gauge_sensor_value = _mavlink_manager.yaw_angle;
-        onRoll_angleChanged:    rollGauge.gauge_sensor_value = _mavlink_manager.roll_angle;
+
+        onPan_powerChanged:             panConfigDialog.power_level = _mavlink_manager.pan_power;
+        onMotor_pan_num_polesChanged:   panConfigDialog.poles_num   = _mavlink_manager.motor_pan_num_poles;
+        onMotor_pan_dirChanged:         panConfigDialog.motor_dir   = _mavlink_manager.motor_pan_dir;
+        onPan_ccw_limit_angleChanged:   panConfigDialog.min_value   = _mavlink_manager.pan_ccw_limit_angle;
+        onPan_cw_limit_angleChanged:    panConfigDialog.max_value   = _mavlink_manager.pan_cw_limit_angle;
+        onYaw_angleChanged:             panGauge.gauge_sensor_value = _mavlink_manager.yaw_angle;
+
+        onRoll_powerChanged:            rollConfigDialog.power_level = _mavlink_manager.roll_power;
+        onMotor_roll_num_polesChanged:  rollConfigDialog.poles_num   = _mavlink_manager.motor_roll_num_poles;
+        onMotor_roll_dirChanged:        rollConfigDialog.motor_dir   = _mavlink_manager.motor_roll_dir;
+        onRoll_up_limit_angleChanged:   rollConfigDialog.min_value   = _mavlink_manager.roll_up_limit_angle;
+        onRoll_down_limit_angleChanged: rollConfigDialog.max_value   = _mavlink_manager.roll_down_limit_angle;
+        onRoll_angleChanged:            rollGauge.gauge_sensor_value = _mavlink_manager.roll_angle;
     }
 
 

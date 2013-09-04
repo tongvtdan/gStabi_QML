@@ -277,7 +277,6 @@ void MavLinkManager::update_all_parameters(uint8_t index, float value)
         break;
     case PARAM_RC_YAW_MODE:     current_params_on_board.rcYawMode = value;
         update_all_parameters_to_UI();
-        get_mavlink_info();
         break;
     default:
         break;
@@ -290,8 +289,10 @@ void MavLinkManager::update_all_parameters_to_UI()
 {
     if(!first_data_pack)    // to ensure all params read
     {
-        get_firmware_version();
-        get_hardware_serial_number();
+        setmavlink_message_log("Updating parameters...");
+//        get_firmware_version();
+//        get_hardware_serial_number();
+        // Tilt
         settilt_kp(current_params_on_board.pitchKp);
         settilt_ki(current_params_on_board.pitchKi);
         settilt_kd(current_params_on_board.pitchKd);
@@ -302,6 +303,32 @@ void MavLinkManager::update_all_parameters_to_UI()
         setmotor_tilt_num_poles(current_params_on_board.nPolesPitch);
         settilt_up_limit_angle(current_params_on_board.travelMinPitch);
         settilt_down_limit_angle(current_params_on_board.travelMaxPitch);
+
+        // Pan
+        setpan_kp(current_params_on_board.yawKp);
+        setpan_ki(current_params_on_board.yawKi);
+        setpan_kd(current_params_on_board.yawKd);
+        setpan_power(current_params_on_board.yawPower);
+        setpan_filter(current_params_on_board.panFilter);
+        setpan_follow(current_params_on_board.yawFollow);
+        setmotor_pan_dir(current_params_on_board.dirMotorYaw);
+        setmotor_pan_num_poles(current_params_on_board.nPolesYaw);
+        setpan_ccw_limit_angle(current_params_on_board.travelMinYaw);
+        setpan_cw_limit_angle(current_params_on_board.travelMaxYaw);
+
+        // Roll
+        setroll_kp(current_params_on_board.rollKp);
+        setroll_ki(current_params_on_board.rollKi);
+        setroll_kd(current_params_on_board.rollKd);
+        setroll_power(current_params_on_board.rollPower);
+        setroll_filter(current_params_on_board.rollFilter);
+        setroll_follow(current_params_on_board.rollFollow);
+        setmotor_roll_dir(current_params_on_board.dirMotorRoll);
+        setmotor_roll_num_poles(current_params_on_board.nPolesRoll);
+        setroll_up_limit_angle(current_params_on_board.travelMinRoll);
+        setroll_down_limit_angle(current_params_on_board.travelMaxRoll);
+
+        setmavlink_message_log("Updating parameters...Done");
     }
     else setmavlink_message_log("Waiting for reading parameters...");
 }
@@ -335,7 +362,10 @@ void MavLinkManager::get_attitude_data()
 
 void MavLinkManager::write_params_to_board()
 {
+    setmavlink_message_log("Sending parameters to controller board...");
     // Motor config params
+
+//    [1] Tilt Motor
     if(tilt_power() != current_params_on_board.pitchPower){  // if power level changed, it will be store in params
         current_params_on_board.pitchPower = tilt_power();   // update current value to params struct
         write_a_param_to_board("PITCH_POWER", current_params_on_board.pitchPower);
@@ -356,7 +386,52 @@ void MavLinkManager::write_params_to_board()
         current_params_on_board.travelMaxPitch = tilt_down_limit_angle();   // update current value to params struct
         write_a_param_to_board("TRAVEL_MAX_PIT", current_params_on_board.travelMaxPitch);
     }
+
+//    [2] Pan Motor
+    if(pan_power() != current_params_on_board.yawPower){  // if power level changed, it will be store in params
+        current_params_on_board.yawPower = pan_power();   // update current value to params struct
+        write_a_param_to_board("YAW_POWER", current_params_on_board.yawPower);
+    }
+    if(motor_pan_dir() != current_params_on_board.dirMotorYaw){
+        current_params_on_board.dirMotorYaw = motor_pan_dir();   // update current value to params struct
+        write_a_param_to_board("DIR_MOTOR_YAW", current_params_on_board.dirMotorYaw);
+    }
+    if(motor_pan_num_poles() != current_params_on_board.nPolesYaw){
+        current_params_on_board.nPolesYaw = motor_pan_num_poles();   // update current value to params struct
+        write_a_param_to_board("NPOLES_YAW", current_params_on_board.nPolesYaw);
+    }
+    if(pan_ccw_limit_angle() != current_params_on_board.travelMinYaw){
+        current_params_on_board.travelMinYaw = pan_ccw_limit_angle();   // update current value to params struct
+        write_a_param_to_board("TRAVEL_MIN_YAW",  current_params_on_board.travelMinYaw);
+    }
+    if(pan_cw_limit_angle() != current_params_on_board.travelMaxYaw){
+        current_params_on_board.travelMaxYaw = pan_cw_limit_angle();   // update current value to params struct
+        write_a_param_to_board("TRAVEL_MAX_YAW", current_params_on_board.travelMaxYaw);
+    }
+    //    [3] Roll Motor
+    if(roll_power() != current_params_on_board.rollPower){  // if power level changed, it will be store in params
+        current_params_on_board.rollPower = roll_power();   // update current value to params struct
+        write_a_param_to_board("ROLL_POWER", current_params_on_board.rollPower);
+    }
+    if(motor_roll_dir() != current_params_on_board.dirMotorRoll){
+        current_params_on_board.dirMotorRoll = motor_roll_dir();   // update current value to params struct
+        write_a_param_to_board("DIR_MOTOR_ROLL", current_params_on_board.dirMotorRoll);
+    }
+    if(motor_roll_num_poles() != current_params_on_board.nPolesRoll){
+        current_params_on_board.nPolesRoll = motor_roll_num_poles();   // update current value to params struct
+        write_a_param_to_board("NPOLES_ROLL", current_params_on_board.nPolesRoll);
+    }
+    if(roll_up_limit_angle() != current_params_on_board.travelMinRoll){
+        current_params_on_board.travelMinRoll = roll_up_limit_angle();   // update current value to params struct
+        write_a_param_to_board("TRAVEL_MIN_ROLL",  current_params_on_board.travelMinRoll);
+    }
+    if(roll_down_limit_angle() != current_params_on_board.travelMaxRoll){
+        current_params_on_board.travelMaxRoll = roll_down_limit_angle();   // update current value to params struct
+        write_a_param_to_board("TRAVEL_MAX_ROLL", current_params_on_board.travelMaxRoll);
+    }
+
     // Controller Setting Params
+//    [1] Tilt Motor
     if(tilt_kp() != current_params_on_board.pitchKp){
         current_params_on_board.pitchKp = tilt_kp();   // update current value to params struct
         write_a_param_to_board("PITCH_P", current_params_on_board.pitchKp);
@@ -377,8 +452,53 @@ void MavLinkManager::write_params_to_board()
         current_params_on_board.tiltFilter = tilt_filter();   // update current value to params struct
         write_a_param_to_board("PITCH_FILTER", current_params_on_board.tiltFilter);
     }
-    // other params
+//    [2] Pan Motor
+    if(pan_kp() != current_params_on_board.yawKp){
+        current_params_on_board.yawKp = pan_kp();   // update current value to params struct
+        write_a_param_to_board("YAW_P", current_params_on_board.yawKp);
+    }
+    if(pan_ki() != current_params_on_board.yawKi){
+        current_params_on_board.yawKi = pan_ki();   // update current value to params struct
+        write_a_param_to_board("YAW_I", current_params_on_board.yawKi);
+    }
+    if(pan_kd() != current_params_on_board.yawKd){
+        current_params_on_board.yawKd = pan_kd();   // update current value to params struct
+        write_a_param_to_board("YAW_D", current_params_on_board.yawKd);
+    }
+    if(pan_follow() != current_params_on_board.yawFollow){
+        current_params_on_board.yawFollow = pan_follow();   // update current value to params struct
+        write_a_param_to_board("YAW_FOLLOW", current_params_on_board.yawFollow);
+    }
+    if(pan_filter() != current_params_on_board.panFilter){
+        current_params_on_board.panFilter = pan_filter();   // update current value to params struct
+        write_a_param_to_board("YAW_FILTER", current_params_on_board.panFilter);
+    }
 
+//    [3] Roll Motor
+    if(roll_kp() != current_params_on_board.rollKp){
+        current_params_on_board.rollKp = roll_kp();   // update current value to params struct
+        write_a_param_to_board("ROLL_P", current_params_on_board.rollKp);
+    }
+    if(roll_ki() != current_params_on_board.rollKi){
+        current_params_on_board.rollKi = roll_ki();   // update current value to params struct
+        write_a_param_to_board("ROLL_I", current_params_on_board.rollKi);
+    }
+    if(roll_kd() != current_params_on_board.rollKd){
+        current_params_on_board.rollKd = roll_kd();   // update current value to params struct
+        write_a_param_to_board("ROLL_D", current_params_on_board.rollKd);
+    }
+    if(roll_follow() != current_params_on_board.rollFollow){
+        current_params_on_board.rollFollow = roll_follow();   // update current value to params struct
+        write_a_param_to_board("ROLL_FOLLOW", current_params_on_board.rollFollow);
+    }
+    if(roll_filter() != current_params_on_board.rollFilter){
+        current_params_on_board.rollFilter = roll_filter();   // update current value to params struct
+        write_a_param_to_board("ROLL_FILTER", current_params_on_board.rollFilter);
+    }
+
+
+    // other params
+    setmavlink_message_log("Sending parameters to controller board...Done!");
 }
 
 void MavLinkManager::get_mavlink_info()
@@ -401,7 +521,6 @@ void MavLinkManager::write_a_param_to_board(const char *param_id, float _value)
                                param_id, _value, MAVLINK_TYPE_INT16_T);
     len = mavlink_msg_to_send_buffer(buf, &msg);
     emit messge_write_to_comport_ready((const char*)buf, len);      // send signal
-//    setmavlink_message_log("Writing a param to board...Done");
 
 }
 
@@ -462,7 +581,6 @@ void MavLinkManager::setboard_connection_state(bool _state)
 QString MavLinkManager::mavlink_message_log() const
 {
     return m_mavlink_message_log;
-//    return system_msg_log;
 }
 
 void MavLinkManager::setmavlink_message_log(QString msg_data)
@@ -503,7 +621,9 @@ void MavLinkManager::setyaw_angle(float _angle)
     m_yaw_angle = _angle;
     emit yaw_angleChanged(m_yaw_angle);
 }
-
+/**
+ * @brief Tilt motor functions to control tilt parameters
+ */
 float MavLinkManager::tilt_kp() const
 {
     return m_tilt_kp;
@@ -572,13 +692,13 @@ void MavLinkManager::settilt_filter(float _filter)
 
 int MavLinkManager::motor_tilt_dir() const
 {
-    return m_dirMotortilt;
+    return m_motor_tilt_dir;
 }
 
 void MavLinkManager::setmotor_tilt_dir(int _dir)
 {
-    m_dirMotortilt = _dir;
-    emit motor_tilt_dirChanged(m_dirMotortilt);
+    m_motor_tilt_dir = _dir;
+    emit motor_tilt_dirChanged(m_motor_tilt_dir);
 }
 
 int MavLinkManager::motor_tilt_num_poles() const
@@ -615,7 +735,230 @@ void MavLinkManager::settilt_down_limit_angle(int _max)
 }
 
 
+/**
+ * @brief Pan motor functions to control pan parameters
+ */
+float MavLinkManager::pan_kp() const
+{
+    return m_pan_kp;
+}
 
+void MavLinkManager::setpan_kp(float _kp)
+{
+    m_pan_kp = _kp;
+    emit pan_kpChanged(m_pan_kp);
+}
 
+float MavLinkManager::pan_ki() const
+{
+    return m_pan_ki;
+}
+
+void MavLinkManager::setpan_ki(float _ki)
+{
+    m_pan_ki = _ki;
+    emit pan_kiChanged(m_pan_ki);
+}
+
+float MavLinkManager::pan_kd() const
+{
+    return m_pan_kd;
+}
+
+void MavLinkManager::setpan_kd(float _kd)
+{
+    m_pan_kd = _kd;
+    emit pan_kdChanged(m_pan_kd);
+}
+
+float MavLinkManager::pan_power() const
+{
+    return m_pan_power;
+}
+
+void MavLinkManager::setpan_power(float _power)
+{
+    m_pan_power = _power;
+    emit pan_powerChanged(m_pan_power);
+}
+
+float MavLinkManager::pan_follow() const
+{
+    return m_pan_follow;
+}
+
+void MavLinkManager::setpan_follow(float _follow)
+{
+    m_pan_follow = _follow;
+    emit pan_followChanged(m_pan_follow);
+}
+
+float MavLinkManager::pan_filter() const
+{
+    return m_pan_filter;
+}
+
+void MavLinkManager::setpan_filter(float _filter)
+{
+    m_pan_filter = _filter;
+    emit pan_filterChanged(m_pan_filter);
+}
+
+int MavLinkManager::motor_pan_dir() const
+{
+    return m_motor_pan_dir;
+}
+
+void MavLinkManager::setmotor_pan_dir(int _dir)
+{
+    m_motor_pan_dir = _dir;
+    emit motor_pan_dirChanged(m_motor_pan_dir);
+}
+
+int MavLinkManager::motor_pan_num_poles() const
+{
+    return m_motor_pan_num_poles;
+}
+
+void MavLinkManager::setmotor_pan_num_poles(int _poles)
+{
+    m_motor_pan_num_poles = _poles;
+    emit motor_pan_num_polesChanged(m_motor_pan_num_poles);
+}
+
+int MavLinkManager::pan_cw_limit_angle() const
+{
+   return m_pan_cw_limit_angle;
+}
+
+void MavLinkManager::setpan_cw_limit_angle(int _min)
+{
+    m_pan_cw_limit_angle = _min;
+    emit pan_cw_limit_angleChanged(m_pan_cw_limit_angle);
+}
+
+int MavLinkManager::pan_ccw_limit_angle() const
+{
+    return m_pan_ccw_limit_angle;
+}
+
+void MavLinkManager::setpan_ccw_limit_angle(int _max)
+{
+    m_pan_ccw_limit_angle = _max;
+    emit pan_ccw_limit_angleChanged(m_pan_ccw_limit_angle);
+}
+
+/**
+ * @brief Roll motor functions to control roll parameters
+ */
+float MavLinkManager::roll_kp() const
+{
+    return m_roll_kp;
+}
+
+void MavLinkManager::setroll_kp(float _kp)
+{
+    m_roll_kp = _kp;
+    emit roll_kpChanged(m_roll_kp);
+}
+
+float MavLinkManager::roll_ki() const
+{
+    return m_roll_ki;
+}
+
+void MavLinkManager::setroll_ki(float _ki)
+{
+    m_roll_ki = _ki;
+    emit roll_kiChanged(m_roll_ki);
+}
+
+float MavLinkManager::roll_kd() const
+{
+    return m_roll_kd;
+}
+
+void MavLinkManager::setroll_kd(float _kd)
+{
+    m_roll_kd = _kd;
+    emit roll_kdChanged(m_roll_kd);
+}
+
+float MavLinkManager::roll_power() const
+{
+    return m_roll_power;
+}
+
+void MavLinkManager::setroll_power(float _power)
+{
+    m_roll_power = _power;
+    emit roll_powerChanged(m_roll_power);
+}
+
+float MavLinkManager::roll_follow() const
+{
+    return m_roll_follow;
+}
+
+void MavLinkManager::setroll_follow(float _follow)
+{
+    m_roll_follow = _follow;
+    emit roll_followChanged(m_roll_follow);
+}
+
+float MavLinkManager::roll_filter() const
+{
+    return m_roll_filter;
+}
+
+void MavLinkManager::setroll_filter(float _filter)
+{
+    m_roll_filter = _filter;
+    emit roll_filterChanged(m_roll_filter);
+}
+
+int MavLinkManager::motor_roll_dir() const
+{
+    return m_motor_roll_dir;
+}
+
+void MavLinkManager::setmotor_roll_dir(int _dir)
+{
+    m_motor_roll_dir = _dir;
+    emit motor_roll_dirChanged(m_motor_roll_dir);
+}
+
+int MavLinkManager::motor_roll_num_poles() const
+{
+    return m_motor_roll_num_poles;
+}
+
+void MavLinkManager::setmotor_roll_num_poles(int _poles)
+{
+    m_motor_roll_num_poles = _poles;
+    emit motor_roll_num_polesChanged(m_motor_roll_num_poles);
+}
+
+int MavLinkManager::roll_up_limit_angle() const
+{
+   return m_roll_up_limit_angle;
+}
+
+void MavLinkManager::setroll_up_limit_angle(int _min)
+{
+    m_roll_up_limit_angle = _min;
+    emit roll_up_limit_angleChanged(m_roll_up_limit_angle);
+}
+
+int MavLinkManager::roll_down_limit_angle() const
+{
+    return m_roll_down_limit_angle;
+}
+
+void MavLinkManager::setroll_down_limit_angle(int _max)
+{
+    m_roll_down_limit_angle = _max;
+    emit roll_down_limit_angleChanged(m_roll_down_limit_angle);
+}
 
 

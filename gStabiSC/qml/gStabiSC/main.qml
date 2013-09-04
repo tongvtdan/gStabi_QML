@@ -1,13 +1,20 @@
 import QtQuick 2.0
-
+import QtQuick.LocalStorage 2.0
 
 import "GDashboard"
 import "Components"
+
+import "../../javascript/storage.js" as Storage
+
+
+
 
 Item {
     id: mainWindow
     property int header_height: 30
     property string main_log_msg: ""
+    property string table_name: "gStabi"
+
 //    color: "#242424"
     BorderImage {
         id: gstabiBackgroundImage
@@ -75,6 +82,23 @@ Item {
         y: (gstabiBackgroundImage.y + gstabiBackgroundImage.height)/2 - height/2;
         onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
     }
+    GProfile{
+        id: saveProfileDialog
+        visible: false;
+        x: (gstabiBackgroundImage.x + gstabiBackgroundImage.width)/2 - width/2;
+        y: (gstabiBackgroundImage.y + gstabiBackgroundImage.height)/2 - height/2;
+        save_profile: false
+        onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
+        onSave_profileChanged: {
+            if(save_profile) {
+                table_name = text_value;
+                gDashboard.database_table_name = table_name;
+                Storage.initialize(table_name);
+                console.log(Storage.getTableName());
+            }
+        }
+    }
+
     Item {
         id: buttonsPanel
         width: 150; height: 70
@@ -112,6 +136,15 @@ Item {
             anchors.left: pidSettingsButton.right; anchors.leftMargin: 20
             onClicked: _mavlink_manager.get_mavlink_info();
         }
+        GImageButton{
+            id: saveSettingToPC
+            text: "Save"
+            anchors.left: systemInfo.right; anchors.leftMargin: 20
+            onClicked: {
+                saveProfileDialog.save_profile = false;
+                saveProfileDialog.visible = true;
+            }
+        }
     }   // end of buttons Panel
     onMain_log_msgChanged: {
         if(main_log_msg.length >=10000){
@@ -126,7 +159,6 @@ Item {
             comportSettingPanel.state = "smaller";
             }
             waitingForConnection.paused = !_mavlink_manager.board_connection_state;
-
         }
     }
 
@@ -144,5 +176,6 @@ Item {
         font.family: "Segoe UI"
         font.pixelSize: 12
     }
-
+    Component.onCompleted: {
+    }
 }

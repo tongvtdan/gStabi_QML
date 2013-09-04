@@ -34,6 +34,15 @@ GDialog{
 
         }
     } // end of Open Close Port Button
+    GListView{
+        id: serialportNameList
+        list_header_title: "Serial Ports"
+        onClicked: {
+
+        }
+    }
+
+  /*
     Component {
         id: portListDelegate
         Rectangle {
@@ -110,7 +119,7 @@ GDialog{
         spacing: 2
     } // end of ListView
     ListModel {  id: comportList }
-
+*/
     Timer{
         id: getPortListTimer
         interval: 100;  repeat: false   // run once at start up
