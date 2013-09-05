@@ -4,16 +4,17 @@ import "Components"
 GDialog{
     id: serialSettingDialog
     property string portname: ""    // used to store portname in getPortNameList()
-    property string selected_portname: ""
+    property string selected_portname: "COM1"
     property int    selected_port_index: 1
     property bool   showPortSetting: true
 
     property string  msg_log: ""
     property string  serial_port_info_details: ""
+
     height: 200;   width: 400
     border_normal: ""
     title: ""
-    smaller_scale: 0
+    hide_scale: 0
     // Open Close Port Button
     GButton{
         id: openCloseComportButton
@@ -26,10 +27,10 @@ GDialog{
         onClicked: {
             _serialLink.open_close_comport();
             if(_serialLink.isConnected) {
-                serial_dialog_log("Open Serialport: " + selected_portname);
+                serial_dialog_log("Port " + selected_portname + " state: Opened");
                 serial_dialog_log("Waiting response from controller board...");
             }
-            else serial_dialog_log("Close Serialport: " + selected_portname)
+            else serial_dialog_log("Port " + selected_portname + " state: Closed")
 
         }
     } // end of Open Close Port Button
@@ -61,17 +62,7 @@ GDialog{
     // this code cause warning when run the app, but it works
     Connections{
         target: _serialLink
-        onIsPortListUpdatedChanged: {
-            getPortNameList() // update portlist when there is a change
-            for(var i=0; i < serialportNameList.list_count; i++){
-                console.log(i)
-                if(selected_port_index === i){
-                    serialportNameList.current_index = i;
-                    selected_portname = serialportNameList.list_model.get(i).value // get port name from port name list model
-                    console.log("Selected Port: "+ selected_portname+ " Index: "+ i)
-                }
-            }
-        }
+        onIsPortListUpdatedChanged: {port_is_exist();}
         onIsConnectedChanged:{
             if(_serialLink.isConnected){ openCloseComportButton.text = "Close"} else {openCloseComportButton.text = "Open"}
         }
@@ -102,6 +93,10 @@ GDialog{
         _serialLink.update_comport_settings(selected_portname);
         serial_dialog_log("Reselected port to: "+ selected_portname)
     }
+    Component.onCompleted: {
+        console.log("check port at first")
+        port_is_exist()
+    }
 
     function getPortNameList()
     {
@@ -114,6 +109,19 @@ GDialog{
             }
         }
     }
+    function port_is_exist(){
+        getPortNameList() // update portlist when there is a change
+        for(var i=0; i < serialportNameList.list_count; i++){
+            if(selected_port_index === i){
+                serialportNameList.current_index = i;
+//                if(selected_portname === serialportNameList.list_model.get(i).value) // get port name from port name list model
+//                {
+
+//                }
+            }
+        }
+    }
+
     function serial_dialog_log(_message){
         msg_log = "<font color=\"cyan\">" + _message+ "</font><br>";
     }

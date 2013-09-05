@@ -7,7 +7,6 @@ GSettingDialog{
     property string msg_log: "PID Dialog Log"
 
     title: "Controller Parameters"
-    state:"showDialog"
     width: 930; height: 500
     // Tilt Axis Motor
     Item{
@@ -118,7 +117,7 @@ GSettingDialog{
             GButton {
                 id: closeDialogButton
                 text: "Close"
-                onClicked: {pidDialog.state = "hideDialog";}
+                onClicked: {pidDialog.state = "hide";}
             }
         }
     }

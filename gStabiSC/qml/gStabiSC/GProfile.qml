@@ -18,7 +18,7 @@ GDialog{
 
     border_normal: ""
     title: ""
-    smaller_scale: 0
+    hide_scale: 0
     width: 400; height:200
     Rectangle{
         id: root
@@ -99,7 +99,7 @@ GDialog{
                         save_parameters_to_profile();
                         dialog_log("Creating and saving params to profile successfully");
                     }
-//                    profileDialog.state = "smaller";
+//                    profileDialog.state = "hide";
                 }
             }
             GButton {
@@ -111,7 +111,7 @@ GDialog{
                     Storage.initialize();
                     load_parameters_to_ui();
                     dialog_log("Loading parameters from "+ profile_name + " done!")
-//                    profileDialog.state = "smaller";
+//                    profileDialog.state = "hide";
                 }
             }
 
@@ -120,7 +120,7 @@ GDialog{
                 text: "Cancel"
                 onClicked: {
                     dialog_log("Canceled to save the profile");
-                    profileDialog.state = "smaller";
+                    profileDialog.state = "hide";
                     save_profile = false;
                 }
             }
@@ -141,7 +141,7 @@ GDialog{
 
     }
     onStateChanged: {
-        if(profileDialog.state === "focus"){update_table_name_list()}
+        if(profileDialog.state === "show"){update_table_name_list()}
     }
 
     Component.onCompleted: {

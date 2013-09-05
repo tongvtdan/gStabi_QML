@@ -31,7 +31,7 @@ Item {
         gauge_handle_normal: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_normal_green_handle.png"
         gauge_handle_pressed: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_pressed_green_handle.png"
         gauge_config_mode: dashboard_config_mode
-        onGauge_log_messageChanged: tilt_log(tiltGauge.gauge_log_message)
+        onEntered: tilt_log("Tilt axis of the system")
         onGauge_up_limit_set_angleChanged: tiltConfigDialog.min_value = gauge_up_limit_set_angle;
         onGauge_down_limit_set_angleChanged:  tiltConfigDialog.max_value = gauge_down_limit_set_angle;
     }
@@ -49,7 +49,7 @@ Item {
         gauge_config_mode: dashboard_config_mode
         up_limit_pie_color: "green"
         down_limit_pie_color: "chartreuse"
-        onGauge_log_messageChanged: pan_log(panGauge.gauge_log_message)
+        onEntered: pan_log("Pan axis of the system")
         onGauge_down_limit_set_angleChanged: panConfigDialog.max_value = gauge_down_limit_set_angle
         onGauge_up_limit_set_angleChanged:   panConfigDialog.min_value = gauge_up_limit_set_angle
     }
@@ -65,7 +65,7 @@ Item {
         gauge_handle_normal: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_normal_cyan_handle.png"
         gauge_handle_pressed: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_pressed_cyan_handle.png"
         gauge_config_mode: dashboard_config_mode
-        onGauge_log_messageChanged: roll_log(rollGauge.gauge_log_message)
+        onEntered: roll_log("Roll axis of the system")
         onGauge_down_limit_set_angleChanged: rollConfigDialog.max_value = gauge_down_limit_set_angle
         onGauge_up_limit_set_angleChanged:   rollConfigDialog.min_value = gauge_up_limit_set_angle
     }
@@ -83,8 +83,10 @@ Item {
                 width: 120; height: 30
                 text: "Config"
                 onClicked: {
-                    dashboard_config_mode = !dashboard_config_mode;
-                    root.state = dashboard_config_mode? "Config" : "Dashboard"
+//                    dashboard_config_mode = !dashboard_config_mode;
+                    if(root.state === "Config"){
+                        root.state = "Dashboard"
+                    } else root.state = "Config"
                 }
             }
             GButton{
@@ -194,9 +196,6 @@ Item {
 
         }
     ]
-    onStateChanged: {
-        if(dashboard_config_mode) {tilt_log("Change to Config Mode")} else {tilt_log("Return to Dashboard mode")}
-    }
 
     Connections{
         target: _mavlink_manager

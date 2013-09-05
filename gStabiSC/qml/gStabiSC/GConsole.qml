@@ -4,10 +4,9 @@ import "Components"
 GDialog{
     id: consoleDialog
     title: "Console"
-    state: "focus"
     border_normal: "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_normal_console_border.png"
     width: 250; height: 400
-    smaller_scale: 1
+    hide_scale: 1
     Flickable{
         id: flickArea
         anchors.rightMargin: 10

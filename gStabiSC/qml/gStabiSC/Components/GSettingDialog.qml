@@ -8,13 +8,13 @@ Item{
     property string title_normal_color  : "cyan"
     property string title_hover_color   : "yellow"
     property string title               : "Setting Dialog"
-    property int  minimize_pos_x    : 0
-    property int  minimize_pos_y    : 0
-    property int  current_pos_x     : 0
-    property int  current_pos_y     : 0
+    property int    show_state_posY     : 500
+    property int    hide_state_posY     : 600
+    property double hide_scale          : 0.5
+
 
     property string  border_normal: "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_normal_setting_dialog.png"
-    property string border_hover : "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_hover_setting_dialog.png"
+    property string  border_hover : "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_hover_setting_dialog.png"
 //    property string  border_normal  : "../images/gStabiUI_3.2_normal_setting_dialog.png"
 //    property string border_hover    : "../images/gStabiUI_3.2_hover_setting_dialog.png"
 
@@ -67,33 +67,43 @@ Item{
         horizontalAlignment: Text.AlignHCenter
     }
     states:[
-        State{
-            name: "showDialog"
-            PropertyChanges { target: dialogContainer; opacity: 1; scale: 1; z: 100  }
+        State {
+            name: "show"
+            PropertyChanges {target: dialogContainer; scale: 1.0; opacity: 1; y: show_state_posY }
+
         }
         ,State {
-            name: "hideDialog"
-            PropertyChanges {target: dialogContainer; opacity: 0; scale: 0; z: -1}
+            name: "hide"
+            PropertyChanges {target: dialogContainer; scale: hide_scale ; opacity: 0.5; y: hide_state_posY}
         }
     ]
-    transitions: [
-        Transition {
-            from: "showDialog" ; to:   "hideDialog"
+    transitions: [ Transition {
+            from: "show"
+            to:   "hide"
             ParallelAnimation{
-                NumberAnimation { target: dialogContainer; property: "opacity";  duration: 500;}
-                NumberAnimation { target: dialogContainer; property: "scale"; duration: 500; easing.type: Easing.Bezier}
-                NumberAnimation { target: dialogContainer; property: "z"; duration: 500; easing.type: Easing.Bezier}
-            }
-        }
-        ,Transition {
-            from: "hideDialog" ; to: "showDialog"
-            ParallelAnimation{
-                PropertyAnimation{ target: dialogContainer; property : "opacity"; duration: 500;}
-                NumberAnimation { target: dialogContainer; property: "scale"; duration: 500; easing.type: Easing.OutElastic}
-                NumberAnimation { target: dialogContainer; property: "z"; duration: 500; easing.type: Easing.Bezier}
+                NumberAnimation { target: dialogContainer; property: "opacity"; duration: 400;  }
+                NumberAnimation { target: dialogContainer; property: "y"; duration: 400; easing.type: Easing.InOutQuad }
+                SequentialAnimation{
+                    NumberAnimation{ target: dialogContainer; properties: "scale"; from: 1.0; to: 1.5; duration: 200;}
+                    NumberAnimation{ target: dialogContainer; properties: "scale"; from: 1.5; to: 0.5; duration: 200;}
+
+                }
 
             }
+        },
+        Transition{
+            from: "hide"
+            to: "show"
+            ParallelAnimation{
+                NumberAnimation { target: dialogContainer; property: "opacity"; duration: 600;  }
+                NumberAnimation { target: dialogContainer; property: "y"; duration: 600; easing.type: Easing.InOutQuad }
+                SequentialAnimation{
+                    NumberAnimation{ target: dialogContainer; properties: "scale"; from: 0.5; to: 1.0; duration: 200;}
+                    NumberAnimation{ target: dialogContainer; properties: "scale"; from: 1.0; to: 1.5; duration: 200;}
+                    NumberAnimation{ target: dialogContainer; properties: "scale"; from: 1.5; to: 1; duration: 200;}
 
+                }
+            }
         }
     ]
 

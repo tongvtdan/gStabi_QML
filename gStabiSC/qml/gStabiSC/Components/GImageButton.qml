@@ -7,13 +7,21 @@ Item{
     property string imageHover  : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_released_button.png"
     property string imagePressed: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_pressed_button.png"
     property string text: "ImgButton"
+    property bool  hover_enabled: true
+    property bool toggle: false;
+    property bool toggle_enabled: false
     signal clicked
-    property string previous_state: ""
+    signal entered
+    signal exited
+    signal pressed
+    signal released
+
 
     implicitHeight: 20; implicitWidth: 100
     width: buttonImage.width; height: buttonImage.height
     Image{
         id: buttonImage
+        fillMode: Image.PreserveAspectFit
         source: imageNormal
 
     }
@@ -29,38 +37,48 @@ Item{
     MouseArea{
         id: buttonMouseArea
         anchors.fill: parent
-        hoverEnabled: true
+        hoverEnabled: hover_enabled
         onEntered: {
-            previous_state = rootItem.state
+            if(rootItem.state !== "pressed")
             rootItem.state = "hover"
+            rootItem.entered();
         }
         onExited: {
-            rootItem.state = ""
+            if(rootItem.state !== "pressed")
+
+            rootItem.state = "normal"
+            rootItem.exited();
         }
         onPressed: {
             rootItem.state = "pressed"
+            rootItem.pressed();
         }
         onReleased: {
+
             rootItem.state = "normal"
+            rootItem.released();
         }
-        onClicked: rootItem.clicked();
+        onClicked: {
+            toggle = !toggle
+            rootItem.clicked();
+        }
     }
 
     states: [
         State {
             name: "pressed"
             PropertyChanges { target: buttonImage; source: imagePressed; }
-            PropertyChanges {target: rootItem; scale: 1.2  }
+//            PropertyChanges {target: rootItem; scale: 1.2  }
         }
         ,State {
             name: "normal"
             PropertyChanges { target: buttonImage; source: imageNormal;  }
-            PropertyChanges {target: rootItem; scale: 1  }
+//            PropertyChanges {target: rootItem; scale: 1  }
         }
         ,State {
             name: "hover"
-//            PropertyChanges { target: buttonImage; source: imageHover; }
-            PropertyChanges {target: rootItem; scale: 1.5  }
+            PropertyChanges { target: buttonImage; source: imageHover; }
+//            PropertyChanges {target: rootItem; scale: 1.2  }
         }
 
     ]

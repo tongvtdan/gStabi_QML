@@ -9,7 +9,7 @@ import Charts 1.0
   - Change gauge_offset for Gauge type, e.g.: Pan will has gauge_offset = 90 to rotate some visual element
 */
 Item{
-    id: gauge_container
+    id: gaugeContainer
 //[!] Variables can be change in using code
     property string gauge_log_message           : "Gauge Log"
     property int    gauge_width                 : 330
@@ -56,6 +56,12 @@ Item{
     property string  up_limit_pie_color     : "blue"
     property string  down_limit_pie_color   : "cyan"
     property double  range_limit_opacity: 0.5
+
+    signal clicked
+    signal entered
+    signal exited
+    signal pressed
+    signal released
 
     implicitWidth: gauge_width; implicitHeight: gauge_height
     Image {
@@ -273,9 +279,10 @@ Item{
         anchors.fill: parent
         hoverEnabled: true
         onPositionChanged:  calc_rotate_angle_gauge(mouse.x, mouse.y)
-        onEntered: gauge_log_message = "<b><i>" + gauge_tilte + " axis of gStabi</i></b>"
-        onExited: gauge_log_message = ""
+        onEntered: gaugeContainer.entered()
+        onExited: gaugeContainer.exited()
         onPressed: {
+            gaugeContainer.pressed()
             if(select_handle1){
                 gauge_set_enabled = true;
                 gaugeHandlePressedImage.state = "focus"
@@ -288,6 +295,7 @@ Item{
             }
         } // end of onPressed
         onReleased:{
+            gaugeContainer.released()
             if(select_handle1){
                 gauge_set_enabled = false;
                 gaugeHandlePressedImage.state = "normal"
@@ -425,4 +433,5 @@ Item{
             out_of_range = false;
         }
     }
+
 }   // end of gauge Gauge
