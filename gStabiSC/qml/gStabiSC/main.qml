@@ -38,30 +38,7 @@ Item {
         source: "qrc:/images/qml/gStabiSC/images/animation.gif"
         paused: true
     }
-    GDashBoard{
-        id: gDashboard
-        width: 1024;     height: 340
-
-        anchors.horizontalCenter: parent.horizontalCenter; anchors.horizontalCenterOffset: 15
-        anchors.top: gstabiBackgroundImage.top; anchors.topMargin: 60
-        onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
-        state: "Dashboard"
-        onStateChanged: {
-            if(gDashboard.state === "Config") {
-                dashboard_config_mode = true
-                dialog_log("Switch to Motor Confid Mode")
-                comportSettingPanel.state = "hide";
-                pidSettingDialog.state = "hide"
-                profileDialog.state = "hide"
-                systemConsole.y = gstabiBackgroundImage.height - systemConsole.height/2;
-            }
-            else {
-                dashboard_config_mode = false
-                dialog_log("Switch to Dashboard mode")
-                systemConsole.y = systemConsole.show_state_posY;
-            }
-        }
-    } // end of dashboard
+    // end of dashboard
     GSerialSettings{
         id: comportSettingPanel
         state: "show"
@@ -107,6 +84,7 @@ Item {
         onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
         onStateChanged: {
             if(state === "show"){
+                z = 100
                 pidSettingsButton.state = "pressed"
                 comportSettingPanel.state = "hide"
                 profileDialog.state = "hide"
@@ -114,6 +92,7 @@ Item {
                 systemConsole.y = gstabiBackgroundImage.height - systemConsole.height/2;
             }
             else {
+                z = -1
                 systemConsole.y = systemConsole.show_state_posY;
                 pidSettingsButton.state = "normal"
             }
@@ -137,6 +116,31 @@ Item {
                 gDashboard.state = "Dashboard"
             } else {
                 profileDialogButton.state = "normal"
+            }
+        }
+    }
+
+    GDashBoard{
+        id: gDashboard
+        width: 1024;     height: 340
+
+        anchors.horizontalCenter: parent.horizontalCenter; anchors.horizontalCenterOffset: 15
+        anchors.top: gstabiBackgroundImage.top; anchors.topMargin: 60
+        onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
+        state: "Dashboard"
+        onStateChanged: {
+            if(gDashboard.state === "Config") {
+                dashboard_config_mode = true
+                dialog_log("Switch to Motor Confid Mode")
+                comportSettingPanel.state = "hide";
+                pidSettingDialog.state = "hide"
+                profileDialog.state = "hide"
+                systemConsole.y = gstabiBackgroundImage.height - systemConsole.height/2;
+            }
+            else {
+                dashboard_config_mode = false
+                dialog_log("Switch to Dashboard mode")
+                systemConsole.y = systemConsole.show_state_posY;
             }
         }
     }

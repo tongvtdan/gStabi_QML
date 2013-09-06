@@ -22,7 +22,6 @@ Item {
         gauge_width: root.gauge_width; gauge_height:root.gauge_height
         anchors.top: parent.top; anchors.topMargin: 0
         anchors.left: parent.left; anchors.leftMargin: 15
-        z: 10
         gauge_back  : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_back_tilt.png"
         gauge_needle: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_needle_tilt.png"
         gauge_handle_normal: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_normal_green_handle.png"

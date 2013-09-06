@@ -55,7 +55,7 @@ Item{
     property double   scale_ratio: 0.8          // use to scale element inside the gauge
     property string  up_limit_pie_color     : "blue"
     property string  down_limit_pie_color   : "cyan"
-    property double  range_limit_opacity: 0.5
+    property double  range_limit_opacity: 0.2
 
     signal clicked
     signal entered
@@ -330,7 +330,7 @@ Item{
     function calc_rotate_angle_gauge(_x, _y){
         var rot_angle_deg;
         var distanceFromCenterToPressedPoint = Math.sqrt((_x - gauge_center_x)*(_x - gauge_center_x) + (_y - gauge_center_y)*(_y - gauge_center_y));
-        if((distanceFromCenterToPressedPoint >= 0.9*gauge_radius) && (distanceFromCenterToPressedPoint <= gauge_radius))
+        if((distanceFromCenterToPressedPoint >= 0.7*gauge_radius) && (distanceFromCenterToPressedPoint <= gauge_radius))
         {
             console.log( gauge_tilte+ " In control area")
             var minDistanceFromPress = 32767;
