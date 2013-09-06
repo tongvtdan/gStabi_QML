@@ -4,9 +4,9 @@ import "GDashboard"
 import "Components"
 
 
-import "../../javascript/storage.js" as Storage
+//import "../../javascript/storage.js" as Storage
 
-
+import "qrc:/javascript/storage.js" as Storage
 
 
 Item {
@@ -39,41 +39,6 @@ Item {
         paused: true
     }
     // end of dashboard
-    GSerialSettings{
-        id: comportSettingPanel
-        state: "show"
-        x: gstabiBackgroundImage.x + 50 ;
-        y: (gstabiBackgroundImage.y + gstabiBackgroundImage.height)/2 - height/2;
-        show_state_posY: gstabiBackgroundImage.height - comportSettingPanel.height - 70
-        hide_state_posY: gstabiBackgroundImage.height - comportSettingPanel.height + 100
-        dragMinX: 50
-        dragMaxX: gstabiBackgroundImage.width - comportSettingPanel.width
-        dragMaxY: gstabiBackgroundImage.height - comportSettingPanel.height
-        onMsg_logChanged: { main_log_msg = msg_log + main_log_msg }
-        onStateChanged: {
-            if(state === "show"){
-                serialSettingButton.state = "pressed"
-                pidSettingDialog.state = "hide"
-            } else serialSettingButton.state = "normal"
-        }
-    }
-    GConsole{
-        id: systemConsole
-        x: gstabiBackgroundImage.x + gstabiBackgroundImage.width - systemConsole.width - 15
-        opacity: 1
-        hide_scale: 1
-        state: "show"
-        height: 200; width:  300
-        show_state_posY: gstabiBackgroundImage.height - systemConsole.height - 70
-        hide_state_posY: gstabiBackgroundImage.height - systemConsole.height + 100
-        dragMinX: gstabiBackgroundImage.x; dragMaxX: gstabiBackgroundImage.width - systemConsole.width/2
-        dragMaxY: gstabiBackgroundImage.height - systemConsole.height+100
-        msg_history: main_log_msg
-        Behavior on y {
-            NumberAnimation { target: systemConsole; property: "y"; duration: 400; easing.type: Easing.Bezier }
-        }
-
-    }
     GPIDDialog{
         id: pidSettingDialog
         state: "hide"
@@ -84,7 +49,7 @@ Item {
         onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
         onStateChanged: {
             if(state === "show"){
-                z = 100
+//                z = 100
                 pidSettingsButton.state = "pressed"
                 comportSettingPanel.state = "hide"
                 profileDialog.state = "hide"
@@ -92,12 +57,38 @@ Item {
                 systemConsole.y = gstabiBackgroundImage.height - systemConsole.height/2;
             }
             else {
-                z = -1
+//                z = -1
                 systemConsole.y = systemConsole.show_state_posY;
                 pidSettingsButton.state = "normal"
             }
         }
     }
+
+    GDashBoard{
+        id: gDashboard
+        width: 1024;     height: 340
+        z:0;
+        anchors.horizontalCenter: parent.horizontalCenter; anchors.horizontalCenterOffset: 15
+        anchors.top: gstabiBackgroundImage.top; anchors.topMargin: 60
+        onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
+        state: "Dashboard"
+        onStateChanged: {
+            if(gDashboard.state === "Config") {
+                dashboard_config_mode = true
+                dialog_log("Switch to Motor Confid Mode")
+                comportSettingPanel.state = "hide";
+                pidSettingDialog.state = "hide"
+                profileDialog.state = "hide"
+                systemConsole.y = gstabiBackgroundImage.height - systemConsole.height/2;
+            }
+            else {
+                dashboard_config_mode = false
+                dialog_log("Switch to Dashboard mode")
+                systemConsole.y = systemConsole.show_state_posY;
+            }
+        }
+    }
+
     GProfile{
         id: profileDialog
         state: "hide";
@@ -120,28 +111,40 @@ Item {
         }
     }
 
-    GDashBoard{
-        id: gDashboard
-        width: 1024;     height: 340
+    GConsole{
+        id: systemConsole
+        x: gstabiBackgroundImage.x + gstabiBackgroundImage.width - systemConsole.width - 15
+        opacity: 1
+        hide_scale: 1
+        state: "show"
+        height: 200; width:  300
+        show_state_posY: gstabiBackgroundImage.height - systemConsole.height - 70
+        hide_state_posY: gstabiBackgroundImage.height - systemConsole.height + 100
+        dragMinX: gstabiBackgroundImage.x; dragMaxX: gstabiBackgroundImage.width - systemConsole.width/2
+        dragMaxY: gstabiBackgroundImage.height - systemConsole.height+100
+        msg_history: main_log_msg
+        Behavior on y {
+            NumberAnimation { target: systemConsole; property: "y"; duration: 400; easing.type: Easing.Bezier }
+        }
 
-        anchors.horizontalCenter: parent.horizontalCenter; anchors.horizontalCenterOffset: 15
-        anchors.top: gstabiBackgroundImage.top; anchors.topMargin: 60
-        onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
-        state: "Dashboard"
+    }
+
+    GSerialSettings{
+        id: comportSettingPanel
+        state: "show"
+        x: gstabiBackgroundImage.x + 50 ;
+        y: (gstabiBackgroundImage.y + gstabiBackgroundImage.height)/2 - height/2;
+        show_state_posY: gstabiBackgroundImage.height - comportSettingPanel.height - 70
+        hide_state_posY: gstabiBackgroundImage.height - comportSettingPanel.height + 100
+        dragMinX: 50
+        dragMaxX: gstabiBackgroundImage.width - comportSettingPanel.width
+        dragMaxY: gstabiBackgroundImage.height - comportSettingPanel.height
+        onMsg_logChanged: { main_log_msg = msg_log + main_log_msg }
         onStateChanged: {
-            if(gDashboard.state === "Config") {
-                dashboard_config_mode = true
-                dialog_log("Switch to Motor Confid Mode")
-                comportSettingPanel.state = "hide";
+            if(state === "show"){
+                serialSettingButton.state = "pressed"
                 pidSettingDialog.state = "hide"
-                profileDialog.state = "hide"
-                systemConsole.y = gstabiBackgroundImage.height - systemConsole.height/2;
-            }
-            else {
-                dashboard_config_mode = false
-                dialog_log("Switch to Dashboard mode")
-                systemConsole.y = systemConsole.show_state_posY;
-            }
+            } else serialSettingButton.state = "normal"
         }
     }
 

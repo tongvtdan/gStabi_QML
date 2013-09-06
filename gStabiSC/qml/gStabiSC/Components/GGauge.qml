@@ -56,6 +56,7 @@ Item{
     property string  up_limit_pie_color     : "blue"
     property string  down_limit_pie_color   : "cyan"
     property double  range_limit_opacity: 0.2
+    property int axis_direcion: 1   // 1: normal, -1 reverse, use with sensor_value
 
     signal clicked
     signal entered
@@ -393,7 +394,7 @@ Item{
             {
                 return gauge_down_limit_set_angle;
             } else {
-                rot_angle = gauge_sensor_value;      // no travel limit handle change, return the sensor reading value
+                rot_angle = axis_direcion*gauge_sensor_value;      // no travel limit handle change, return the sensor reading value
                 check_sensor_value_is_out_of_range(rot_angle);
                 return rot_angle;
             }
@@ -401,7 +402,7 @@ Item{
         {
             if(!gauge_set_enabled)
             {
-                rot_angle = gauge_sensor_value;
+                rot_angle = axis_direcion*gauge_sensor_value;
                 check_sensor_value_is_out_of_range(rot_angle);
                 return rot_angle;
             }else

@@ -2,7 +2,7 @@ import QtQuick 2.0
 import QtQuick.LocalStorage 2.0
 
 import "../Components"
-import "../../../javascript/storage.js" as Storage
+//import "../../../javascript/storage.js" as Storage
 /*
   All angles value unit are Degree
   */
@@ -18,7 +18,7 @@ Item {
         id: tiltGauge
         width: gauge_width; height: gauge_height
         gauge_tilte: "Tilt"
-        gauge_type: 1; gauge_offset: 0
+        gauge_type: 1; gauge_offset: 0 ; axis_direcion: -1
         gauge_width: root.gauge_width; gauge_height:root.gauge_height
         anchors.top: parent.top; anchors.topMargin: 0
         anchors.left: parent.left; anchors.leftMargin: 15

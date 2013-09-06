@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.LocalStorage 2.0
-import "../../javascript/storage.js" as Storage
+//import "../../javascript/storage.js" as Storage
+import "qrc:/javascript/storage.js" as Storage
 import "Components"
 GDialog{
     id: profileDialog

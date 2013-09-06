@@ -3,9 +3,8 @@
 #include <QQmlEngine>
 #include <QString>
 #include <QQmlContext> // for setContextProperty
-
-
 #include <QDir>
+
 #include "configuration.h"
 #include "SerialLink.h"
 #include "MavLinkManager.hpp"

@@ -67,7 +67,12 @@ void SerialLink::open_close_comport()
     {
         serialport->open(QIODevice::ReadWrite);
         //Hardware trigger
-        serialport->setRts(1); // 0V output on boot0
+        //[!]for old version controller board
+//        serialport->setRts(1); // 0V output on boot0
+//        [!]
+//        [!]for new version controller board
+        serialport->setRts(0); // 0V output on boot0
+//        [!]
         serialport->setDtr(1); // 0v output on reset
         serialport->setDtr(0); // 3V3 output on reset
     }
