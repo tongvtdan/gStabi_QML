@@ -1,6 +1,4 @@
 #include "SerialLink.h"
-//#include <QtSerialPort/QSerialPortInfo>
-//#include <QtSerialPort/QSerialPort>
 #include <QStringList>
 #include <QDebug>
 
@@ -88,10 +86,7 @@ void SerialLink::update_comport_settings(QString portname_str)
 void SerialLink::fillSerialPortInfo()
 {
 
-//    port_name_list.clear();
     serial_port_info = QextSerialEnumerator::getPorts();
-//    // Get the ports available on this system
-//   QList<QextPortInfo> ports = QextSerialEnumerator::getPorts();
 //   // Add the ports in reverse order, because we prepend them to the list
    for(int i = serial_port_info.size() - 1; i >= 0; i--){
        QextPortInfo portInfo = serial_port_info.at(i);
@@ -100,7 +95,7 @@ void SerialLink::fillSerialPortInfo()
        }
    }
    selected_port_name = serial_port_info.at(0).portName; // get the latest port
-   setisPortListUpdated(true);
+//   setisPortListUpdated(true);
 }
 
 
@@ -121,7 +116,7 @@ void SerialLink::portSettings()
 void SerialLink::updatePortStatus(bool connection_state)
 {
     setisConnected(connection_state);
-
+    setisPortListUpdated(connection_state);
 }
 
 bool SerialLink::isConnected() const

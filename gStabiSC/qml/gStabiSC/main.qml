@@ -50,13 +50,11 @@ Item {
                 comportSettingPanel.state = "hide";
                 pidSettingDialog.state = "hide"
                 systemConsole.y = gstabiBackgroundImage.height - systemConsole.height/2;
-
             }
             else {
                 dashboard_config_mode = false
                 dialog_log("Switch to Dashboard mode")
                 systemConsole.y = systemConsole.show_state_posY;
-
             }
         }
     } // end of dashboard
@@ -70,7 +68,7 @@ Item {
         dragMinX: 50
         dragMaxX: gstabiBackgroundImage.width - comportSettingPanel.width
         dragMaxY: gstabiBackgroundImage.height - comportSettingPanel.height
-        onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
+        onMsg_logChanged: { main_log_msg = msg_log + main_log_msg }
         onStateChanged: {
             if(state === "show"){
                 serialSettingButton.state = "pressed"
