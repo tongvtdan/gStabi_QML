@@ -5,7 +5,6 @@
 MavLinkManager::MavLinkManager(QObject *parent) :
     QObject(parent)
 {
-//    m_tilt_motor = new gSBMotor(this);
     linkConnectionTimer = new QTimer(this);
     linkConnectionTimer->setSingleShot(true);
 
@@ -39,7 +38,8 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
             case MAVLINK_MSG_ID_HEARTBEAT:{ // get Heartbeat
                 mavlink_msg_heartbeat_decode(&message,&m_mavlink_heartbeat);
                 if(m_mavlink_heartbeat.mavlink_version == MAVLINK_VERSION ){
-                    sethb_pulse(true);
+                    heartbeat_state = !heartbeat_state;
+                    sethb_pulse(heartbeat_state);
                 }
                 else
                     sethb_pulse(false);
@@ -533,7 +533,7 @@ void MavLinkManager::mavlink_init()
     custom_mode = 0;                 ///< Custom mode, can be defined by user/adopter
     system_state = MAV_STATE_STANDBY; ///< System ready for flight
     first_data_pack = true;           // this will be check when mavlink message was received, to check whether it's 1st time to received the message
-    //    sethb_pulse(false);
+    heartbeat_state = false;
 }
 
 void MavLinkManager::RestartLinkConnectionTimer(int msec)

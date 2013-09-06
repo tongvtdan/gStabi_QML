@@ -1,8 +1,8 @@
 import QtQuick 2.0
 import QtQuick.LocalStorage 2.0
-
 import "GDashboard"
 import "Components"
+
 
 import "../../javascript/storage.js" as Storage
 
@@ -15,8 +15,6 @@ Item {
     property string main_log_msg: ""
     property string running_image_source: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_run_0_port_connect.png"
 
-
-//    color: "#242424"
     BorderImage {
         id: gstabiBackgroundImage
         width: 1044;  height: 700
@@ -252,11 +250,9 @@ Item {
 
         }
         onHb_pulseChanged: {
-            console.log("HB Received"+_mavlink_manager.hb_pulse)
             if(_mavlink_manager.hb_pulse)
             running_image_source =   "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_run_0_port_connect.png"
             else running_image_source = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_run_1_port_connect.png"
-
         }
     }
 
@@ -277,7 +273,6 @@ Item {
         Storage.initializeSettings();
         if(Storage.getSetting("Port name") !== "NA"){   // if already exist, get it
             comportSettingPanel.selected_portname = Storage.getSetting("Port name")
-            dialog_log("Get port name: " + comportSettingPanel.selected_portname)
         }
         if(Storage.getSetting("Port index") !== "NA"){   // if already exist, get it
             comportSettingPanel.selected_port_index = Storage.getSetting("Port index")
@@ -285,9 +280,10 @@ Item {
         if(Storage.getSetting("Profile") !== "NA"){   // if already exist, get it
             profileDialog.profile_name = Storage.getSetting("Profile")
         }
-
-        dialog_log("Before you can start to control or config your system, please connect your system to PC then open the serial port to establish the communication with controller board on gStabi Systtem")
-        dialog_log("Welcome to gStabi Station Controller")
+        dialog_log("<center>************************************</center>")
+        dialog_log("<center>Before you can start to control or config your system, please connect your system to PC then open the serial port to establish the communication with controller board on gStabi Systtem</center>")
+        dialog_log("<center>Welcome to gStabi Station Controller</center>")
+        dialog_log("<center>************************************</center>")
 
     }
     Component.onDestruction: {

@@ -15,10 +15,6 @@ Item {
     property string msg_log : "" // log the message to display on Console
     property bool   dashboard_config_mode : false   // if false: dashbord mode; if true: config mode
     property string database_table_name: ""
-
-
-    state: "Dashboard"
-
     GGauge{
         id: tiltGauge
         gauge_tilte: "Tilt"
@@ -181,8 +177,6 @@ Item {
             PropertyChanges { target: tiltConfigDialog; state  : "hideDialog"}
             PropertyChanges { target: panConfigDialog;  state  : "hideDialog"}
             PropertyChanges { target: rollConfigDialog; state  : "hideDialog"}
-
-
         },
         State {
             name: "Config"
@@ -192,8 +186,6 @@ Item {
             PropertyChanges { target: tiltConfigDialog; state: "showDialog"}
             PropertyChanges { target: panConfigDialog;  state: "showDialog"}
             PropertyChanges { target: rollConfigDialog; state: "showDialog"}
-
-
         }
     ]
 

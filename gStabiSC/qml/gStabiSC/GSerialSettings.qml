@@ -25,13 +25,16 @@ GDialog{
         anchors.top: serialportNameList.top
         anchors.topMargin: 0
         onClicked: {
+            if(!_serialLink.isConnected){       // if port is being closed, can update port name
+                _serialLink.update_comport_settings(selected_portname);
+                console.log("Port will be open: "+ selected_portname)
+            }
             _serialLink.open_close_comport();
             if(_serialLink.isConnected) {
-                serial_dialog_log("Port " + selected_portname + " state: Opened");
-                serial_dialog_log("Waiting response from controller board...");
+                dialog_log("Port " + selected_portname + " state: Opened");
+                dialog_log("Waiting response from controller board...");
             }
-            else serial_dialog_log("Port " + selected_portname + " state: Closed")
-
+            else dialog_log("Port " + selected_portname + " state: Closed")
         }
     } // end of Open Close Port Button
     GListView{
@@ -41,6 +44,7 @@ GDialog{
         onClicked: {
             selected_port_index = item_index;
             selected_portname   = item_text;
+            console.log("Chose: "+ selected_portname)
         }
         onEntered: {
             serial_port_info_details = _serialLink.get_selected_port_details(item_index);
@@ -57,16 +61,11 @@ GDialog{
         id: getPortListTimer
         interval: 100;  repeat: false   // run once at start up
         running: true
-        onTriggered: getPortNameList();
-    }
-    // this code cause warning when run the app, but it works
-    Connections{
-        target: _serialLink
-        onIsPortListUpdatedChanged: {port_is_exist();}
-        onIsConnectedChanged:{
-            if(_serialLink.isConnected){ openCloseComportButton.text = "Close"} else {openCloseComportButton.text = "Open"}
+        onTriggered: {
+            check_and_set_current_port()
         }
     }
+
     Flickable{
         id: portDetails
         width: 250; height: 100
@@ -89,13 +88,23 @@ GDialog{
             }
         }
     }
-    onSelected_portnameChanged: {
-        _serialLink.update_comport_settings(selected_portname);
-        serial_dialog_log("Reselected port to: "+ selected_portname)
+    //[!] this code cause warning when run the app, but it works
+    Connections{
+        target: _serialLink
+        onIsPortListUpdatedChanged: {check_and_set_current_port();}
+        onIsConnectedChanged:{
+            if(_serialLink.isConnected){ openCloseComportButton.text = "Close"} else {openCloseComportButton.text = "Open"}
+        }
     }
+//    [!]
+
+//    onSelected_portnameChanged: {
+//        _serialLink.update_comport_settings(selected_portname);
+//        dialog_log("Reselected port to: "+ selected_portname)
+//    }
     Component.onCompleted: {
-        console.log("check port at first")
-        port_is_exist()
+//        check_and_set_current_port()
+
     }
 
     function getPortNameList()
@@ -105,24 +114,30 @@ GDialog{
             portname = _serialLink.getPortName(i);
             if(portname !== "NA"){
                 serialportNameList.list_model.append({"value": portname});
-                if(selected_port_index === i) serialportNameList.current_index = i; // hightlight current port in the list
+//                if(selected_port_index === i) serialportNameList.current_index = i; // hightlight current port in the list
             }
         }
     }
-    function port_is_exist(){
+    function check_and_set_current_port(){
         getPortNameList() // update portlist when there is a change
         for(var i=0; i < serialportNameList.list_count; i++){
-            if(selected_port_index === i){
+            if(selected_portname === serialportNameList.list_model.get(i).value) // get port name from port name list model
+            {
+                dialog_log("Find the restored port " + selected_portname)
                 serialportNameList.current_index = i;
-//                if(selected_portname === serialportNameList.list_model.get(i).value) // get port name from port name list model
-//                {
-
-//                }
+                selected_portname = serialportNameList.list_model.get(i).value
+                dialog_log("Selected the port: " + selected_portname)
+            }
+            else if(selected_port_index === i){
+                dialog_log("Port " + selected_portname + " was removed")
+                serialportNameList.current_index = i;
+                selected_portname = serialportNameList.list_model.get(i).value
+                dialog_log("Selected new port: " + selected_portname)
             }
         }
     }
 
-    function serial_dialog_log(_message){
+    function dialog_log(_message){
         msg_log = "<font color=\"cyan\">" + _message+ "</font><br>";
     }
 }

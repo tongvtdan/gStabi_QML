@@ -341,6 +341,7 @@ private:
     QTimer *linkConnectionTimer; // this timer will monitor message on mavlink, if timer timeout, lost connection.
     bool isConnected;            // use to monitor the status of board's connection to control the timer
     QString system_msg_log;             // system log message
+    bool heartbeat_state;        // store heartbeat status
 
     bool first_data_pack;        // this will be check when mavlink message was received, to check whether it's 1st time to received the message
                                 // if true: Request to Read all parameters to display on UI and store in current parameters.

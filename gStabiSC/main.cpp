@@ -4,6 +4,7 @@
 #include <QString>
 #include <QQmlContext> // for setContextProperty
 
+
 #include <QDir>
 #include "configuration.h"
 #include "SerialLink.h"
@@ -21,17 +22,17 @@ int main(int argc, char *argv[])
     qmlRegisterType<PieSlice>("Charts", 1, 0, "PieSlice");
 
     QtQuick2ApplicationViewer viewer;
+
     QString customPath = "Sqlite/OfflineStorage";
     QDir dir;
     if(dir.mkpath(QString(customPath))){
-        qDebug() << "Default path >> "+viewer.engine()->offlineStoragePath();
+//        qDebug() << "Default path >> "+viewer.engine()->offlineStoragePath();
         viewer.engine()->setOfflineStoragePath(QString(customPath));
-        qDebug() << "New path >> "+viewer.engine()->offlineStoragePath();
+//        qDebug() << "New path >> "+viewer.engine()->offlineStoragePath();
     }
 //    QQuickView viewer;
     // using as normal
 //    viewer.setMainQmlFile(QStringLiteral("qml/gStabiSC/main.qml"));
-
     // using qml files form resources file, uncomment this to compile all qml file to .exe
     viewer.setSource(QUrl("qrc:/qml/gStabiSC/main.qml"));
     viewer.addImportPath("qrc:/qml/gStabiSC");
@@ -40,8 +41,10 @@ int main(int argc, char *argv[])
     viewer.addImportPath("qrc:/javascript/storage.js");
 
     viewer.setTitle(QString("%1 %2").arg(APPLICATION_NAME).arg(APPLICATION_VERSION));
+
     viewer.setMinimumSize(QSize(APPLICATION_WIDTH,APPLICATION_HEIGHT));
     viewer.setMaximumSize(QSize(APPLICATION_WIDTH,APPLICATION_HEIGHT));
+    viewer.setPosition(200, 30);
 //    viewer.setFlags(Qt::FramelessWindowHint); // no boarder and no icon on StaskBar
 
     Configuration m_configuration;
@@ -54,7 +57,7 @@ int main(int argc, char *argv[])
     LinkManager m_gLinkManager;
     m_gLinkManager.connectLink(&m_serialLink,&m_mavlink_manager);
 
-    viewer.show();
+    viewer.showNormal();
 
     return app.exec();
 }
