@@ -29,7 +29,8 @@ GDialog{
         smooth: true;
         Rectangle{
             id: profileNameContainer
-            width: profileNameInput.contentWidth+10; height: profileNameInput.contentHeight+10;
+            width: 190;  height: 30
+//            width: profileNameInput.contentWidth+10; height: profileNameInput.contentHeight+10;
             border.width: 1; border.color: "cyan"
             color: "#00000000";  smooth: true;
             radius: 0.7*height/2
@@ -144,7 +145,6 @@ GDialog{
     onStateChanged: {
         if(profileDialog.state === "show"){update_table_name_list()}
     }
-
     Component.onCompleted: {
         Storage.getDatabaseSync();
         update_table_name_list();

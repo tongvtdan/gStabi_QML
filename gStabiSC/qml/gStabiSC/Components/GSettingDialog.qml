@@ -39,6 +39,7 @@ Item{
     }
     BorderImage {
         id: dialogBorderImg
+        asynchronous: true
         anchors.fill: parent
         source: border_normal
         opacity: 1
@@ -47,21 +48,18 @@ Item{
     }
     BorderImage {
         id: dialogHoverBorderImg
+        asynchronous: true
         anchors.fill: parent
         source: border_hover
         border.left: 5; border.top: 5
         border.right: 5; border.bottom: 5
         opacity: 0
     }
-    Text {
+    TextStyled {
         id: dialogTitle
         color: "#042eff"
-        font.family: "Segoe UI"
-        font.bold: true
         text: title
         verticalAlignment: Text.AlignVCenter
-        style: Text.Normal
-        font.pixelSize: 20
         anchors.top: dialogBorderImg.top; anchors.topMargin: 9
         anchors.horizontalCenter: parent.horizontalCenter; anchors.horizontalCenterOffset: 0
         horizontalAlignment: Text.AlignHCenter

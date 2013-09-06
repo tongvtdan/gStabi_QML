@@ -43,15 +43,14 @@ Item{
         source: border_normal
         border.left: 5; border.top: 5
         border.right: 5; border.bottom: 5
+        asynchronous: true
     }
-    Text {
+    TextStyled {
         id: dialogTitle
-        font.family: "Segoe UI"
-        font.bold: true
         color: title_normal_color
+        font.pixelSize: 12
         text: title
         anchors.horizontalCenter: parent.horizontalCenter
-        font.pixelSize: 12
         anchors.top: parent.top
         anchors.topMargin: 2
 

@@ -40,6 +40,7 @@ Item{
     }
     BorderImage {
         id: dialogBorderImg
+        asynchronous: true
         anchors.fill: parent
         source: border_normal
         border.left: 5; border.top: 5
@@ -48,6 +49,7 @@ Item{
     }
     BorderImage {
         id: dialogHoverBorderImg
+        asynchronous: true
         anchors.fill: parent
         source: border_hover
         visible: false
@@ -67,13 +69,11 @@ Item{
         anchors.rightMargin: -30
         anchors.top: dialogBorderImg.top; anchors.topMargin: 50;
         spacing: 5
-        Text{
+        TextStyled{
             id: pLabel
             width: 20; height: 20
 //            color : "#00e3f9"
             color: text_color
-            font.family: "Segoe UI"
-            font.bold: true
             font.pixelSize: 16
             text: "P:"
             horizontalAlignment: Text.AlignHCenter
@@ -102,13 +102,11 @@ Item{
         anchors.rightMargin: -30
         anchors.top: pParamsRow.bottom; anchors.topMargin: 30
         spacing: 5
-        Text{
+        TextStyled{
             id: iLabel
             width: 20; height: 20
 //            color : "#00e3f9"
             color: text_color
-            font.family: "Segoe UI"
-            font.bold: true
             font.pixelSize: 16
             text: "I:"
             horizontalAlignment: Text.AlignHCenter
@@ -137,13 +135,11 @@ Item{
         anchors.rightMargin: -30
         anchors.top: iParamsRow.bottom; anchors.topMargin: 30
         spacing: 5
-        Text{
+        TextStyled{
             id: dLabel
             width: 20; height: 20
 //            color : "#00e3f9"
             color: text_color
-            font.family: "Segoe UI"
-            font.bold: true
             font.pixelSize: 16
             text: "D:"
             horizontalAlignment: Text.AlignHCenter
@@ -173,13 +169,11 @@ Item{
         anchors.rightMargin: -30
         anchors.top: dParamsRow.bottom; anchors.topMargin: 30
         spacing: 5
-        Text{
+        TextStyled{
             id: followLabel
             width: 20; height: 20
             color: text_color
 //            color : "#00e3f9"
-            font.family: "Segoe UI"
-            font.bold: true
             font.pixelSize: 12
             text: "Follow:"
             horizontalAlignment: Text.AlignRight
@@ -209,13 +203,11 @@ Item{
         anchors.rightMargin: -30
         anchors.top: followParamsRow.bottom; anchors.topMargin: 30
         spacing: 5
-        Text{
+        TextStyled{
             id: filterLabel
             width: 20; height: 20
 //            color : "#00e3f9"
             color: text_color
-            font.family: "Segoe UI"
-            font.bold: true
             font.pixelSize: 12
             text: "Smooth:"
             horizontalAlignment: Text.AlignRight

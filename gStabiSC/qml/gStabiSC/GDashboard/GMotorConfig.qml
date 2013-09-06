@@ -30,6 +30,7 @@ Item{
     }
     BorderImage {
         id: boardNormalImg
+        asynchronous: true
         width: parent.width ; height: parent.height
         border.left: 5; border.top: 5 ;border.right: 5; border.bottom: 5
         anchors.top: parent.top;
@@ -37,6 +38,7 @@ Item{
     }
     BorderImage {
         id: boarderHoverImg
+        asynchronous: true
         width: parent.width ; height: parent.height
         border.left: 5; border.top: 5
         border.right: 5; border.bottom: 5
@@ -51,12 +53,10 @@ Item{
         anchors.top: boardNormalImg.top; anchors.topMargin: 40
         anchors.left: boardNormalImg.left ; anchors.leftMargin: 8
         spacing: 5
-        Text{
+        TextStyled{
             id: powerLabel
             width: 50; height: 20
             color : "#00e3f9"
-            font.family: "Segoe UI"
-            font.bold: true
             font.pixelSize: 12
             text: "Power (%)"
             horizontalAlignment: Text.AlignHCenter
@@ -85,12 +85,10 @@ Item{
         anchors.top: powerRow.bottom; anchors.topMargin: 40
         anchors.left: boardNormalImg.left; anchors.leftMargin: 10
         spacing: 10
-        Text{
+        TextStyled{
             id: polesLabel
             width: 45; height: 20
             color : "#00e3f9"
-            font.family: "Segoe UI"
-            font.bold: true
             font.pixelSize: 16
             text: "Poles:"
             verticalAlignment: Text.AlignVCenter
@@ -111,12 +109,10 @@ Item{
         anchors.horizontalCenterOffset: 70
         anchors.horizontalCenter: parent.horizontalCenter
         spacing: 5
-        Text{
+        TextStyled{
             width: 40
             height: 20
             color : "#00e3f9"
-            font.family: "Segoe UI"
-            font.bold: true
             font.pixelSize: 16
             text: max_limit_label
             verticalAlignment: Text.AlignVCenter
@@ -137,12 +133,10 @@ Item{
         anchors.horizontalCenterOffset: -70
         anchors.horizontalCenter: parent.horizontalCenter
         spacing: 5
-        Text{
+        TextStyled{
             width: 40
             height: 20
             color : "#00e3f9"
-            font.family: "Segoe UI"
-            font.bold: true
             font.pixelSize: 16
             text: min_limit_label
             verticalAlignment: Text.AlignVCenter

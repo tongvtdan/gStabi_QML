@@ -17,6 +17,7 @@ Item {
 
     BorderImage {
         id: gstabiBackgroundImage
+        asynchronous: true
         width: 1044;  height: 700
         z: -100
         anchors.centerIn: parent
@@ -104,6 +105,7 @@ Item {
             if(state === "show"){
                 profileDialogButton.state = "pressed"
                 pidSettingDialog.state = "hide"
+                comportSettingPanel.state = "hide"
                 gDashboard.state = "Dashboard"
             } else {
                 profileDialogButton.state = "normal"
@@ -265,7 +267,7 @@ Item {
         }
     }
 
-    Text {
+    TextStyled {
         id: gremsyText
         color: "#0cf708"
         text: qsTr("Developed by Gremsy Co., Ltd")
@@ -273,8 +275,6 @@ Item {
         anchors.rightMargin: 20
         anchors.bottom: gstabiBackgroundImage.bottom
         anchors.bottomMargin: 15
-        font.bold: true
-        font.family: "Segoe UI"
         font.pixelSize: 12
     }
     Component.onCompleted: {

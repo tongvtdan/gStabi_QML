@@ -3,7 +3,7 @@ import "Components"
 
 GDialog{
     id: serialSettingDialog
-    property string portname: ""    // used to store portname in getPortNameList()
+//    property string portname: ""    // used to store portname in getPortNameList()
     property string selected_portname: "COM1"
     property int    selected_port_index: 1
     property bool   showPortSetting: true
@@ -100,26 +100,28 @@ GDialog{
     {
         serialportNameList.list_model.clear()
         for(var i=0 ; i < 10 ; i++){
-            portname = _serialLink.getPortName(i);
+            var portname = _serialLink.getPortName(i);
             if(portname !== "NA"){
                 serialportNameList.list_model.append({"value": portname});
             }
         }
     }
     function check_and_set_current_port(){
+
         getPortNameList() // update portlist when there is a change
         for(var i=0; i < serialportNameList.list_count; i++){
-            if(selected_portname === serialportNameList.list_model.get(i).value) // get port name from port name list model
+            var port_name_in_list = serialportNameList.list_model.get(i).value;
+            if(selected_portname === port_name_in_list ) // get port name from port name list model
             {
                 dialog_log("Find the restored port " + selected_portname)
                 serialportNameList.current_index = i;
-                selected_portname = serialportNameList.list_model.get(i).value
+                selected_portname = port_name_in_list;
                 dialog_log("Selected the port: " + selected_portname)
             }
             else if(selected_port_index === i){
                 dialog_log("Port " + selected_portname + " was removed")
                 serialportNameList.current_index = i;
-                selected_portname = serialportNameList.list_model.get(i).value
+                selected_portname = port_name_in_list;
                 dialog_log("Selected new port: " + selected_portname)
             }
         }

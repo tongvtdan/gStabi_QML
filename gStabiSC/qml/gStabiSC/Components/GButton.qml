@@ -10,12 +10,10 @@ Rectangle{
     color: "#00000000"
     smooth: true;
 
-    Text{
+    TextStyled{
         id: buttonLabel
         anchors.centerIn: parent
         color : "#00e3f9"
-        font.family: "Segoe UI"
-        font.bold: true
         font.pixelSize: 16
         text: button.text
         Behavior on color { ColorAnimation { duration: 200 }}

@@ -29,6 +29,7 @@ GDialog{
             wrapMode: Text.WordWrap
             color: "cyan"
             textFormat: Text.RichText
+//            textFormat: Text.PlainText
             text: msg_history
             anchors.bottomMargin: 30
             anchors.rightMargin: 30

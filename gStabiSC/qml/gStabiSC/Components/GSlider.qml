@@ -34,24 +34,8 @@ Rectangle {
             id: fillRect
             height: parent.height;
             width: (value - lowerLimit)*convert_ratio
-//            width: 250
             radius: background.radius
-//            gradient: Gradient {
-//                GradientStop {
-//                    position: 0.00;
-//                    color: "#08f7dc";
-//                }
-//                GradientStop {
-//                    position: 0.50;
-//                    color: "#000000";
-//                }
-//                GradientStop {
-//                    position: 1.00;
-//                    color: "#07f7db";
-//                }
-//            }
-                        color: "#04ffde"
-
+            color: "#04ffde"
             opacity: 0.8
             anchors.left: parent.left; anchors.leftMargin: background.border.width/2
         }
@@ -63,11 +47,13 @@ Rectangle {
         anchors.top: grooveRect.bottom; anchors.topMargin: 0
         Image{
             id: handleReleasedImage
+            asynchronous: true
             anchors.fill: parent
             source: handle_normal
         }
         Image{
             id: handlePressedImage
+            asynchronous: true
             anchors.fill: parent
             source: handle_pressed
             state: "normal"

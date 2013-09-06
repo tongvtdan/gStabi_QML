@@ -68,5 +68,6 @@
         <file>qml/gStabiSC/Components/GListView.qml</file>
         <file>qml/gStabiSC/GProfile.qml</file>
         <file>qml/gStabiSC/Components/GCheckBox.qml</file>
+        <file>qml/gStabiSC/Components/TextStyled.qml</file>
     </qresource>
 </RCC>

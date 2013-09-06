@@ -71,4 +71,5 @@ OTHER_FILES += \
     qml/gStabiSC/Components/GProfile.qml \
     javascript/storage.js \
     qml/gStabiSC/Components/GListView.qml \
-    qml/gStabiSC/Components/GCheckBox.qml
+    qml/gStabiSC/Components/GCheckBox.qml \
+    qml/gStabiSC/Components/TextStyled.qml

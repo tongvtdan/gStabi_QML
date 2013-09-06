@@ -21,17 +21,17 @@ Item{
     width: buttonImage.width; height: buttonImage.height
     Image{
         id: buttonImage
+        asynchronous: true
         fillMode: Image.PreserveAspectFit
         source: imageNormal
 
+
     }
-    Text{
+    TextStyled{
         id: buttonText
         text: rootItem.text
         anchors.centerIn: parent
         color : "#00e3f9"
-        font.family: "Segoe UI"
-        font.bold: true
         font.pixelSize: 16
     }
     MouseArea{

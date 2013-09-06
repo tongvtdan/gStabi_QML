@@ -69,44 +69,48 @@ Item{
         id: gaugeBackImage
         anchors.fill: parent
         source: gauge_back
+        asynchronous: true
     }
     Image {
         id: gaugeNeedleImage
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         source: gauge_needle
+        asynchronous: true
+
         rotation: get_rotation_angle();
     }
-    Text{
+    TextStyled{
         id: outOfRangeLabel
         width: 20; height: 13
         color: "#ff0000"
-        font.pixelSize: 20 ; font.family:"Segoe UI" ; font.bold: true
+
+//        font.pixelSize: 20 ; font.family:"Segoe UI" ; font.bold: true
         anchors.centerIn: parent
         verticalAlignment: Text.AlignVCenter ; horizontalAlignment: Text.AlignHCenter
-        style: Text.Normal
+//        style: Text.Normal
         text: "Out of range"
         anchors.verticalCenterOffset: -50
         visible: out_of_range
     }
 
     // text display current angle value, sensor angle value
-    Text{
+    TextStyled{
         id: gaugeAngleValueText
         width: 20; height: 13
         color: "#00ffff"
-        font.pixelSize: 20 ; font.family:"Segoe UI" ; font.bold: true
+//        font.pixelSize: 20 ; font.family:"Segoe UI" ; font.bold: true
         anchors.centerIn: parent
         verticalAlignment: Text.AlignVCenter ; horizontalAlignment: Text.AlignHCenter
-        style: Text.Normal
+//        style: Text.Normal
         text: gaugeNeedleImage.rotation.toFixed(angle_precision)
     }
     // display different value from setpoint
-    Text{
+    TextStyled{
         id: gaugeAngleDeltaText
         width: 20; height: 13
         color: "#ff0000"
-        font.pixelSize: 12; font.family: "Segoe UI Symbol"; font.bold: true
+        font.pixelSize: 12;
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: gaugeAngleValueText.bottom; anchors.topMargin: 35
         verticalAlignment: Text.AlignVCenter; horizontalAlignment: Text.AlignHCenter
@@ -147,6 +151,7 @@ Item{
         rotation: (gauge_config_mode? gauge_up_limit_set_angle : gauge_setpoint_angle) - gauge_offset
         Image {
             id: gaugeHandlePressedImage
+            asynchronous: true
             anchors.right: parent.right; anchors.rightMargin: -10
             anchors.verticalCenter: parent.verticalCenter
             source: gauge_handle_pressed
@@ -189,6 +194,7 @@ Item{
         }
         Image{
             id: gaugeControlHandleImage
+            asynchronous: true
             rotation: 0
             anchors.right: parent.right; anchors.rightMargin: -10
             anchors.verticalCenter: parent.verticalCenter
@@ -202,6 +208,7 @@ Item{
         rotation: gauge_down_limit_set_angle - gauge_offset
         Image {
             id: gaugeDownRangeHandleSelectedImage
+            asynchronous: true
             anchors.right: parent.right
             anchors.rightMargin: -10
             anchors.verticalCenter: parent.verticalCenter
@@ -245,6 +252,7 @@ Item{
         }
         Image{
             id: gaugeDownRangeSelectHandlerImage
+            asynchronous: true
             anchors.right: parent.right
             anchors.rightMargin: -10
             anchors.verticalCenter: parent.verticalCenter

@@ -34,14 +34,12 @@ Item{
         }
 
     }
-    Text {
+    TextStyled {
         id: checkBoxText
         text: checkbox_text
         anchors.left: checkBoxBorder.right;   anchors.leftMargin: 10
         anchors.verticalCenter: parent.verticalCenter
         color : "cyan"
-        font.family: "Segoe UI"
-        font.bold: true
         font.pixelSize: 16
     }
 
