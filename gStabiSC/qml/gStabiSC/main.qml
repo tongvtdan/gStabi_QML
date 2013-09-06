@@ -18,6 +18,7 @@ Item {
     BorderImage {
         id: gstabiBackgroundImage
         width: 1044;  height: 700
+        z: -100
         anchors.centerIn: parent
         source: "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_background.png"
     }
@@ -39,6 +40,8 @@ Item {
     }
     GDashBoard{
         id: gDashboard
+        width: 1024;     height: 340
+
         anchors.horizontalCenter: parent.horizontalCenter; anchors.horizontalCenterOffset: 15
         anchors.top: gstabiBackgroundImage.top; anchors.topMargin: 60
         onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
@@ -49,6 +52,7 @@ Item {
                 dialog_log("Switch to Motor Confid Mode")
                 comportSettingPanel.state = "hide";
                 pidSettingDialog.state = "hide"
+                profileDialog.state = "hide"
                 systemConsole.y = gstabiBackgroundImage.height - systemConsole.height/2;
             }
             else {

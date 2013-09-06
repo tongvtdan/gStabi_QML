@@ -8,15 +8,15 @@ import "../../../javascript/storage.js" as Storage
   */
 Item {
     id: root
-    width: 1024
-    height: 340
     property int gauge_width: 330
     property int gauge_height: 330
     property string msg_log : "" // log the message to display on Console
     property bool   dashboard_config_mode : false   // if false: dashbord mode; if true: config mode
-    property string database_table_name: ""
+
+    implicitWidth: 1024; implicitHeight: 340
     GGauge{
         id: tiltGauge
+        width: gauge_width; height: gauge_height
         gauge_tilte: "Tilt"
         gauge_type: 1; gauge_offset: 0
         gauge_width: root.gauge_width; gauge_height:root.gauge_height
@@ -33,6 +33,7 @@ Item {
     }
     GGauge{
         id: panGauge
+        width: gauge_width; height: gauge_height
         gauge_tilte: "Pan"
         gauge_type: 2; gauge_offset: 90
         gauge_width: root.gauge_width; gauge_height:root.gauge_height
@@ -51,6 +52,7 @@ Item {
     }
     GGauge{
         id: rollGauge
+        width: gauge_width; height: gauge_height
         gauge_tilte: "Roll"
         gauge_type: 3; gauge_offset: 0
         gauge_width: root.gauge_width; gauge_height:root.gauge_height

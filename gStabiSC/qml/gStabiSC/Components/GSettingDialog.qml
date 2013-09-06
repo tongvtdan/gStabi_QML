@@ -69,12 +69,12 @@ Item{
     states:[
         State {
             name: "show"
-            PropertyChanges {target: dialogContainer; scale: 1.0; opacity: 1; y: show_state_posY }
+            PropertyChanges {target: dialogContainer; scale: 1.0; opacity: 1; y: show_state_posY ;}
 
         }
         ,State {
             name: "hide"
-            PropertyChanges {target: dialogContainer; scale: hide_scale ; opacity: 0.5; y: hide_state_posY}
+            PropertyChanges {target: dialogContainer; scale: hide_scale ; opacity: 0.5; y: hide_state_posY;}
         }
     ]
     transitions: [ Transition {

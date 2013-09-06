@@ -330,8 +330,9 @@ Item{
     function calc_rotate_angle_gauge(_x, _y){
         var rot_angle_deg;
         var distanceFromCenterToPressedPoint = Math.sqrt((_x - gauge_center_x)*(_x - gauge_center_x) + (_y - gauge_center_y)*(_y - gauge_center_y));
-        if((distanceFromCenterToPressedPoint >= 0.7*gauge_radius) && (distanceFromCenterToPressedPoint <= gauge_radius))
+        if((distanceFromCenterToPressedPoint >= 0.9*gauge_radius) && (distanceFromCenterToPressedPoint <= gauge_radius))
         {
+            console.log( gauge_tilte+ " In control area")
             var minDistanceFromPress = 32767;
             for(var angle = 0; angle < 360; angle++ ){
                 var x_angle = gauge_center_x + gauge_radius*Math.cos(angle*Math.PI/180);

@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
     viewer.setTitle(QString("%1 %2").arg(APPLICATION_NAME).arg(APPLICATION_VERSION));
     viewer.setMinimumSize(QSize(APPLICATION_WIDTH,APPLICATION_HEIGHT));
     viewer.setMaximumSize(QSize(APPLICATION_WIDTH,APPLICATION_HEIGHT));
-    viewer.setPosition(200, 30);
+//    viewer.setPosition(200, 30);
 //    viewer.setFlags(Qt::FramelessWindowHint); // no boarder and no icon on StaskBar
 
 
