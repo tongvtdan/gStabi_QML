@@ -32,6 +32,7 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
                 first_data_pack = false; // From now on, all message is treated as normal.
                 request_all_params();   // then request all parameters from Board
             }
+
             switch (message.msgid)
             {
 
@@ -43,6 +44,7 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
                 }
                 else
                     sethb_pulse(false);
+                qDebug()<< "Checksum: " << message.checksum;
             }
                 break;
             case MAVLINK_MSG_ID_RAW_IMU: { // get raw IMU data
@@ -546,6 +548,7 @@ void MavLinkManager::request_all_params()
 {
     uint16_t len;
     mavlink_message_t msg;
+
     uint8_t buf[MAVLINK_MAX_PACKET_LEN];
     mavlink_msg_param_request_list_pack(SYSTEM_ID, MAV_COMP_ID_SERVO1, &msg, TARGET_SYSTEM_ID, MAV_COMP_ID_IMU);
     len = mavlink_msg_to_send_buffer(buf, &msg);
