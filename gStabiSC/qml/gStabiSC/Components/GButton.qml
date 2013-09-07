@@ -5,6 +5,8 @@ Rectangle{
     property string  text   : "Button"
     property bool hover_enabled: true
     signal clicked
+    signal entered
+    signal exited
     width: buttonLabel.width+20; height: buttonLabel.height + 5;
     border.width: 1; border.color: "cyan"
     color: "#00000000"
@@ -25,8 +27,8 @@ Rectangle{
         onClicked: button.clicked();
         onPressed: button.state = "pressed"
         onReleased:  button.state = "released"
-        onEntered: button.state = "hover"
-        onExited: button.state = "exit"
+        onEntered: {button.state = "hover"; button.entered();}
+        onExited: {button.state = "exit"; button.exited(); }
     }
     Behavior on color {ColorAnimation {duration: 200 }}
     states: [

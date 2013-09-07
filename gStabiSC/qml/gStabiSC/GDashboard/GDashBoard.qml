@@ -79,14 +79,15 @@ Item {
             spacing: 5
             GButton{
                 id: modeSelectionButton
-                width: 120; height: 30
-                text: "Config"
+                width: 150; height: 30
+                text: "Config Motor"
                 onClicked: {
-//                    dashboard_config_mode = !dashboard_config_mode;
                     if(root.state === "Config"){
                         root.state = "Dashboard"
                     } else root.state = "Config"
                 }
+                onEntered: dialog_log("Open Config Motors Panel")
+
             }
             GButton{
                 id: writeConfigParamsToMCU
@@ -98,6 +99,7 @@ Item {
                     }
                     else{  dialog_log("Controller board is not connected. Please connect PC to the board then try again") }
                 }
+                onEntered: dialog_log("Write Motor Config parameters to controller board")
             }
             GButton{
                 id: readConfigParamsFromMCU
@@ -107,6 +109,7 @@ Item {
                     if(_serialLink.isConnected){ _mavlink_manager.request_all_params(); }
                     else {dialog_log("Controller board is not connected. Please connect PC to the board then try again")}
                 }
+                onEntered: dialog_log("Read Motor Config parameters from controller board")
             }
         }
     }
@@ -174,7 +177,7 @@ Item {
     states: [
         State {
             name: "Dashboard"
-            PropertyChanges { target: modeSelectionButton; text: "Config >>"}
+            PropertyChanges { target: modeSelectionButton; text: "Config Motor>>"}
             PropertyChanges { target: writeConfigParamsToMCU; visible: false }
             PropertyChanges { target: readConfigParamsFromMCU; visible: false }
             PropertyChanges { target: tiltConfigDialog; state  : "hideDialog"}
@@ -224,7 +227,8 @@ Item {
        @output: msg_log in HTML format
       */
     function tilt_log(_message){
-        msg_log = "<font color=\"yellow\">" + _message+ "</font><br>";
+//        msg_log = "<font color=\"yellow\">" + _message+ "</font><br>";
+        msg_log = _message + "\n"
     }
     /* function roll_log(_message)
        @brief: put message to log
@@ -232,7 +236,8 @@ Item {
        @output: msg_log in HTML format
       */
     function roll_log(_message){
-        msg_log = "<font color=\"springgreen\">" + _message+ "</font><br>";
+//        msg_log = "<font color=\"springgreen\">" + _message+ "</font><br>";
+        msg_log = _message + "\n"
     }
     /* function pan_log(_message)
        @brief: put message to log
@@ -240,7 +245,8 @@ Item {
        @output: msg_log in HTML format
       */
     function pan_log(_message){
-        msg_log = "<font color=\"deepskyblue\">" + _message+ "</font><br>";
+//        msg_log = "<font color=\"deepskyblue\">" + _message+ "</font><br>";
+        msg_log = _message + "\n"
     }
     /* function dialog_log(_message)
        @brief: put message to log
@@ -248,6 +254,7 @@ Item {
        @output: msg_log in HTML format
       */
     function dialog_log(_message){
-        msg_log = "<font color=\"red\">" + _message+ "</font><br>";
+//        msg_log = "<font color=\"red\">" + _message+ "</font><br>";
+        msg_log = _message + "\n"
     }
 }

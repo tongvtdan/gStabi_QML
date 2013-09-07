@@ -146,6 +146,7 @@ Item {
             if(state === "show"){
                 serialSettingButton.state = "pressed"
                 pidSettingDialog.state = "hide"
+                gDashboard.state = "Dashboard"
             } else serialSettingButton.state = "normal"
         }
     }
@@ -289,10 +290,16 @@ Item {
         if(Storage.getSetting("Profile") !== "NA"){   // if already exist, get it
             profileDialog.profile_name = Storage.getSetting("Profile")
         }
-        dialog_log("<center>************************************</center>")
-        dialog_log("<center>Before you can start to control or config your system, please connect your system to PC then open the serial port to establish the communication with controller board on gStabi Systtem</center>")
-        dialog_log("<center>Welcome to gStabi Station Controller</center>")
-        dialog_log("<center>************************************</center>")
+        dialog_log("************************************\n")
+        dialog_log("Before you can start to control or config your system, please connect your system to PC then open the serial port to establish the communication with controller board on gStabi Systtem \n")
+        dialog_log("Welcome to gStabi Station Controller \n")
+        dialog_log("************************************\n")
+
+//        dialog_log("<center>************************************</center>")
+//        dialog_log("<center>Before you can start to control or config your system, please connect your system to PC then open the serial port to establish the communication with controller board on gStabi Systtem</center>")
+//        dialog_log("<center>Welcome to gStabi Station Controller</center>")
+//        dialog_log("<center>************************************</center>")
+
 
     }
     Component.onDestruction: {
@@ -323,6 +330,7 @@ Item {
        @output: msg_log in HTML format
       */
     function dialog_log(_message){
-        main_log_msg = "<font color=\"white\">" + _message+ "</font><br>" + main_log_msg;
+//        main_log_msg = "<font color=\"white\">" + _message+ "</font><br>" + main_log_msg;
+        main_log_msg =_message+ "\n" + main_log_msg;
     }
 }

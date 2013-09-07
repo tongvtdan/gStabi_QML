@@ -28,8 +28,8 @@ GDialog{
             height: 370
             wrapMode: Text.WordWrap
             color: "cyan"
-            textFormat: Text.RichText
-//            textFormat: Text.PlainText
+//            textFormat: Text.RichText
+            textFormat: Text.PlainText
             text: msg_history
             anchors.bottomMargin: 30
             anchors.rightMargin: 30

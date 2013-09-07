@@ -179,7 +179,8 @@ GDialog{
    @output: msg_log in HTML format
   */
     function dialog_log(_message){
-        msg_log = "<font color=\"yellow\">" + _message+ "</font><br>";
+//        msg_log = "<font color=\"yellow\">" + _message+ "</font><br>";
+         msg_log = _message+ "\n";
     }
     /* function save_parameters_to_profile()
    @brief: save all parameters to profile name

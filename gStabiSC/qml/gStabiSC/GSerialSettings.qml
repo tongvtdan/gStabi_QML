@@ -128,7 +128,8 @@ GDialog{
     }
 
     function dialog_log(_message){
-        msg_log = "<font color=\"cyan\">" + _message+ "</font><br>";
+//        msg_log = "<font color=\"cyan\">" + _message+ "</font><br>";
+         msg_log = _message+ "\n";
     }
 }
 

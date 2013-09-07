@@ -144,10 +144,12 @@ GSettingDialog{
     /* function dialog_log(_message)
        @brief: put message to log
        @input: _message
-       @output: msg_log in HTML format
+       @output: msg_log in HTML format/plaintext format
       */
     function dialog_log(_message){
-        msg_log = "<font color=\"red\">" + _message+ "</font><br>";
+//        msg_log = "<font color=\"red\">" + _message+ "</font><br>";
+        msg_log = _message + "\n"
     }
+
 
 }
