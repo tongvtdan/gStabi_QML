@@ -7,6 +7,7 @@ Rectangle{
     property int    top_value       : 100
     property bool   read_only       : false
     signal clicked
+
     width: 45; height: 20;
     implicitWidth: 45; implicitHeight: 20
     border.width: 1; border.color: "cyan"

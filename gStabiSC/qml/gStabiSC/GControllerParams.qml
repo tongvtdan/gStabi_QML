@@ -48,6 +48,8 @@ GSettingDialog{
             anchors.bottom: panParameters.top
             anchors.bottomMargin: 0
             anchors.horizontalCenter: panParameters.horizontalCenter
+            onClicked: panParameters.visible = !panParameters.visible
+
         }
         GParametersContainer{
             id: panParameters
@@ -76,6 +78,7 @@ GSettingDialog{
             anchors.bottom: rollParameters.top
             anchors.bottomMargin: 0
             anchors.horizontalCenter: rollParameters.horizontalCenter
+            onClicked: rollParameters.visible = !rollParameters.visible
         }
         GParametersContainer{
             id: rollParameters
