@@ -204,7 +204,7 @@ Item {
     Connections{
         target: _mavlink_manager
 
-        onTilt_powerChanged:             tiltConfigDialog.power_level = _mavlink_manager.tilt_power;
+        onTilt_powerChanged:            tiltConfigDialog.power_level = _mavlink_manager.tilt_power;
         onMotor_tilt_num_polesChanged:  tiltConfigDialog.poles_num   = _mavlink_manager.motor_tilt_num_poles;
         onMotor_tilt_dirChanged:        tiltConfigDialog.motor_dir   = _mavlink_manager.motor_tilt_dir;
         onTilt_up_limit_angleChanged:   tiltConfigDialog.min_value   = _mavlink_manager.tilt_up_limit_angle;

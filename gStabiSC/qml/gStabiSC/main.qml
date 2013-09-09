@@ -40,17 +40,16 @@ Item {
         paused: true
     }
     // end of dashboard
-    GPIDDialog{
-        id: pidSettingDialog
+    GControllerParams{
+        id: controllerParamsDialog
         state: "hide"
         dragMaxX: gstabiBackgroundImage.width
         dragMaxY: gstabiBackgroundImage.height
-        x: gstabiBackgroundImage.x + gstabiBackgroundImage.width/2 - pidSettingDialog.width/2;
-        show_state_posY: gstabiBackgroundImage.y + gstabiBackgroundImage.height/2 - pidSettingDialog.height/2;
+        x: gstabiBackgroundImage.x + gstabiBackgroundImage.width/2 - controllerParamsDialog.width/2;
+        show_state_posY: gstabiBackgroundImage.y + gstabiBackgroundImage.height/2 - controllerParamsDialog.height/2;
         onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
         onStateChanged: {
             if(state === "show"){
-//                z = 100
                 pidSettingsButton.state = "pressed"
                 comportSettingPanel.state = "hide"
                 profileDialog.state = "hide"
@@ -58,7 +57,6 @@ Item {
                 systemConsole.y = gstabiBackgroundImage.height - systemConsole.height/2;
             }
             else {
-//                z = -1
                 systemConsole.y = systemConsole.show_state_posY;
                 pidSettingsButton.state = "normal"
             }
@@ -78,7 +76,7 @@ Item {
                 dashboard_config_mode = true
                 dialog_log("Switch to Motor Confid Mode")
                 comportSettingPanel.state = "hide";
-                pidSettingDialog.state = "hide"
+                controllerParamsDialog.state = "hide"
                 profileDialog.state = "hide"
                 systemConsole.y = gstabiBackgroundImage.height - systemConsole.height/2;
             }
@@ -104,7 +102,7 @@ Item {
         onStateChanged: {
             if(state === "show"){
                 profileDialogButton.state = "pressed"
-                pidSettingDialog.state = "hide"
+                controllerParamsDialog.state = "hide"
                 comportSettingPanel.state = "hide"
                 gDashboard.state = "Dashboard"
             } else {
@@ -145,7 +143,7 @@ Item {
         onStateChanged: {
             if(state === "show"){
                 serialSettingButton.state = "pressed"
-                pidSettingDialog.state = "hide"
+                controllerParamsDialog.state = "hide"
                 gDashboard.state = "Dashboard"
             } else serialSettingButton.state = "normal"
         }
@@ -185,10 +183,10 @@ Item {
             imagePressed: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_pid.png"
             imageHover  : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_pid.png"
             onClicked: {
-                if(pidSettingDialog.state === "hide") {
-                    pidSettingDialog.state = "show" ;
+                if(controllerParamsDialog.state === "hide") {
+                    controllerParamsDialog.state = "show" ;
                 } else {
-                    pidSettingDialog.state = "hide";
+                    controllerParamsDialog.state = "hide";
                 }
             }
             onEntered: dialog_log("Open or Close Controller Settings dialog")

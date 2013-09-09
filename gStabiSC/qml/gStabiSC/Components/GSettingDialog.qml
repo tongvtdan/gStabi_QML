@@ -19,51 +19,51 @@ Item{
 //    property string border_hover    : "../images/gStabiUI_3.2_hover_setting_dialog.png"
 
     implicitWidth: 940; implicitHeight: 500
-    MouseArea{
-        id: windowMouseArea
-        anchors.fill: parent
-        anchors.top: parent.top;  anchors.horizontalCenter: parent.horizontalCenter
-        drag.target: parent
-        drag.minimumX: 0; drag.minimumY: 0
-        drag.maximumX: dragMaxX ;  drag.maximumY: dragMaxY
-        hoverEnabled: true
-        onEntered: {
-            dialogHoverBorderImg.opacity = 1;
-            dialogTitle.color = title_hover_color;
-        }
-        onExited: {
-            dialogHoverBorderImg.opacity = 0;
-            dialogTitle.color = title_normal_color;
-        }
-//        onDoubleClicked: dialogContainer.state === "hideDialog"? dialogContainer.state = "showDialog" : dialogContainer.state = "hideDialog"
-    }
-    BorderImage {
-        id: dialogBorderImg
-        asynchronous: true
-        anchors.fill: parent
-        source: border_normal
-        opacity: 1
-        border.left: 5; border.top: 5
-        border.right: 5; border.bottom: 5
-    }
-    BorderImage {
-        id: dialogHoverBorderImg
-        asynchronous: true
-        anchors.fill: parent
-        source: border_hover
-        border.left: 5; border.top: 5
-        border.right: 5; border.bottom: 5
-        opacity: 0
-    }
-    TextStyled {
-        id: dialogTitle
-        color: "#042eff"
-        text: title
-        verticalAlignment: Text.AlignVCenter
-        anchors.top: dialogBorderImg.top; anchors.topMargin: 9
-        anchors.horizontalCenter: parent.horizontalCenter; anchors.horizontalCenterOffset: 0
-        horizontalAlignment: Text.AlignHCenter
-    }
+//    MouseArea{
+//        id: windowMouseArea
+//        anchors.fill: parent
+//        anchors.top: parent.top;  anchors.horizontalCenter: parent.horizontalCenter
+//        drag.target: parent
+//        drag.minimumX: 0; drag.minimumY: 0
+//        drag.maximumX: dragMaxX ;  drag.maximumY: dragMaxY
+//        hoverEnabled: true
+//        onEntered: {
+//            dialogHoverBorderImg.opacity = 1;
+//            dialogTitle.color = title_hover_color;
+//        }
+//        onExited: {
+//            dialogHoverBorderImg.opacity = 0;
+//            dialogTitle.color = title_normal_color;
+//        }
+////        onDoubleClicked: dialogContainer.state === "hideDialog"? dialogContainer.state = "showDialog" : dialogContainer.state = "hideDialog"
+//    }
+//    BorderImage {
+//        id: dialogBorderImg
+//        asynchronous: true
+//        anchors.fill: parent
+//        source: border_normal
+//        opacity: 1
+//        border.left: 5; border.top: 5
+//        border.right: 5; border.bottom: 5
+//    }
+//    BorderImage {
+//        id: dialogHoverBorderImg
+//        asynchronous: true
+//        anchors.fill: parent
+//        source: border_hover
+//        border.left: 5; border.top: 5
+//        border.right: 5; border.bottom: 5
+//        opacity: 0
+//    }
+//    TextStyled {
+//        id: dialogTitle
+//        color: "#042eff"
+//        text: title
+//        verticalAlignment: Text.AlignVCenter
+//        anchors.top: dialogBorderImg.top; anchors.topMargin: 9
+//        anchors.horizontalCenter: parent.horizontalCenter; anchors.horizontalCenterOffset: 0
+//        horizontalAlignment: Text.AlignHCenter
+//    }
     states:[
         State {
             name: "show"

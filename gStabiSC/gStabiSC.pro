@@ -64,7 +64,6 @@ OTHER_FILES += \
     qml/gStabiSC/GDashboard/GMotorConfig.qml            \
     qml/gStabiSC/GAppHeader.qml \
     qml/gStabiSC/GConsole.qml   \
-    qml/gStabiSC/GPIDDialog.qml \
     qml/gStabiSC/GSerialSettings.qml \
     qml/gStabiSC/GDashboard/GDashBoard.qml \
     qml/gStabiSC/Components/GSerialPortListHeader.qml \
@@ -72,4 +71,5 @@ OTHER_FILES += \
     javascript/storage.js \
     qml/gStabiSC/Components/GListView.qml \
     qml/gStabiSC/Components/GCheckBox.qml \
-    qml/gStabiSC/Components/TextStyled.qml
+    qml/gStabiSC/Components/TextStyled.qml \
+    qml/gStabiSC/GPIDDialog.qml
