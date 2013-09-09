@@ -31,6 +31,7 @@ Item {
         onGauge_up_limit_set_angleChanged: tiltConfigDialog.min_value = gauge_up_limit_set_angle;
         onGauge_down_limit_set_angleChanged:  tiltConfigDialog.max_value = gauge_down_limit_set_angle;
         onGauge_setpoint_angleChanged: send_setpoint_control();
+        onGauge_log_messageChanged: dialog_log(gauge_log_message)
     }
 
     GGauge{
@@ -52,6 +53,7 @@ Item {
         onGauge_down_limit_set_angleChanged: panConfigDialog.max_value = gauge_down_limit_set_angle
         onGauge_up_limit_set_angleChanged:   panConfigDialog.min_value = gauge_up_limit_set_angle
         onGauge_setpoint_angleChanged: send_setpoint_control();
+        onGauge_log_messageChanged: dialog_log(gauge_log_message)
     }
     GGauge{
         id: rollGauge
@@ -70,6 +72,7 @@ Item {
         onGauge_down_limit_set_angleChanged: rollConfigDialog.max_value = gauge_down_limit_set_angle
         onGauge_up_limit_set_angleChanged:   rollConfigDialog.min_value = gauge_up_limit_set_angle
         onGauge_setpoint_angleChanged: send_setpoint_control();
+        onGauge_log_messageChanged: dialog_log(gauge_log_message)
     }
     Item{
         id: configButtonsPanel
