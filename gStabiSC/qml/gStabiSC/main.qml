@@ -1,6 +1,6 @@
 import QtQuick 2.0
 import QtQuick.LocalStorage 2.0
-import "GDashboard"
+
 import "Components"
 
 
@@ -65,7 +65,7 @@ Item {
 
     GDashBoard{
         id: gDashboard
-        width: 1024;     height: 340
+        width: 930;     height: 310
         z:0;
         anchors.horizontalCenter: parent.horizontalCenter; anchors.horizontalCenterOffset: 15
         anchors.top: gstabiBackgroundImage.top; anchors.topMargin: 60
@@ -87,7 +87,12 @@ Item {
             }
         }
     }
-
+    GMotorsConfiguration{
+        id: motorsConfigurationPanel
+        anchors.horizontalCenter: gDashboard.horizontalCenter
+        anchors.top : gDashboard.bottom; anchors.topMargin: -10
+        visible: false
+    }
     GProfile{
         id: profileDialog
         state: "hide";
@@ -176,6 +181,17 @@ Item {
             }
             onEntered: dialog_log("Open or Close Serial Port dialog")
         }
+        GImageButton{
+            id: motorsParamsButton
+            text:""
+            imageNormal: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_motors.png"
+            imagePressed: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_motors.png"
+            imageHover: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_motors.png"
+            onClicked: {
+                motorsConfigurationPanel.visible = !motorsConfigurationPanel.visible
+            }
+        }
+
         GImageButton{
             id: pidSettingsButton
             text: ""
