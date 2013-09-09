@@ -237,13 +237,14 @@ Item {
 
     }   // end of buttons Panel
     onMain_log_msgChanged: {
-        if(main_log_msg.length >=10000){
+        if(main_log_msg.length >=1000){
+            main_log_msg = ""
             dialog_log("Log data cleared")
         }
     }
     Connections{
         target: _mavlink_manager;
-        onMavlink_message_logChanged: {main_log_msg = _mavlink_manager.mavlink_message_log + "<br>" + main_log_msg}
+        onMavlink_message_logChanged: {main_log_msg = _mavlink_manager.mavlink_message_log + "\n" + main_log_msg}
         onBoard_connection_stateChanged: {
             if(_mavlink_manager.board_connection_state){
 //            comportSettingPanel.state = "hide";

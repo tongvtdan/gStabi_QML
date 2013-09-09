@@ -44,7 +44,6 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
                 }
                 else
                     sethb_pulse(false);
-                qDebug()<< "Checksum: " << message.checksum;
             }
                 break;
             case MAVLINK_MSG_ID_RAW_IMU: { // get raw IMU data
@@ -93,47 +92,9 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
                 sbus_chan_values.ch17 = mavlink_msg_sbus_chan_values_get_ch17(&message);
                 sbus_chan_values.ch18 = mavlink_msg_sbus_chan_values_get_ch18(&message);
             }
-                break;
-            case MAVLINK_MSG_ID_ACC_CALIB_STATUS: { // get acc calib data
-                acc_calib_sta.acc_calib_status = mavlink_msg_acc_calib_status_get_acc_calib_status(&message);
-                /*
-            switch(acc_calib_sta.acc_calib_status)
-            {
-                case ACC_CALIB_FINISH:
-                    ui->acc_calib_label->setText("Acc calib finished!");
-                break;
-                case ONE_REMAINING_FACE:
-                    ui->acc_calib_label->setText("One remaining face");
-                break;
-                case TWO_REMAINING_FACES:
-                    ui->acc_calib_label->setText("Two remaining faces");
-                break;
-                case THREE_REMAINING_FACES:
-                    ui->acc_calib_label->setText("Three remaining faces");
-                break;
-                case FOUR_REMAINING_FACES:
-                    ui->acc_calib_label->setText("Four remaining faces");
-                break;
-                case FIVE_REMAINING_FACES:
-                    ui->acc_calib_label->setText("Five remaining faces");
-                break;
-                case SIX_REMAINING_FACES:
-                    ui->acc_calib_label->setText("Six remaining faces");
-                break;
-                case ACC_CALIB_FAIL:
-                    ui->acc_calib_label->setText("Acc calib failed!");
-                break;
-            }
-            */
-            }
-                break;
-
-            case MAVLINK_MSG_ID_GYRO_CALIB_STATUS:  { // get gyro calib data
-                gyro_calib_sta.status = mavlink_msg_gyro_calib_status_get_status(&message);
-            }
-                break;
+            break;
             default:
-                break;
+            break;
             } // end of switch
         }
     }
@@ -554,6 +515,22 @@ void MavLinkManager::request_all_params()
     len = mavlink_msg_to_send_buffer(buf, &msg);
     emit messge_write_to_comport_ready((const char*)buf, len);
     setmavlink_message_log("Requesting parameters on board...");
+}
+
+void MavLinkManager::send_control_command(int tilt_angle_setpoint, int pan_angle_setpoint, int roll_angle_setpoint)
+{
+    uint16_t len=0;
+    mavlink_message_t msg;
+    uint8_t buf[MAVLINK_MAX_PACKET_LEN];
+
+//    tilt_temp = ui->pitchSlider->value();  // degree then convert to angle speed
+//    roll_temp = ui->rollSlider->value();
+//    yaw_temp  = ui->yawknob->value();
+
+    mavlink_msg_rc_simulation_pack(SYSTEM_ID, MAV_COMP_ID_SERVO1, &msg, tilt_angle_setpoint, roll_angle_setpoint, pan_angle_setpoint);
+    len = mavlink_msg_to_send_buffer(buf, &msg);
+    emit messge_write_to_comport_ready((const char*)buf, len);
+    qDebug()<< QString("Control angle: %1, %2, %3").arg(tilt_angle_setpoint).arg(pan_angle_setpoint).arg(roll_angle_setpoint);
 }
 
 

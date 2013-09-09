@@ -7,7 +7,7 @@
 
 #include "thirdParty/mavlink/v1.0/gremsyBGC/mavlink.h"
 #include "thirdParty/mavlink/v1.0/globalData.h"
-#include "thirdParty/mavlink/v1.0/gMavlinkV1_0.h"
+
 /*
  * Some names are equal:
  *  Pitch   = Tilt
@@ -223,6 +223,7 @@ public:
     Q_INVOKABLE void write_params_to_board();
     Q_INVOKABLE void get_mavlink_info();
     Q_INVOKABLE void request_all_params();      // function to read parameters from controller board
+    Q_INVOKABLE void send_control_command(int tilt_angle_setpoint, int pan_angle_setpoint, int roll_angle_setpoint);
 
 signals:
     void mavlink_data_ready(QByteArray data);
@@ -312,8 +313,6 @@ private:
     mavlink_param_request_read_t request_read;
     mavlink_param_value_t paramValue;
     mavlink_sbus_chan_values_t sbus_chan_values;
-    mavlink_acc_calib_status_t acc_calib_sta;
-    mavlink_gyro_calib_status_t gyro_calib_sta;
     global_struct global_data;
     gConfig_t current_params_on_board;
     mavlink_heartbeat_t m_mavlink_heartbeat;

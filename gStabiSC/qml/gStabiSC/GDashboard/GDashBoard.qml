@@ -30,6 +30,7 @@ Item {
         onEntered: tilt_log("Tilt axis of the system")
         onGauge_up_limit_set_angleChanged: tiltConfigDialog.min_value = gauge_up_limit_set_angle;
         onGauge_down_limit_set_angleChanged:  tiltConfigDialog.max_value = gauge_down_limit_set_angle;
+        onGauge_setpoint_angleChanged: send_setpoint_control();
     }
 
     GGauge{
@@ -45,11 +46,12 @@ Item {
         gauge_handle_normal: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_normal_blue_handle.png"
         gauge_handle_pressed: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_pressed_blue_handle.png"
         gauge_config_mode: dashboard_config_mode
-        up_limit_pie_color: "green"
-        down_limit_pie_color: "chartreuse"
+//        up_limit_pie_color: "green"
+//        down_limit_pie_color: "chartreuse"
         onEntered: pan_log("Pan axis of the system")
         onGauge_down_limit_set_angleChanged: panConfigDialog.max_value = gauge_down_limit_set_angle
         onGauge_up_limit_set_angleChanged:   panConfigDialog.min_value = gauge_up_limit_set_angle
+        onGauge_setpoint_angleChanged: send_setpoint_control();
     }
     GGauge{
         id: rollGauge
@@ -67,6 +69,7 @@ Item {
         onEntered: roll_log("Roll axis of the system")
         onGauge_down_limit_set_angleChanged: rollConfigDialog.max_value = gauge_down_limit_set_angle
         onGauge_up_limit_set_angleChanged:   rollConfigDialog.min_value = gauge_up_limit_set_angle
+        onGauge_setpoint_angleChanged: send_setpoint_control();
     }
     Item{
         id: configButtonsPanel
@@ -256,5 +259,8 @@ Item {
     function dialog_log(_message){
 //        msg_log = "<font color=\"red\">" + _message+ "</font><br>";
         msg_log = _message + "\n"
+    }
+    function send_setpoint_control(){
+        _mavlink_manager.send_control_command(tiltGauge.gauge_setpoint_angle, panGauge.gauge_setpoint_angle, rollGauge.gauge_setpoint_angle)
     }
 }
