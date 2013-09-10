@@ -89,9 +89,25 @@ Item {
     }
     GMotorsConfiguration{
         id: motorsConfigurationPanel
-        anchors.horizontalCenter: gDashboard.horizontalCenter
-        anchors.top : gDashboard.bottom; anchors.topMargin: -10
-        visible: false
+        state: "hide"
+        x: (gstabiBackgroundImage.x + gstabiBackgroundImage.width)/2 - width/2;
+        y: (gstabiBackgroundImage.y + gstabiBackgroundImage.height)/2 - height;
+        show_state_posY: gstabiBackgroundImage.height - motorsConfigurationPanel.height - 100
+        hide_state_posY: gstabiBackgroundImage.height - motorsConfigurationPanel.height + 100
+        dragMaxX: gstabiBackgroundImage.width - motorsConfigurationPanel.width
+        dragMaxY: gstabiBackgroundImage.height - motorsConfigurationPanel.height
+        onStateChanged: {
+            if(state === "show"){
+                motorsParamsButton.state = "pressed"
+                controllerParamsDialog.state = "hide"
+                comportSettingPanel.state = "hide"
+                gDashboard.state = "Config"
+            } else {
+                motorsParamsButton.state = "normal"
+                gDashboard.state = "Dashboard"
+            }
+        }
+
     }
     GProfile{
         id: profileDialog
@@ -109,6 +125,7 @@ Item {
                 profileDialogButton.state = "pressed"
                 controllerParamsDialog.state = "hide"
                 comportSettingPanel.state = "hide"
+                motorsConfigurationPanel.state = "hide"
                 gDashboard.state = "Dashboard"
             } else {
                 profileDialogButton.state = "normal"
@@ -149,6 +166,7 @@ Item {
             if(state === "show"){
                 serialSettingButton.state = "pressed"
                 controllerParamsDialog.state = "hide"
+                motorsConfigurationPanel.state = "hide"
                 gDashboard.state = "Dashboard"
             } else serialSettingButton.state = "normal"
         }
@@ -188,7 +206,11 @@ Item {
             imagePressed: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_motors.png"
             imageHover: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_motors.png"
             onClicked: {
-                motorsConfigurationPanel.visible = !motorsConfigurationPanel.visible
+                if(motorsConfigurationPanel.state === "hide") {
+                    motorsConfigurationPanel.state = "show" ;
+                } else {
+                    motorsConfigurationPanel.state = "hide";
+                }
             }
         }
 

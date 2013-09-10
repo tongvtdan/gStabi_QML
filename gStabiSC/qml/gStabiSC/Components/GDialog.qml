@@ -63,20 +63,20 @@ Item{
         }
         ,State {
             name: "hide"
-            PropertyChanges {target: dialogContainer; scale: hide_scale ; opacity: 0.5; y: hide_state_posY; z: -1}
+            PropertyChanges {target: dialogContainer; scale: hide_scale ; opacity: 0; y: hide_state_posY; z: -1}
         }
     ]
     transitions: [ Transition {
             from: "show"
             to:   "hide"
             ParallelAnimation{
-                NumberAnimation { target: dialogContainer; property: "opacity"; duration: 400;  }
-                NumberAnimation { target: dialogContainer; property: "y"; duration: 400; easing.type: Easing.InOutQuad }
-                SequentialAnimation{
-                    NumberAnimation{ target: dialogContainer; properties: "scale"; from: 1.0; to: 1.5; duration: 200;}
-                    NumberAnimation{ target: dialogContainer; properties: "scale"; from: 1.5; to: 0.5; duration: 200;}
+                NumberAnimation { target: dialogContainer; property: "opacity"; duration: 300;  }
+                NumberAnimation { target: dialogContainer; property: "y"; duration: 400; easing.type: Easing.bezierCurve }
+//                SequentialAnimation{
+//                    NumberAnimation{ target: dialogContainer; properties: "scale"; from: 1.0; to: 1.5; duration: 200;}
+//                    NumberAnimation{ target: dialogContainer; properties: "scale"; from: 1.5; to: 0.5; duration: 200;}
 
-                }
+//                }
 
             }
         },
@@ -84,14 +84,14 @@ Item{
             from: "hide"
             to: "show"
             ParallelAnimation{
-                NumberAnimation { target: dialogContainer; property: "opacity"; duration: 600;  }
-                NumberAnimation { target: dialogContainer; property: "y"; duration: 600; easing.type: Easing.InOutQuad }
-                SequentialAnimation{
-                    NumberAnimation{ target: dialogContainer; properties: "scale"; from: 0.5; to: 1.0; duration: 200;}
-                    NumberAnimation{ target: dialogContainer; properties: "scale"; from: 1.0; to: 1.5; duration: 200;}
-                    NumberAnimation{ target: dialogContainer; properties: "scale"; from: 1.5; to: 1; duration: 200;}
+                NumberAnimation { target: dialogContainer; property: "opacity"; duration: 400;  }
+                NumberAnimation { target: dialogContainer; property: "y"; duration: 600; easing.type: Easing.Bezier }
+//                SequentialAnimation{
+//                    NumberAnimation{ target: dialogContainer; properties: "scale"; from: 0.5; to: 1.0; duration: 200;}
+//                    NumberAnimation{ target: dialogContainer; properties: "scale"; from: 1.0; to: 1.5; duration: 200;}
+//                    NumberAnimation{ target: dialogContainer; properties: "scale"; from: 1.5; to: 1; duration: 200;}
 
-                }
+//                }
             }
         }
     ]
