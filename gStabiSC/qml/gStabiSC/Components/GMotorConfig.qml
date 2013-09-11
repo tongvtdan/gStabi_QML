@@ -66,7 +66,7 @@ Item{
         GSlider{
             id: powerSlider
             lowerLimit: 0 ; upperLimit: 100
-            width: 180; height: 20
+            width: 180; //height: 4
             anchors.verticalCenter: parent.verticalCenter
             value: power_level
             onValueChanged: power_level = powerSlider.value

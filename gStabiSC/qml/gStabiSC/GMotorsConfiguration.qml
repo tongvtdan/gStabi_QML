@@ -1,6 +1,6 @@
 import QtQuick 2.0
 import "Components"
-GDialog{
+GContainer{
     id: mainContainer
 
     property int  tilt_down_limit: 0
@@ -10,8 +10,6 @@ GDialog{
     property int  roll_up_limit: 0
     property int  roll_down_limit: 0
 
-    border_normal: ""
-    title: ""
     hide_scale: 0
     height: 250 ; width: 930
     Row{

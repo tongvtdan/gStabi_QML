@@ -72,5 +72,6 @@
         <file>qml/gStabiSC/GDashBoard.qml</file>
         <file>qml/gStabiSC/GMotorsConfiguration.qml</file>
         <file>qml/gStabiSC/Components/GMotorConfig.qml</file>
+        <file>qml/gStabiSC/Components/GContainer.qml</file>
     </qresource>
 </RCC>

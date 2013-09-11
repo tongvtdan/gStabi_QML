@@ -14,7 +14,6 @@ Item {
     property bool   dashboard_config_mode : false   // if false: dashbord mode; if true: config mode
 
     implicitWidth: 930; implicitHeight: 310
-
     GGauge{
         id: tiltGauge
         width: gauge_width; height: gauge_height

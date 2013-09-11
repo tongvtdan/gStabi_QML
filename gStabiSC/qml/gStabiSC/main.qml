@@ -9,16 +9,18 @@ import "Components"
 import "qrc:/javascript/storage.js" as Storage
 
 
-Item {
+Rectangle {
     id: mainWindow
     property int header_height: 30
     property string main_log_msg: ""
     property string running_image_source: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_run_0_port_connect.png"
-
+    width:1044; height: 700
+    color: "transparent"
     BorderImage {
         id: gstabiBackgroundImage
         asynchronous: true
-        width: 1044;  height: 700
+        anchors.fill: parent
+//        width: 1044;  height: 700
         z: -100
         anchors.centerIn: parent
         source: "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_background.png"
@@ -43,10 +45,7 @@ Item {
     GControllerParams{
         id: controllerParamsDialog
         state: "hide"
-        dragMaxX: gstabiBackgroundImage.width
-        dragMaxY: gstabiBackgroundImage.height
-        x: gstabiBackgroundImage.x + gstabiBackgroundImage.width/2 - controllerParamsDialog.width/2;
-        show_state_posY: gstabiBackgroundImage.y + gstabiBackgroundImage.height/2 - controllerParamsDialog.height/2;
+        anchors.horizontalCenter: gstabiBackgroundImage.horizontalCenter;  anchors.horizontalCenterOffset: 0
         onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
         onStateChanged: {
             if(state === "show"){
@@ -54,20 +53,18 @@ Item {
                 comportSettingPanel.state = "hide"
                 profileDialog.state = "hide"
                 gDashboard.state = "Dashboard"
-                systemConsole.y = gstabiBackgroundImage.height - systemConsole.height/2;
-            }
-            else {
-                systemConsole.y = systemConsole.show_state_posY;
-                pidSettingsButton.state = "normal"
             }
         }
+        show_state_posY: gstabiBackgroundImage.height - controllerParamsDialog.height - 70
+        hide_state_posY: gstabiBackgroundImage.height - controllerParamsDialog.height + 100
+
     }
 
     GDashBoard{
         id: gDashboard
         width: 930;     height: 310
         z:0;
-        anchors.horizontalCenter: parent.horizontalCenter; anchors.horizontalCenterOffset: 15
+        anchors.horizontalCenter: gstabiBackgroundImage.horizontalCenter; anchors.horizontalCenterOffset: 0
         anchors.top: gstabiBackgroundImage.top; anchors.topMargin: 60
         onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
         state: "Dashboard"
@@ -78,12 +75,10 @@ Item {
                 comportSettingPanel.state = "hide";
                 controllerParamsDialog.state = "hide"
                 profileDialog.state = "hide"
-                systemConsole.y = gstabiBackgroundImage.height - systemConsole.height/2;
             }
             else {
                 dashboard_config_mode = false
                 dialog_log("Switch to Dashboard mode")
-                systemConsole.y = systemConsole.show_state_posY;
             }
         }
     }
@@ -94,8 +89,6 @@ Item {
         y: (gstabiBackgroundImage.y + gstabiBackgroundImage.height)/2 - height;
         show_state_posY: gstabiBackgroundImage.height - motorsConfigurationPanel.height - 100
         hide_state_posY: gstabiBackgroundImage.height - motorsConfigurationPanel.height + 100
-        dragMaxX: gstabiBackgroundImage.width - motorsConfigurationPanel.width
-        dragMaxY: gstabiBackgroundImage.height - motorsConfigurationPanel.height
         onStateChanged: {
             if(state === "show"){
                 motorsParamsButton.state = "pressed"
@@ -116,8 +109,6 @@ Item {
         y: (gstabiBackgroundImage.y + gstabiBackgroundImage.height)/2 - height;
         show_state_posY: gstabiBackgroundImage.height - profileDialog.height - 100
         hide_state_posY: gstabiBackgroundImage.height - profileDialog.height + 100
-        dragMaxX: gstabiBackgroundImage.width - profileDialog.width
-        dragMaxY: gstabiBackgroundImage.height - profileDialog.height
         save_profile: false
         onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
         onStateChanged: {
@@ -135,15 +126,17 @@ Item {
 
     GConsole{
         id: systemConsole
-        x: gstabiBackgroundImage.x + gstabiBackgroundImage.width - systemConsole.width - 15
+//        x: gstabiBackgroundImage.x + gstabiBackgroundImage.width/2 + 20// - systemConsole.width - 15
+//        y: gstabiBackgroundImage.height - height/2;
+        anchors.bottom: gstabiBackgroundImage.bottom;        anchors.horizontalCenter: gstabiBackgroundImage.horizontalCenter
         opacity: 1
         hide_scale: 1
         state: "show"
-        height: 200; width:  300
+        height: 200; anchors.horizontalCenterOffset: 200; anchors.bottomMargin: -height/2; width:  300
         show_state_posY: gstabiBackgroundImage.height - systemConsole.height - 70
         hide_state_posY: gstabiBackgroundImage.height - systemConsole.height + 100
-        dragMinX: gstabiBackgroundImage.x; dragMaxX: gstabiBackgroundImage.width - systemConsole.width/2
-        dragMaxY: gstabiBackgroundImage.height - systemConsole.height+100
+//        dragMinX: gstabiBackgroundImage.x; dragMaxX: gstabiBackgroundImage.width - systemConsole.width/2
+//        dragMaxY: gstabiBackgroundImage.height - systemConsole.height+100
         msg_history: main_log_msg
         Behavior on y {
             NumberAnimation { target: systemConsole; property: "y"; duration: 400; easing.type: Easing.Bezier }
@@ -310,7 +303,7 @@ Item {
         color: "#0cf708"
         text: qsTr("Developed by Gremsy Co., Ltd")
         anchors.right: gstabiBackgroundImage.right
-        anchors.rightMargin: 20
+        anchors.rightMargin: 15
         anchors.bottom: gstabiBackgroundImage.bottom
         anchors.bottomMargin: 15
         font.pixelSize: 12

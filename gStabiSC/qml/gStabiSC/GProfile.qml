@@ -3,7 +3,7 @@ import QtQuick.LocalStorage 2.0
 //import "../../javascript/storage.js" as Storage
 import "qrc:/javascript/storage.js" as Storage
 import "Components"
-GDialog{
+GContainer{
     id: profileDialog
 
     property string profile_name    : "Profile_Default"
@@ -17,8 +17,6 @@ GDialog{
     property string roll_motor_class_name   : "Roll Motor"
 
 
-    border_normal: ""
-    title: ""
     hide_scale: 0
     width: 400; height:200
     Rectangle{

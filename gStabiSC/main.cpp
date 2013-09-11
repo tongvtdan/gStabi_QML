@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<PieChart>("Charts", 1, 0, "PieChart");
     qmlRegisterType<PieSlice>("Charts", 1, 0, "PieSlice");
 
+
     Configuration m_configuration;
     SerialLink m_serialLink;
     MavLinkManager m_mavlink_manager;
@@ -44,12 +45,11 @@ int main(int argc, char *argv[])
     viewer.addImportPath("qrc:/qml/gStabiSC/GDashboard");
     viewer.addImportPath("qrc:/javascript/storage.js");
 
-    viewer.setTitle(QString("%1 %2").arg(APPLICATION_NAME).arg(APPLICATION_VERSION));
-    viewer.setMinimumSize(QSize(APPLICATION_WIDTH,APPLICATION_HEIGHT));
-    viewer.setMaximumSize(QSize(APPLICATION_WIDTH,APPLICATION_HEIGHT));
-//    viewer.setPosition(200, 30);
-//    viewer.setFlags(Qt::FramelessWindowHint); // no boarder and no icon on StaskBar
 
+
+       viewer.setTitle(QString("%1 %2").arg(APPLICATION_NAME).arg(APPLICATION_VERSION));
+       viewer.setMinimumSize(QSize(APPLICATION_WIDTH,APPLICATION_HEIGHT));
+//       viewer.setMaximumSize(QSize(APPLICATION_WIDTH,APPLICATION_HEIGHT));
 
     viewer.rootContext()->setContextProperty("m_configuration",&m_configuration);
     viewer.rootContext()->setContextProperty("_serialLink", &m_serialLink);
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 
     m_gLinkManager.connectLink(&m_serialLink,&m_mavlink_manager);
 
-    viewer.showNormal();
+    viewer.showExpanded();
 
     return app.exec();
 }

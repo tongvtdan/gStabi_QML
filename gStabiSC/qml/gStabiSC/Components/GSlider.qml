@@ -21,9 +21,9 @@ Rectangle {
     color: "#00000000"
     smooth: true
     radius: 0.7*height/2
-    border.width: 1
+    border.width: 0.5
     border.color: "cyan"
-    implicitHeight: 20; implicitWidth: 300
+    implicitHeight: 4; implicitWidth: 300
     Item {
         id: grooveRect
         width: parent.width - parent.border.width
@@ -42,14 +42,14 @@ Rectangle {
     }
     Item {
         id: handle
-        height:  25 ; width: 25
+        height:  25 ; width: 25; anchors.verticalCenter: grooveRect.verticalCenter;
         x: -handle_offset_x + background.border.width + fillRect.width
-        anchors.top: grooveRect.bottom; anchors.topMargin: 0
         Image{
             id: handleReleasedImage
             asynchronous: true
             anchors.fill: parent
             source: handle_normal
+//            source: "images/gStabiUI_3.2_normal_slider_handle.png"
         }
         Image{
             id: handlePressedImage
@@ -96,12 +96,15 @@ Rectangle {
         MouseArea {
             id: handleMouseArea
             anchors.fill: parent
+            hoverEnabled: true
             drag.target: parent
             drag.axis: Drag.XAxis
             drag.minimumX: -handle_offset_x + background.border.width
             drag.maximumX: background.width - handle_offset_x - background.border.width
             onPressed: { handlePressedImage.state  = "focus" }
             onReleased: { handlePressedImage.state = "normal"}
+            onEntered: handleReleasedImage.source = handle_pressed
+            onExited:  handleReleasedImage.source = handle_normal
             onPositionChanged: {
                 fill_width = handle.x + handle_offset_x  - background.border.width
                 value = lowerLimit + (fill_width )/convert_ratio    //(drag.maximumX - drag.minimumX)*(Math.abs(upperLimit) - Math.abs(lowerLimit));
