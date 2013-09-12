@@ -11,7 +11,7 @@ GContainer{
     property int  roll_down_limit: 0
 
     hide_scale: 0
-    height: 250 ; width: 930
+    width: 930; height: 250
     Row{
         id: motorsParamsRow
         anchors.horizontalCenter: parent.horizontalCenter
@@ -51,7 +51,7 @@ GContainer{
             pan_ccw_limit = min_value;
         }
         onPower_levelChanged:   _mavlink_manager.pan_power = power_level;
-        onPoles_numChanged:     {_mavlink_manager.motor_pan_num_poles = poles_num; console.log("#Pole Changed")}
+        onPoles_numChanged:     {_mavlink_manager.motor_pan_num_poles = poles_num; }
         onMotor_dirChanged:     _mavlink_manager.motor_pan_dir = motor_dir;
 
     }

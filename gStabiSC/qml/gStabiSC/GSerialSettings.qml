@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import "Components"
 
-GDialog{
+GContainer{
     id: serialSettingDialog
 //    property string portname: ""    // used to store portname in getPortNameList()
     property string selected_portname: "COM1"
@@ -12,9 +12,9 @@ GDialog{
     property string  serial_port_info_details: ""
 
     height: 200;   width: 400
-    border_normal: ""
-    title: ""
-    hide_scale: 0
+//    border_normal: ""
+//    title: ""
+//    hide_scale: 0
     // Open Close Port Button
     GButton{
         id: openCloseComportButton

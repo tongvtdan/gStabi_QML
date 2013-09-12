@@ -31,8 +31,7 @@ GContainer{
 
     //    property string border_normal   : "../images/gStabiUI_3.2_normal_parameters_dialog.png"
     //    property string border_hover    : "../images/gStabiUI_3.2_hover_parameters_dialog.png"
-    width: 300; height: 300
-    Column{
+    width: 300; height: 200;    Column{
         // p parameters
         id: paramsColumn
         anchors.fill: parent
@@ -40,12 +39,11 @@ GContainer{
         Row{
             id: pParamsRow
             width: 300
-            anchors.right: parent.right;anchors.rightMargin: 0
-            spacing: 5
+            anchors.right: parent.right;anchors.rightMargin: -10
+            spacing: 10
             TextStyled{
                 id: pLabel
                 width: 20; height: 20
-                //            color : "#00e3f9"
                 color: text_color
                 font.pixelSize: 16
                 text: "P:"
@@ -72,8 +70,8 @@ GContainer{
         Row{
             id: iParamsRow
             width: 300
-            anchors.right: parent.right;anchors.rightMargin: 0
-            spacing: 5
+            anchors.right: parent.right;anchors.rightMargin: -10
+            spacing: 10
             TextStyled{
                 id: iLabel
                 width: 20; height: 20
@@ -104,8 +102,8 @@ GContainer{
         Row{
             id: dParamsRow
             width: 300
-            anchors.right: parent.right;anchors.rightMargin: 0
-            spacing: 5
+            anchors.right: parent.right;anchors.rightMargin: -10
+            spacing: 10
             TextStyled{
                 id: dLabel
                 width: 20; height: 20
@@ -136,11 +134,8 @@ GContainer{
         Row{
             id: followParamsRow
             width: 300
-            anchors.right: parent.right;anchors.rightMargin: 0
-//            anchors.right: parent.right
-//            anchors.rightMargin: -30
-//            anchors.top: dParamsRow.bottom; anchors.topMargin: 30
-            spacing: 5
+            anchors.right: parent.right;anchors.rightMargin: -10
+            spacing: 10
             TextStyled{
                 id: followLabel
                 width: 20; height: 20
@@ -172,11 +167,8 @@ GContainer{
         Row{
             id: filterParamsRow
             width: 300
-            anchors.right: parent.right;anchors.rightMargin: 0
-//            anchors.right: parent.right
-//            anchors.rightMargin: -30
-//            anchors.top: followParamsRow.bottom; anchors.topMargin: 30
-            spacing: 5
+            anchors.right: parent.right;anchors.rightMargin: -10
+            spacing: 10
             TextStyled{
                 id: filterLabel
                 width: 20; height: 20

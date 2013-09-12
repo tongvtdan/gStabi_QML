@@ -17,7 +17,7 @@ Item{
         Rectangle {
             id: wrapper
             width: listItemLabel.contentWidth+20 ; height: listItemLabel.contentHeight + 10; color: "#00000000"
-            border.width: 1 ; border.color: "cyan"
+            border.width: 1 ; border.color: "cyan"; radius: height/8
             Text {
                 id: listItemLabel
                 anchors.verticalCenter: parent.verticalCenter
@@ -59,7 +59,7 @@ Item{
     Component {
         id: highlightBar
         Rectangle {
-            width: listView.currentItem.width; height: listView.currentItem.height
+            width: listView.currentItem.width; height: listView.currentItem.height; radius: height/8
             color: hightlght_color
             opacity: 0.5
             y: listView.currentItem.y;
@@ -70,25 +70,41 @@ Item{
     }
     Component{
         id: headerBar
-        Rectangle {
+        Item{
+            id:  headerItem
             width: root.width; height: 20;
-            gradient: Gradient {
-                GradientStop {
-                    position: 0
-                    color: "#7d04f3e4"
-                }
+            Rectangle {
+                id: headerRect
+                anchors.fill: parent
+                radius: height/8
+                opacity: 0.5
+                gradient: Gradient {
+                    GradientStop {
+                        position: 0
+                        color: "#04ffdf"
+                    }
 
-                GradientStop {
-                    position: 1
-                    color: "#000000"
+                    GradientStop {
+                        position: 0.5
+                        color: "#0087ee"
+                    }
+
+                    GradientStop {
+                        position: 1
+                        color: "#04ffdf"
+                    }
                 }
+                border { color: "cyan"; width: 1; }
+
             }
-            border { color: "cyan"; width: 1; }
             Text {
                 id: headerText
-                anchors.centerIn: parent
-                color: "chartreuse"
+                anchors.fill: parent
+                color: "#04ff00"
                 text: list_header_title
+                font.bold: true
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
             }
         }
     }

@@ -9,8 +9,9 @@ Rectangle{
     signal exited
     width: buttonLabel.width+20; height: buttonLabel.height + 5;
     border.width: 1; border.color: "cyan"
-    color: "#00000000"
+    color: "transparent"
     smooth: true;
+    radius: button.height/4
 
     TextStyled{
         id: buttonLabel
@@ -44,12 +45,12 @@ Rectangle{
         }
         ,State{
             name: "hover"
-            PropertyChanges {target: button; border.color: "white"; border.width: 1}
-            PropertyChanges { target: buttonLabel; color: "chartreuse"   }
+            PropertyChanges {target: button; border.color: "white"; border.width: 1; color: "#04ffdf"; opacity: 0.3}
+            PropertyChanges { target: buttonLabel; color: "white"   }
         }
         ,State{
             name: "exit"
-            PropertyChanges {target: button; border.color: "cyan"; border.width: 1}
+            PropertyChanges {target: button; border.color: "cyan"; border.width: 1; color: "transparent"; opacity: 1}
             PropertyChanges { target: buttonLabel; color: "#00e3f9"   }
 
         }

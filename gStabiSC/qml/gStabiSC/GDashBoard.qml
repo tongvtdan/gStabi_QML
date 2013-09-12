@@ -77,7 +77,7 @@ Item {
     }
 
     Item{
-        id: configButtonsPanel
+        id: buttonsPanel
         anchors.right: parent.right; anchors.rightMargin: 50
         anchors.top: parent.top; anchors.topMargin: -40
         width: 400; height: 40
@@ -85,18 +85,6 @@ Item {
             id: buttonsRow
             anchors.top: parent.top; anchors.topMargin: 5
             spacing: 5
-            GButton{
-                id: modeSelectionButton
-                width: 150; height: 30
-                text: "Config Motor"
-                onClicked: {
-                    if(root.state === "Config"){
-                        root.state = "Dashboard"
-                    } else root.state = "Config"
-                }
-                onEntered: dialog_log("Open Config Motors Panel")
-
-            }
             GButton{
                 id: writeConfigParamsToMCU
                 width: 100; height: 30
@@ -107,7 +95,7 @@ Item {
                     }
                     else{  dialog_log("Controller board is not connected. Please connect PC to the board then try again") }
                 }
-                onEntered: dialog_log("Write Motor Config parameters to controller board")
+                onEntered: dialog_log("Write parameters to controller board")
             }
             GButton{
                 id: readConfigParamsFromMCU
@@ -117,7 +105,7 @@ Item {
                     if(_serialLink.isConnected){ _mavlink_manager.request_all_params(); }
                     else {dialog_log("Controller board is not connected. Please connect PC to the board then try again")}
                 }
-                onEntered: dialog_log("Read Motor Config parameters from controller board")
+                onEntered: dialog_log("Read parameters from controller board")
             }
         }
     }
@@ -125,15 +113,15 @@ Item {
     states: [
         State {
             name: "Dashboard"
-            PropertyChanges { target: modeSelectionButton; text: "Config Motor>>"}
-            PropertyChanges { target: writeConfigParamsToMCU; visible: false }
-            PropertyChanges { target: readConfigParamsFromMCU; visible: false }
+//            PropertyChanges { target: modeSelectionButton; text: "Config Motor>>"}
+//            PropertyChanges { target: writeConfigParamsToMCU; visible: false }
+//            PropertyChanges { target: readConfigParamsFromMCU; visible: false }
         },
         State {
             name: "Config"
-            PropertyChanges { target: modeSelectionButton; text: "<< Dashboard" }
-            PropertyChanges { target: writeConfigParamsToMCU; visible: true }
-            PropertyChanges { target: readConfigParamsFromMCU; visible: true }
+//            PropertyChanges { target: modeSelectionButton; text: "<< Dashboard" }
+//            PropertyChanges { target: writeConfigParamsToMCU; visible: true }
+//            PropertyChanges { target: readConfigParamsFromMCU; visible: true }
         }
     ]
 

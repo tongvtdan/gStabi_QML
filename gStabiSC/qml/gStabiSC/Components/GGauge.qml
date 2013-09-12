@@ -317,7 +317,6 @@ Item{
             }
         }  // end of onReleased
     }
-    onGauge_config_modeChanged: {   console.log("Mode Changed")   }
     states: [
         State{
             name: "dash"

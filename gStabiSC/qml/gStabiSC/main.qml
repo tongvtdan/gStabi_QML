@@ -41,24 +41,6 @@ Rectangle {
         source: "qrc:/images/qml/gStabiSC/images/animation.gif"
         paused: true
     }
-    // end of dashboard
-    GControllerParams{
-        id: controllerParamsDialog
-        state: "hide"
-        anchors.horizontalCenter: gstabiBackgroundImage.horizontalCenter;  anchors.horizontalCenterOffset: 0
-        onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
-        onStateChanged: {
-            if(state === "show"){
-                pidSettingsButton.state = "pressed"
-                comportSettingPanel.state = "hide"
-                profileDialog.state = "hide"
-                gDashboard.state = "Dashboard"
-            }
-        }
-        show_state_posY: gstabiBackgroundImage.height - controllerParamsDialog.height - 70
-        hide_state_posY: gstabiBackgroundImage.height - controllerParamsDialog.height + 100
-
-    }
 
     GDashBoard{
         id: gDashboard
@@ -71,24 +53,38 @@ Rectangle {
         onStateChanged: {
             if(gDashboard.state === "Config") {
                 dashboard_config_mode = true
-                dialog_log("Switch to Motor Confid Mode")
                 comportSettingPanel.state = "hide";
                 controllerParamsDialog.state = "hide"
                 profileDialog.state = "hide"
             }
             else {
                 dashboard_config_mode = false
-                dialog_log("Switch to Dashboard mode")
             }
         }
     }
+
+    GControllerParams{
+        id: controllerParamsDialog
+        state: "hide"
+        anchors.horizontalCenter: gstabiBackgroundImage.horizontalCenter;  anchors.horizontalCenterOffset: 0
+//        y: gstabiBackgroundImage.height - controllerParamsDialog.height - 70
+        onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
+        onStateChanged: {
+            if(state === "show"){
+                pidSettingsButton.state = "pressed"
+                comportSettingPanel.state = "hide"
+                profileDialog.state = "hide"
+                motorsConfigurationPanel.state = "hide"
+                gDashboard.state = "Dashboard"
+            }
+        }
+    }
+
     GMotorsConfiguration{
         id: motorsConfigurationPanel
         state: "hide"
-        x: (gstabiBackgroundImage.x + gstabiBackgroundImage.width)/2 - width/2;
-        y: (gstabiBackgroundImage.y + gstabiBackgroundImage.height)/2 - height;
-        show_state_posY: gstabiBackgroundImage.height - motorsConfigurationPanel.height - 100
-        hide_state_posY: gstabiBackgroundImage.height - motorsConfigurationPanel.height + 100
+        anchors.horizontalCenter: gstabiBackgroundImage.horizontalCenter; anchors.horizontalCenterOffset: 0
+//        y: (gstabiBackgroundImage.y + gstabiBackgroundImage.height)/2 - height;
         onStateChanged: {
             if(state === "show"){
                 motorsParamsButton.state = "pressed"
@@ -100,15 +96,12 @@ Rectangle {
                 gDashboard.state = "Dashboard"
             }
         }
-
     }
     GProfile{
         id: profileDialog
         state: "hide";
-        x: (gstabiBackgroundImage.x + gstabiBackgroundImage.width)/2 - width/2;
-        y: (gstabiBackgroundImage.y + gstabiBackgroundImage.height)/2 - height;
-        show_state_posY: gstabiBackgroundImage.height - profileDialog.height - 100
-        hide_state_posY: gstabiBackgroundImage.height - profileDialog.height + 100
+        anchors.horizontalCenter: gstabiBackgroundImage.horizontalCenter; anchors.horizontalCenterOffset: 0
+        show_state_posY: 400
         save_profile: false
         onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
         onStateChanged: {
@@ -126,34 +119,16 @@ Rectangle {
 
     GConsole{
         id: systemConsole
-//        x: gstabiBackgroundImage.x + gstabiBackgroundImage.width/2 + 20// - systemConsole.width - 15
-//        y: gstabiBackgroundImage.height - height/2;
-        anchors.bottom: gstabiBackgroundImage.bottom;        anchors.horizontalCenter: gstabiBackgroundImage.horizontalCenter
-        opacity: 1
-        hide_scale: 1
-        state: "show"
-        height: 200; anchors.horizontalCenterOffset: 200; anchors.bottomMargin: -height/2; width:  300
-        show_state_posY: gstabiBackgroundImage.height - systemConsole.height - 70
-        hide_state_posY: gstabiBackgroundImage.height - systemConsole.height + 100
-//        dragMinX: gstabiBackgroundImage.x; dragMaxX: gstabiBackgroundImage.width - systemConsole.width/2
-//        dragMaxY: gstabiBackgroundImage.height - systemConsole.height+100
+        anchors.bottom: gstabiBackgroundImage.bottom;  anchors.bottomMargin:10
+        anchors.horizontalCenter: gstabiBackgroundImage.horizontalCenter; anchors.horizontalCenterOffset: 170
         msg_history: main_log_msg
-        Behavior on y {
-            NumberAnimation { target: systemConsole; property: "y"; duration: 400; easing.type: Easing.Bezier }
-        }
-
     }
 
     GSerialSettings{
         id: comportSettingPanel
         state: "show"
-        x: gstabiBackgroundImage.x + 50 ;
-        y: (gstabiBackgroundImage.y + gstabiBackgroundImage.height)/2 - height/2;
-        show_state_posY: gstabiBackgroundImage.height - comportSettingPanel.height - 70
-        hide_state_posY: gstabiBackgroundImage.height - comportSettingPanel.height + 100
-        dragMinX: 50
-        dragMaxX: gstabiBackgroundImage.width - comportSettingPanel.width
-        dragMaxY: gstabiBackgroundImage.height - comportSettingPanel.height
+        anchors.horizontalCenter: gstabiBackgroundImage.horizontalCenter; anchors.horizontalCenterOffset: 0
+        show_state_posY: 400
         onMsg_logChanged: { main_log_msg = msg_log + main_log_msg }
         onStateChanged: {
             if(state === "show"){

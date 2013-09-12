@@ -1,22 +1,22 @@
 import QtQuick 2.0
 import "Components"
 
-GDialog{
+Rectangle{
     id: consoleDialog
-    title: "Console"
-    border_normal: "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_normal_console_border.png"
-    width: 250; height: 400
-    hide_scale: 1
+    property string msg_history: ""
+    width: 300; height: 80
+    color: "transparent"
+    radius: height/8
+    border.color: "cyan"; border.width: 1
     Flickable{
         id: flickArea
-        anchors.rightMargin: 10
-        anchors.topMargin: 20
+        anchors.rightMargin: 5
+        anchors.topMargin: 5
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 10
+        anchors.bottomMargin: 5
         anchors.fill: parent
-//        width: 280;     height: 150
         anchors.left: parent.left
-        anchors.leftMargin: 20
+        anchors.leftMargin: 5
         contentWidth: Math.max(parent.width,logText.paintedWidth)
         contentHeight: Math.max(parent.height,logText.paintedHeight+10)
         flickableDirection: Flickable.VerticalFlick
@@ -28,11 +28,10 @@ GDialog{
             height: 370
             wrapMode: Text.WordWrap
             color: "cyan"
-//            textFormat: Text.RichText
             textFormat: Text.PlainText
             text: msg_history
-            anchors.bottomMargin: 30
-            anchors.rightMargin: 30
+            anchors.bottomMargin: 5
+            anchors.rightMargin: 5
             anchors.fill: parent
         }
     }

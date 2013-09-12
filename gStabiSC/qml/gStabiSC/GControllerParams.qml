@@ -56,7 +56,7 @@ GContainer{
     // Roll Axis Motor
     Item{
         id: rollItems
-        anchors.right: parent.right; anchors.rightMargin: 20
+        anchors.right: parent.right; anchors.rightMargin: 5
         anchors.top: parent.top; anchors.topMargin: 70
 
         GButton{
