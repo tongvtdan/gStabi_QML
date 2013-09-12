@@ -27,7 +27,7 @@ Item{
 
 
     }
-    TextStyled{
+    GTextStyled{
         id: buttonText
         text: rootItem.text
         anchors.centerIn: parent

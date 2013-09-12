@@ -6,7 +6,7 @@ Item {
     width: 1024
     height: 25
 
-    TextStyled{
+    GTextStyled{
         id: applicationName
         color: "#00ffff"
         anchors.left: header.left

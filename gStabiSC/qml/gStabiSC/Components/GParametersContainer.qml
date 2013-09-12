@@ -41,7 +41,7 @@ GContainer{
             width: 300
             anchors.right: parent.right;anchors.rightMargin: -10
             spacing: 10
-            TextStyled{
+            GTextStyled{
                 id: pLabel
                 width: 20; height: 20
                 color: text_color
@@ -71,7 +71,7 @@ GContainer{
             width: 300
             anchors.right: parent.right;anchors.rightMargin: -10
             spacing: 10
-            TextStyled{
+            GTextStyled{
                 id: iLabel
                 width: 20; height: 20
                 //            color : "#00e3f9"
@@ -101,7 +101,7 @@ GContainer{
             width: 300
             anchors.right: parent.right;anchors.rightMargin: -10
             spacing: 10
-            TextStyled{
+            GTextStyled{
                 id: dLabel
                 width: 20; height: 20
                 //            color : "#00e3f9"
@@ -131,7 +131,7 @@ GContainer{
             width: 300
             anchors.right: parent.right;anchors.rightMargin: -10
             spacing: 10
-            TextStyled{
+            GTextStyled{
                 id: followLabel
                 width: 20; height: 20
                 color: text_color
@@ -162,7 +162,7 @@ GContainer{
             width: 300
             anchors.right: parent.right;anchors.rightMargin: -10
             spacing: 10
-            TextStyled{
+            GTextStyled{
                 id: filterLabel
                 width: 20; height: 20
                 //            color : "#00e3f9"

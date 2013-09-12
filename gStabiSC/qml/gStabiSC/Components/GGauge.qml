@@ -80,7 +80,7 @@ Item{
 
         rotation: get_rotation_angle();
     }
-    TextStyled{
+    GTextStyled{
         id: outOfRangeLabel
         width: 20; height: 13
         color: "#ff0000"
@@ -95,7 +95,7 @@ Item{
     }
 
     // text display current angle value, sensor angle value
-    TextStyled{
+    GTextStyled{
         id: gaugeAngleValueText
         width: 20; height: 13
         color: "#00ffff"
@@ -106,7 +106,7 @@ Item{
         text: gaugeNeedleImage.rotation.toFixed(angle_precision)
     }
     // display different value from setpoint
-    TextStyled{
+    GTextStyled{
         id: gaugeAngleDeltaText
         width: 20; height: 13
         color: "#ff0000"

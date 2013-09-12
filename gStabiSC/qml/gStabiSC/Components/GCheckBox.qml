@@ -34,7 +34,7 @@ Item{
         }
 
     }
-    TextStyled {
+    GTextStyled {
         id: checkBoxText
         text: checkbox_text
         anchors.left: checkBoxBorder.right;   anchors.leftMargin: 10

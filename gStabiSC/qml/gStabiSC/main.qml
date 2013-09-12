@@ -309,7 +309,7 @@ Rectangle {
         }
     }
 
-    TextStyled {
+    GTextStyled {
         id: gremsyText
         color: "#0cf708"
         text: qsTr("Developed by Gremsy Co., Ltd")

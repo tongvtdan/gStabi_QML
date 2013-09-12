@@ -53,7 +53,7 @@ Item{
         anchors.top: boardNormalImg.top; anchors.topMargin: 40
         anchors.left: boardNormalImg.left ; anchors.leftMargin: 8
         spacing: 5
-        TextStyled{
+        GTextStyled{
             id: powerLabel
             width: 50; height: 20
             color : "#00e3f9"
@@ -85,7 +85,7 @@ Item{
         anchors.top: powerRow.bottom; anchors.topMargin: 40
         anchors.left: boardNormalImg.left; anchors.leftMargin: 10
         spacing: 10
-        TextStyled{
+        GTextStyled{
             id: polesLabel
             width: 45; height: 20
             color : "#00e3f9"
@@ -109,7 +109,7 @@ Item{
         anchors.horizontalCenterOffset: 70
         anchors.horizontalCenter: parent.horizontalCenter
         spacing: 5
-        TextStyled{
+        GTextStyled{
             width: 40
             height: 20
             color : "#00e3f9"
@@ -133,7 +133,7 @@ Item{
         anchors.horizontalCenterOffset: -70
         anchors.horizontalCenter: parent.horizontalCenter
         spacing: 5
-        TextStyled{
+        GTextStyled{
             width: 40
             height: 20
             color : "#00e3f9"

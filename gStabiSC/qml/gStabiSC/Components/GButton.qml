@@ -13,7 +13,7 @@ Rectangle{
     smooth: true;
     radius: button.height/4
 
-    TextStyled{
+    GTextStyled{
         id: buttonLabel
         anchors.centerIn: parent
         color : "#00e3f9"
