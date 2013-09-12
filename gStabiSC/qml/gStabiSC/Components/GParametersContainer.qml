@@ -55,17 +55,16 @@ GContainer{
                 id: pSlider
                 lowerLimit: p_min ; upperLimit: p_max
                 width: 180;// height: 20;
-                value: p_value;
                 anchors.verticalCenter: parent.verticalCenter
                 onValueChanged: { p_value = value; }
             }
             GTextInput{
                 id: pValueInput
-                bottom_value: p_min; top_value: p_max; text_value: p_value
+                bottom_value: p_min; top_value: p_max;
                 onText_valueChanged: p_value = text_value
             }
         }
-        //    onP_valueChanged: {pSlider.value = p_value; pValueInput.text_value = p_value}
+
         // i parameters
         Row{
             id: iParamsRow
@@ -87,17 +86,15 @@ GContainer{
                 id: iSlider
                 lowerLimit: i_min ; upperLimit: i_max
                 width: 180; //height: 20;
-                value: i_value;
                 anchors.verticalCenter: parent.verticalCenter
                 onValueChanged: { i_value = value; }
             }
             GTextInput{
                 id: iValueInput
-                bottom_value: i_min; top_value: i_max; text_value: i_value
+                bottom_value: i_min; top_value: i_max;
                 onText_valueChanged: i_value = text_value
             }
         }
-        //    onI_valueChanged: {iSlider.value = i_value; iValueInput.text_value = i_value}
         // d parameters
         Row{
             id: dParamsRow
@@ -119,17 +116,15 @@ GContainer{
                 id: dSlider
                 lowerLimit: d_min ; upperLimit: d_max
                 width: 180;// height: 20;
-                value: d_value;
                 anchors.verticalCenter: parent.verticalCenter
                 onValueChanged: { d_value = value; }
             }
             GTextInput{
                 id: dValueInput
-                bottom_value: d_min; top_value: d_max; text_value: d_value
+                bottom_value: d_min; top_value: d_max;
                 onText_valueChanged: d_value = text_value
             }
         }
-        //    onD_valueChanged: {dSlider.value = d_value; dValueInput.text_value = d_value}
         // follow parameters
         Row{
             id: followParamsRow
@@ -151,17 +146,15 @@ GContainer{
                 id: followSlider
                 lowerLimit: follow_min ; upperLimit: follow_max
                 width: 180;// height: 20;
-                value: follow_value;
                 anchors.verticalCenter: parent.verticalCenter
                 onValueChanged: { follow_value = value; }
             }
             GTextInput{
                 id: followValueInput
-                bottom_value: follow_min; top_value: follow_max; text_value: follow_value
+                bottom_value: follow_min; top_value: follow_max;
                 onText_valueChanged: follow_value = text_value
             }
         }
-        //    onFollow_valueChanged: {followSlider.value = follow_value; followValueInput.text_value = follow_value}
 
         // filter parameters
         Row{
@@ -184,18 +177,21 @@ GContainer{
                 id: filterSlider
                 lowerLimit: filter_min ; upperLimit: filter_max
                 width: 180; //height: 20;
-                value: filter_value;
                 anchors.verticalCenter: parent.verticalCenter
                 onValueChanged: { filter_value = value; }
             }
             GTextInput{
                 id: filterValueInput
-                bottom_value: filter_min; top_value: filter_max; text_value: filter_value
+                bottom_value: filter_min; top_value: filter_max;
                 onText_valueChanged: filter_value = text_value
             }
         }
-        //    onFilter_valueChanged: {filterSlider.value = filter_value; filterValueInput.text_value = filter_value}
     }
+    onP_valueChanged: {pSlider.value = p_value; pValueInput.text_value = p_value}
+    onI_valueChanged: {iSlider.value = i_value; iValueInput.text_value = i_value}
+    onD_valueChanged: {dSlider.value = d_value; dValueInput.text_value = d_value}
+    onFollow_valueChanged: {followSlider.value = follow_value; followValueInput.text_value = follow_value}
+    onFilter_valueChanged: {filterSlider.value = filter_value; filterValueInput.text_value = filter_value}
 
     states:[
         State{

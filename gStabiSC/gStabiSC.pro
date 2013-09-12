@@ -10,7 +10,7 @@ QML_IMPORT_PATH =
 # lines and add the respective components to the MOBILITY variable.
 # CONFIG += mobility
 # MOBILITY +=
-QT       += serialport
+
 
 INCLUDEPATH += src \
                thirdParty/mavlink/v1.0/gremsyBGC \
