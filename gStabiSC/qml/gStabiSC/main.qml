@@ -27,6 +27,7 @@ Rectangle {
     }
     GAppHeader{
         id: header
+        width: 500
         anchors.top: gstabiBackgroundImage.top ; anchors.topMargin: 20
         anchors.left: gstabiBackgroundImage.left ; anchors.leftMargin: 30
         implicitHeight: gstabiBackgroundImage.height ; implicitWidth: gstabiBackgroundImage.width
@@ -41,7 +42,39 @@ Rectangle {
         source: "qrc:/images/qml/gStabiSC/images/animation.gif"
         paused: true
     }
+    Item{
+        id: buttonsPanel
+        anchors.right: parent.right; anchors.rightMargin: 30
+        anchors.top: parent.top; anchors.topMargin: 20
+        width: 210; height: 40
+        Row{
 
+            anchors.top: parent.top; anchors.topMargin: 5
+            spacing: 5
+            GButton{
+                id: writeConfigParamsToMCU
+                width: 100; height: 30
+                text: "Write"
+                onClicked: {
+                    if(_serialLink.isConnected) {
+                        _mavlink_manager.write_params_to_board();
+                    }
+                    else{  dialog_log("Controller board is not connected. Please connect PC to the board then try again") }
+                }
+                onEntered: dialog_log("Write parameters to controller board")
+            }
+            GButton{
+                id: readConfigParamsFromMCU
+                width: 100; height: 30
+                text: "Read"
+                onClicked: {
+                    if(_serialLink.isConnected){ _mavlink_manager.request_all_params(); }
+                    else {dialog_log("Controller board is not connected. Please connect PC to the board then try again")}
+                }
+                onEntered: dialog_log("Read parameters from controller board")
+            }
+        }
+    }
     GDashBoard{
         id: gDashboard
         width: 930;     height: 310
@@ -53,7 +86,7 @@ Rectangle {
         onStateChanged: {
             if(gDashboard.state === "Config") {
                 dashboard_config_mode = true
-                comportSettingPanel.state = "hide";
+                generalSettingsPanel.state = "hide";
                 controllerParamsDialog.state = "hide"
                 profileDialog.state = "hide"
             }
@@ -72,11 +105,14 @@ Rectangle {
         onStateChanged: {
             if(state === "show"){
                 pidSettingsButton.state = "pressed"
-                comportSettingPanel.state = "hide"
+                generalSettingsPanel.state = "hide"
                 profileDialog.state = "hide"
                 motorsConfigurationPanel.state = "hide"
                 gDashboard.state = "Dashboard"
+            } else {
+                pidSettingsButton.state = "normal"
             }
+
         }
     }
 
@@ -89,7 +125,7 @@ Rectangle {
             if(state === "show"){
                 motorsParamsButton.state = "pressed"
                 controllerParamsDialog.state = "hide"
-                comportSettingPanel.state = "hide"
+                generalSettingsPanel.state = "hide"
                 gDashboard.state = "Config"
             } else {
                 motorsParamsButton.state = "normal"
@@ -108,7 +144,7 @@ Rectangle {
             if(state === "show"){
                 profileDialogButton.state = "pressed"
                 controllerParamsDialog.state = "hide"
-                comportSettingPanel.state = "hide"
+                generalSettingsPanel.state = "hide"
                 motorsConfigurationPanel.state = "hide"
                 gDashboard.state = "Dashboard"
             } else {
@@ -124,11 +160,11 @@ Rectangle {
         msg_history: main_log_msg
     }
 
-    GSerialSettings{
-        id: comportSettingPanel
+    GGeneralSettings{
+        id: generalSettingsPanel
         state: "show"
         anchors.horizontalCenter: gstabiBackgroundImage.horizontalCenter; anchors.horizontalCenterOffset: 0
-        show_state_posY: 400
+        show_state_posY: 380
         onMsg_logChanged: { main_log_msg = msg_log + main_log_msg }
         onStateChanged: {
             if(state === "show"){
@@ -159,10 +195,10 @@ Rectangle {
                 visible: false
             }
             onClicked: {
-                if(comportSettingPanel.state === "show"){
-                    comportSettingPanel.state = "hide"
+                if(generalSettingsPanel.state === "show"){
+                    generalSettingsPanel.state = "hide"
                 } else {
-                    comportSettingPanel.state = "show"
+                    generalSettingsPanel.state = "show"
                 }
             }
             onEntered: dialog_log("Open or Close Serial Port dialog")
@@ -251,7 +287,7 @@ Rectangle {
         onMavlink_message_logChanged: {main_log_msg = _mavlink_manager.mavlink_message_log + "\n" + main_log_msg}
         onBoard_connection_stateChanged: {
             if(_mavlink_manager.board_connection_state){
-//            comportSettingPanel.state = "hide";
+//            generalSettingsPanel.state = "hide";
                 serialSettingButton.imageNormal  = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_port_connect.png"
                 serialSettingButton.imagePressed = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_port_connect.png"
                 serialSettingButton.imageHover   = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_port_connect.png"
@@ -287,10 +323,10 @@ Rectangle {
         Storage.getSettingDatabaseSync();
         Storage.initializeSettings();
         if(Storage.getSetting("Port name") !== "NA"){   // if already exist, get it
-            comportSettingPanel.selected_portname = Storage.getSetting("Port name")
+            generalSettingsPanel.selected_portname = Storage.getSetting("Port name")
         }
         if(Storage.getSetting("Port index") !== "NA"){   // if already exist, get it
-            comportSettingPanel.selected_port_index = Storage.getSetting("Port index")
+            generalSettingsPanel.selected_port_index = Storage.getSetting("Port index")
         }
         if(Storage.getSetting("Profile") !== "NA"){   // if already exist, get it
             profileDialog.profile_name = Storage.getSetting("Profile")
@@ -311,15 +347,15 @@ Rectangle {
         Storage.getSettingDatabaseSync();
         Storage.initializeSettings();
         if(Storage.getSetting("Port name") !== "NA"){ // already in table, do update
-            Storage.updateSetting("Port name", comportSettingPanel.selected_portname);
+            Storage.updateSetting("Port name", generalSettingsPanel.selected_portname);
         } else {
-            Storage.saveSetting("Port name", comportSettingPanel.selected_portname)
+            Storage.saveSetting("Port name", generalSettingsPanel.selected_portname)
         }
 
         if(Storage.getSetting("Port index") !== "NA"){ // already in table, do update
-            Storage.updateSetting("Port index", comportSettingPanel.selected_port_index);
+            Storage.updateSetting("Port index", generalSettingsPanel.selected_port_index);
         } else {
-            Storage.saveSetting("Port index", comportSettingPanel.selected_port_index)
+            Storage.saveSetting("Port index", generalSettingsPanel.selected_port_index)
         }
 
         if(Storage.getSetting("Profile") !== "NA"){ // already in table, do update

@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import "Components"
 
-GContainer{
+Rectangle{
     id: serialSettingDialog
 //    property string portname: ""    // used to store portname in getPortNameList()
     property string selected_portname: "COM1"
@@ -10,11 +10,12 @@ GContainer{
 
     property string  msg_log: ""
     property string  serial_port_info_details: ""
+    property bool  view_details: false
+
 
     height: 200;   width: 400
-//    border_normal: ""
-//    title: ""
-//    hide_scale: 0
+    color: "transparent"
+    border{color: "cyan"; width: 1}
     // Open Close Port Button
     GButton{
         id: openCloseComportButton
@@ -39,7 +40,9 @@ GContainer{
     } // end of Open Close Port Button
     GListView{
         id: serialportNameList
-        width: 100; height: 150; anchors.left: parent.left; anchors.leftMargin: 10;  anchors.top: parent.top ; anchors.topMargin: 0
+        width: 100; height: 150;
+        anchors.left: parent.left; anchors.leftMargin: 10;
+        anchors.top: parent.top ; anchors.topMargin: 10
         list_header_title: "Serial Ports"
         onClicked: {
             selected_port_index = item_index;
@@ -73,6 +76,7 @@ GContainer{
         pressDelay: 300
         clip: true
         flickableDirection: Flickable.HorizontalAndVerticalFlick
+        visible: view_details
         Text {
             id: serialportInfoDetailsText
             anchors.fill: parent

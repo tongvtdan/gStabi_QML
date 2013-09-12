@@ -75,54 +75,9 @@ Item {
         onGauge_setpoint_angleChanged: send_setpoint_control();
         onGauge_log_messageChanged: dialog_log(gauge_log_message)
     }
-
-    Item{
-        id: buttonsPanel
-        anchors.right: parent.right; anchors.rightMargin: 50
-        anchors.top: parent.top; anchors.topMargin: -40
-        width: 400; height: 40
-        Row{
-            id: buttonsRow
-            anchors.top: parent.top; anchors.topMargin: 5
-            spacing: 5
-            GButton{
-                id: writeConfigParamsToMCU
-                width: 100; height: 30
-                text: "Write"
-                onClicked: {
-                    if(_serialLink.isConnected) {
-                        _mavlink_manager.write_params_to_board();
-                    }
-                    else{  dialog_log("Controller board is not connected. Please connect PC to the board then try again") }
-                }
-                onEntered: dialog_log("Write parameters to controller board")
-            }
-            GButton{
-                id: readConfigParamsFromMCU
-                width: 100; height: 30
-                text: "Read"
-                onClicked: {
-                    if(_serialLink.isConnected){ _mavlink_manager.request_all_params(); }
-                    else {dialog_log("Controller board is not connected. Please connect PC to the board then try again")}
-                }
-                onEntered: dialog_log("Read parameters from controller board")
-            }
-        }
-    }
-
     states: [
-        State {
-            name: "Dashboard"
-//            PropertyChanges { target: modeSelectionButton; text: "Config Motor>>"}
-//            PropertyChanges { target: writeConfigParamsToMCU; visible: false }
-//            PropertyChanges { target: readConfigParamsFromMCU; visible: false }
-        },
-        State {
-            name: "Config"
-//            PropertyChanges { target: modeSelectionButton; text: "<< Dashboard" }
-//            PropertyChanges { target: writeConfigParamsToMCU; visible: true }
-//            PropertyChanges { target: readConfigParamsFromMCU; visible: true }
-        }
+        State {name: "Dashboard" },
+        State {name: "Config"    }
     ]
 
     Connections{

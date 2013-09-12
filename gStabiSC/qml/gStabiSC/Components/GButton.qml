@@ -45,8 +45,8 @@ Rectangle{
         }
         ,State{
             name: "hover"
-            PropertyChanges {target: button; border.color: "white"; border.width: 1; color: "#04ffdf"; opacity: 0.3}
-            PropertyChanges { target: buttonLabel; color: "white"   }
+            PropertyChanges {target: button; border.color: "white"; border.width: 1; color: "#04ffdf"; opacity: 0.5}
+            PropertyChanges { target: buttonLabel; color: "blue"   }
         }
         ,State{
             name: "exit"

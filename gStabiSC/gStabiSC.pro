@@ -72,6 +72,7 @@ OTHER_FILES += \
     qml/gStabiSC/Components/GListView.qml \
     qml/gStabiSC/Components/GCheckBox.qml \
     qml/gStabiSC/Components/TextStyled.qml \
-    qml/gStabiSC/GPIDDialog.qml \
     qml/gStabiSC/GMotorsConfiguration.qml \
-    qml/gStabiSC/Components/GContainer.qml
+    qml/gStabiSC/Components/GContainer.qml \
+    qml/gStabiSC/GGeneralSettings.qml \
+    qml/gStabiSC/Components/GManualControl.qml

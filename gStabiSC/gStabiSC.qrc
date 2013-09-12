@@ -73,5 +73,7 @@
         <file>qml/gStabiSC/GMotorsConfiguration.qml</file>
         <file>qml/gStabiSC/Components/GMotorConfig.qml</file>
         <file>qml/gStabiSC/Components/GContainer.qml</file>
+        <file>qml/gStabiSC/GGeneralSettings.qml</file>
+        <file>qml/gStabiSC/Components/GManualControl.qml</file>
     </qresource>
 </RCC>
