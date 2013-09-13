@@ -10,8 +10,8 @@ Rectangle {
     property bool   motor_config_enabled    : false
     property bool   motor_control_enabled   : false
 
+//    property string  msg_log: ""
 
-//    border {color: "cyan"; width: 3}
 
     state: "GeneralSettings"
     ListModel{
@@ -241,4 +241,13 @@ Rectangle {
             NumberAnimation { properties: "opacity"; duration: 250; }
         }
     }
+    /* function dialog_log(_message)
+   @brief: put message to log
+   @input: _message
+   @output: msg_log in HTML format
+  */
+//    function dialog_log(_message){
+////        msg_log = "<font color=\"yellow\">" + _message+ "</font><br>";
+//         msg_log = _message + "\n";
+//    }
 }

@@ -10,7 +10,6 @@ Item {
     id: root
     property int gauge_width: 220
     property int gauge_height: 220
-    property string msg_log : "" // log the message to display on Console
     property bool   gauge_config_mode    : false   // if false: dashbord mode; if true: config mode
     property bool   gauge_control_enabled: false
 
@@ -27,11 +26,10 @@ Item {
         gauge_needle: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.3_needle_tilt.png"
         gauge_handle_normal:  "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_normal_green_handle.png"
         gauge_handle_pressed:  "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_pressed_green_handle.png"
-        onEntered: tilt_log("Tilt axis of the system")
+        onEntered: dialog_log("Tilt axis of the system")
         onGauge_up_limit_set_angleChanged: _mavlink_manager.tilt_up_limit_angle = gauge_up_limit_set_angle;
         onGauge_down_limit_set_angleChanged:  _mavlink_manager.tilt_down_limit_angle = gauge_down_limit_set_angle;
         onGauge_setpoint_angleChanged: send_setpoint_control();
-        onGauge_log_messageChanged: dialog_log(gauge_log_message)
     }
     GGauge{
         id: panGauge
@@ -45,11 +43,10 @@ Item {
         gauge_needle: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.3_needle_pan.png"
         gauge_handle_normal: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_normal_blue_handle.png"
         gauge_handle_pressed: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_pressed_blue_handle.png"
-        onEntered: pan_log("Pan axis of the system")
+        onEntered: dialog_log("Pan axis of the system")
         onGauge_down_limit_set_angleChanged: _mavlink_manager.pan_cw_limit_angle = gauge_down_limit_set_angle
         onGauge_up_limit_set_angleChanged:   _mavlink_manager.pan_ccw_limit_angle = gauge_up_limit_set_angle
         onGauge_setpoint_angleChanged: send_setpoint_control();
-        onGauge_log_messageChanged: dialog_log(gauge_log_message)
     }
     GGauge{
         id: rollGauge
@@ -64,11 +61,10 @@ Item {
         gauge_needle: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.3_needle_roll.png"
         gauge_handle_normal: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_normal_cyan_handle.png"
         gauge_handle_pressed: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_pressed_cyan_handle.png"
-        onEntered: roll_log("Roll axis of the system")
+        onEntered: dialog_log("Roll axis of the system")
         onGauge_down_limit_set_angleChanged: _mavlink_manager.roll_down_limit_angle = gauge_down_limit_set_angle
         onGauge_up_limit_set_angleChanged:   _mavlink_manager.roll_up_limit_angle = gauge_up_limit_set_angle
         onGauge_setpoint_angleChanged: send_setpoint_control();
-        onGauge_log_messageChanged: dialog_log(gauge_log_message)
     }
     states: [
         State {name: "Dashboard" },
@@ -92,42 +88,7 @@ Item {
     }
 
 
-    /* function tilt_log(_message)
-       @brief: put message to log
-       @input: message
-       @output: msg_log in HTML format
-      */
-    function tilt_log(_message){
-//        msg_log = "<font color=\"yellow\">" + _message+ "</font><br>";
-        msg_log = _message + "\n"
-    }
-    /* function roll_log(_message)
-       @brief: put message to log
-       @input: message
-       @output: msg_log in HTML format
-      */
-    function roll_log(_message){
-//        msg_log = "<font color=\"springgreen\">" + _message+ "</font><br>";
-        msg_log = _message + "\n"
-    }
-    /* function pan_log(_message)
-       @brief: put message to log
-       @input: message
-       @output: msg_log in HTML format
-      */
-    function pan_log(_message){
-//        msg_log = "<font color=\"deepskyblue\">" + _message+ "</font><br>";
-        msg_log = _message + "\n"
-    }
-    /* function dialog_log(_message)
-       @brief: put message to log
-       @input: _message
-       @output: msg_log in HTML format
-      */
-    function dialog_log(_message){
-//        msg_log = "<font color=\"red\">" + _message+ "</font><br>";
-        msg_log = _message + "\n"
-    }
+
     function send_setpoint_control(){
         _mavlink_manager.send_control_command(tiltGauge.gauge_setpoint_angle, panGauge.gauge_setpoint_angle, rollGauge.gauge_setpoint_angle)
     }

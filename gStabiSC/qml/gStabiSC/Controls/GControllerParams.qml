@@ -4,8 +4,6 @@ import "../Components"
 Item{
     id: controllerParamsDialog
 
-    property string msg_log: "PID Dialog Log"
-
     width: 960; height: 280
     // Tilt Axis Motor
     Item{
@@ -79,15 +77,5 @@ Item{
         onRoll_followChanged: rollParameters.follow_value = _mavlink_manager.roll_follow
         onRoll_filterChanged: rollParameters.filter_value = _mavlink_manager.roll_filter
     }
-    /* function dialog_log(_message)
-       @brief: put message to log
-       @input: _message
-       @output: msg_log in HTML format/plaintext format
-      */
-    function dialog_log(_message){
-//        msg_log = "<font color=\"red\">" + _message+ "</font><br>";
-        msg_log = _message + "\n"
-    }
-
 
 }

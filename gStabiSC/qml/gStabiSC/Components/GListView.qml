@@ -11,8 +11,6 @@ Item{
     property alias list_count: listView.count;
     property alias list_model: listView.model
     property alias  current_index: listView.currentIndex
-//    implicitWidth: 100; implicitHeight: 100
-//    color: "transparent"
     Item{
         id: headerTitle
         height: 20
@@ -116,14 +114,13 @@ Item{
 
     ListView{
         id: listView
-        width: 100; height: 150;
+        width: root.width; height: root.height;
         anchors.top: headerTitle.bottom; anchors.topMargin: 5
 
         model: listModel
         delegate: listDelegate
         highlightFollowsCurrentItem: false
         highlight: highlightBar
-//        header: headerBar
         focus: true
         clip: true
         spacing: 2

@@ -76,7 +76,7 @@ Rectangle {
         width: 700;     height: 250
         anchors.horizontalCenter: gstabiBackgroundImage.horizontalCenter; anchors.horizontalCenterOffset: 120
         anchors.top: gstabiBackgroundImage.top; anchors.topMargin: 40
-        onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
+//        onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
     }
     GMainControlPanel{
         anchors.bottom: gstabiBackgroundImage.bottom; anchors.bottomMargin: 5
@@ -86,7 +86,7 @@ Rectangle {
             gDashboard.gauge_control_enabled = motor_control_enabled;
             console.log( gDashboard.gauge_control_enabled)
         }
-
+//        onMsg_logChanged: main_log_msg = msg_log + main_log_msg
     }
     GConsole{
         id: systemConsole
@@ -170,10 +170,10 @@ Rectangle {
     /* function dialog_log(_message)
        @brief: put message to log
        @input: _message
-       @output: msg_log in HTML format
+       @output: msg_log to display in console
       */
     function dialog_log(_message){
 //        main_log_msg = "<font color=\"white\">" + _message+ "</font><br>" + main_log_msg;
-        main_log_msg =_message+ "\n" + main_log_msg;
+        main_log_msg =_message + "\n" + main_log_msg;
     }
 }

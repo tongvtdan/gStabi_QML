@@ -11,7 +11,6 @@ GContainer{
     property int    top_value       : 100
     property bool   read_only       : false
     property bool   save_profile    : true;
-    property string msg_log: "GProfile"
     property string tilt_motor_class_name   : "Tilt Motor"
     property string pan_motor_class_name    : "Pan Motor"
     property string roll_motor_class_name   : "Roll Motor"
@@ -30,7 +29,7 @@ GContainer{
             width: 190;  height: 30
 //            width: profileNameInput.contentWidth+10; height: profileNameInput.contentHeight+10;
             border.width: 1; border.color: "cyan"
-            color: "#00000000";  smooth: true;
+            color: "transparent";  smooth: true;
             radius: 0.7*height/2
             anchors.left: profileNameList.right
             anchors.leftMargin: 40
@@ -40,19 +39,23 @@ GContainer{
             MouseArea{
                 id: mouseArea
                 anchors.fill: parent; hoverEnabled: true
-                onEntered: profileNameContainer.state = "focus"
+                onEntered: {
+                    profileNameContainer.state = "focus"
+                    dialog_log("Profile name must not contain space")
+                }
                 onExited:  profileNameContainer.state = "unfocus"
             }
 
             TextInput {
                 id: profileNameInput
                 anchors.centerIn: parent
-                color : "#0800f9"
+                color: "#04ffdf"
                 font{ family: "Segoe UI"; bold: true; pixelSize: 16}
                 focus: true
                 horizontalAlignment: TextInput.AlignHCenter
                 Behavior on color {ColorAnimation {duration: 200 }}
                 text: profile_name
+
             }
 
             states: [
@@ -64,7 +67,7 @@ GContainer{
                 ,State {
                     name: "unfocus"
                     PropertyChanges {target: profileNameContainer; border.color: "cyan"; border.width: 1 }
-                    PropertyChanges { target: profileNameInput; color: "#0800f9"   }
+                    PropertyChanges { target: profileNameInput; color: "#04ffdf"   }
 
                 }
             ]
@@ -99,7 +102,6 @@ GContainer{
                         save_parameters_to_profile();
                         dialog_log("Creating and saving params to profile successfully");
                     }
-//                    profileDialog.state = "hide";
                 }
             }
             GButton {
@@ -111,19 +113,17 @@ GContainer{
                     Storage.initialize();
                     load_parameters_to_ui();
                     dialog_log("Loading parameters from "+ profile_name + " done!")
-//                    profileDialog.state = "hide";
                 }
             }
-
-//            GButton {
-//                id: cancelButton
-//                text: "Cancel"
-//                onClicked: {
-//                    dialog_log("Canceled to save the profile");
-//                    profileDialog.state = "hide";
-//                    save_profile = false;
-//                }
-//            }
+            GButton {
+                id: clearTextButton
+                text: "Clear"
+                onClicked: {
+                    profile_name = ""
+                    profileNameInput.text = ""
+                    profileNameInput.focus = true
+                }
+            }
 
         }
 
@@ -176,10 +176,10 @@ GContainer{
    @input: _message
    @output: msg_log in HTML format
   */
-    function dialog_log(_message){
-//        msg_log = "<font color=\"yellow\">" + _message+ "</font><br>";
-         msg_log = _message+ "\n";
-    }
+//    function dialog_log(_message){
+////        msg_log = "<font color=\"yellow\">" + _message+ "</font><br>";
+//         msg_log = _message+ "\n";
+//    }
     /* function save_parameters_to_profile()
    @brief: save all parameters to profile name
    @input: parameters value get from _mavlink_manager

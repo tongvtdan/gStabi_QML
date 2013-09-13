@@ -811,32 +811,35 @@ void MavLinkManager::settilt_down_limit_angle(int _max)
 
 int MavLinkManager::tilt_lpf() const
 {
-
+    return m_tilt_lpf;
 }
 
 void MavLinkManager::settilt_lpf(int _lpf)
 {
-
+    m_tilt_lpf = _lpf;
+    emit tilt_lpfChanged(m_tilt_lpf);
 }
 
 int MavLinkManager::tilt_trim() const
 {
-
+    return m_tilt_trim;
 }
 
 void MavLinkManager::settilt_trim(int _trim)
 {
-
+    m_tilt_trim = _trim;
+    emit tilt_trimChanged(m_tilt_trim);
 }
 
 int MavLinkManager::tilt_mode() const
 {
-
+    return m_tilt_mode;
 }
 
 void MavLinkManager::settilt_mode(int _mode)
 {
-
+    m_tilt_mode = _mode;
+    emit tilt_modeChanged(m_tilt_mode);
 }
 
 
