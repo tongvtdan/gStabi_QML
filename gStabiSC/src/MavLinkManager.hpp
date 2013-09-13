@@ -18,6 +18,20 @@
 #define ONLINE true
 #define OFFLINE false
 
+#define BATT_CELL_MIN		3.5
+#define BATT_CELL_MAX 	4.2
+#define BATT_CELL_ALARM	3.6
+
+#define BATT_ALARM_OK		1
+#define BATT_ALARM_LOW	2
+#define BATT_ALARM_PC		3
+
+#define BATT_NO_CELL		2
+#define BATT_3_CELL			3
+#define BATT_4_CELL			4
+#define BATT_5_CELL			5
+#define BATT_6_CELL			6
+
 class MavLinkManager : public QObject
 {
     Q_OBJECT
@@ -31,7 +45,8 @@ class MavLinkManager : public QObject
     Q_PROPERTY(float pitch_angle READ pitch_angle   WRITE setpitch_angle    NOTIFY pitch_angleChanged)
     Q_PROPERTY(float yaw_angle   READ yaw_angle     WRITE setyaw_angle      NOTIFY yaw_angleChanged)
     //General
-//    Q_PROPERTY(int motorFreq READ motorFreq WRITE setmotorFreq NOTIFY motorFreqChanged)
+    Q_PROPERTY(int control_type READ control_type WRITE setcontrol_type NOTIFY control_typeChanged)
+    Q_PROPERTY(int battery_voltage READ battery_voltage WRITE setbattery_voltage NOTIFY battery_voltageChanged)
 
     // Parameters data
     //Pitch axis, Tilt Motor
@@ -48,9 +63,9 @@ class MavLinkManager : public QObject
     Q_PROPERTY(int tilt_up_limit_angle  READ tilt_up_limit_angle    WRITE settilt_up_limit_angle    NOTIFY tilt_up_limit_angleChanged)
     Q_PROPERTY(int tilt_down_limit_angle READ tilt_down_limit_angle WRITE settilt_down_limit_angle  NOTIFY tilt_down_limit_angleChanged)
         // use in QML, others dialog
-//    Q_PROPERTY(int  tilt_rc_lpf     READ tilt_rc_lpf    WRITE settilt_rc_lpf    NOTIFY tilt_rc_lpfChanged)
-//    Q_PROPERTY(int  tilt_rc_trim    READ tilt_rc_trim   WRITE settilt_rc_trim   NOTIFY tilt_rc_trimChanged)
-//    Q_PROPERTY(int  tilt_rc_mode    READ tilt_rc_mode   WRITE settilt_rc_mode   NOTIFY tilt_rc_modeChanged)
+    Q_PROPERTY(int  tilt_lpf     READ tilt_lpf    WRITE settilt_lpf    NOTIFY tilt_lpfChanged)
+    Q_PROPERTY(int  tilt_trim    READ tilt_trim   WRITE settilt_trim   NOTIFY tilt_trimChanged)
+    Q_PROPERTY(int  tilt_mode    READ tilt_mode   WRITE settilt_mode   NOTIFY tilt_modeChanged)
 //    Q_PROPERTY(int  tilt_sbus_chan  READ tilt_sbus_chan WRITE settilt_sbus_chan NOTIFY tilt_sbus_chanChanged)
 
     //Yaw axis, Pan Motor
@@ -116,6 +131,14 @@ public:
 
     float yaw_angle() const;
     void setyaw_angle(float _angle);
+    // General
+    int control_type() const;
+    void setcontrol_type(int _type);
+
+    int battery_voltage() const;
+    void setbattery_voltage(int _vol);
+
+
     // Parameters on board
     //[1] Tilt Motor
     float tilt_kp() const;
@@ -147,6 +170,15 @@ public:
 
     int tilt_down_limit_angle() const;
     void settilt_down_limit_angle(int _max);
+
+    int tilt_lpf() const;
+    void settilt_lpf(int _lpf);
+
+    int tilt_trim() const;
+    void settilt_trim(int _trim);
+
+    int tilt_mode() const;
+    void settilt_mode(int _mode);
 //    [1]
 //    [2] Pan Motor
     float pan_kp() const;
@@ -222,8 +254,10 @@ public:
 // function can be called form QML
     Q_INVOKABLE void write_params_to_board();
     Q_INVOKABLE void get_mavlink_info();
+    Q_INVOKABLE double get_battery_percent_remain(double _vol);
     Q_INVOKABLE void request_all_params();      // function to read parameters from controller board
     Q_INVOKABLE void send_control_command(int tilt_angle_setpoint, int pan_angle_setpoint, int roll_angle_setpoint);
+
 
 signals:
     void mavlink_data_ready(QByteArray data);
@@ -236,7 +270,9 @@ signals:
     void roll_angleChanged(float);
     void pitch_angleChanged(float);
     void yaw_angleChanged(float);
-
+// General
+    void control_typeChanged(int);
+    void battery_voltageChanged(int);
     // Parameters on board;
 //    [1] Tilt Motor
     void tilt_kpChanged(float);
@@ -249,6 +285,9 @@ signals:
     void motor_tilt_num_polesChanged(int);
     void tilt_up_limit_angleChanged(int);
     void tilt_down_limit_angleChanged(int);
+    void tilt_lpfChanged(int);
+    void tilt_trimChanged(int);
+    void tilt_modeChanged(int);
 //    [1]
 //    [2] pan Motor
     void pan_kpChanged(float);
@@ -316,6 +355,7 @@ private:
     global_struct global_data;
     gConfig_t current_params_on_board;
     mavlink_heartbeat_t m_mavlink_heartbeat;
+    mavlink_system_status_t m_g_system_status;
 //    [!] Q_PROPERTY
 
     bool m_hb_pulse;
@@ -324,7 +364,9 @@ private:
 
     // IMU data
     float m_roll_angle, m_pitch_angle, m_yaw_angle;
-
+    // General
+    int m_control_type;
+    int m_battery_voltage;
     // Parameters on board
 //    [1] Tilt Motor
     float m_tilt_kp, m_tilt_ki, m_tilt_kd, m_tilt_power, m_tilt_follow, m_tilt_filter;

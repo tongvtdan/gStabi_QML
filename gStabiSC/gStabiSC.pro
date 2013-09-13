@@ -80,4 +80,5 @@ OTHER_FILES += \
     qml/gStabiSC/GMainControlPanel.qml \
     qml/gStabiSC/Components/GIMUSettings.qml \
     qml/gStabiSC/Components/GCharts.qml \
-    qml/gStabiSC/Components/GInfo.qml
+    qml/gStabiSC/Components/GInfo.qml \
+    qml/gStabiSC/Components/GBattery.qml

@@ -5,8 +5,11 @@ Rectangle {
     id: mainControlPanel
     width: 1000 ;  height: 350
     color: "transparent"
-    property int control_width: 1000
-    property int  control_height: 280
+    property int    control_width           : 1000
+    property int    control_height          : 280
+    property bool   motor_config_enabled    : false
+    property bool   motor_control_enabled   : false
+
 
 //    border {color: "cyan"; width: 3}
 
@@ -15,37 +18,44 @@ Rectangle {
         id: controls
         ListElement{
             name: "General Settings"
-            pixmap: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_ports_disconnect.png"
+            pixmap:  "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_normal_settings.png"
+            pixmapfocus:  "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_settings.png"
             stateId: "GeneralSettings"
         }
         ListElement{
             name: "Motor Settings"
-            pixmap: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_motors.png"
+            pixmap: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_normal_motors.png"
+            pixmapfocus: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_motors.png"
             stateId: "MotorSettings"
         }
         ListElement{
             name: "Controller Settings"
-            pixmap: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_pid.png"
+            pixmap: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_normal_pid.png"
+            pixmapfocus: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_pid.png"
             stateId: "ControllerSettings"
         }
         ListElement{
             name: "IMU Settings"
-            pixmap: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_imu.png"
+            pixmap: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_normal_imu.png"
+            pixmapfocus: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_imu.png"
             stateId: "IMUSettings"
         }
         ListElement{
             name: "Profile"
-            pixmap: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_profile.png"
+            pixmap: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_normal_profile.png"
+            pixmapfocus: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_profile.png"
             stateId: "Profile"
         }
         ListElement{
             name: "Realtime Charts"
-            pixmap: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_chart.png"
+            pixmap: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_normal_chart.png"
+            pixmapfocus: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_chart.png"
             stateId: "RealtimeCharts"
         }
         ListElement{
             name: "Information"
-            pixmap: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_info.png"
+            pixmap: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_normal_info.png"
+            pixmapfocus: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_info.png"
             stateId: "Information"
         }
     }
@@ -83,6 +93,8 @@ Rectangle {
                     id: gMotorSettings
                     anchors.centerIn:   parent
                 }
+                onOpacityChanged: opacity === 1? motor_config_enabled = true : motor_config_enabled = false
+
             }
             Item{
                 id: controllerSettings
@@ -156,6 +168,8 @@ Rectangle {
             PropertyChanges { target: profileSettings; opacity: 0; }
             PropertyChanges { target: realtimeChart; opacity: 0; }
             PropertyChanges { target: info; opacity: 0; }
+//            PropertyChanges { target: mainControlPanel;  motor_config_enabled: true }
+
 
 
         },

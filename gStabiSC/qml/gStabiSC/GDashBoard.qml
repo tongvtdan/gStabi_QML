@@ -11,22 +11,22 @@ Item {
     property int gauge_width: 220
     property int gauge_height: 220
     property string msg_log : "" // log the message to display on Console
-    property bool   dashboard_config_mode : false   // if false: dashbord mode; if true: config mode
+    property bool   gauge_config_mode    : false   // if false: dashbord mode; if true: config mode
+    property bool   gauge_control_enabled: false
 
-    implicitWidth: 700; implicitHeight: 220
+    width: 700; height: 220
     GGauge{
         id: tiltGauge
         width: 220; height: 220
         anchors.left: parent.left; anchors.leftMargin: 0
         anchors.verticalCenter: parent.verticalCenter
         gauge_tilte: "Tilt"
-        gauge_type: 1; gauge_offset: 0 ; axis_direcion: -1
+        gauge_type: 1; gauge_offset: 0 ; axis_direcion: 1
         gauge_width: root.gauge_width; gauge_height:root.gauge_height
         gauge_back  : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.3_back_tilt.png"
         gauge_needle: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.3_needle_tilt.png"
         gauge_handle_normal:  "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_normal_green_handle.png"
         gauge_handle_pressed:  "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_pressed_green_handle.png"
-        gauge_config_mode: dashboard_config_mode
         onEntered: tilt_log("Tilt axis of the system")
         onGauge_up_limit_set_angleChanged: _mavlink_manager.tilt_up_limit_angle = gauge_up_limit_set_angle;
         onGauge_down_limit_set_angleChanged:  _mavlink_manager.tilt_down_limit_angle = gauge_down_limit_set_angle;
@@ -45,9 +45,6 @@ Item {
         gauge_needle: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.3_needle_pan.png"
         gauge_handle_normal: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_normal_blue_handle.png"
         gauge_handle_pressed: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_pressed_blue_handle.png"
-        gauge_config_mode: dashboard_config_mode
-//        up_limit_pie_color: "green"
-//        down_limit_pie_color: "chartreuse"
         onEntered: pan_log("Pan axis of the system")
         onGauge_down_limit_set_angleChanged: _mavlink_manager.pan_cw_limit_angle = gauge_down_limit_set_angle
         onGauge_up_limit_set_angleChanged:   _mavlink_manager.pan_ccw_limit_angle = gauge_up_limit_set_angle
@@ -67,7 +64,6 @@ Item {
         gauge_needle: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.3_needle_roll.png"
         gauge_handle_normal: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_normal_cyan_handle.png"
         gauge_handle_pressed: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_pressed_cyan_handle.png"
-        gauge_config_mode: dashboard_config_mode
         onEntered: roll_log("Roll axis of the system")
         onGauge_down_limit_set_angleChanged: _mavlink_manager.roll_down_limit_angle = gauge_down_limit_set_angle
         onGauge_up_limit_set_angleChanged:   _mavlink_manager.roll_up_limit_angle = gauge_up_limit_set_angle

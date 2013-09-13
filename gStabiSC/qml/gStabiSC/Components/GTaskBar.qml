@@ -17,11 +17,18 @@ Image {
         Item
         {
             id: delegate
-            width: 80  ; height: 80
-            Image {
-                width: 48 ;  height: 44
-                anchors.centerIn: parent
-                source: pixmap
+            width: 80  ; height: 70
+            BorderImage {
+                id: borderIamge
+                source:"qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_normal_button_border.png"
+                width: 70; height: 50
+                border.left: 5; border.top: 5
+                border.right: 5; border.bottom: 5
+                Image {
+                    width: 50 ;  height: 35
+                    anchors.centerIn: parent
+                    source: delegate.ListView.isCurrentItem? pixmapfocus:pixmap
+                }
             }
             GTextStyled {
                 text: name
@@ -41,13 +48,12 @@ Image {
     Component {
         id: highlight
         Item {
-            width: 80; height: 80
+            width: 70; height: 50
             Image {
                 id: highlightRect
-                anchors.fill: parent
-                anchors.topMargin: 5
-                anchors.bottomMargin: -5
-                source: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus.png"
+                 width: 70; height: 50
+//                anchors.fill: parent
+                source: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_hover_button_border.png"
             }
         }
     }

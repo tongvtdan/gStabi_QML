@@ -7,10 +7,12 @@ GContainer{
 
    property string  msg_log: ""
 
+
     Rectangle{
         id: borderRect
         anchors.fill: parent
         color: "transparent"
+        radius: 5
         border{ color: "cyan"; width: 1       }
         GSerialSettings{
             id: serialPortSettings
@@ -23,6 +25,12 @@ GContainer{
         GManualControl{
             anchors.left: serialPortSettings.right; anchors.leftMargin: 10
             anchors.top: parent.top; anchors.topMargin: 10
+            onControl_type_selectedChanged: {
+                if(control_type_selected === 3){
+                    motor_control_enabled = true
+                } else {motor_control_enabled = false}
+            }
+
         }
     }
     function dialog_log(_message){

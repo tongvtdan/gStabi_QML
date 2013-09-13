@@ -58,6 +58,7 @@ Item{
     }
     Component {
         id: listDelegate
+
         Rectangle {
             id: wrapper
             width: listItemLabel.contentWidth+20 ; height: listItemLabel.contentHeight + 10; color: "#00000000"

@@ -31,16 +31,12 @@ Rectangle {
         anchors.left: gstabiBackgroundImage.left ; anchors.leftMargin: 30
         implicitHeight: gstabiBackgroundImage.height ; implicitWidth: gstabiBackgroundImage.width
     }
-    AnimatedImage{
-        id: waitingForConnection
-        width: 30
-        height: 140
+    GBattery{
         anchors.left: gstabiBackgroundImage.left
         anchors.leftMargin: 5
         anchors.verticalCenter: parent.verticalCenter
-        source: "qrc:/images/qml/gStabiSC/images/animation.gif"
-        paused: true
     }
+
     Item{
         id: buttonsPanel
         width: 210; height: 40
@@ -81,209 +77,25 @@ Rectangle {
         anchors.horizontalCenter: gstabiBackgroundImage.horizontalCenter; anchors.horizontalCenterOffset: 120
         anchors.top: gstabiBackgroundImage.top; anchors.topMargin: 40
         onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
-        state: "Dashboard"
-        onStateChanged: {
-            if(gDashboard.state === "Config") {
-                dashboard_config_mode = true
-                generalSettingsPanel.state = "hide";
-                controllerParamsDialog.state = "hide"
-                profileDialog.state = "hide"
-            }
-            else {
-                dashboard_config_mode = false
-            }
-        }
     }
     GMainControlPanel{
-//        anchors.horizontalCenter: gstabiBackgroundImage.horizontalCenter;  anchors.horizontalCenterOffset: 0
         anchors.bottom: gstabiBackgroundImage.bottom; anchors.bottomMargin: 5
         anchors.right: parent.right; anchors.rightMargin: 10
+        onMotor_config_enabledChanged: gDashboard.gauge_config_mode = motor_config_enabled
+        onMotor_control_enabledChanged: {
+            gDashboard.gauge_control_enabled = motor_control_enabled;
+            console.log( gDashboard.gauge_control_enabled)
+        }
 
     }
     GConsole{
         id: systemConsole
-        anchors.top: gstabiBackgroundImage.top;   anchors.topMargin: 50
+        anchors.top: gstabiBackgroundImage.top;   anchors.topMargin: 80
         anchors.left: gstabiBackgroundImage.left; anchors.leftMargin: 50
         msg_history: main_log_msg
     }
 
-/*
-    GControllerParams{
-        id: controllerParamsDialog
-        state: "hide"
-        anchors.horizontalCenter: gstabiBackgroundImage.horizontalCenter;  anchors.horizontalCenterOffset: 0
-//        y: gstabiBackgroundImage.height - controllerParamsDialog.height - 70
-        onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
-        onStateChanged: {
-            if(state === "show"){
-                pidSettingsButton.state = "pressed"
-                generalSettingsPanel.state = "hide"
-                profileDialog.state = "hide"
-                motorsConfigurationPanel.state = "hide"
-                gDashboard.state = "Dashboard"
-            } else {
-                pidSettingsButton.state = "normal"
-            }
 
-        }
-    }
-
-    GMotorsConfiguration{
-        id: motorsConfigurationPanel
-        state: "hide"
-        anchors.horizontalCenter: gstabiBackgroundImage.horizontalCenter; anchors.horizontalCenterOffset: 0
-//        y: (gstabiBackgroundImage.y + gstabiBackgroundImage.height)/2 - height;
-        onStateChanged: {
-            if(state === "show"){
-                motorsParamsButton.state = "pressed"
-                controllerParamsDialog.state = "hide"
-                generalSettingsPanel.state = "hide"
-                gDashboard.state = "Config"
-            } else {
-                motorsParamsButton.state = "normal"
-                gDashboard.state = "Dashboard"
-            }
-        }
-    }
-    GProfile{
-        id: profileDialog
-        state: "hide";
-        anchors.horizontalCenter: gstabiBackgroundImage.horizontalCenter; anchors.horizontalCenterOffset: 0
-        show_state_posY: 400
-        save_profile: false
-        onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
-        onStateChanged: {
-            if(state === "show"){
-                profileDialogButton.state = "pressed"
-                controllerParamsDialog.state = "hide"
-                generalSettingsPanel.state = "hide"
-                motorsConfigurationPanel.state = "hide"
-                gDashboard.state = "Dashboard"
-            } else {
-                profileDialogButton.state = "normal"
-            }
-        }
-    }
-
-
-
-    GGeneralSettings{
-        id: generalSettingsPanel
-        state: "show"
-        anchors.horizontalCenter: gstabiBackgroundImage.horizontalCenter; anchors.horizontalCenterOffset: 0
-        show_state_posY: 380
-        onMsg_logChanged: { main_log_msg = msg_log + main_log_msg }
-        onStateChanged: {
-            if(state === "show"){
-                serialSettingButton.state = "pressed"
-                controllerParamsDialog.state = "hide"
-                motorsConfigurationPanel.state = "hide"
-                gDashboard.state = "Dashboard"
-            } else serialSettingButton.state = "normal"
-        }
-    }
-
-    Row {
-        id: buttonsRow
-        width: 300; height: 70
-        anchors.bottom: gstabiBackgroundImage.bottom; anchors.bottomMargin: 0
-        anchors.left: gstabiBackgroundImage.left; anchors.leftMargin: 50
-        spacing: 10
-        GImageButton{
-            id: serialSettingButton
-            imageNormal : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_ports_disconnect.png"
-            imagePressed: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_ports_disconnect.png"
-            imageHover  : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_ports_disconnect.png"
-            text: ""
-            Image{
-                id: runningImage
-                anchors.fill: parent
-                source: running_image_source
-                visible: false
-            }
-            onClicked: {
-                if(generalSettingsPanel.state === "show"){
-                    generalSettingsPanel.state = "hide"
-                } else {
-                    generalSettingsPanel.state = "show"
-                }
-            }
-            onEntered: dialog_log("Open or Close Serial Port dialog")
-        }
-        GImageButton{
-            id: motorsParamsButton
-            text:""
-            imageNormal: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_motors.png"
-            imagePressed: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_motors.png"
-            imageHover: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_motors.png"
-            onClicked: {
-                if(motorsConfigurationPanel.state === "hide") {
-                    motorsConfigurationPanel.state = "show" ;
-                } else {
-                    motorsConfigurationPanel.state = "hide";
-                }
-            }
-        }
-
-        GImageButton{
-            id: pidSettingsButton
-            text: ""
-            imageNormal : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_pid.png"
-            imagePressed: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_pid.png"
-            imageHover  : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_pid.png"
-            onClicked: {
-                if(controllerParamsDialog.state === "hide") {
-                    controllerParamsDialog.state = "show" ;
-                } else {
-                    controllerParamsDialog.state = "hide";
-                }
-            }
-            onEntered: dialog_log("Open or Close Controller Settings dialog")
-        }
-        GImageButton{
-            id: profileDialogButton
-            text: ""
-            imageNormal : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_profile.png"
-            imagePressed: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_profile.png"
-            imageHover  : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_profile.png"
-            onClicked: {
-                profileDialog.save_profile = false;
-                if(profileDialog.state  === "show"){
-                    profileDialog.state  = "hide"
-                }else {
-                    profileDialog.state  = "show";
-                }
-            }
-            onEntered: dialog_log("Open or Close Profile dialog");
-        }
-        GImageButton{
-            id: imuSettingButton
-            text:""
-            imageNormal : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_imu.png"
-            imagePressed: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_imu.png"
-            imageHover  : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_imu.png"
-            onEntered: dialog_log("IMU Settings")
-        }
-        GImageButton{
-            id: realtimeChartButton
-            text:""
-            imageNormal : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_chart.png"
-            imagePressed: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_chart.png"
-            imageHover  : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_chart.png"
-            onEntered: dialog_log("Realtime data charts")
-        }
-        GImageButton{
-            id: systemInfo
-            text: ""
-            imageNormal : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_info.png"
-            imagePressed: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_info.png"
-            imageHover  : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_info.png"
-            onEntered: dialog_log("Get Application Information")
-            onClicked: _mavlink_manager.get_mavlink_info();
-        }
-
-    }   // end of buttons Panel
-    */
     onMain_log_msgChanged: {
         if(main_log_msg.length >=1000){
             main_log_msg = ""
@@ -293,23 +105,9 @@ Rectangle {
     Connections{
         target: _mavlink_manager;
         onMavlink_message_logChanged: {main_log_msg = _mavlink_manager.mavlink_message_log + "\n" + main_log_msg}
-//        onBoard_connection_stateChanged: {
-//            if(_mavlink_manager.board_connection_state){
-////            generalSettingsPanel.state = "hide";
-//                serialSettingButton.imageNormal  = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_port_connect.png"
-//                serialSettingButton.imagePressed = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_port_connect.png"
-//                serialSettingButton.imageHover   = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_port_connect.png"
-//                runningImage.visible = true;
-//            }
-//            else{
-//                serialSettingButton.imageNormal  = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_ports_disconnect.png"
-//                serialSettingButton.imagePressed = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_ports_disconnect.png"
-//                serialSettingButton.imageHover   = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_ports_disconnect.png"
-//                runningImage.visible = false
-//            }
+        onBoard_connection_stateChanged: {
 //            waitingForConnection.paused = !_mavlink_manager.board_connection_state;
-
-//        }
+        }
         onHb_pulseChanged: {
             if(_mavlink_manager.hb_pulse)
             running_image_source =   "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_run_0_port_connect.png"
@@ -344,10 +142,6 @@ Rectangle {
         dialog_log("Welcome to gStabi Station Controller \n")
         dialog_log("************************************\n")
 
-//        dialog_log("<center>************************************</center>")
-//        dialog_log("<center>Before you can start to control or config your system, please connect your system to PC then open the serial port to establish the communication with controller board on gStabi Systtem</center>")
-//        dialog_log("<center>Welcome to gStabi Station Controller</center>")
-//        dialog_log("<center>************************************</center>")
 
 
     }

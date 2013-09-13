@@ -115,15 +115,15 @@ GContainer{
                 }
             }
 
-            GButton {
-                id: cancelButton
-                text: "Cancel"
-                onClicked: {
-                    dialog_log("Canceled to save the profile");
-                    profileDialog.state = "hide";
-                    save_profile = false;
-                }
-            }
+//            GButton {
+//                id: cancelButton
+//                text: "Cancel"
+//                onClicked: {
+//                    dialog_log("Canceled to save the profile");
+//                    profileDialog.state = "hide";
+//                    save_profile = false;
+//                }
+//            }
 
         }
 

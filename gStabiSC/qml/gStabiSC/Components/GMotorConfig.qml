@@ -9,10 +9,9 @@ Item{
     property int    max_value   : 10
     property int    min_value   : -10
     property int    motor_dir   : 0
-    property int    rc_lpf      : 0
-    property string min_limit_label: "Min"
-    property string max_limit_label: "Max"
-
+    property int    lpf_value   : 0
+    property int    trim_value  : 0
+    property int   angle_mode   : 0
 
     property string border_normal   : "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_tilt_normal_frame.png"
     property string border_hover    : "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_hover_frame.png"
@@ -20,7 +19,7 @@ Item{
 //    property string border_hover    : "../images/gStabiUI_3.2_hover_parameters_dialog.png"
 
 
-    width: 310; height:  210
+    width: 310; height:  230
 
     MouseArea{
         anchors.fill: parent
@@ -50,7 +49,7 @@ Item{
     Row{
         id: powerRow
         width: 300
-        anchors.top: boardNormalImg.top; anchors.topMargin: 40
+        anchors.top: boardNormalImg.top; anchors.topMargin: 30
         anchors.left: boardNormalImg.left ; anchors.leftMargin: 8
         spacing: 5
         GTextStyled{
@@ -74,16 +73,14 @@ Item{
         GTextInput{
             id: powerLevelInput
             bottom_value: 0; top_value: 100
-//            text_value: power_level
             onText_valueChanged: power_level = text_value
         }
-
     }
     Row{
         id: polesRow
         height: 20
-        anchors.top: powerRow.bottom; anchors.topMargin: 40
-        anchors.left: boardNormalImg.left; anchors.leftMargin: 10
+        anchors.top: powerRow.bottom; anchors.topMargin: 10
+        anchors.left: boardNormalImg.left; anchors.leftMargin: 15
         spacing: 10
         GTextStyled{
             id: polesLabel
@@ -97,48 +94,25 @@ Item{
         GTextInput{
             id: polesNumInput
             bottom_value: 0; top_value: 100
+            read_only: true
             text_value: poles_num
             onText_valueChanged: poles_num = text_value
         }
     }
-    Column{
-        id: maxColumn
-        x: 194
-        y: 136
-        width: 50; height: 45
-        anchors.horizontalCenterOffset: 70
-        anchors.horizontalCenter: parent.horizontalCenter
+    Row{
+        id: minRow
+        width: 100; height: 20
+        anchors.top: polesRow.bottom
+        anchors.topMargin: 15
+        anchors.left: parent.left
+        anchors.leftMargin: 30
         spacing: 5
         GTextStyled{
             width: 40
             height: 20
             color : "#00e3f9"
+            text: "Min:"
             font.pixelSize: 16
-            text: max_limit_label
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-        }
-        GTextInput{
-            id: maxLimitInput
-            bottom_value: 0; top_value:  180
-            text_value: max_value
-            onText_valueChanged: max_value = text_value
-        }
-    }
-    Column{
-        id: minColumn
-        x: 55
-        y: 136
-        width: 50; height: 45
-        anchors.horizontalCenterOffset: -70
-        anchors.horizontalCenter: parent.horizontalCenter
-        spacing: 5
-        GTextStyled{
-            width: 40
-            height: 20
-            color : "#00e3f9"
-            font.pixelSize: 16
-            text: min_limit_label
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
         }
@@ -147,6 +121,31 @@ Item{
             bottom_value: -180; top_value: 0
             text_value: min_value
             onText_valueChanged: min_value = text_value
+        }
+    }
+
+    Row{
+        id: maxRow
+        width: 100; height: 20
+        anchors.top: minRow.top
+        anchors.topMargin: 0
+        anchors.left: minRow.right
+        anchors.leftMargin: 20
+        spacing: 5
+        GTextStyled{
+            width: 40
+            height: 20
+            color : "#00e3f9"
+            text: "Max:"
+            font.pixelSize: 16
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+        }
+        GTextInput{
+            id: maxLimitInput
+            bottom_value: 0; top_value:  180
+            text_value: max_value
+            onText_valueChanged: max_value = text_value
         }
     }
     GCheckBox{
@@ -159,36 +158,93 @@ Item{
             motor_dir = checked_state;
         }
     }
-
-
-    states:[
-        State{
-            name: "showDialog"
-            PropertyChanges { target: dialogContainer; opacity: 1; scale: 1 }
+    Row{
+        id: lpfRow
+        width: 300
+        anchors.top: minRow.bottom; anchors.topMargin: 15
+        anchors.left: parent.left; anchors.leftMargin: 10
+        spacing: 5
+        GTextStyled{
+            id: lpfLabel
+            width: 50; height: 20
+            color : "#00e3f9"
+            font.pixelSize: 12
+            text: "LPF"
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            anchors.verticalCenter: parent.verticalCenter
         }
-        ,State {
-            name: "hideDialog"
-            PropertyChanges {target: dialogContainer; opacity: 0; scale: 0.5}
+        GSlider{
+            id: lpfSlider
+            lowerLimit: 0 ; upperLimit: 100
+            width: 180; //height: 4
+            anchors.verticalCenter: parent.verticalCenter
+            value: lpf_value
+            onValueChanged: lpf_value = lpfSlider.value
+        }
+        GTextInput{
+            id: lpfLevelInput
+            bottom_value: 0; top_value: 100
+            onText_valueChanged: lpf_value = text_value
+        }
+    }
+    Row{
+        id: trimRow
+        width: 300
+        anchors.top: lpfRow.bottom; anchors.topMargin: 10
+        anchors.left: parent.left; anchors.leftMargin: 10
+        spacing: 5
+        GTextStyled{
+            id: trimLabel
+            width: 50; height: 20
+            color : "#00e3f9"
+            font.pixelSize: 12
+            text: "TRIM"
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            anchors.verticalCenter: parent.verticalCenter
+        }
+        GSlider{
+            id: trimSlider
+            lowerLimit: 0 ; upperLimit: 100
+            width: 180; //height: 4
+            anchors.verticalCenter: parent.verticalCenter
+            value: trim_value
+            onValueChanged: trim_value = trimSlider.value
+        }
+        GTextInput{
+            id: trimLevelInput
+            bottom_value: 0; top_value: 100
+            onText_valueChanged: trim_value = text_value
+        }
+    }
+
+    GCheckBox{
+        id: angleModeChecked
+        checkbox_text: "Angle"
+        anchors.top: trimRow.bottom ; anchors.topMargin: 10
+        anchors.left: parent.left;  anchors.leftMargin: 20
+        state:  "unchecked"
+        onChecked_stateChanged: {
+            angle_mode = 0  // angle mode
+            velocityModeChecked.checked_state = !checked_state
         }
 
-    ]
-    transitions: [
-        Transition {
-            from: "showDialog" ; to:   "hideDialog"
-            ParallelAnimation{
-                NumberAnimation { target: dialogContainer; property: "opacity";  duration: 500; }
-                NumberAnimation { target: dialogContainer; property: "scale"; duration: 500; easing.type: Easing.Bezier}
-            }
-        }
-        ,Transition {
-            from: "hideDialog" ; to: "showDialog"
-            ParallelAnimation{
-                NumberAnimation { target: dialogContainer; property: "opacity"; duration: 1000; }
-                NumberAnimation { target: dialogContainer; property: "scale"; duration: 1000; easing.type: Easing.OutElastic}
-            }
+    }
+    GCheckBox{
+        id: velocityModeChecked
+        checkbox_text: "Velocity"
+        anchors.top: angleModeChecked.top ; anchors.topMargin: 0
+        anchors.left: angleModeChecked.right;  anchors.leftMargin: 20
+        state:  "unchecked"
+        onChecked_stateChanged: {
+            angle_mode = 1  // velocity mode
+            angleModeChecked.checked_state = !checked_state
 
         }
-    ]
+
+    }
+
     onPower_levelChanged: {
         powerLevelInput.text_value = power_level;
         powerSlider.value = power_level;
@@ -197,4 +253,13 @@ Item{
         polesNumInput.text_value = poles_num;
     }
     onMotor_dirChanged: reversedCheckBox.checked_state = motor_dir;
+    onLpf_valueChanged: {
+        lpfLevelInput.text_value = lpf_value
+        lpfSlider.value = lpf_value
+    }
+    onTrim_valueChanged: {
+        trimLevelInput.text_value = trim_value
+        trimSlider.value = trim_value
+    }
+
 }

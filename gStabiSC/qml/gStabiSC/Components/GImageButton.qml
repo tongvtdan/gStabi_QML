@@ -1,11 +1,14 @@
 import QtQuick 2.0
 
-Item{
+BorderImage{
     id: rootItem
 
-    property string imageNormal : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_released_button.png"
-    property string imageHover  : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_released_button.png"
+    property string imageNormal : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_normal_settings"
+    property string imageHover  : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_normal_settings"
     property string imagePressed: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_pressed_button.png"
+    property string border_normal   : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_normal_button_border.png"
+    property string border_hover    : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_hover_button_border.png"
+
     property string text: "ImgButton"
     property bool  hover_enabled: true
     property bool toggle: false;
@@ -17,10 +20,13 @@ Item{
     signal released
 
 
-    implicitHeight: 20; implicitWidth: 100
-    width: buttonImage.width; height: buttonImage.height
+    width : 70; height: 50
+//    source: "../images/buttons/gStabiUI_3.3_normal_button_border.png"
+    source: border_normal
+
     Image{
         id: buttonImage
+//        source: "../images/buttons/gStabiUI_3.3_normal_settings.png"
         asynchronous: true
         fillMode: Image.PreserveAspectFit
         source: imageNormal

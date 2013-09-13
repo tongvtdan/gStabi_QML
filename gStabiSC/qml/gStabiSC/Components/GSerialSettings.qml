@@ -9,11 +9,12 @@ Rectangle{
 
     property string  msg_log: ""
     property string  serial_port_info_details: ""
-    property bool  view_details: false
+    property bool  view_details: true
 
 
     height: 200;   width: 400
     color: "transparent"
+    radius: 5
     border{color: "cyan"; width: 1}
     // Open Close Port Button
     GButton{

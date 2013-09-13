@@ -32,18 +32,15 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
                 first_data_pack = false; // From now on, all message is treated as normal.
                 request_all_params();   // then request all parameters from Board
             }
-
             switch (message.msgid)
             {
-
             case MAVLINK_MSG_ID_HEARTBEAT:{ // get Heartbeat
                 mavlink_msg_heartbeat_decode(&message,&m_mavlink_heartbeat);
                 if(m_mavlink_heartbeat.mavlink_version == MAVLINK_VERSION ){
                     heartbeat_state = !heartbeat_state;
                     sethb_pulse(heartbeat_state);
                 }
-                else
-                    sethb_pulse(false);
+                else sethb_pulse(false);
             }
                 break;
             case MAVLINK_MSG_ID_RAW_IMU: { // get raw IMU data
@@ -93,6 +90,13 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
                 sbus_chan_values.ch18 = mavlink_msg_sbus_chan_values_get_ch18(&message);
             }
             break;
+            case MAVLINK_MSG_ID_SYSTEM_STATUS:{
+                m_g_system_status.battery_voltage = mavlink_msg_system_status_get_battery_voltage(&message);
+                setbattery_voltage(m_g_system_status.battery_voltage);
+                qDebug() << "Battery Level: " << m_g_system_status.battery_voltage;
+            }
+                break;
+
             default:
             break;
             } // end of switch
@@ -255,6 +259,8 @@ void MavLinkManager::update_all_parameters_to_UI()
         setmavlink_message_log("Updating parameters...");
 //        get_firmware_version();
 //        get_hardware_serial_number();
+        // General
+        setcontrol_type(current_params_on_board.radioType);
         // Tilt
         settilt_kp(current_params_on_board.pitchKp);
         settilt_ki(current_params_on_board.pitchKi);
@@ -327,7 +333,11 @@ void MavLinkManager::write_params_to_board()
 {
     setmavlink_message_log("Sending parameters to controller board...");
     // Motor config params
-
+// General
+    if(control_type() != current_params_on_board.radioType){
+        current_params_on_board.radioType = control_type();
+        write_a_param_to_board("RADIO_TYPE", current_params_on_board.radioType);
+    }
 //    [1] Tilt Motor
     if(tilt_power() != current_params_on_board.pitchPower){  // if power level changed, it will be store in params
         current_params_on_board.pitchPower = tilt_power();   // update current value to params struct
@@ -474,6 +484,68 @@ void MavLinkManager::get_mavlink_info()
 
 }
 
+double MavLinkManager::get_battery_percent_remain(double _vol)
+{
+    int batt_cells = 0;
+    if(_vol < (BATT_3_CELL*BATT_CELL_MIN - 4)){
+        batt_cells = BATT_NO_CELL;
+    }
+    else if((_vol >= (BATT_3_CELL*BATT_CELL_MIN)) && (_vol <= (BATT_3_CELL*BATT_CELL_MAX))){
+        batt_cells = BATT_3_CELL;
+    }
+    else if((_vol >= (BATT_4_CELL*BATT_CELL_MIN)) && (_vol <= (BATT_4_CELL*BATT_CELL_MAX))){
+        batt_cells = BATT_4_CELL;
+    }
+    else if((_vol >= (BATT_5_CELL*BATT_CELL_MIN)) && (_vol <= (BATT_5_CELL*BATT_CELL_MAX))){
+        batt_cells = BATT_5_CELL;
+    }
+    else if((_vol >= (BATT_6_CELL*BATT_CELL_MIN))){
+        batt_cells = BATT_6_CELL;
+    }
+    if(batt_cells != 2){
+        return 100*(_vol - batt_cells*BATT_CELL_MIN)/(batt_cells*(BATT_CELL_MAX - BATT_CELL_MIN));
+    }
+    else {
+        return 100*_vol/5.0;
+    }
+
+}
+
+/*
+ *gBattery.volCurrent = readAdc()*BATT_VOL_SCALE;
+
+    if(gBattery.volCurrent < (BATT_3_CELL*BATT_CELL_MIN - 4)){
+        gBattery.cell = BATT_NO_CELL;
+    }
+    else if((gBattery.volCurrent >= (BATT_3_CELL*BATT_CELL_MIN)) && (gBattery.volCurrent <= (BATT_3_CELL*BATT_CELL_MAX))){
+        gBattery.cell = BATT_3_CELL;
+    }
+    else if((gBattery.volCurrent >= (BATT_4_CELL*BATT_CELL_MIN)) && (gBattery.volCurrent <= (BATT_4_CELL*BATT_CELL_MAX))){
+        gBattery.cell = BATT_4_CELL;
+    }
+    else if((gBattery.volCurrent >= (BATT_5_CELL*BATT_CELL_MIN)) && (gBattery.volCurrent <= (BATT_5_CELL*BATT_CELL_MAX))){
+        gBattery.cell = BATT_5_CELL;
+    }
+    else if((gBattery.volCurrent >= (BATT_6_CELL*BATT_CELL_MIN))){
+        gBattery.cell = BATT_6_CELL;
+    }
+//					gBattery.percent = 100 - (gBattery.cell*BATT_CELL_MAX - gBattery.volCurrent)*100/(gBattery.cell*(BATT_CELL_MAX - BATT_CELL_MIN));
+    if(gBattery.cell != 2){
+        if(gBattery.volCurrent <= gBattery.cell*BATT_CELL_ALARM){
+            gBattery.update++;
+            if(gBattery.update > 10){
+                gBattery.update = 11;
+                return BATT_ALARM_LOW;
+            }
+        }
+        else{
+            gBattery.update = 0;
+            return BATT_ALARM_OK;
+        }
+    }
+
+    return BATT_ALARM_PC;
+*/
 void MavLinkManager::write_a_param_to_board(const char *param_id, float _value)
 {
     uint16_t len;
@@ -517,6 +589,7 @@ void MavLinkManager::request_all_params()
     setmavlink_message_log("Requesting parameters on board...");
 }
 
+
 void MavLinkManager::send_control_command(int tilt_angle_setpoint, int pan_angle_setpoint, int roll_angle_setpoint)
 {
     uint16_t len=0;
@@ -530,7 +603,7 @@ void MavLinkManager::send_control_command(int tilt_angle_setpoint, int pan_angle
     mavlink_msg_rc_simulation_pack(SYSTEM_ID, MAV_COMP_ID_SERVO1, &msg, tilt_angle_setpoint, roll_angle_setpoint, pan_angle_setpoint);
     len = mavlink_msg_to_send_buffer(buf, &msg);
     emit messge_write_to_comport_ready((const char*)buf, len);
-    qDebug()<< QString("Control angle: %1, %2, %3").arg(tilt_angle_setpoint).arg(pan_angle_setpoint).arg(roll_angle_setpoint);
+    qDebug()<< QString("C++>>Control angle: %1, %2, %3").arg(tilt_angle_setpoint).arg(pan_angle_setpoint).arg(roll_angle_setpoint);
 }
 
 
@@ -600,6 +673,28 @@ void MavLinkManager::setyaw_angle(float _angle)
 {
     m_yaw_angle = _angle;
     emit yaw_angleChanged(m_yaw_angle);
+}
+
+int MavLinkManager::control_type() const
+{
+    return m_control_type;
+}
+
+void MavLinkManager::setcontrol_type(int _type)
+{
+    m_control_type = _type;
+    emit control_typeChanged(m_control_type);
+}
+
+int MavLinkManager::battery_voltage() const
+{
+    return m_battery_voltage;
+}
+
+void MavLinkManager::setbattery_voltage(int _vol)
+{
+    m_battery_voltage = _vol;
+    emit battery_voltageChanged(m_battery_voltage);
 }
 /**
  * @brief Tilt motor functions to control tilt parameters
@@ -712,6 +807,36 @@ void MavLinkManager::settilt_down_limit_angle(int _max)
 {
     m_tilt_down_limit_angle = _max;
     emit tilt_down_limit_angleChanged(m_tilt_down_limit_angle);
+}
+
+int MavLinkManager::tilt_lpf() const
+{
+
+}
+
+void MavLinkManager::settilt_lpf(int _lpf)
+{
+
+}
+
+int MavLinkManager::tilt_trim() const
+{
+
+}
+
+void MavLinkManager::settilt_trim(int _trim)
+{
+
+}
+
+int MavLinkManager::tilt_mode() const
+{
+
+}
+
+void MavLinkManager::settilt_mode(int _mode)
+{
+
 }
 
 

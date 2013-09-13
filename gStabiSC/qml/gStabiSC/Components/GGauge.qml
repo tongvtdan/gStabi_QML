@@ -14,7 +14,7 @@ Item{
     property string gauge_log_message           : "Gauge Log"
     property int    gauge_width                 : 220
     property int    gauge_height                : 220
-    property bool   gauge_config_mode           : false
+//    property bool   gauge_config_mode           : false
     property double gauge_sensor_value          : 0
     property int    gauge_type                  : 1      // 1: Tilt, 2: pan; 3: roll
     property string gauge_tilte                 : "Tilt"
@@ -57,6 +57,7 @@ Item{
     property string  down_limit_pie_color   : "cyan"
     property double  range_limit_opacity: 0.2
     property int axis_direcion: 1   // 1: normal, -1 reverse, use with sensor_value
+    property bool gauge_handle_enabled: false
 
     signal clicked
     signal entered
@@ -126,33 +127,43 @@ Item{
     // Display different from setpoint, positive delta
     Rectangle{
         id: gaugePositiveAngleDelta
-        anchors.bottom: parent.bottom; anchors.bottomMargin: 122
-        anchors.leftMargin: 190; anchors.left: parent.left
-        rotation: 90
-        transformOrigin: Item.BottomLeft
+        rotation: 0
+        transformOrigin: Item.Left
         color: "#6429f704"
-        width: 10
-        height:  gauge_angle_delta >= 0 ? gauge_angle_delta:0
+        anchors.left: gaugeAngleDeltaNumDisplay.right
+        anchors.leftMargin: 0
+        anchors.verticalCenter: gaugeAngleDeltaNumDisplay.verticalCenter
+//        width:  gauge_angle_delta >= 0 ? gauge_angle_delta:0
+        width:  {
+            if(gauge_control_enabled) {return gauge_angle_delta >= 0 ? -gauge_angle_delta:0}
+            else return 0;
+        }
+        height: 10
     }
     // Display different from setpoint, negative delta
     Rectangle{
         id: gaugeNegativeAngleDelta
-        anchors.rightMargin: 190; anchors.right: parent.right
-        anchors.bottom: parent.bottom; anchors.bottomMargin: 122
-        rotation: -90
-        transformOrigin: Item.BottomRight
+        rotation: 0
+        transformOrigin: Item.Right
         color: "#6429f704"
-        width: 10
-        height: gauge_angle_delta <= 0 ? -gauge_angle_delta:0
+        anchors.right: gaugeAngleDeltaNumDisplay.left
+        anchors.rightMargin: 0
+        anchors.verticalCenter: gaugeAngleDeltaNumDisplay.verticalCenter
+        width:  {
+            if(gauge_control_enabled) {return gauge_angle_delta <= 0 ? -gauge_angle_delta:0}
+            else return 0;
+        }
+        height: 10
     }
     Item{
         id: gaugeControlItem
         anchors.fill: parent
-        rotation: (gauge_config_mode? gauge_up_limit_set_angle : gauge_setpoint_angle) - gauge_offset
+
+        rotation: if(!out_of_range){return (gauge_config_mode? gauge_up_limit_set_angle : gauge_setpoint_angle) - gauge_offset}
         Image {
             id: gaugeHandlePressedImage
             asynchronous: true
-            anchors.right: parent.right; anchors.rightMargin: -10
+            anchors.right: parent.right; anchors.rightMargin: -20
             anchors.verticalCenter: parent.verticalCenter
             source: gauge_handle_pressed
             state: "normal"
@@ -196,7 +207,7 @@ Item{
             id: gaugeControlHandleImage
             asynchronous: true
             rotation: 0
-            anchors.right: parent.right; anchors.rightMargin:-10
+            anchors.right: parent.right; anchors.rightMargin: -20
             anchors.verticalCenter: parent.verticalCenter
             source: gauge_handle_normal
         }
@@ -205,12 +216,12 @@ Item{
     Item{
         id: gaugeDownLimitSetItem
         anchors.fill: parent
-        rotation: gauge_down_limit_set_angle - gauge_offset
+        rotation: {if(!out_of_range) gauge_down_limit_set_angle - gauge_offset}
         Image {
             id: gaugeDownRangeHandleSelectedImage
             asynchronous: true
             anchors.right: parent.right
-            anchors.rightMargin: -10
+            anchors.rightMargin: -20
             anchors.verticalCenter: parent.verticalCenter
             source: down_limit_handle_pressed
             state: "limit_normal"
@@ -254,7 +265,7 @@ Item{
             id: gaugeDownRangeSelectHandlerImage
             asynchronous: true
             anchors.right: parent.right
-            anchors.rightMargin: -10
+            anchors.rightMargin: -20
             anchors.verticalCenter: parent.verticalCenter
             source: down_limit_handle_normal
         }
@@ -320,15 +331,26 @@ Item{
     states: [
         State{
             name: "dash"
-            when: !gauge_config_mode
-            PropertyChanges { target: gaugeDownLimitSetItem; visible: false}
+            when: !gauge_config_mode && !gauge_control_enabled
+            PropertyChanges { target: gaugeDownLimitSetItem; visible: false; enabled: false}
+            PropertyChanges {target: gaugeControlItem; visible: false; enabled: false }
+
         }
         ,State{
             name: "config"
             when: gauge_config_mode
-            PropertyChanges { target: gaugeDownLimitSetItem; visible: true}
+            PropertyChanges { target: gaugeDownLimitSetItem; visible: true; enabled: true}
+            PropertyChanges {target: gaugeControlItem; visible: true; enabled: true}
         }
+        ,State{
+            name: "control"
+            when: gauge_control_enabled
+            PropertyChanges {target: gaugeControlItem; visible: true; enabled: true}
+            PropertyChanges { target: gaugeDownLimitSetItem; visible: false; enabled: false}
+        }
+
     ]
+    onStateChanged: console.log(state)
     /* function calc_rotate_angle_gauge(_x, _y)
        @brief: get the angle to rotate the setpoint handler
        @input: (_x, _y) = (mouse.x, mouse.y)
@@ -338,7 +360,7 @@ Item{
     function calc_rotate_angle_gauge(_x, _y){
         var rot_angle_deg;
         var distanceFromCenterToPressedPoint = Math.sqrt((_x - gauge_center_x)*(_x - gauge_center_x) + (_y - gauge_center_y)*(_y - gauge_center_y));
-        if((distanceFromCenterToPressedPoint >= 0.7*gauge_radius) && (distanceFromCenterToPressedPoint <= gauge_radius))
+        if((distanceFromCenterToPressedPoint >= 0.7*gauge_radius) && (distanceFromCenterToPressedPoint <= 1.3*gauge_radius))
         {
             var minDistanceFromPress = 32767;
             for(var angle = 0; angle < 360; angle++ ){
@@ -358,7 +380,7 @@ Item{
         if(rot_angle_deg !== -360){
             var diff_angle_1 = Math.abs(gauge_up_limit_set_angle - rot_angle_deg) // calc the different angle between current angle and previous position
             var diff_angle_2 = Math.abs(gauge_down_limit_set_angle - rot_angle_deg)
-            if(gauge_config_mode){ // in Config Mode, show both Up (use Control handle) and Down limit
+            if(gauge_config_mode){ // in Config Mode, use both Up (use Control handle) and Down limit
                 if(diff_angle_1 <= diff_angle_2) {      // select the handle to interact
                     select_handle1 = true; select_handle2 = false;//console.log("Select 1")
                 } else {
@@ -373,8 +395,9 @@ Item{
                     gauge_log("Setting down limit to angle: " + gauge_down_limit_set_angle);
                 }
             }
-            else{       // in Dashboard Mode, only show Control Handle
-                select_handle1 = true
+            else{       // in Dashboard Mode
+                if(gauge_control_enabled){ select_handle1 = true}
+                else {select_handle1 = false}
                 select_handle2 = false
                 if(gauge_set_enabled) {
                     gauge_setpoint_angle = rot_angle_deg;
@@ -390,7 +413,7 @@ Item{
         {
 //             user change rotate up limit,
 //             in Config mode, this handle is up travel limit setting handle
-//             in Dashboard mode, this handle is Rotate setpoint
+//             in Control mode, this handle is Rotate setpoint
             if(gauge_set_enabled)
             {
                 return gauge_up_limit_set_angle;
@@ -405,7 +428,7 @@ Item{
             }
         } else // in Dashboard mode
         {
-            if(!gauge_set_enabled)
+            if(!gauge_set_enabled)  // will rotate based on sensor value
             {
                 rot_angle = axis_direcion*gauge_sensor_value;
                 check_sensor_value_is_out_of_range(rot_angle);

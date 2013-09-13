@@ -4,9 +4,9 @@ import "Components"
 Rectangle{
     id: consoleDialog
     property string msg_history: ""
-    width: 200; height: 250
+    width: 220; height: 250
     color: "transparent"
-    radius: 10
+    radius: 5
     border.color: "cyan"; border.width: 1
     Flickable{
         id: flickArea
