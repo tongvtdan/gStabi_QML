@@ -1,7 +1,8 @@
 import QtQuick 2.0
 
-GContainer{
+BorderImage{
     id: rootContainer
+    asynchronous: true
     // variables for P
     property int  p_value   : 45
     property int  p_min     : 0;
@@ -23,23 +24,39 @@ GContainer{
     property int  filter_min     : 0;
     property int  filter_max     : 255;
 
-    property string text_color: "white"
+    property string text_color: "cyan"
 
     // uncomment these lines to use resources
-//    property string border_normal   : "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_normal_controller_params_frame.png"
-//    property string border_hover    : "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_hover_controller_params_frame.png"
+    property string border_normal   : "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_tilt_normal_frame.png"
+    property string border_hover    : "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_hover_frame.png"
 
-    //    property string border_normal   : "../images/gStabiUI_3.2_normal_parameters_dialog.png"
-    //    property string border_hover    : "../images/gStabiUI_3.2_hover_parameters_dialog.png"
-    width: 300; height: 200;    Column{
+    width: 320; height: 230;
+    source: border_normal
+    MouseArea{
+        anchors.fill: parent
+        hoverEnabled: true
+        onEntered: borderHover.visible = true
+        onExited: borderHover.visible = false
+
+    }
+    BorderImage {
+        id: borderHover
+        source: border_hover
+        asynchronous: true
+        visible: false
+        anchors.fill: parent
+    }
+    Column{
         // p parameters
         id: paramsColumn
+        anchors.leftMargin: 20
+        anchors.topMargin: 20
         anchors.fill: parent
         spacing: 20
         Row{
             id: pParamsRow
             width: 300
-            anchors.right: parent.right;anchors.rightMargin: -10
+            anchors.right: parent.right;anchors.rightMargin: -15
             spacing: 10
             GTextStyled{
                 id: pLabel
@@ -56,11 +73,13 @@ GContainer{
                 lowerLimit: p_min ; upperLimit: p_max
                 width: 180;// height: 20;
                 anchors.verticalCenter: parent.verticalCenter
+                value: p_value
                 onValueChanged: { p_value = value; }
             }
             GTextInput{
                 id: pValueInput
                 bottom_value: p_min; top_value: p_max;
+                text_value: p_value.toString()
                 onText_valueChanged: p_value = text_value
             }
         }
@@ -69,7 +88,7 @@ GContainer{
         Row{
             id: iParamsRow
             width: 300
-            anchors.right: parent.right;anchors.rightMargin: -10
+            anchors.right: parent.right;anchors.rightMargin: -15
             spacing: 10
             GTextStyled{
                 id: iLabel
@@ -87,11 +106,13 @@ GContainer{
                 lowerLimit: i_min ; upperLimit: i_max
                 width: 180; //height: 20;
                 anchors.verticalCenter: parent.verticalCenter
+                value: i_value
                 onValueChanged: { i_value = value; }
             }
             GTextInput{
                 id: iValueInput
                 bottom_value: i_min; top_value: i_max;
+                text_value: i_value.toString()
                 onText_valueChanged: i_value = text_value
             }
         }
@@ -99,7 +120,7 @@ GContainer{
         Row{
             id: dParamsRow
             width: 300
-            anchors.right: parent.right;anchors.rightMargin: -10
+            anchors.right: parent.right;anchors.rightMargin: -15
             spacing: 10
             GTextStyled{
                 id: dLabel
@@ -117,11 +138,13 @@ GContainer{
                 lowerLimit: d_min ; upperLimit: d_max
                 width: 180;// height: 20;
                 anchors.verticalCenter: parent.verticalCenter
+                value: d_value
                 onValueChanged: { d_value = value; }
             }
             GTextInput{
                 id: dValueInput
                 bottom_value: d_min; top_value: d_max;
+                text_value: d_value.toString()
                 onText_valueChanged: d_value = text_value
             }
         }
@@ -129,7 +152,7 @@ GContainer{
         Row{
             id: followParamsRow
             width: 300
-            anchors.right: parent.right;anchors.rightMargin: -10
+            anchors.right: parent.right;anchors.rightMargin: -15
             spacing: 10
             GTextStyled{
                 id: followLabel
@@ -147,11 +170,13 @@ GContainer{
                 lowerLimit: follow_min ; upperLimit: follow_max
                 width: 180;// height: 20;
                 anchors.verticalCenter: parent.verticalCenter
+                value: follow_value
                 onValueChanged: { follow_value = value; }
             }
             GTextInput{
                 id: followValueInput
                 bottom_value: follow_min; top_value: follow_max;
+                text_value: follow_value.toString()
                 onText_valueChanged: follow_value = text_value
             }
         }
@@ -160,7 +185,7 @@ GContainer{
         Row{
             id: filterParamsRow
             width: 300
-            anchors.right: parent.right;anchors.rightMargin: -10
+            anchors.right: parent.right;anchors.rightMargin: -15
             spacing: 10
             GTextStyled{
                 id: filterLabel
@@ -178,11 +203,13 @@ GContainer{
                 lowerLimit: filter_min ; upperLimit: filter_max
                 width: 180; //height: 20;
                 anchors.verticalCenter: parent.verticalCenter
+                value: filter_value
                 onValueChanged: { filter_value = value; }
             }
             GTextInput{
                 id: filterValueInput
                 bottom_value: filter_min; top_value: filter_max;
+                text_value: filter_value.toString()
                 onText_valueChanged: filter_value = text_value
             }
         }
@@ -193,32 +220,5 @@ GContainer{
     onFollow_valueChanged: {followSlider.value = follow_value; followValueInput.text_value = follow_value}
     onFilter_valueChanged: {filterSlider.value = filter_value; filterValueInput.text_value = filter_value}
 
-    states:[
-        State{
-            name: "showDialog"
-            PropertyChanges { target: rootContainer; opacity: 1; }
-        }
-        ,State {
-            name: "hideDialog"
-            PropertyChanges {target: rootContainer; opacity: 0;}
-        }
-
-    ]
-    transitions: [
-        Transition {
-            from: "showDialog" ; to:   "hideDialog"
-            ParallelAnimation{
-                NumberAnimation { target: rootContainer; property: "opacity";  duration: 500; }
-                NumberAnimation { target: rootContainer; property: "scale"; to: 0.5; duration: 500; easing.type: Easing.Bezier}
-            }
-        }
-        ,Transition {
-            from: "hideDialog" ; to: "showDialog"
-            ParallelAnimation{
-                NumberAnimation { target: rootContainer; property: "opacity"; duration: 1000; }
-                NumberAnimation { target: rootContainer; property: "scale"; to: 1; duration: 1000; easing.type: Easing.OutElastic}
-            }
-        }
-    ]
 }
 

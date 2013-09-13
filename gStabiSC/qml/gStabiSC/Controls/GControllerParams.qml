@@ -1,25 +1,19 @@
 import QtQuick 2.0
-import "Components"
+import "../Components"
 
-GContainer{
+Item{
     id: controllerParamsDialog
 
     property string msg_log: "PID Dialog Log"
 
-    width: 930; height: 300
+    width: 960; height: 280
     // Tilt Axis Motor
     Item{
         id: tiltItems
-        anchors.left: parent.left; anchors.leftMargin: 20
-        anchors.top: parent.top; anchors.topMargin: 70
-        GButton{
-            text: "Tilt"
-            anchors.left: tiltParameters.left;   anchors.leftMargin: 110
-            anchors.bottom: tiltParameters.top; anchors.bottomMargin: 10
-        }
+        anchors.left: parent.left; anchors.leftMargin: 0
+        anchors.top: parent.top; anchors.topMargin: 20
         GParametersContainer{
             id: tiltParameters
-            height: 350
             anchors.left: parent.left; anchors.leftMargin: 0
             anchors.top: parent.top; anchors.topMargin: 0
             onP_valueChanged:       _mavlink_manager.tilt_kp     = p_value;
@@ -33,18 +27,12 @@ GContainer{
     Item{
         id: panItems
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: parent.top; anchors.topMargin: 70
-
-        GButton{
-            text: "Pan"
-            anchors.bottom: panParameters.top; anchors.bottomMargin: 10
-            anchors.horizontalCenter: panParameters.horizontalCenter
-        }
+        anchors.top: parent.top; anchors.topMargin: 20
         GParametersContainer{
             id: panParameters
-            height: 350
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.top; anchors.topMargin: 0
+            border_normal: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_pan_normal_frame.png"
             onP_valueChanged:       _mavlink_manager.pan_kp     = p_value;
             onI_valueChanged:       _mavlink_manager.pan_ki     = i_value;
             onD_valueChanged:       _mavlink_manager.pan_kd     = d_value;
@@ -56,19 +44,13 @@ GContainer{
     // Roll Axis Motor
     Item{
         id: rollItems
-        anchors.right: parent.right; anchors.rightMargin: 5
-        anchors.top: parent.top; anchors.topMargin: 70
-
-        GButton{
-            text: "Roll"
-            anchors.right: rollParameters.right;   anchors.rightMargin: 110
-            anchors.bottom: rollParameters.top; anchors.bottomMargin: 10
-        }
+        anchors.right: parent.right; anchors.rightMargin: 0
+        anchors.top: parent.top; anchors.topMargin: 20
         GParametersContainer{
             id: rollParameters
-            height: 350
             anchors.right: parent.right; anchors.rightMargin: 0
             anchors.top: parent.top; anchors.topMargin: 0
+            border_normal: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_roll_normal_frame.png"
             onP_valueChanged:       _mavlink_manager.roll_kp     = p_value;
             onI_valueChanged:       _mavlink_manager.roll_ki     = i_value;
             onD_valueChanged:       _mavlink_manager.roll_kd     = d_value;

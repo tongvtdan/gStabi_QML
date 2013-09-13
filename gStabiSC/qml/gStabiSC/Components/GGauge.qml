@@ -12,8 +12,8 @@ Item{
     id: gaugeContainer
 //[!] Variables can be change in using code
     property string gauge_log_message           : "Gauge Log"
-    property int    gauge_width                 : 310
-    property int    gauge_height                : 310
+    property int    gauge_width                 : 220
+    property int    gauge_height                : 220
     property bool   gauge_config_mode           : false
     property double gauge_sensor_value          : 0
     property int    gauge_type                  : 1      // 1: Tilt, 2: pan; 3: roll
@@ -196,7 +196,7 @@ Item{
             id: gaugeControlHandleImage
             asynchronous: true
             rotation: 0
-            anchors.right: parent.right; anchors.rightMargin: -10
+            anchors.right: parent.right; anchors.rightMargin:-10
             anchors.verticalCenter: parent.verticalCenter
             source: gauge_handle_normal
         }

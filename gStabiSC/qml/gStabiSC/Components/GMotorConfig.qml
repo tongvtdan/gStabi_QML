@@ -14,13 +14,13 @@ Item{
     property string max_limit_label: "Max"
 
 
-    property string border_normal   : "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_normal_parameters_dialog.png"
-    property string border_hover    : "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_hover_parameters_dialog.png"
+    property string border_normal   : "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_tilt_normal_frame.png"
+    property string border_hover    : "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_hover_frame.png"
 //    property string border_normal   : "../images/gStabiUI_3.2_normal_parameters_dialog.png"
 //    property string border_hover    : "../images/gStabiUI_3.2_hover_parameters_dialog.png"
 
 
-    implicitWidth: 310; implicitHeight: 210
+    width: 310; height:  210
 
     MouseArea{
         anchors.fill: parent

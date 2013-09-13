@@ -75,4 +75,9 @@ OTHER_FILES += \
     qml/gStabiSC/Components/GContainer.qml \
     qml/gStabiSC/GGeneralSettings.qml \
     qml/gStabiSC/Components/GManualControl.qml \
-    qml/gStabiSC/Components/GTextStyled.qml
+    qml/gStabiSC/Components/GTextStyled.qml \
+    qml/gStabiSC/Components/GTaskBar.qml \
+    qml/gStabiSC/GMainControlPanel.qml \
+    qml/gStabiSC/Components/GIMUSettings.qml \
+    qml/gStabiSC/Components/GCharts.qml \
+    qml/gStabiSC/Components/GInfo.qml

@@ -1,6 +1,6 @@
 import QtQuick 2.0
-import "Components"
-GContainer{
+import "../Components"
+Item{
     id: mainContainer
 
     property int  tilt_down_limit: 0
@@ -10,7 +10,6 @@ GContainer{
     property int  roll_up_limit: 0
     property int  roll_down_limit: 0
 
-    hide_scale: 0
     width: 930; height: 250
     Row{
         id: motorsParamsRow
@@ -19,8 +18,7 @@ GContainer{
         spacing: 0
     GMotorConfig{
         id: tiltMotorParams
-        width: 310; height: 210
-//        opacity: 0
+        border_normal: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_tilt_normal_frame.png"
         min_limit_label: "Tilt up limit"
         max_limit_label: "Tilt down limit"
         onMax_valueChanged: {
@@ -38,8 +36,8 @@ GContainer{
     }
     GMotorConfig{
         id: panMotorParams
-        width: 310; height: 210
-//        opacity: 0
+        border_normal: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_pan_normal_frame.png"
+
         min_limit_label: "Pan left limit"
         max_limit_label: "Pan right limit"
         onMax_valueChanged: {
@@ -57,8 +55,8 @@ GContainer{
     }
     GMotorConfig{
         id: rollMotorParams
-        width: 310; height: 210
-//        opacity: 0
+        border_normal: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_roll_normal_frame.png"
+
         min_limit_label: "Roll up limit"
         max_limit_label: "Roll down limit"
         onMax_valueChanged: {

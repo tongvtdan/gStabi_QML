@@ -14,13 +14,12 @@ Rectangle {
     property int header_height: 30
     property string main_log_msg: ""
     property string running_image_source: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_run_0_port_connect.png"
-    width:1044; height: 700
+    width:1024; height: 700
     color: "transparent"
     BorderImage {
         id: gstabiBackgroundImage
         asynchronous: true
         anchors.fill: parent
-//        width: 1044;  height: 700
         z: -100
         anchors.centerIn: parent
         source: "qrc:/images/qml/gStabiSC/images/gStabiUI_3.2_background.png"
@@ -44,9 +43,10 @@ Rectangle {
     }
     Item{
         id: buttonsPanel
-        anchors.right: parent.right; anchors.rightMargin: 30
-        anchors.top: parent.top; anchors.topMargin: 20
         width: 210; height: 40
+        anchors.verticalCenterOffset: -20
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
         Row{
 
             anchors.top: parent.top; anchors.topMargin: 5
@@ -77,10 +77,9 @@ Rectangle {
     }
     GDashBoard{
         id: gDashboard
-        width: 930;     height: 310
-        z:0;
-        anchors.horizontalCenter: gstabiBackgroundImage.horizontalCenter; anchors.horizontalCenterOffset: 0
-        anchors.top: gstabiBackgroundImage.top; anchors.topMargin: 60
+        width: 700;     height: 250
+        anchors.horizontalCenter: gstabiBackgroundImage.horizontalCenter; anchors.horizontalCenterOffset: 120
+        anchors.top: gstabiBackgroundImage.top; anchors.topMargin: 40
         onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
         state: "Dashboard"
         onStateChanged: {
@@ -95,7 +94,20 @@ Rectangle {
             }
         }
     }
+    GMainControlPanel{
+//        anchors.horizontalCenter: gstabiBackgroundImage.horizontalCenter;  anchors.horizontalCenterOffset: 0
+        anchors.bottom: gstabiBackgroundImage.bottom; anchors.bottomMargin: 5
+        anchors.right: parent.right; anchors.rightMargin: 10
 
+    }
+    GConsole{
+        id: systemConsole
+        anchors.top: gstabiBackgroundImage.top;   anchors.topMargin: 50
+        anchors.left: gstabiBackgroundImage.left; anchors.leftMargin: 50
+        msg_history: main_log_msg
+    }
+
+/*
     GControllerParams{
         id: controllerParamsDialog
         state: "hide"
@@ -153,12 +165,7 @@ Rectangle {
         }
     }
 
-    GConsole{
-        id: systemConsole
-        anchors.bottom: gstabiBackgroundImage.bottom;  anchors.bottomMargin:10
-        anchors.horizontalCenter: gstabiBackgroundImage.horizontalCenter; anchors.horizontalCenterOffset: 170
-        msg_history: main_log_msg
-    }
+
 
     GGeneralSettings{
         id: generalSettingsPanel
@@ -276,6 +283,7 @@ Rectangle {
         }
 
     }   // end of buttons Panel
+    */
     onMain_log_msgChanged: {
         if(main_log_msg.length >=1000){
             main_log_msg = ""
@@ -285,23 +293,23 @@ Rectangle {
     Connections{
         target: _mavlink_manager;
         onMavlink_message_logChanged: {main_log_msg = _mavlink_manager.mavlink_message_log + "\n" + main_log_msg}
-        onBoard_connection_stateChanged: {
-            if(_mavlink_manager.board_connection_state){
-//            generalSettingsPanel.state = "hide";
-                serialSettingButton.imageNormal  = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_port_connect.png"
-                serialSettingButton.imagePressed = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_port_connect.png"
-                serialSettingButton.imageHover   = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_port_connect.png"
-                runningImage.visible = true;
-            }
-            else{
-                serialSettingButton.imageNormal  = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_ports_disconnect.png"
-                serialSettingButton.imagePressed = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_ports_disconnect.png"
-                serialSettingButton.imageHover   = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_ports_disconnect.png"
-                runningImage.visible = false
-            }
-            waitingForConnection.paused = !_mavlink_manager.board_connection_state;
+//        onBoard_connection_stateChanged: {
+//            if(_mavlink_manager.board_connection_state){
+////            generalSettingsPanel.state = "hide";
+//                serialSettingButton.imageNormal  = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_port_connect.png"
+//                serialSettingButton.imagePressed = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_port_connect.png"
+//                serialSettingButton.imageHover   = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_port_connect.png"
+//                runningImage.visible = true;
+//            }
+//            else{
+//                serialSettingButton.imageNormal  = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_ports_disconnect.png"
+//                serialSettingButton.imagePressed = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_ports_disconnect.png"
+//                serialSettingButton.imageHover   = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_ports_disconnect.png"
+//                runningImage.visible = false
+//            }
+//            waitingForConnection.paused = !_mavlink_manager.board_connection_state;
 
-        }
+//        }
         onHb_pulseChanged: {
             if(_mavlink_manager.hb_pulse)
             running_image_source =   "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_run_0_port_connect.png"
@@ -320,17 +328,17 @@ Rectangle {
         font.pixelSize: 12
     }
     Component.onCompleted: {
-        Storage.getSettingDatabaseSync();
-        Storage.initializeSettings();
-        if(Storage.getSetting("Port name") !== "NA"){   // if already exist, get it
-            generalSettingsPanel.selected_portname = Storage.getSetting("Port name")
-        }
-        if(Storage.getSetting("Port index") !== "NA"){   // if already exist, get it
-            generalSettingsPanel.selected_port_index = Storage.getSetting("Port index")
-        }
-        if(Storage.getSetting("Profile") !== "NA"){   // if already exist, get it
-            profileDialog.profile_name = Storage.getSetting("Profile")
-        }
+//        Storage.getSettingDatabaseSync();
+//        Storage.initializeSettings();
+//        if(Storage.getSetting("Port name") !== "NA"){   // if already exist, get it
+//            generalSettingsPanel.selected_portname = Storage.getSetting("Port name")
+//        }
+//        if(Storage.getSetting("Port index") !== "NA"){   // if already exist, get it
+//            generalSettingsPanel.selected_port_index = Storage.getSetting("Port index")
+//        }
+//        if(Storage.getSetting("Profile") !== "NA"){   // if already exist, get it
+//            profileDialog.profile_name = Storage.getSetting("Profile")
+//        }
         dialog_log("************************************\n")
         dialog_log("Before you can start to control or config your system, please connect your system to PC then open the serial port to establish the communication with controller board on gStabi Systtem \n")
         dialog_log("Welcome to gStabi Station Controller \n")
@@ -344,25 +352,25 @@ Rectangle {
 
     }
     Component.onDestruction: {
-        Storage.getSettingDatabaseSync();
-        Storage.initializeSettings();
-        if(Storage.getSetting("Port name") !== "NA"){ // already in table, do update
-            Storage.updateSetting("Port name", generalSettingsPanel.selected_portname);
-        } else {
-            Storage.saveSetting("Port name", generalSettingsPanel.selected_portname)
-        }
+//        Storage.getSettingDatabaseSync();
+//        Storage.initializeSettings();
+//        if(Storage.getSetting("Port name") !== "NA"){ // already in table, do update
+//            Storage.updateSetting("Port name", generalSettingsPanel.selected_portname);
+//        } else {
+//            Storage.saveSetting("Port name", generalSettingsPanel.selected_portname)
+//        }
 
-        if(Storage.getSetting("Port index") !== "NA"){ // already in table, do update
-            Storage.updateSetting("Port index", generalSettingsPanel.selected_port_index);
-        } else {
-            Storage.saveSetting("Port index", generalSettingsPanel.selected_port_index)
-        }
+//        if(Storage.getSetting("Port index") !== "NA"){ // already in table, do update
+//            Storage.updateSetting("Port index", generalSettingsPanel.selected_port_index);
+//        } else {
+//            Storage.saveSetting("Port index", generalSettingsPanel.selected_port_index)
+//        }
 
-        if(Storage.getSetting("Profile") !== "NA"){ // already in table, do update
-            Storage.updateSetting("Profile", profileDialog.profile_name);
-        } else {        // else do create
-            Storage.saveSetting("Profile", profileDialog.profile_name)
-        }
+//        if(Storage.getSetting("Profile") !== "NA"){ // already in table, do update
+//            Storage.updateSetting("Profile", profileDialog.profile_name);
+//        } else {        // else do create
+//            Storage.saveSetting("Profile", profileDialog.profile_name)
+//        }
 
     }
     /* function dialog_log(_message)

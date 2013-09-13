@@ -11,7 +11,51 @@ Item{
     property alias list_count: listView.count;
     property alias list_model: listView.model
     property alias  current_index: listView.currentIndex
-    implicitWidth: 100; implicitHeight: 100
+//    implicitWidth: 100; implicitHeight: 100
+//    color: "transparent"
+    Item{
+        id: headerTitle
+        height: 20
+        anchors.left: parent.left
+        anchors.right: parent.right
+        Item{
+            id:  headerItem
+            width: root.width; height: 20;
+            Rectangle {
+                id: headerRect
+                anchors.fill: parent
+                radius: height/8
+                opacity: 0.5
+                gradient: Gradient {
+                    GradientStop {
+                        position: 0
+                        color: "#04ffdf"
+                    }
+
+                    GradientStop {
+                        position: 0.5
+                        color: "#0087ee"
+                    }
+
+                    GradientStop {
+                        position: 1
+                        color: "#04ffdf"
+                    }
+                }
+                border { color: "cyan"; width: 1; }
+
+            }
+            Text {
+                id: headerText
+                anchors.fill: parent
+                color: "#04ff00"
+                text: list_header_title
+                font.bold: true
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+            }
+        }
+    }
     Component {
         id: listDelegate
         Rectangle {
@@ -68,56 +112,19 @@ Item{
             Behavior on x { SpringAnimation { spring: 2; damping: 0.1 } }
         }
     }
-    Component{
-        id: headerBar
-        Item{
-            id:  headerItem
-            width: root.width; height: 20;
-            Rectangle {
-                id: headerRect
-                anchors.fill: parent
-                radius: height/8
-                opacity: 0.5
-                gradient: Gradient {
-                    GradientStop {
-                        position: 0
-                        color: "#04ffdf"
-                    }
-
-                    GradientStop {
-                        position: 0.5
-                        color: "#0087ee"
-                    }
-
-                    GradientStop {
-                        position: 1
-                        color: "#04ffdf"
-                    }
-                }
-                border { color: "cyan"; width: 1; }
-
-            }
-            Text {
-                id: headerText
-                anchors.fill: parent
-                color: "#04ff00"
-                text: list_header_title
-                font.bold: true
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-            }
-        }
-    }
 
     ListView{
         id: listView
-        implicitWidth: 100; implicitHeight: 150;
+        width: 100; height: 150;
+        anchors.top: headerTitle.bottom; anchors.topMargin: 5
+
         model: listModel
         delegate: listDelegate
         highlightFollowsCurrentItem: false
         highlight: highlightBar
-        header: headerBar
+//        header: headerBar
         focus: true
+        clip: true
         spacing: 2
     } // end of ListView
     ListModel {  id: listModel }
