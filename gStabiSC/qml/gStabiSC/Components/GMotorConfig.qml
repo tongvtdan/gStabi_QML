@@ -19,8 +19,6 @@ Item{
 
     property string border_normal   : "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_tilt_normal_frame.png"
     property string border_hover    : "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_hover_frame.png"
-//    property string border_normal   : "../images/gStabiUI_3.2_normal_parameters_dialog.png"
-//    property string border_hover    : "../images/gStabiUI_3.2_hover_parameters_dialog.png"
 
 
     width: 310; height:  230
@@ -95,16 +93,12 @@ Item{
             color : "#00e3f9"
             font.pixelSize: 12
             text: "Poles:"
-            anchors.right: polesNumInput.left
-            anchors.rightMargin: 5
             horizontalAlignment: Text.AlignRight
             verticalAlignment: Text.AlignVCenter
             anchors.verticalCenter: parent.verticalCenter
         }
         GTextInput{
             id: polesNumInput
-            anchors.right: parent.right
-            anchors.rightMargin: 0
             bottom_value: 0; top_value: 100
             read_only: true
             text_value: poles_num
@@ -118,23 +112,18 @@ Item{
         anchors.rightMargin: 20
         anchors.top: polesRow.bottom
         anchors.topMargin: 10
-        spacing: 5
+        spacing: 10
         GTextStyled{
-            width: 40
+            width: 45
             height: 20
             color : "#00e3f9"
             text: max_label
-            anchors.right: maxLimitInput.left
-            anchors.rightMargin: 5
-            anchors.verticalCenter: parent.verticalCenter
             font.pixelSize: 12
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignRight
         }
         GTextInput{
             id: maxLimitInput
-            anchors.right: parent.right
-            anchors.rightMargin: 0
             bottom_value: 0; top_value:  180
             text_value: max_value
             onText_valueChanged: max_value = text_value
@@ -148,23 +137,18 @@ Item{
         anchors.rightMargin: 20
         anchors.top: maxRow.bottom
         anchors.topMargin: 10
-        spacing: 5
+        spacing: 10
         GTextStyled{
-            width: 40
+            width: 45
             height: 20
             color : "#00e3f9"
             text: min_label
-            anchors.right: minLimitInput.left
-            anchors.rightMargin: 5
-            anchors.verticalCenter: parent.verticalCenter
             font.pixelSize: 12
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignRight
         }
         GTextInput {
             id: minLimitInput
-            anchors.right: parent.right
-            anchors.rightMargin: 0
             bottom_value: -180; top_value: 0
             text_value: min_value
             onText_valueChanged: min_value = text_value
@@ -197,7 +181,7 @@ Item{
             id: angleModeChecked
             height: 30
             checkbox_text: "Angle Mode"
-            anchors.top: powerRow.bottom ; anchors.topMargin: 5
+            anchors.top: parent.top ; anchors.topMargin: 5
             anchors.left: parent.left;  anchors.leftMargin: 5
             checked_state: !speed_mode
             onChecked_stateChanged: {
