@@ -90,14 +90,12 @@ Rectangle {
         onMotor_config_enabledChanged: gDashboard.gauge_config_mode = motor_config_enabled
         onMotor_control_enabledChanged: {
             gDashboard.gauge_control_enabled = motor_control_enabled;
-            console.log( gDashboard.gauge_control_enabled)
         }
     }
     GConsole{
         id: systemConsole
         anchors.top: gstabiBackgroundImage.top;   anchors.topMargin: 80
         anchors.left: gstabiBackgroundImage.left; anchors.leftMargin: 50
-        msg_history: main_log_msg
     }
     GPopupMessage{
         id: popupDialog

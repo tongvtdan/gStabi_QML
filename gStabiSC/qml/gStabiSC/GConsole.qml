@@ -3,7 +3,6 @@ import "Components"
 
 Rectangle{
     id: consoleDialog
-    property string msg_history: ""
     width: 220; height: 250
     color: "transparent"
     radius: 5
@@ -27,7 +26,7 @@ Rectangle{
             wrapMode: Text.WordWrap
             color: "cyan"
             textFormat: Text.PlainText
-            text: msg_history
+            text: main_log_msg
             anchors.bottomMargin: 5
             anchors.rightMargin: 5
             anchors.fill: parent
