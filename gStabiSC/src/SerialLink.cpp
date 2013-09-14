@@ -25,8 +25,9 @@ SerialLink::SerialLink(QObject *parent) :
 void SerialLink::PortAddedRemoved()
 {
     if(serialport->isOpen()) {serialport->close();}
-    updatePortStatus(false);
+
     fillSerialPortInfo();
+    updatePortStatus(false);
 }
 
 QString SerialLink::getPortName(int idx)
@@ -95,12 +96,22 @@ void SerialLink::fillSerialPortInfo()
 //   // Add the ports in reverse order, because we prepend them to the list
    for(int i = serial_port_info.size() - 1; i >= 0; i--){
        QextPortInfo portInfo = serial_port_info.at(i);
-       if(portInfo.portName == ""){
+       QString serialport_name;
+
+       serialport_name = portInfo.portName;
+       if(serialport_name == ""){
            serial_port_info.removeAt(i);    // remove all dummy serial ports
        }
+//       int venderID;
+//       venderID = portInfo.vendorID;
+//       if(venderID == 0){
+//           serial_port_info.removeAt(i);    // remove all dummy serial ports
+//           qDebug()<< "C++>>Remove port: " << portInfo.portName;
+//       }
    }
-   selected_port_name = serial_port_info.at(0).portName; // get the latest port
-//   setisPortListUpdated(true);
+   if(serial_port_info.size() > 0){
+        selected_port_name = serial_port_info.at(0).portName; // get the latest port
+   }
 }
 
 

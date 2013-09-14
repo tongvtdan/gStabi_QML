@@ -10,13 +10,11 @@ Rectangle{
     border.color: "cyan"; border.width: 1
     Flickable{
         id: flickArea
+        anchors.fill: parent
         anchors.rightMargin: 5
         anchors.topMargin: 5
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 5
-        anchors.fill: parent
-        anchors.left: parent.left
-        anchors.leftMargin: 5
+        anchors.bottom: parent.bottom ;    anchors.bottomMargin: 5
+        anchors.left: parent.left ;  anchors.leftMargin: 5
         contentWidth: Math.max(parent.width,logText.paintedWidth)
         contentHeight: Math.max(parent.height,logText.paintedHeight+10)
         flickableDirection: Flickable.VerticalFlick

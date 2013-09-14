@@ -13,14 +13,14 @@ Item {
 //    }
     Rectangle{
         id: batteryIndicatorBorder
-        width: 30
+        width: 20
         height: 100
         color: "transparent"
         border{ color: "cyan"; width: 1}
         Rectangle {
             id: pole
-            width: 10
-            height: 10
+            width: 7
+            height: 5
             color: "#00000000"
             border.color: "cyan"; border.width: 1
             anchors.horizontalCenter: parent.horizontalCenter
@@ -64,7 +64,6 @@ Item {
         target: _mavlink_manager;
         onBattery_voltageChanged: {
             battery_percent = _mavlink_manager.get_battery_percent_remain(_mavlink_manager.battery_voltage);
-            console.log("Battery %: " + battery_percent)
         }
     }
 }

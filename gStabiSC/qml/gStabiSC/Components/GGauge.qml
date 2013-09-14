@@ -306,11 +306,11 @@ Item{
             if(select_handle1){
                 gauge_set_enabled = true;
                 gaugeHandlePressedImage.state = "focus"
-                if(gauge_config_mode) dialog_log("Start to set up angle limit for the camera")
-                else dialog_log("Start to move camera")
+                if(gauge_config_mode) dialog_log(gauge_tilte + ": Start to set up angle limit for the camera")
+                else dialog_log(gauge_tilte + ": Start to move camera")
             } else if(select_handle2){
                 gauge_down_limit_set_enabled = true;
-                dialog_log("Start to set down angle limit for the camera")
+                dialog_log(gauge_tilte + ": Start to set down angle limit for the camera")
                 gaugeDownRangeHandleSelectedImage.state = "limit_focus"
             }
         } // end of onPressed
@@ -319,11 +319,11 @@ Item{
             if(select_handle1){
                 gauge_set_enabled = false;
                 gaugeHandlePressedImage.state = "normal"
-                if(gauge_config_mode) dialog_log("Stop setting up angle limit for the camera")
-                else dialog_log("Stop moving camera");
+                if(gauge_config_mode) dialog_log(gauge_tilte + ": Stop setting up angle limit for the camera")
+                else dialog_log(gauge_tilte + ": Stop moving camera");
             } else if(select_handle2){
                 gauge_down_limit_set_enabled = false;
-                dialog_log("Stop setting down angle limit for the camera");
+                dialog_log(gauge_tilte + ": Stop setting down angle limit for the camera");
                 gaugeDownRangeHandleSelectedImage.state = "limit_normal"
             }
         }  // end of onReleased
@@ -350,7 +350,7 @@ Item{
         }
 
     ]
-    onStateChanged: console.log(state)
+
     /* function calc_rotate_angle_gauge(_x, _y)
        @brief: get the angle to rotate the setpoint handler
        @input: (_x, _y) = (mouse.x, mouse.y)
@@ -388,11 +388,11 @@ Item{
                 }
                 if(gauge_set_enabled) {
                     gauge_up_limit_set_angle = rot_angle_deg;
-                    dialog_log("Setting up limit to angle: " + gauge_up_limit_set_angle);
+                    dialog_log(gauge_tilte + ": Setting up limit to angle: " + gauge_up_limit_set_angle);
                 }
                 if(gauge_down_limit_set_enabled){
                     gauge_down_limit_set_angle = rot_angle_deg;
-                    dialog_log("Setting down limit to angle: " + gauge_down_limit_set_angle);
+                    dialog_log(gauge_tilte + ": Setting down limit to angle: " + gauge_down_limit_set_angle);
                 }
             }
             else{       // in Dashboard Mode
@@ -437,11 +437,11 @@ Item{
             {
                 rot_angle = gauge_setpoint_angle;
                 if(rot_angle >= gauge_down_limit_set_angle) { // check whether the setpoint is in travel range
-                    dialog_log("Reach max travel limit");
+                    dialog_log(gauge_tilte + ": Reach max travel limit");
                     out_of_range = true;
                     return gauge_down_limit_set_angle;
                 } else if(rot_angle <=gauge_up_limit_set_angle){
-                    dialog_log("Reach min travel limit");
+                    dialog_log(gauge_tilte + ": Reach min travel limit");
                     out_of_range = true;
                     return gauge_up_limit_set_angle;
                 } else {                    // the setpoint is in travel limit
@@ -454,10 +454,10 @@ Item{
     function check_sensor_value_is_out_of_range(_angle_value)
     {
         if(_angle_value >= gauge_down_limit_set_angle) {
-            dialog_log("Reach max travel limit");
+            dialog_log(gauge_tilte + ": Reach max travel limit");
             out_of_range = true;
         } else if(_angle_value <=gauge_up_limit_set_angle){
-            dialog_log("Reach min travel limit");
+            dialog_log(gauge_tilte + ": Reach min travel limit");
             out_of_range = true;
         } else {
             out_of_range = false;

@@ -1,34 +1,38 @@
 import QtQuick 2.0
 
-Rectangle{
+GFrame{
     id: serialSettingDialog
-//    property string portname: ""    // used to store portname in getPortNameList()
     property string selected_portname: "COM1"
     property int    selected_port_index: 1
     property bool   showPortSetting: true
 
-    property string  msg_log: ""
-    property string  serial_port_info_details: ""
-    property bool  view_details: true
+    property string serial_port_info_details: ""
+    property bool   view_details: false
+    property string connection_image_src: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_run_0_port_connect.png"
 
 
-    height: 200;   width: 400
-    color: "transparent"
-    radius: 5
-    border{color: "cyan"; width: 1}
+    border_normal: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_serialports_normal_frame.png"
     // Open Close Port Button
-    GButton{
+    GImageButton{
         id: openCloseComportButton
-        width: 60; height: 30;
-        text: "Open"
-        anchors.left: serialportNameList.right
-        anchors.leftMargin: 10
-        anchors.top: serialportNameList.top
-        anchors.topMargin: 0
+        width: 70; height: 50;
+        anchors.left: serialportNameList.right; anchors.leftMargin: 10
+        anchors.top: viewportDetailsChecked.bottom; anchors.topMargin: 20
+        text: ""
+        imageNormal : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_normal_ports_disconnect.png"
+        imagePressed: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_ports_disconnect.png"
+        imageHover  : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_ports_disconnect.png"
+        Image{
+            id: connectedImage
+            anchors.fill: parent
+            width: 50; height: 35
+            source: connection_image_src
+            visible: false
+        }
+        onEntered: dialog_log("* Open or Close Comport *")
         onClicked: {
             if(!_serialLink.isConnected){       // if port is being closed, can update port name
                 _serialLink.update_comport_settings(selected_portname);
-                console.log("Port will be open: "+ selected_portname)
             }
             _serialLink.open_close_comport();
             if(_serialLink.isConnected) {
@@ -37,25 +41,36 @@ Rectangle{
             }
             else dialog_log("Port " + selected_portname + " state: Closed")
         }
-    } // end of Open Close Port Button
+    }
+
+    GCheckBox{
+        id: viewportDetailsChecked
+        width: 100
+        height: 30
+        anchors.top: parent.top; anchors.topMargin: 40
+        anchors.left: serialportNameList.right ;    anchors.leftMargin: 0
+        checkbox_text: "View details"
+        state: "unchecked"
+        onChecked_stateChanged: {
+            view_details = checked_state
+        }
+    }
+
     GListView{
         id: serialportNameList
-        width: 100; height: 150;
-        anchors.left: parent.left; anchors.leftMargin: 10;
-        anchors.top: parent.top ; anchors.topMargin: 10
+        width: 70; height: 100;
+        anchors.left: parent.left; anchors.leftMargin: 20;
+        anchors.top: parent.top ; anchors.topMargin: 30
         list_header_title: "Serial Ports"
         onClicked: {
             selected_port_index = item_index;
             selected_portname   = item_text;
-            console.log("Chose: "+ selected_portname)
         }
         onEntered: {
-            serial_port_info_details = _serialLink.get_selected_port_details(item_index);
-            serialportInfoDetailsText.opacity = 1
-        }
-        onExited: {
-            serial_port_info_details = _serialLink.get_selected_port_details(item_index);
-            serialportInfoDetailsText.opacity = 0
+            if(view_details){
+                serial_port_info_details = _serialLink.get_selected_port_details(item_index);
+                dialog_log(serial_port_info_details)
+            }
         }
     }
 
@@ -68,37 +83,34 @@ Rectangle{
         }
     }
 
-    Flickable{
-        id: portDetails
-        width: 250; height: 100
-        anchors.top: serialportNameList.top; anchors.topMargin: 40
-        anchors.left: openCloseComportButton.left; anchors.leftMargin: 0
-        pressDelay: 300
-        clip: true
-        flickableDirection: Flickable.HorizontalAndVerticalFlick
-        visible: view_details
-        Text {
-            id: serialportInfoDetailsText
-            anchors.fill: parent
-            color: "#04f900"
-            text:serial_port_info_details
-            font.family: "Segoe UI"
-            wrapMode: Text.NoWrap
-            opacity: 0
-            font.pixelSize: 12
-            Behavior on opacity {
-                NumberAnimation { target: serialportInfoDetailsText; property: "opacity"; duration: 500; easing.type: Easing.Bezier }
-            }
-        }
-    }
     //[!] this code cause warning when run the app, but it works
     Connections{
         target: _serialLink
         onIsPortListUpdatedChanged: {check_and_set_current_port();}
-        onIsConnectedChanged:{
-            if(_serialLink.isConnected){ openCloseComportButton.text = "Close"} else {openCloseComportButton.text = "Open"}
+    }
+    Connections{
+        target: _mavlink_manager;
+        onBoard_connection_stateChanged: {
+            if(_mavlink_manager.board_connection_state){
+                openCloseComportButton.imageNormal  = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_normal_port_connect.png"
+                openCloseComportButton.imagePressed = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_port_connect.png"
+                openCloseComportButton.imageHover   = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_port_connect.png"
+                connectedImage.visible = true;
+            }
+            else{
+                openCloseComportButton.imageNormal  = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_normal_ports_disconnect.png"
+                openCloseComportButton.imagePressed = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_ports_disconnect.png"
+                openCloseComportButton.imageHover   = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_ports_disconnect.png"
+                connectedImage.visible = false
+            }
+        }
+        onHb_pulseChanged: {
+            if(_mavlink_manager.hb_pulse)
+                connection_image_src =   "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_run_0_port_connect.png"
+            else connection_image_src = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_run_1_port_connect.png"
         }
     }
+
 //    [!]
     function getPortNameList()
     {
@@ -109,31 +121,35 @@ Rectangle{
                 serialportNameList.list_model.append({"value": portname});
             }
         }
+        var no_of_ports = serialportNameList.list_count;
+        if(no_of_ports === 0)
+        {
+            dialog_log("Check Driver for Silicon Labs CP210x USB to UART Bridge is installed then restart application")
+            dialog_log("* No Serial Port on your computer *");
+        }
+        return no_of_ports
     }
-    function check_and_set_current_port(){
-
-        getPortNameList() // update portlist when there is a change
-        for(var i=0; i < serialportNameList.list_count; i++){
-            var port_name_in_list = serialportNameList.list_model.get(i).value;
-            if(selected_portname === port_name_in_list ) // get port name from port name list model
-            {
-                dialog_log("Find the restored port " + selected_portname)
-                serialportNameList.current_index = i;
-                selected_portname = port_name_in_list;
-                dialog_log("Selected the port: " + selected_portname)
-            }
-            else if(selected_port_index === i){
-                dialog_log("Port " + selected_portname + " was removed")
-                serialportNameList.current_index = i;
-                selected_portname = port_name_in_list;
-                dialog_log("Selected new port: " + selected_portname)
+    function check_and_set_current_port()
+    {
+        var no_of_ports = getPortNameList() // update portlist when there is a change
+        if(no_of_ports > 0) {
+            for(var i=0; i < no_of_ports; i++){
+                var port_name_in_list = serialportNameList.list_model.get(i).value;
+                if(selected_portname === port_name_in_list ) // get port name from port name list model
+                {
+                    dialog_log("Find the restored port " + selected_portname)
+                    serialportNameList.current_index = i;
+                    selected_portname = port_name_in_list;
+                    dialog_log("Selected the port: " + selected_portname)
+                }
+                else if(selected_port_index === i){
+                    dialog_log("Port " + selected_portname + " was removed")
+                    serialportNameList.current_index = i;
+                    selected_portname = port_name_in_list;
+                    dialog_log("Selected new port: " + selected_portname)
+                }
             }
         }
-    }
-
-    function dialog_log(_message){
-//        msg_log = "<font color=\"cyan\">" + _message+ "</font><br>";
-         msg_log = _message+ "\n";
     }
 }
 

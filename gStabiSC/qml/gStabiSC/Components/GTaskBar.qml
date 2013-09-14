@@ -7,8 +7,6 @@ Image {
     property int  task_bar_width: 300
     property int  task_bar_height: 100
 
-//    source: "qrc:/images/qml/gStabiSC/images/toolbar_back.png"
-//    source: "../images/toolbar_back.png"
 
     height: 100
     width: 600
@@ -24,8 +22,10 @@ Image {
                 width: 70; height: 50
                 border.left: 5; border.top: 5
                 border.right: 5; border.bottom: 5
+                asynchronous: true
                 Image {
                     width: 50 ;  height: 35
+                    asynchronous: true
                     anchors.centerIn: parent
                     source: delegate.ListView.isCurrentItem? pixmapfocus:pixmap
                 }
@@ -40,7 +40,9 @@ Image {
             }
             MouseArea {
                 anchors.fill: parent;
-                onClicked: { delegate.ListView.view.currentIndex = index;
+                onClicked: {
+                    delegate.ListView.view.currentIndex = index;
+                    control_selected_index = index
                     delegate.ListView.view.clicked(stateId) }
             }
         }

@@ -45,11 +45,9 @@ int main(int argc, char *argv[])
     viewer.addImportPath("qrc:/qml/gStabiSC/GDashboard");
     viewer.addImportPath("qrc:/javascript/storage.js");
 
-
-
-       viewer.setTitle(QString("%1 %2").arg(APPLICATION_NAME).arg(APPLICATION_VERSION));
-       viewer.setMinimumSize(QSize(APPLICATION_WIDTH,APPLICATION_HEIGHT));
-//       viewer.setMaximumSize(QSize(APPLICATION_WIDTH,APPLICATION_HEIGHT));
+    viewer.setTitle(QString("%1 %2").arg(APPLICATION_NAME).arg(APPLICATION_VERSION));
+    viewer.setMinimumSize(QSize(APPLICATION_WIDTH,APPLICATION_HEIGHT));
+    viewer.setMaximumSize(QSize(APPLICATION_WIDTH,APPLICATION_HEIGHT));
 
     viewer.rootContext()->setContextProperty("m_configuration",&m_configuration);
     viewer.rootContext()->setContextProperty("_serialLink", &m_serialLink);

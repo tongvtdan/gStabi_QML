@@ -13,7 +13,8 @@ Rectangle {
     id: mainWindow
     property int header_height: 30
     property string main_log_msg: ""
-    property string running_image_source: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_run_0_port_connect.png"
+    property string popup_msg: ""
+    property bool popup_show: false
     width:1024; height: 700
     color: "transparent"
     BorderImage {
@@ -55,7 +56,10 @@ Rectangle {
                     if(_serialLink.isConnected) {
                         _mavlink_manager.write_params_to_board();
                     }
-                    else{  dialog_log("Controller board is not connected. Please connect PC to the board then try again") }
+                    else{
+                        popup_msg = ("Controller board is not connected. Please connect the board to your PC through USB cable then try again")
+                        popup_show = true;
+                    }
                 }
                 onEntered: dialog_log("Write parameters to controller board")
             }
@@ -65,7 +69,10 @@ Rectangle {
                 text: "Read"
                 onClicked: {
                     if(_serialLink.isConnected){ _mavlink_manager.request_all_params(); }
-                    else {dialog_log("Controller board is not connected. Please connect PC to the board then try again")}
+                    else {
+                        popup_msg = "Controller board is not connected. Please connect the board to your PC through USB cable then try again"
+                        popup_show = true;
+                    }
                 }
                 onEntered: dialog_log("Read parameters from controller board")
             }
@@ -76,7 +83,6 @@ Rectangle {
         width: 700;     height: 250
         anchors.horizontalCenter: gstabiBackgroundImage.horizontalCenter; anchors.horizontalCenterOffset: 120
         anchors.top: gstabiBackgroundImage.top; anchors.topMargin: 40
-//        onMsg_logChanged: { main_log_msg = msg_log + main_log_msg  }
     }
     GMainControlPanel{
         anchors.bottom: gstabiBackgroundImage.bottom; anchors.bottomMargin: 5
@@ -86,7 +92,6 @@ Rectangle {
             gDashboard.gauge_control_enabled = motor_control_enabled;
             console.log( gDashboard.gauge_control_enabled)
         }
-//        onMsg_logChanged: main_log_msg = msg_log + main_log_msg
     }
     GConsole{
         id: systemConsole
@@ -94,25 +99,25 @@ Rectangle {
         anchors.left: gstabiBackgroundImage.left; anchors.leftMargin: 50
         msg_history: main_log_msg
     }
-
+    GPopupMessage{
+        id: popupDialog
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.centerIn: gstabiBackgroundImage.Center;
+    }
 
     onMain_log_msgChanged: {
-        if(main_log_msg.length >=1000){
+        if(main_log_msg.length >=5000){
             main_log_msg = ""
-            dialog_log("Log data cleared")
+            dialog_log("************************")
+            dialog_log("*** Log data cleared ***")
+            dialog_log("************************")
         }
     }
     Connections{
         target: _mavlink_manager;
         onMavlink_message_logChanged: {main_log_msg = _mavlink_manager.mavlink_message_log + "\n" + main_log_msg}
-        onBoard_connection_stateChanged: {
-//            waitingForConnection.paused = !_mavlink_manager.board_connection_state;
-        }
-        onHb_pulseChanged: {
-            if(_mavlink_manager.hb_pulse)
-            running_image_source =   "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_run_0_port_connect.png"
-            else running_image_source = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_run_1_port_connect.png"
-        }
+
     }
 
     GTextStyled {
@@ -174,6 +179,6 @@ Rectangle {
       */
     function dialog_log(_message){
 //        main_log_msg = "<font color=\"white\">" + _message+ "</font><br>" + main_log_msg;
-        main_log_msg =_message + "\n" + main_log_msg;
+        main_log_msg ="- "+_message + "\n" + main_log_msg;
     }
 }

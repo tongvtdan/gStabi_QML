@@ -4,6 +4,8 @@ Item{
     signal clicked;
     signal entered;
     signal exited;
+    signal header_clicked;
+    signal header_entered;
     property string list_header_title: "List Header"
     property int    item_index: 0
     property string item_text: ""
@@ -11,14 +13,15 @@ Item{
     property alias list_count: listView.count;
     property alias list_model: listView.model
     property alias  current_index: listView.currentIndex
+    property alias orientation: listView.orientation
     Item{
         id: headerTitle
-        height: 20
+        width: headerText.contentWidth + 10; height: 20;
         anchors.left: parent.left
         anchors.right: parent.right
         Item{
             id:  headerItem
-            width: root.width; height: 20;
+            anchors.fill: parent
             Rectangle {
                 id: headerRect
                 anchors.fill: parent
@@ -53,6 +56,24 @@ Item{
                 horizontalAlignment: Text.AlignHCenter
             }
         }
+        MouseArea{
+            id: headerMouseArea
+            anchors.fill: parent
+            hoverEnabled: true
+            onEntered: {
+                headerRect.border.color = "green"
+                headerRect.border.width = 2
+                headerText.color = "cyan"
+                header_entered();
+            }
+            onExited: {
+                headerRect.border.color = "cyan"
+                headerRect.border.width = 1
+                headerText.color = "#04ff00"
+            }
+
+            onClicked: header_clicked();
+        }
     }
     Component {
         id: listDelegate
@@ -69,12 +90,12 @@ Item{
                 text: value
                 Behavior on color{ ColorAnimation { } }
             }
-            states: State{
-                name: "Current" ; when: wrapper.ListView.isCurrentItem
-                PropertyChanges {target: wrapper; x: 20}
-            }
-            transitions: Transition { NumberAnimation { property: "x"; duration: 200; }
-            }
+//            states: State{
+//                name: "Current" ; when: wrapper.ListView.isCurrentItem
+//                PropertyChanges {target: wrapper; x: 20}
+//            }
+//            transitions: Transition { NumberAnimation { property: "x"; duration: 200; }
+//            }
             MouseArea{
                 anchors.fill: parent; hoverEnabled: true
                 onClicked: {
@@ -116,7 +137,6 @@ Item{
         id: listView
         width: root.width; height: root.height;
         anchors.top: headerTitle.bottom; anchors.topMargin: 5
-
         model: listModel
         delegate: listDelegate
         highlightFollowsCurrentItem: false
@@ -126,5 +146,4 @@ Item{
         spacing: 2
     } // end of ListView
     ListModel {  id: listModel }
-//    onItem_indexChanged: {console.log("Current Index: " + item_index); listView.currentIndex = item_index}
 }

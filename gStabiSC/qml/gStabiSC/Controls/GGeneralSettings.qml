@@ -1,39 +1,18 @@
 import QtQuick 2.0
 import "../Components"
 
-GContainer{
+Item{
     id: generalSettings
-    width: 600; height: 220
+     width: 930; height: 250
 
-   property string  msg_log: ""
+    GSerialSettings{
+        id: serialPortSettings
+        anchors.left: parent.left; anchors.leftMargin: 0
+        anchors.top:    parent.top; anchors.topMargin: 0
 
-
-    Rectangle{
-        id: borderRect
-        anchors.fill: parent
-        color: "transparent"
-        radius: 5
-        border{ color: "cyan"; width: 1       }
-        GSerialSettings{
-            id: serialPortSettings
-            width: 200
-            height: 200
-            anchors.left: parent.left; anchors.leftMargin: 10
-            anchors.top:    parent.top; anchors.topMargin: 10
-            onMsg_logChanged: generalSettings.msg_log = msg_log
-        }
-        GManualControl{
-            anchors.left: serialPortSettings.right; anchors.leftMargin: 10
-            anchors.top: parent.top; anchors.topMargin: 10
-            onControl_type_selectedChanged: {
-                if(control_type_selected === 3){
-                    motor_control_enabled = true
-                } else {motor_control_enabled = false}
-            }
-
-        }
     }
-    function dialog_log(_message){
-         msg_log = _message+ "\n";
+    GManualControl{
+        anchors.left: serialPortSettings.right; anchors.leftMargin: 5
+        anchors.top: parent.top; anchors.topMargin: 0
     }
 }

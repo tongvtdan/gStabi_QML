@@ -3,7 +3,7 @@ import QtQuick.LocalStorage 2.0
 //import "../../javascript/storage.js" as Storage
 import "qrc:/javascript/storage.js" as Storage
 import "../Components"
-GContainer{
+GFrame{
     id: profileDialog
 
     property string profile_name    : "Profile_Default"
@@ -16,130 +16,127 @@ GContainer{
     property string roll_motor_class_name   : "Roll Motor"
 
 
-    hide_scale: 0
-    width: 400; height:200
+    //    width: 400; height:200
+    border_normal: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_profile_normal_frame.png"
+
     Rectangle{
-        id: root
-        anchors.fill: parent
-        color: "transparent"
+        id: profileNameContainer
+        width: 130;  height: 30
+        //            width: profileNameInput.contentWidth+10; height: profileNameInput.contentHeight+10;
         border.width: 1; border.color: "cyan"
-        smooth: true;
-        Rectangle{
-            id: profileNameContainer
-            width: 190;  height: 30
-//            width: profileNameInput.contentWidth+10; height: profileNameInput.contentHeight+10;
-            border.width: 1; border.color: "cyan"
-            color: "transparent";  smooth: true;
-            radius: 0.7*height/2
-            anchors.left: profileNameList.right
-            anchors.leftMargin: 40
-            anchors.top: parent.top
-            anchors.topMargin: 10
+        color: "transparent";  smooth: true;
+        radius: 0.7*height/2
+        anchors.left: profileNameList.right;  anchors.leftMargin: 10
+        anchors.top: parent.top ;   anchors.topMargin: 30
 
-            MouseArea{
-                id: mouseArea
-                anchors.fill: parent; hoverEnabled: true
-                onEntered: {
-                    profileNameContainer.state = "focus"
-                    dialog_log("Profile name must not contain space")
-                }
-                onExited:  profileNameContainer.state = "unfocus"
+        MouseArea{
+            id: mouseArea
+            anchors.fill: parent; hoverEnabled: true
+            onEntered: {
+                profileNameContainer.state = "focus"
+                dialog_log("* Profile name must not contain any space character *")
             }
+            onExited:  profileNameContainer.state = "unfocus"
+        }
 
-            TextInput {
-                id: profileNameInput
-                anchors.centerIn: parent
-                color: "#04ffdf"
-                font{ family: "Segoe UI"; bold: true; pixelSize: 16}
-                focus: true
-                horizontalAlignment: TextInput.AlignHCenter
-                Behavior on color {ColorAnimation {duration: 200 }}
-                text: profile_name
-
-            }
-
-            states: [
-                State{
-                    name: "focus"
-                    PropertyChanges {target: profileNameContainer; border.color: "#009dff"; border.width: 2}
-                    PropertyChanges { target: profileNameInput; color: "red"   }
-                }
-                ,State {
-                    name: "unfocus"
-                    PropertyChanges {target: profileNameContainer; border.color: "cyan"; border.width: 1 }
-                    PropertyChanges { target: profileNameInput; color: "#04ffdf"   }
-
-                }
-            ]
+        TextInput {
+            id: profileNameInput
+            anchors.centerIn: parent
+            color: "#04ffdf"
+            font{ family: "Segoe UI"; bold: true; pixelSize: 12}
+            focus: true
+            horizontalAlignment: TextInput.AlignHCenter
             Behavior on color {ColorAnimation {duration: 200 }}
+            text: profile_name
 
-        } // end of profileNameContainer
-        Row{
-            id: buttonsRow
-            width: 120
-            height: 26
-            anchors.left: profileNameList.right
-            anchors.leftMargin: 40
-            anchors.top: profileNameContainer.bottom
-            anchors.topMargin: 20
-            spacing: 5
-            GButton{
-                id: saveProfileButton
-                text: "Save"
-                onClicked: {
-                    profile_name = profileNameInput.text;
-                    save_profile = true;
-                    if(table_name_exist(profile_name) === 1){
-                        Storage.table_name = profile_name;      // select a new table to get data
-                        Storage.initialize();
-                        dialog_log("Updating params to profile: " + profile_name);
-                        update_parameters_to_profile();
-                        dialog_log("Updating params to profile successfully");
-                    } else {
-                        dialog_log("Creating and saving params to profile: " + profile_name);
-                        Storage.table_name = profile_name;      // select a new table to get data
-                        Storage.initialize();
-                        save_parameters_to_profile();
-                        dialog_log("Creating and saving params to profile successfully");
-                    }
-                }
+        }
+
+        states: [
+            State{
+                name: "focus"
+                PropertyChanges {target: profileNameContainer; border.color: "#009dff"; border.width: 2}
+                PropertyChanges { target: profileNameInput; color: "red"   }
             }
-            GButton {
-                id: loadProfileButton
-                text: "Load"
-                onClicked: {
-                    dialog_log("Load profile: " + profile_name )
+            ,State {
+                name: "unfocus"
+                PropertyChanges {target: profileNameContainer; border.color: "cyan"; border.width: 1 }
+                PropertyChanges { target: profileNameInput; color: "#04ffdf"   }
+            }
+        ]
+        Behavior on color {ColorAnimation {duration: 200 }}
+
+    } // end of profileNameContainer
+    Column{
+        id: buttonsColumn
+        width: 60
+        height: 100
+        anchors.left: profileNameList.right
+        anchors.leftMargin: 40
+        anchors.top: profileNameContainer.bottom
+        anchors.topMargin: 30
+        spacing: 10
+        GButton {
+            id: clearTextButton
+            text: "Clear"
+            onClicked: {
+                profile_name = ""
+                profileNameInput.text = ""
+                profileNameInput.focus = true
+            }
+        }
+
+        GButton{
+            id: saveProfileButton
+            text: "Save"
+            onClicked: {
+                profile_name = profileNameInput.text;
+                save_profile = true;
+                if(table_name_exist(profile_name) === 1){
                     Storage.table_name = profile_name;      // select a new table to get data
                     Storage.initialize();
-                    load_parameters_to_ui();
-                    dialog_log("Loading parameters from "+ profile_name + " done!")
+                    dialog_log("Updating params to profile: " + profile_name);
+                    update_parameters_to_profile();
+                    dialog_log("Updating params to profile successfully");
+                } else {
+                    dialog_log("Creating and saving params to profile: " + profile_name);
+                    Storage.table_name = profile_name;      // select a new table to get data
+                    Storage.initialize();
+                    save_parameters_to_profile();
+                    dialog_log("Creating and saving params to profile successfully");
                 }
             }
-            GButton {
-                id: clearTextButton
-                text: "Clear"
-                onClicked: {
-                    profile_name = ""
-                    profileNameInput.text = ""
-                    profileNameInput.focus = true
-                }
-            }
-
         }
-
-        GListView{
-            id: profileNameList
-            width: 150; height: parent.height - 20; anchors.left: parent.left; anchors.leftMargin: 10;  anchors.top: parent.top ; anchors.topMargin: 10
-            list_header_title: "Profile Name"
-            hightlght_color: "blue"
+        GButton {
+            id: loadProfileButton
+            text: "Load"
             onClicked: {
-                profile_name = item_text;
-                dialog_log("Selected new profile: " + profile_name);
+                dialog_log("Load profile: " + profile_name )
+                Storage.table_name = profile_name;      // select a new table to get data
+                Storage.initialize();
+                load_parameters_to_ui();
+                dialog_log("Loading parameters from "+ profile_name + " done!")
             }
         }
-
 
     }
+
+    GListView{
+        id: profileNameList
+        width: 150; height: parent.height - 20; anchors.left: parent.left; anchors.leftMargin: 10;
+        anchors.top: parent.top ; anchors.topMargin: 30
+        list_header_title: "Profile Name"
+        hightlght_color: "blue"
+        onClicked: {
+            profile_name = item_text;
+            dialog_log("Selected new profile: " + profile_name);
+        }
+        onHeader_clicked: {
+            update_table_name_list();
+        }
+        onHeader_entered: dialog_log("Click to refresh the list")
+
+    }
+
     onStateChanged: {
         if(profileDialog.state === "show"){update_table_name_list()}
     }
@@ -176,10 +173,10 @@ GContainer{
    @input: _message
    @output: msg_log in HTML format
   */
-//    function dialog_log(_message){
-////        msg_log = "<font color=\"yellow\">" + _message+ "</font><br>";
-//         msg_log = _message+ "\n";
-//    }
+    //    function dialog_log(_message){
+    ////        msg_log = "<font color=\"yellow\">" + _message+ "</font><br>";
+    //         msg_log = _message+ "\n";
+    //    }
     /* function save_parameters_to_profile()
    @brief: save all parameters to profile name
    @input: parameters value get from _mavlink_manager
@@ -201,6 +198,9 @@ GContainer{
         Storage.saveParam(class_name, "D", _mavlink_manager.tilt_kd);
         Storage.saveParam(class_name, "Follow", _mavlink_manager.tilt_follow);
         Storage.saveParam(class_name, "Filter", _mavlink_manager.tilt_filter);
+        Storage.saveParam(class_name, "LPF", _mavlink_manager.tilt_lpf);
+        Storage.saveParam(class_name, "Trim", _mavlink_manager.tilt_trim);
+        Storage.saveParam(class_name, "Mode", _mavlink_manager.tilt_mode);
 
         // Save Pan params:
         class_name = pan_motor_class_name;
@@ -214,6 +214,10 @@ GContainer{
         Storage.saveParam(class_name, "D", _mavlink_manager.pan_kd);
         Storage.saveParam(class_name, "Follow", _mavlink_manager.pan_follow);
         Storage.saveParam(class_name, "Filter", _mavlink_manager.pan_filter);
+        Storage.saveParam(class_name, "LPF", _mavlink_manager.pan_lpf);
+        Storage.saveParam(class_name, "Trim", _mavlink_manager.pan_trim);
+        Storage.saveParam(class_name, "Mode", _mavlink_manager.pan_mode);
+
 
         // Save Roll params:
         class_name = roll_motor_class_name;
@@ -227,6 +231,10 @@ GContainer{
         Storage.saveParam(class_name, "D", _mavlink_manager.roll_kd);
         Storage.saveParam(class_name, "Follow", _mavlink_manager.roll_follow);
         Storage.saveParam(class_name, "Filter", _mavlink_manager.roll_filter);
+        Storage.saveParam(class_name, "LPF", _mavlink_manager.roll_lpf);
+        Storage.saveParam(class_name, "Trim", _mavlink_manager.roll_trim);
+        Storage.saveParam(class_name, "Mode", _mavlink_manager.roll_mode);
+
 
     }
     /* function update_parameters_to_profile()
@@ -250,6 +258,10 @@ GContainer{
         Storage.updateParam(class_name, "D", _mavlink_manager.tilt_kd);
         Storage.updateParam(class_name, "Follow", _mavlink_manager.tilt_follow);
         Storage.updateParam(class_name, "Filter", _mavlink_manager.tilt_filter);
+        Storage.updateParam(class_name, "LPF", _mavlink_manager.tilt_lpf);
+        Storage.updateParam(class_name, "Trim", _mavlink_manager.tilt_trim);
+        Storage.updateParam(class_name, "Mode", _mavlink_manager.tilt_mode);
+
 
         // update Pan params:
         class_name = pan_motor_class_name;
@@ -263,6 +275,10 @@ GContainer{
         Storage.updateParam(class_name, "D", _mavlink_manager.pan_kd);
         Storage.updateParam(class_name, "Follow", _mavlink_manager.pan_follow);
         Storage.updateParam(class_name, "Filter", _mavlink_manager.pan_filter);
+        Storage.updateParam(class_name, "LPF", _mavlink_manager.pan_lpf);
+        Storage.updateParam(class_name, "Trim", _mavlink_manager.pan_trim);
+        Storage.updateParam(class_name, "Mode", _mavlink_manager.pan_mode);
+
 
         // update Roll params:
         class_name = roll_motor_class_name;
@@ -276,6 +292,10 @@ GContainer{
         Storage.updateParam(class_name, "D", _mavlink_manager.roll_kd);
         Storage.updateParam(class_name, "Follow", _mavlink_manager.roll_follow);
         Storage.updateParam(class_name, "Filter", _mavlink_manager.roll_filter);
+        Storage.updateParam(class_name, "LPF", _mavlink_manager.roll_lpf);
+        Storage.updateParam(class_name, "Trim", _mavlink_manager.roll_trim);
+        Storage.updateParam(class_name, "Mode", _mavlink_manager.roll_mode);
+
 
     }
 
@@ -293,6 +313,10 @@ GContainer{
         _mavlink_manager.tilt_kd                = Storage.getParam(class_name, "D");
         _mavlink_manager.tilt_follow            = Storage.getParam(class_name, "Follow");
         _mavlink_manager.tilt_filter            = Storage.getParam(class_name, "Filter");
+        _mavlink_manager.tilt_lpf               = Storage.getParam(class_name, "LPF");
+        _mavlink_manager.tilt_trim              = Storage.getParam(class_name, "Trim");
+        _mavlink_manager.tilt_mode              = Storage.getParam(class_name, "Mode");
+
 
         class_name = pan_motor_class_name;
         _mavlink_manager.pan_power             = Storage.getParam(class_name, "Power");
@@ -305,6 +329,10 @@ GContainer{
         _mavlink_manager.pan_kd                = Storage.getParam(class_name, "D");
         _mavlink_manager.pan_follow            = Storage.getParam(class_name, "Follow");
         _mavlink_manager.pan_filter            = Storage.getParam(class_name, "Filter");
+        _mavlink_manager.pan_lpf               = Storage.getParam(class_name, "LPF");
+        _mavlink_manager.pan_trim              = Storage.getParam(class_name, "Trim");
+        _mavlink_manager.pan_mode              = Storage.getParam(class_name, "Mode");
+
 
         class_name = roll_motor_class_name;
         _mavlink_manager.roll_power             = Storage.getParam(class_name, "Power");
@@ -317,6 +345,10 @@ GContainer{
         _mavlink_manager.roll_kd                = Storage.getParam(class_name, "D");
         _mavlink_manager.roll_follow            = Storage.getParam(class_name, "Follow");
         _mavlink_manager.roll_filter            = Storage.getParam(class_name, "Filter");
+        _mavlink_manager.roll_lpf               = Storage.getParam(class_name, "LPF");
+        _mavlink_manager.roll_trim              = Storage.getParam(class_name, "Trim");
+        _mavlink_manager.roll_mode              = Storage.getParam(class_name, "Mode");
+
     }
 
 }

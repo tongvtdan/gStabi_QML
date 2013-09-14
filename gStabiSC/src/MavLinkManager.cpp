@@ -93,8 +93,7 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
             case MAVLINK_MSG_ID_SYSTEM_STATUS:{
                 m_g_system_status.battery_voltage = mavlink_msg_system_status_get_battery_voltage(&message);
                 setbattery_voltage(m_g_system_status.battery_voltage);
-                qDebug() << "Battery Level: " << m_g_system_status.battery_voltage;
-            }
+                   }
                 break;
 
             default:
@@ -265,37 +264,49 @@ void MavLinkManager::update_all_parameters_to_UI()
         settilt_kp(current_params_on_board.pitchKp);
         settilt_ki(current_params_on_board.pitchKi);
         settilt_kd(current_params_on_board.pitchKd);
-        settilt_power(current_params_on_board.pitchPower);
-        settilt_filter(current_params_on_board.tiltFilter);
         settilt_follow(current_params_on_board.pitchFollow);
         setmotor_tilt_dir(current_params_on_board.dirMotorPitch);
+
+        settilt_power(current_params_on_board.pitchPower);
+        settilt_filter(current_params_on_board.tiltFilter);
         setmotor_tilt_num_poles(current_params_on_board.nPolesPitch);
         settilt_up_limit_angle(current_params_on_board.travelMinPitch);
         settilt_down_limit_angle(current_params_on_board.travelMaxPitch);
+        settilt_lpf(current_params_on_board.rcPitchLPF);
+        settilt_trim(current_params_on_board.rcPitchTrim);
+        settilt_mode(current_params_on_board.rcPitchMode);
 
         // Pan
         setpan_kp(current_params_on_board.yawKp);
         setpan_ki(current_params_on_board.yawKi);
         setpan_kd(current_params_on_board.yawKd);
-        setpan_power(current_params_on_board.yawPower);
         setpan_filter(current_params_on_board.panFilter);
         setpan_follow(current_params_on_board.yawFollow);
+
+        setpan_power(current_params_on_board.yawPower);
         setmotor_pan_dir(current_params_on_board.dirMotorYaw);
         setmotor_pan_num_poles(current_params_on_board.nPolesYaw);
         setpan_ccw_limit_angle(current_params_on_board.travelMinYaw);
         setpan_cw_limit_angle(current_params_on_board.travelMaxYaw);
+        setpan_lpf(current_params_on_board.rcYawLPF);
+        setpan_trim(current_params_on_board.rcYawTrim);
+        setpan_mode(current_params_on_board.rcYawMode);
 
         // Roll
         setroll_kp(current_params_on_board.rollKp);
         setroll_ki(current_params_on_board.rollKi);
         setroll_kd(current_params_on_board.rollKd);
-        setroll_power(current_params_on_board.rollPower);
         setroll_filter(current_params_on_board.rollFilter);
         setroll_follow(current_params_on_board.rollFollow);
+
+        setroll_power(current_params_on_board.rollPower);
         setmotor_roll_dir(current_params_on_board.dirMotorRoll);
         setmotor_roll_num_poles(current_params_on_board.nPolesRoll);
         setroll_up_limit_angle(current_params_on_board.travelMinRoll);
         setroll_down_limit_angle(current_params_on_board.travelMaxRoll);
+        setroll_lpf(current_params_on_board.rcRollLPF);
+        setroll_trim(current_params_on_board.rcRollTrim);
+        setroll_mode(current_params_on_board.rcRollMode);
 
         setmavlink_message_log("Updating parameters...Done");
     }
@@ -331,6 +342,7 @@ void MavLinkManager::get_attitude_data()
 
 void MavLinkManager::write_params_to_board()
 {
+    if(board_connection_state() == ONLINE){
     setmavlink_message_log("Sending parameters to controller board...");
     // Motor config params
 // General
@@ -360,6 +372,18 @@ void MavLinkManager::write_params_to_board()
         write_a_param_to_board("TRAVEL_MAX_PIT", current_params_on_board.travelMaxPitch);
     }
 
+    if(tilt_lpf() != current_params_on_board.rcPitchLPF){
+        current_params_on_board.rcPitchLPF = tilt_lpf();
+        write_a_param_to_board("RC_PITCH_LPF", current_params_on_board.rcPitchLPF);
+    }
+    if(tilt_trim() != current_params_on_board.rcPitchTrim){
+        current_params_on_board.rcPitchTrim = tilt_trim();
+        write_a_param_to_board("RC_PITCH_TRIM", current_params_on_board.rcPitchTrim);
+    }
+    if(tilt_mode() != current_params_on_board.rcPitchMode){
+        current_params_on_board.rcPitchMode = tilt_mode();
+        write_a_param_to_board("RC_PITCH_MODE", current_params_on_board.rcPitchMode);
+    }
 //    [2] Pan Motor
     if(pan_power() != current_params_on_board.yawPower){  // if power level changed, it will be store in params
         current_params_on_board.yawPower = pan_power();   // update current value to params struct
@@ -381,6 +405,18 @@ void MavLinkManager::write_params_to_board()
         current_params_on_board.travelMaxYaw = pan_cw_limit_angle();   // update current value to params struct
         write_a_param_to_board("TRAVEL_MAX_YAW", current_params_on_board.travelMaxYaw);
     }
+    if(pan_lpf() != current_params_on_board.rcYawLPF){
+        current_params_on_board.rcYawLPF = pan_lpf();
+        write_a_param_to_board("RC_YAW_LPF", current_params_on_board.rcYawLPF);
+    }
+    if(pan_trim() != current_params_on_board.rcYawTrim){
+        current_params_on_board.rcYawTrim = pan_trim();
+        write_a_param_to_board("RC_YAW_TRIM", current_params_on_board.rcYawTrim);
+    }
+    if(pan_mode() != current_params_on_board.rcYawMode){
+        current_params_on_board.rcYawMode = pan_mode();
+        write_a_param_to_board("RC_YAW_MODE", current_params_on_board.rcYawMode);
+    }
     //    [3] Roll Motor
     if(roll_power() != current_params_on_board.rollPower){  // if power level changed, it will be store in params
         current_params_on_board.rollPower = roll_power();   // update current value to params struct
@@ -401,6 +437,18 @@ void MavLinkManager::write_params_to_board()
     if(roll_down_limit_angle() != current_params_on_board.travelMaxRoll){
         current_params_on_board.travelMaxRoll = roll_down_limit_angle();   // update current value to params struct
         write_a_param_to_board("TRAVEL_MAX_ROLL", current_params_on_board.travelMaxRoll);
+    }
+    if(roll_lpf() != current_params_on_board.rcRollLPF){
+        current_params_on_board.rcRollLPF = roll_lpf();
+        write_a_param_to_board("RC_ROLL_LPF", current_params_on_board.rcRollLPF);
+    }
+    if(roll_trim() != current_params_on_board.rcRollTrim){
+        current_params_on_board.rcRollTrim = roll_trim();
+        write_a_param_to_board("RC_ROLL_TRIM", current_params_on_board.rcRollTrim);
+    }
+    if(roll_mode() != current_params_on_board.rcRollMode){
+        current_params_on_board.rcRollMode = roll_mode();
+        write_a_param_to_board("RC_ROLL_MODE", current_params_on_board.rcRollMode);
     }
 
     // Controller Setting Params
@@ -468,10 +516,13 @@ void MavLinkManager::write_params_to_board()
         current_params_on_board.rollFilter = roll_filter();   // update current value to params struct
         write_a_param_to_board("ROLL_FILTER", current_params_on_board.rollFilter);
     }
-
-
     // other params
+
     setmavlink_message_log("Sending parameters to controller board...Done!");
+    }
+    else {
+        setmavlink_message_log("* Communication error, please check the connection then write parammeters again *");
+    }
 }
 
 void MavLinkManager::get_mavlink_info()
@@ -511,41 +562,7 @@ double MavLinkManager::get_battery_percent_remain(double _vol)
 
 }
 
-/*
- *gBattery.volCurrent = readAdc()*BATT_VOL_SCALE;
 
-    if(gBattery.volCurrent < (BATT_3_CELL*BATT_CELL_MIN - 4)){
-        gBattery.cell = BATT_NO_CELL;
-    }
-    else if((gBattery.volCurrent >= (BATT_3_CELL*BATT_CELL_MIN)) && (gBattery.volCurrent <= (BATT_3_CELL*BATT_CELL_MAX))){
-        gBattery.cell = BATT_3_CELL;
-    }
-    else if((gBattery.volCurrent >= (BATT_4_CELL*BATT_CELL_MIN)) && (gBattery.volCurrent <= (BATT_4_CELL*BATT_CELL_MAX))){
-        gBattery.cell = BATT_4_CELL;
-    }
-    else if((gBattery.volCurrent >= (BATT_5_CELL*BATT_CELL_MIN)) && (gBattery.volCurrent <= (BATT_5_CELL*BATT_CELL_MAX))){
-        gBattery.cell = BATT_5_CELL;
-    }
-    else if((gBattery.volCurrent >= (BATT_6_CELL*BATT_CELL_MIN))){
-        gBattery.cell = BATT_6_CELL;
-    }
-//					gBattery.percent = 100 - (gBattery.cell*BATT_CELL_MAX - gBattery.volCurrent)*100/(gBattery.cell*(BATT_CELL_MAX - BATT_CELL_MIN));
-    if(gBattery.cell != 2){
-        if(gBattery.volCurrent <= gBattery.cell*BATT_CELL_ALARM){
-            gBattery.update++;
-            if(gBattery.update > 10){
-                gBattery.update = 11;
-                return BATT_ALARM_LOW;
-            }
-        }
-        else{
-            gBattery.update = 0;
-            return BATT_ALARM_OK;
-        }
-    }
-
-    return BATT_ALARM_PC;
-*/
 void MavLinkManager::write_a_param_to_board(const char *param_id, float _value)
 {
     uint16_t len;
@@ -956,6 +973,39 @@ void MavLinkManager::setpan_ccw_limit_angle(int _max)
     emit pan_ccw_limit_angleChanged(m_pan_ccw_limit_angle);
 }
 
+int MavLinkManager::pan_lpf() const
+{
+    return m_pan_lpf;
+}
+
+void MavLinkManager::setpan_lpf(int _lpf)
+{
+    m_pan_lpf = _lpf;
+    emit pan_lpfChanged(m_pan_lpf);
+}
+
+int MavLinkManager::pan_trim() const
+{
+    return m_pan_trim;
+}
+
+void MavLinkManager::setpan_trim(int _trim)
+{
+    m_pan_trim = _trim;
+    emit pan_trimChanged(m_pan_trim);
+}
+
+int MavLinkManager::pan_mode() const
+{
+    return m_pan_mode;
+}
+
+void MavLinkManager::setpan_mode(int _mode)
+{
+    m_pan_mode = _mode;
+    emit pan_modeChanged(m_pan_mode);
+}
+
 /**
  * @brief Roll motor functions to control roll parameters
  */
@@ -1067,6 +1117,39 @@ void MavLinkManager::setroll_down_limit_angle(int _max)
 {
     m_roll_down_limit_angle = _max;
     emit roll_down_limit_angleChanged(m_roll_down_limit_angle);
+}
+
+int MavLinkManager::roll_lpf() const
+{
+    return m_roll_lpf;
+}
+
+void MavLinkManager::setroll_lpf(int _lpf)
+{
+    m_roll_lpf = _lpf;
+    emit roll_lpfChanged(m_roll_lpf);
+}
+
+int MavLinkManager::roll_trim() const
+{
+    return m_roll_trim;
+}
+
+void MavLinkManager::setroll_trim(int _trim)
+{
+    m_roll_trim = _trim;
+    emit roll_trimChanged(m_roll_trim);
+}
+
+int MavLinkManager::roll_mode() const
+{
+    return m_roll_mode;
+}
+
+void MavLinkManager::setroll_mode(int _mode)
+{
+    m_roll_mode = _mode;
+    emit roll_modeChanged(m_roll_mode);
 }
 
 

@@ -15,6 +15,7 @@
  */
 
 #define TARGET_SYSTEM_ID 10
+
 #define ONLINE true
 #define OFFLINE false
 
@@ -23,7 +24,7 @@
 #define BATT_CELL_ALARM	3.6
 
 #define BATT_ALARM_OK		1
-#define BATT_ALARM_LOW	2
+#define BATT_ALARM_LOW      2
 #define BATT_ALARM_PC		3
 
 #define BATT_NO_CELL		2
@@ -82,9 +83,9 @@ class MavLinkManager : public QObject
     Q_PROPERTY(int pan_cw_limit_angle  READ pan_cw_limit_angle    WRITE setpan_cw_limit_angle    NOTIFY pan_cw_limit_angleChanged)
     Q_PROPERTY(int pan_ccw_limit_angle READ pan_ccw_limit_angle   WRITE setpan_ccw_limit_angle  NOTIFY pan_ccw_limit_angleChanged)
         // use in QML, others dialog
-//    Q_PROPERTY(int  pan_rc_lpf     READ pan_rc_lpf    WRITE setpan_rc_lpf    NOTIFY pan_rc_lpfChanged)
-//    Q_PROPERTY(int  pan_rc_trim    READ pan_rc_trim   WRITE setpan_rc_trim   NOTIFY pan_rc_trimChanged)
-//    Q_PROPERTY(int  pan_rc_mode    READ pan_rc_mode   WRITE setpan_rc_mode   NOTIFY pan_rc_modeChanged)
+    Q_PROPERTY(int  pan_lpf     READ pan_lpf    WRITE setpan_lpf    NOTIFY pan_lpfChanged)
+    Q_PROPERTY(int  pan_trim    READ pan_trim   WRITE setpan_trim   NOTIFY pan_trimChanged)
+    Q_PROPERTY(int  pan_mode    READ pan_mode   WRITE setpan_mode   NOTIFY pan_modeChanged)
 //    Q_PROPERTY(int  pan_sbus_chan  READ pan_sbus_chan WRITE setpan_sbus_chan NOTIFY pan_sbus_chanChanged)
 
     //Roll axis, Roll Motor
@@ -101,9 +102,9 @@ class MavLinkManager : public QObject
     Q_PROPERTY(int roll_up_limit_angle  READ roll_up_limit_angle    WRITE setroll_up_limit_angle    NOTIFY roll_up_limit_angleChanged)
     Q_PROPERTY(int roll_down_limit_angle READ roll_down_limit_angle WRITE setroll_down_limit_angle  NOTIFY roll_down_limit_angleChanged)
         // use in QML, others dialog
-//    Q_PROPERTY(int  roll_rc_lpf     READ roll_rc_lpf    WRITE setroll_rc_lpf    NOTIFY roll_rc_lpfChanged)
-//    Q_PROPERTY(int  roll_rc_trim    READ roll_rc_trim   WRITE setroll_rc_trim   NOTIFY roll_rc_trimChanged)
-//    Q_PROPERTY(int  roll_rc_mode    READ roll_rc_mode   WRITE setroll_rc_mode   NOTIFY roll_rc_modeChanged)
+    Q_PROPERTY(int  roll_lpf     READ roll_lpf    WRITE setroll_lpf    NOTIFY roll_lpfChanged)
+    Q_PROPERTY(int  roll_trim    READ roll_trim   WRITE setroll_trim   NOTIFY roll_trimChanged)
+    Q_PROPERTY(int  roll_mode    READ roll_mode   WRITE setroll_mode   NOTIFY roll_modeChanged)
 //    Q_PROPERTY(int  roll_sbus_chan  READ roll_sbus_chan WRITE setroll_sbus_chan NOTIFY roll_sbus_chanChanged)
 
 
@@ -210,6 +211,15 @@ public:
 
     int pan_ccw_limit_angle() const;
     void setpan_ccw_limit_angle(int _max);
+
+    int pan_lpf() const;
+    void setpan_lpf(int _lpf);
+
+    int pan_trim() const;
+    void setpan_trim(int _trim);
+
+    int pan_mode() const;
+    void setpan_mode(int _mode);
 //    [2]
     //[3] Roll Motor
     float roll_kp() const;
@@ -241,6 +251,15 @@ public:
 
     int roll_down_limit_angle() const;
     void setroll_down_limit_angle(int _max);
+
+    int roll_lpf() const;
+    void setroll_lpf(int _lpf);
+
+    int roll_trim() const;
+    void setroll_trim(int _trim);
+
+    int roll_mode() const;
+    void setroll_mode(int _mode);
 //    [3]
 
 
@@ -301,6 +320,9 @@ signals:
     void motor_pan_num_polesChanged(int);
     void pan_cw_limit_angleChanged(int);
     void pan_ccw_limit_angleChanged(int);
+    void pan_lpfChanged(int);
+    void pan_trimChanged(int);
+    void pan_modeChanged(int);
 //    [2]
 //    [3] Roll Motor
     void roll_kpChanged(float);
@@ -313,6 +335,9 @@ signals:
     void motor_roll_num_polesChanged(int);
     void roll_up_limit_angleChanged(int);
     void roll_down_limit_angleChanged(int);
+    void roll_lpfChanged(int);
+    void roll_trimChanged(int);
+    void roll_modeChanged(int);
 //    [3]
 
 
@@ -374,10 +399,10 @@ private:
     int m_motor_tilt_dir, m_tilt_up_limit_angle, m_tilt_down_limit_angle, m_motor_tilt_num_poles, m_tilt_lpf, m_tilt_trim, m_tilt_mode;
 //    [2] Pan Motor
     float m_pan_kp, m_pan_ki, m_pan_kd, m_pan_power, m_pan_follow, m_pan_filter;
-    int m_motor_pan_dir, m_pan_cw_limit_angle, m_pan_ccw_limit_angle, m_motor_pan_num_poles;
+    int m_motor_pan_dir, m_pan_cw_limit_angle, m_pan_ccw_limit_angle, m_motor_pan_num_poles, m_pan_lpf, m_pan_trim, m_pan_mode;
 //    [3] Roll Motor
     float m_roll_kp, m_roll_ki, m_roll_kd, m_roll_power, m_roll_follow, m_roll_filter;
-    int m_motor_roll_dir, m_roll_up_limit_angle, m_roll_down_limit_angle, m_motor_roll_num_poles;
+    int m_motor_roll_dir, m_roll_up_limit_angle, m_roll_down_limit_angle, m_motor_roll_num_poles, m_roll_lpf, m_roll_trim, m_roll_mode;
 
 //    [!]
     QTimer *linkConnectionTimer; // this timer will monitor message on mavlink, if timer timeout, lost connection.

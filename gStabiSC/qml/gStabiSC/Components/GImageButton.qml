@@ -21,6 +21,9 @@ BorderImage{
 
 
     width : 70; height: 50
+    border.left: 5; border.top: 5
+    border.right: 5; border.bottom: 5
+    asynchronous: true
 //    source: "../images/buttons/gStabiUI_3.3_normal_button_border.png"
     source: border_normal
 
@@ -28,7 +31,9 @@ BorderImage{
         id: buttonImage
 //        source: "../images/buttons/gStabiUI_3.3_normal_settings.png"
         asynchronous: true
-        fillMode: Image.PreserveAspectFit
+//        fillMode: Image.PreserveAspectFit
+        width: 50 ;  height: 35
+        anchors.centerIn: parent
         source: imageNormal
 
 
@@ -74,16 +79,18 @@ BorderImage{
         State {
             name: "pressed"
             PropertyChanges { target: buttonImage; source: imagePressed; }
-//            PropertyChanges {target: rootItem; scale: 1.2  }
+            PropertyChanges { target: rootItem; source: border_hover  }
         }
         ,State {
             name: "normal"
             PropertyChanges { target: buttonImage; source: imageNormal;  }
+            PropertyChanges { target: rootItem; source: border_normal  }
 //            PropertyChanges {target: rootItem; scale: 1  }
         }
         ,State {
             name: "hover"
             PropertyChanges { target: buttonImage; source: imageHover; }
+            PropertyChanges { target: rootItem; source: border_hover  }
 //            PropertyChanges {target: rootItem; scale: 1.2  }
         }
 

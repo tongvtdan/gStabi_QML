@@ -9,8 +9,8 @@ Rectangle {
     property int    control_height          : 280
     property bool   motor_config_enabled    : false
     property bool   motor_control_enabled   : false
+    property int    control_selected_index  : 0     // store the current index of control tab selected in taskBar
 
-//    property string  msg_log: ""
 
 
     state: "GeneralSettings"
@@ -20,25 +20,25 @@ Rectangle {
             name: "General Settings"
             pixmap:  "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_normal_settings.png"
             pixmapfocus:  "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_settings.png"
-            stateId: "GeneralSettings"
+            stateId: "General Settings"
         }
         ListElement{
             name: "Motor Settings"
             pixmap: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_normal_motors.png"
             pixmapfocus: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_motors.png"
-            stateId: "MotorSettings"
+            stateId: "Motor Settings"
         }
         ListElement{
             name: "Controller Settings"
             pixmap: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_normal_pid.png"
             pixmapfocus: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_pid.png"
-            stateId: "ControllerSettings"
+            stateId: "Controller Settings"
         }
         ListElement{
             name: "IMU Settings"
             pixmap: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_normal_imu.png"
             pixmapfocus: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_imu.png"
-            stateId: "IMUSettings"
+            stateId: "IMU Settings"
         }
         ListElement{
             name: "Profile"
@@ -50,7 +50,7 @@ Rectangle {
             name: "Realtime Charts"
             pixmap: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_normal_chart.png"
             pixmapfocus: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_chart.png"
-            stateId: "RealtimeCharts"
+            stateId: "Realtime Charts"
         }
         ListElement{
             name: "Information"
@@ -93,8 +93,6 @@ Rectangle {
                     id: gMotorSettings
                     anchors.centerIn:   parent
                 }
-                onOpacityChanged: opacity === 1? motor_config_enabled = true : motor_config_enabled = false
-
             }
             Item{
                 id: controllerSettings
@@ -146,7 +144,7 @@ Rectangle {
     }
     states:[
         State {
-            name: "GeneralSettings"
+            name: "General Settings"
             PropertyChanges { target: controlXPosContainer; x: 0 }
             PropertyChanges { target: generalSettings; opacity: 1; }
             PropertyChanges { target: motorSettings; opacity: 0; }
@@ -159,7 +157,7 @@ Rectangle {
 
         },
         State {
-            name: "MotorSettings"
+            name: "Motor Settings"
             PropertyChanges { target: controlXPosContainer; x: -(control_width + 100) * 1 }
             PropertyChanges { target: generalSettings; opacity: 0; }
             PropertyChanges { target: motorSettings; opacity: 1; }
@@ -174,7 +172,7 @@ Rectangle {
 
         },
         State {
-            name: "ControllerSettings"
+            name: "Controller Settings"
             PropertyChanges { target: controlXPosContainer; x: -(control_width + 100) * 2}
             PropertyChanges { target: generalSettings; opacity: 0; }
             PropertyChanges { target: motorSettings; opacity: 0; }
@@ -186,7 +184,7 @@ Rectangle {
 
         },
         State {
-            name: "IMUSettings"
+            name: "IMU Settings"
             PropertyChanges { target: controlXPosContainer; x: -(control_width + 100) * 3 }
             PropertyChanges { target: generalSettings; opacity: 0; }
             PropertyChanges { target: motorSettings; opacity: 0; }
@@ -210,7 +208,7 @@ Rectangle {
 
         },
         State {
-            name: "RealtimeCharts"
+            name: "Realtime Charts"
             PropertyChanges { target: controlXPosContainer; x: -(control_width + 100) * 5 }
             PropertyChanges { target: generalSettings; opacity: 0; }
             PropertyChanges { target: motorSettings; opacity: 0; }
@@ -241,13 +239,19 @@ Rectangle {
             NumberAnimation { properties: "opacity"; duration: 250; }
         }
     }
-    /* function dialog_log(_message)
-   @brief: put message to log
-   @input: _message
-   @output: msg_log in HTML format
-  */
-//    function dialog_log(_message){
-////        msg_log = "<font color=\"yellow\">" + _message+ "</font><br>";
-//         msg_log = _message + "\n";
-//    }
+    onStateChanged: {
+        dialog_log("Changed to " + state)
+    }
+    onControl_selected_indexChanged: {
+        motor_config_enabled = false    // reset before set if selected
+        switch(control_selected_index){
+        case 1:
+            motor_config_enabled = true
+            break;
+        default:
+            break;
+        }
+    }
+
+
 }

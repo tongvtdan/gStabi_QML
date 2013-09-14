@@ -56,14 +56,14 @@ BorderImage{
         Row{
             id: pParamsRow
             width: 300
-            anchors.right: parent.right;anchors.rightMargin: -15
+            anchors.right: parent.right;anchors.rightMargin: -20
             spacing: 10
             GTextStyled{
                 id: pLabel
                 width: 20; height: 20
                 color: text_color
                 font.pixelSize: 16
-                text: "P:"
+                text: "P"
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 anchors.verticalCenter: parent.verticalCenter
@@ -88,7 +88,7 @@ BorderImage{
         Row{
             id: iParamsRow
             width: 300
-            anchors.right: parent.right;anchors.rightMargin: -15
+            anchors.right: parent.right;anchors.rightMargin: -20
             spacing: 10
             GTextStyled{
                 id: iLabel
@@ -96,7 +96,7 @@ BorderImage{
                 //            color : "#00e3f9"
                 color: text_color
                 font.pixelSize: 16
-                text: "I:"
+                text: "I"
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 anchors.verticalCenter: parent.verticalCenter
@@ -120,7 +120,7 @@ BorderImage{
         Row{
             id: dParamsRow
             width: 300
-            anchors.right: parent.right;anchors.rightMargin: -15
+            anchors.right: parent.right;anchors.rightMargin: -20
             spacing: 10
             GTextStyled{
                 id: dLabel
@@ -128,7 +128,7 @@ BorderImage{
                 //            color : "#00e3f9"
                 color: text_color
                 font.pixelSize: 16
-                text: "D:"
+                text: "D"
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 anchors.verticalCenter: parent.verticalCenter
@@ -152,7 +152,7 @@ BorderImage{
         Row{
             id: followParamsRow
             width: 300
-            anchors.right: parent.right;anchors.rightMargin: -15
+            anchors.right: parent.right;anchors.rightMargin: -20
             spacing: 10
             GTextStyled{
                 id: followLabel
@@ -160,7 +160,7 @@ BorderImage{
                 color: text_color
                 //            color : "#00e3f9"
                 font.pixelSize: 12
-                text: "Follow:"
+                text: "Follow"
                 horizontalAlignment: Text.AlignRight
                 verticalAlignment: Text.AlignVCenter
                 anchors.verticalCenter: parent.verticalCenter
@@ -185,7 +185,7 @@ BorderImage{
         Row{
             id: filterParamsRow
             width: 300
-            anchors.right: parent.right;anchors.rightMargin: -15
+            anchors.right: parent.right;anchors.rightMargin: -20
             spacing: 10
             GTextStyled{
                 id: filterLabel
@@ -193,7 +193,7 @@ BorderImage{
                 //            color : "#00e3f9"
                 color: text_color
                 font.pixelSize: 12
-                text: "Smooth:"
+                text: "Response"
                 horizontalAlignment: Text.AlignRight
                 verticalAlignment: Text.AlignVCenter
                 anchors.verticalCenter: parent.verticalCenter

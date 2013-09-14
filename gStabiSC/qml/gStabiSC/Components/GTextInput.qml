@@ -8,14 +8,14 @@ Rectangle{
     property bool   read_only       : false
     signal clicked
 
-    width: 45; height: 20;
+    width: 40; height: 20;
     implicitWidth: 45; implicitHeight: 20
     border.width: 1; border.color: "cyan"
     color: "#00000000";  smooth: true;
     radius: 0.7*height/2
     MouseArea{
         id: mouseArea
-        anchors.fill: parent; hoverEnabled: true
+        anchors.fill: parent; hoverEnabled: !read_only
         onClicked: container.clicked();
         onEntered: container.state = "focus"
         onExited:  container.state = "unfocus"
@@ -24,7 +24,7 @@ Rectangle{
         id: inputText
         anchors.centerIn: parent
         color : "#00e3f9"
-        font{ family: "Segoe UI"; bold: true; pixelSize: 16}
+        font{ family: "Segoe UI"; bold: true; pixelSize: 12}
         validator: IntValidator{bottom: bottom_value; top: top_value;}
         focus: true
         text: text_value
