@@ -53,7 +53,7 @@ Item{
     Row{
         id: powerRow
         width: 300
-        anchors.top: boardNormalImg.top; anchors.topMargin: 30
+        anchors.top: boardNormalImg.top; anchors.topMargin: 40
         anchors.left: boardNormalImg.left ; anchors.leftMargin: 10
         spacing: 5
         GTextStyled{
@@ -81,78 +81,13 @@ Item{
             onText_valueChanged: power_level = text_value
         }
     }
-    Row{
-        id: lpfRow
-        width: 300
-        height: 20
-        anchors.top: powerRow.bottom
-        anchors.topMargin: 10
-        anchors.left: parent.left; anchors.leftMargin: 10
-        spacing: 7
-        GTextStyled{
-            id: lpfLabel
-            width: 50; height: 20
-            color : "#00e3f9"
-            font.pixelSize: 12
-            text: "Smooth"
-            horizontalAlignment: Text.AlignRight
-            verticalAlignment: Text.AlignVCenter
-            anchors.verticalCenter: parent.verticalCenter
-        }
-        GSlider{
-            id: lpfSlider
-            lowerLimit: 0 ; upperLimit: 100
-            width: 180; //height: 4
-            anchors.verticalCenter: parent.verticalCenter
-            value: lpf_value
-            onValueChanged: lpf_value = lpfSlider.value
-        }
-        GTextInput{
-            id: lpfLevelInput
-            bottom_value: 0; top_value: 100
-            text_value: lpf_value.toString()
-            onText_valueChanged: lpf_value = text_value
-        }
-    }
-
-    Row{
-        id: trimRow
-        width: 300
-        anchors.top: lpfRow.bottom; anchors.topMargin: 10
-        anchors.left: parent.left; anchors.leftMargin: 10
-        spacing: 7
-        GTextStyled{
-            id: trimLabel
-            width: 50; height: 20
-            color : "#00e3f9"
-            font.pixelSize: 12
-            text: "Trim"
-            horizontalAlignment: Text.AlignRight
-            verticalAlignment: Text.AlignVCenter
-            anchors.verticalCenter: parent.verticalCenter
-        }
-        GSlider{
-            id: trimSlider
-            lowerLimit: 0 ; upperLimit: 100
-            width: 180; //height: 4
-            anchors.verticalCenter: parent.verticalCenter
-            value: trim_value
-            onValueChanged: trim_value = trimSlider.value
-        }
-        GTextInput{
-            id: trimLevelInput
-            bottom_value: 0; top_value: 100
-            text_value: trim_value.toString()
-            onText_valueChanged: trim_value = text_value
-        }
-    }
 
     Row{
         id: polesRow
         height: 20
         anchors.right: parent.right
         anchors.rightMargin: 20
-        anchors.top: trimRow.bottom; anchors.topMargin: 20
+        anchors.top: powerRow.bottom; anchors.topMargin: 30
         spacing: 10
         GTextStyled{
             id: polesLabel
@@ -252,7 +187,7 @@ Item{
         id: modeContainer
         anchors.left: parent.left
         anchors.leftMargin: 10
-        anchors.top: trimRow.bottom; anchors.topMargin: 5
+        anchors.top: powerRow.bottom; anchors.topMargin: 30
         width: Math.max(angleModeChecked.width, velocityModeChecked.width) + 10
         height: (angleModeChecked.height + velocityModeChecked.height + 10)
         color: "transparent"
@@ -262,7 +197,7 @@ Item{
             id: angleModeChecked
             height: 30
             checkbox_text: "Angle Mode"
-            anchors.top: trimRow.bottom ; anchors.topMargin: 5
+            anchors.top: powerRow.bottom ; anchors.topMargin: 5
             anchors.left: parent.left;  anchors.leftMargin: 5
             checked_state: !speed_mode
             onChecked_stateChanged: {
@@ -289,14 +224,7 @@ Item{
         polesNumInput.text_value = poles_num;
     }
     onMotor_dirChanged: reversedCheckBox.checked_state = motor_dir;
-    onLpf_valueChanged: {
-        lpfLevelInput.text_value = lpf_value
-        lpfSlider.value = lpf_value
-    }
-    onTrim_valueChanged: {
-        trimLevelInput.text_value = trim_value
-        trimSlider.value = trim_value
-    }
+
     onSpeed_modeChanged: {
         angleModeChecked.checked_state = !speed_mode
         velocityModeChecked.checked_state = speed_mode

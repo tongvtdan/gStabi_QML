@@ -88,5 +88,12 @@ Rectangle {
         }
     }
 
-
+    onLpf_valueChanged: {
+        lpfLevelInput.text_value = lpf_value
+        lpfSlider.value = lpf_value
+    }
+    onTrim_valueChanged: {
+        trimLevelInput.text_value = trim_value
+        trimSlider.value = trim_value
+    }
 }

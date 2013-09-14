@@ -32,30 +32,25 @@ GFrame {
 
     Row{
         id: rcSettingRow
-        anchors.top: parent.top
-        anchors.topMargin: 40
-        anchors.left: parent.left
-        anchors.leftMargin: 10
+        anchors.top: parent.top ; anchors.topMargin: 40
+        anchors.left: parent.left; anchors.leftMargin: 10
         spacing: 5
         GRCSettings{
             id: tiltRC
-//            anchors.right: parent.right
-//            anchors.rightMargin: 20
-//            anchors.top : parent.top; anchors.topMargin: 30
+            onLpf_valueChanged:     _mavlink_manager.tilt_lpf = lpf_value;
+            onTrim_valueChanged:    _mavlink_manager.tilt_trim = trim_value;
         }
         GRCSettings{
             id: panRC
             title: "Pan"
-//            anchors.right: parent.right
-//            anchors.rightMargin: 20
-//            anchors.top : tiltRC.bottom; anchors.topMargin: 30
+            onLpf_valueChanged:     _mavlink_manager.pan_lpf = lpf_value;
+            onTrim_valueChanged:    _mavlink_manager.pan_trim = trim_value;
         }
         GRCSettings{
             id: rollRC
             title: "Roll"
-//            anchors.right: parent.right
-//            anchors.rightMargin: 20
-//            anchors.top : panRC.bottom; anchors.topMargin: 30
+            onLpf_valueChanged:     _mavlink_manager.roll_lpf = lpf_value;
+            onTrim_valueChanged:    _mavlink_manager.roll_trim = trim_value;
         }
     }
 
@@ -89,6 +84,18 @@ GFrame {
     Connections{
         target: _mavlink_manager
         onControl_typeChanged: controlTypeList.current_index = _mavlink_manager.control_type
+
+        onTilt_lpfChanged             : tiltRC.lpf_value   = _mavlink_manager.tilt_lpf;
+        onTilt_trimChanged            : tiltRC.trim_value  = _mavlink_manager.tilt_trim;
+
+        onPan_lpfChanged             : panRC.lpf_value   = _mavlink_manager.pan_lpf;
+        onPan_trimChanged            : panRC.trim_value  = _mavlink_manager.pan_trim;
+
+        onRoll_lpfChanged             : rollRC.lpf_value   = _mavlink_manager.roll_lpf;
+        onRoll_trimChanged            : rollRC.trim_value  = _mavlink_manager.roll_trim;
+
+
+
     }
 
 }
