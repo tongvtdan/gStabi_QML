@@ -5,11 +5,11 @@ Rectangle {
     property string title       : "Tilt"
     property int    lpf_value   : 5
     property int    trim_value  : 5
-    property string label       : "Channel"
-    property bool   m_read_only : false
     property int    pwm_channel_value: 1
     property int    rc_value: 50
-    property bool   rc_enabled: false
+//    property bool   rc_enabled: false
+//    property bool   m_read_only : false
+
 
     width: 200;     height: 100
     color: "transparent"
@@ -99,7 +99,7 @@ Rectangle {
         anchors.left: parent.left ;  anchors.leftMargin: 5
         anchors.top: trimRow.bottom ;anchors.topMargin: 20
         GTextStyled{
-            text: label
+            text: rc_label
             anchors.verticalCenter: parent.verticalCenter
             color: "cyan"
             verticalAlignment: Text.AlignVCenter

@@ -4,6 +4,10 @@ GFrame {
     id: manualControlSettingsContainer
 
     property int  control_type_selected: -1
+    property bool   rc_enabled: false
+    property bool   m_read_only : false
+    property string rc_label       : "Channel"
+    property int  mode_channel_num: 1
 
     border_normal: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_normal_manual_control_frame.png"
     border_hover: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_focus_manual_control_frame.png"
@@ -54,43 +58,74 @@ GFrame {
             onTrim_valueChanged:    _mavlink_manager.roll_trim = trim_value;
         }
     }
+    Rectangle{
+        id: modeChannelContainer
+        color: "transparent"
+        radius: 5
+        anchors.left: controlTypeList.right
+        anchors.leftMargin: 120
+        anchors.top: parent.top
+        anchors.topMargin: 40
+        border.color: "cyan"; border.width: 1
+        width: 100; height: 30
+        visible: rc_enabled
 
+        GTextStyled{
+            id: titleText
+            text: "Mode";
+            anchors.top: parent.top
+            anchors.topMargin: -20
+            anchors.horizontalCenter: parent.horizontalCenter
+            font.pixelSize: 14; color: "cyan"
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
 
+        }
+        Row{
+            id: modeChannelRow
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            spacing: 7
+            GTextStyled{
+                text: rc_label
+                color: "cyan"
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignRight
+                font.pixelSize: 12
+            }
+            GTextInput{
+                id: modeChannelValue
+                width: 30
+                top_value: 18
+                text_value: mode_channel_num.toString()
+                read_only: m_read_only
+
+            }
+        }
+    }
     onControl_type_selectedChanged:{
         // reset all variables before they can be set
         motor_control_enabled = false
         popup_show = false
-        tiltRC.rc_enabled = false;
-        panRC.rc_enabled = false;
-        rollRC.rc_enabled = false;
-        tiltRC.m_read_only = false;
-        panRC.m_read_only = false;
-        rollRC.m_read_only = false;
+        rc_enabled = false
+        m_read_only = false
 
-        if(_serialLink.isConnected) {
-            _mavlink_manager.control_type = control_type_selected;
-            _mavlink_manager.write_params_to_board();
+        // temporary comment for testing function
+
+//        if(_serialLink.isConnected)
+        {
+//            _mavlink_manager.control_type = control_type_selected;
+//            _mavlink_manager.write_params_to_board();
 
             switch(control_type_selected){
             case 0:   // PWM
-                tiltRC.rc_enabled = true;
-                panRC.rc_enabled = true;
-                rollRC.rc_enabled = true;
-                tiltRC.m_read_only = true;
-                panRC.m_read_only = true;
-                rollRC.m_read_only = true;
-                tiltRC.label = "Value"
-                panRC.label = "Value"
-                rollRC.label = "Value"
+                rc_enabled = true
+                m_read_only = true
+                rc_label = "Value"
                 break;
             case 1:   // SBUS
-                tiltRC.rc_enabled = true;
-                panRC.rc_enabled = true;
-                rollRC.rc_enabled = true;
-                tiltRC.label = "Channel"
-                panRC.label = "Channel"
-                rollRC.label = "Channel"
-
+                rc_enabled = true
+                rc_label = "Channel"
                 break;
             case 2:   // gMotion
                 popup_msg = "Disconnect system from PC then turn on gMotion System for pairing Bluetooth communication"
@@ -102,10 +137,11 @@ GFrame {
             default:
                 break;
             }
-        } else{
-            popup_msg = "Controller board is not connected. Please connect the board to your PC through USB cable then try again"
-            popup_show = true;
         }
+//        else{
+//            popup_msg = "Controller board is not connected. Please connect the board to your PC through USB cable then try again"
+//            popup_show = true;
+//        }
     }
     Connections{
         target: _mavlink_manager

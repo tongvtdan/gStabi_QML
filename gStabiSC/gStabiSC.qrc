@@ -17,35 +17,6 @@
         <file>qml/gStabiSC/images/gauges/gStabiUI_3.2_pressed_green_handle.png</file>
         <file>qml/gStabiSC/images/gauges/gStabiUI_3.2_pressed_red_handle.png</file>
         <file>qml/gStabiSC/Components/images/gStabiUI_3.2_normal_slider_handle.png</file>
-        <file>qml/gStabiSC/images/gStabiUI_3.2_hover_setting_dialog.png</file>
-        <file>qml/gStabiSC/images/gStabiUI_3.2_normal_setting_dialog.png</file>
-        <file>qml/gStabiSC/images/gStabiUI_3.2_hover_parameters_dialog.png</file>
-        <file>qml/gStabiSC/images/gStabiUI_3.2_normal_parameters_dialog.png</file>
-        <file>qml/gStabiSC/images/gStabiUI_3.2_hover_controller_params_frame.png</file>
-        <file>qml/gStabiSC/images/gStabiUI_3.2_normal_controller_params_frame.png</file>
-        <file>qml/gStabiSC/images/gStabiUI_3.2_normal_serial_setting_dialog.png</file>
-        <file>qml/gStabiSC/images/gStabiUI_3.2_normal_console_border.png</file>
-        <file>qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_pid.png</file>
-        <file>qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_pid.png</file>
-        <file>qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_ports_disconnect.png</file>
-        <file>qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_ports_disconnect.png</file>
-        <file>qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_port_connect.png</file>
-        <file>qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_port_connect.png</file>
-        <file>qml/gStabiSC/images/buttons/gStabiUI_3.2_run_0_port_connect.png</file>
-        <file>qml/gStabiSC/images/buttons/gStabiUI_3.2_run_1_port_connect.png</file>
-        <file>qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_profile.png</file>
-        <file>qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_profile.png</file>
-        <file>qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_info.png</file>
-        <file>qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_info.png</file>
-        <file>qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_chart.png</file>
-        <file>qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_chart.png</file>
-        <file>qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_imu.png</file>
-        <file>qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_imu.png</file>
-        <file>qml/gStabiSC/images/buttons/gStabiUI_3.2_focus_motors.png</file>
-        <file>qml/gStabiSC/images/buttons/gStabiUI_3.2_normal_motors.png</file>
-        <file>qml/gStabiSC/images/buttons/gStabiUI_3.2_focus.png</file>
-        <file>qml/gStabiSC/images/orig_selector.png</file>
-        <file>qml/gStabiSC/images/toolbar_back.png</file>
         <file>qml/gStabiSC/images/gauges/gStabiUI_3.3_back_pan.png</file>
         <file>qml/gStabiSC/images/gauges/gStabiUI_3.3_back_roll.png</file>
         <file>qml/gStabiSC/images/gauges/gStabiUI_3.3_back_tilt.png</file>
@@ -96,7 +67,6 @@
         <file>qml/gStabiSC/Components/GDialog.qml</file>
         <file>qml/gStabiSC/Components/GGauge.qml</file>
         <file>qml/gStabiSC/Components/GParametersContainer.qml</file>
-        <file>qml/gStabiSC/Components/GSettingDialog.qml</file>
         <file>qml/gStabiSC/GAppHeader.qml</file>
         <file>qml/gStabiSC/GConsole.qml</file>
         <file>qml/gStabiSC/Components/GSerialSettings.qml</file>

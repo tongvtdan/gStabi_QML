@@ -58,7 +58,6 @@ OTHER_FILES += \
     qml/gStabiSC/Components/GGauge.qml                  \
     qml/gStabiSC/Components/GImageButton.qml            \
     qml/gStabiSC/Components/GParametersContainer.qml    \
-    qml/gStabiSC/Components/GSettingDialog.qml          \
     qml/gStabiSC/Components/GSlider.qml                 \
     qml/gStabiSC/Components/GTextInput.qml              \
     qml/gStabiSC/GDashboard/GMotorConfig.qml            \
