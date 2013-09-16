@@ -7,6 +7,8 @@ Rectangle {
     property int    trim_value          : 5
     property int    channel_num_value   : 1
     property int    rc_value            : 50
+    property int    rc_pwm_level: 50
+
 
 
     width: 200;     height: 100
@@ -111,7 +113,10 @@ Rectangle {
             id: channelValue
             width: 30
             bottom_value: 1 ;top_value: 18
-            text_value: channel_num_value + 1
+            text_value:{ return channel_num_value
+//                if(control_type_selected === 0)  return rc_pwm_level;
+//                else if(control_type_selected === 1) return channel_num_value;
+            }
             read_only: (control_type_selected === 0)
             onText_valueChanged: channel_num_value = text_value
         }
@@ -131,9 +136,13 @@ Rectangle {
             Rectangle{
                 id: rcValueChannelLevelIndicator
                 anchors.centerIn: parent.Center
-                width: rc_value
+                width: { return rc_value
+//                    if(control_type_selected === 0)  return rc_pwm_level;
+//                    else if(control_type_selected === 1) return rc_value;
+                }
                 height: rcValueChannelIndicatorBorder.height - 2*rcValueChannelIndicatorBorder.border.width
                 color: "#0ef1e2"
+                anchors.left: parent.left; anchors.leftMargin: rcValueChannelIndicatorBorder.border.width
                 anchors.verticalCenter: parent.verticalCenter
                 transformOrigin: Item.Bottom
             }
@@ -141,7 +150,10 @@ Rectangle {
                 id: rcValueChannelLevelLabel
                 width: 10
                 color: "#035bf3"
-                text: (rc_value - 50).toString() // 50 is the offset value
+                text:{ return (rc_value - 50)
+//                    if(control_type_selected === 0)  return rc_pwm_level - 50;
+//                    else if(control_type_selected === 1) return (rc_value - 50);
+                }
                 font.pixelSize: 12
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -160,6 +172,9 @@ Rectangle {
         trimSlider.value = trim_value
     }
     onChannel_num_valueChanged: {
-        channelValue.text_value = channel_num_value  // + 1 for display only, the value 0 is for channel 1, 1 for chan 2 and so on
+        channelValue.text_value = channel_num_value
+//        if(control_type_selected === 0)  channelValue.text_value =  rc_pwm_level;
+//        else if(control_type_selected === 1) channelValue.text_value = channel_num_value;
     }
+//    onRc_valueChanged: rcValueChannelLevelIndicator.width = rc_value;
 }

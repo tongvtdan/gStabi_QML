@@ -106,6 +106,8 @@ GFrame{
                 openCloseComportButton.imagePressed = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_ports_disconnect.png"
                 openCloseComportButton.imageHover   = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_ports_disconnect.png"
                 connectedImage.visible = false
+                popup_msg = "gStabi controller is disconnected."
+                popup_show = true;
             }
         }
         onHb_pulseChanged: {

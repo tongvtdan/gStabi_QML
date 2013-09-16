@@ -68,6 +68,10 @@ class MavLinkManager : public QObject
     Q_PROPERTY(int  tilt_trim    READ tilt_trim   WRITE settilt_trim   NOTIFY tilt_trimChanged)
     Q_PROPERTY(int  tilt_mode    READ tilt_mode   WRITE settilt_mode   NOTIFY tilt_modeChanged)
     Q_PROPERTY(int  tilt_sbus_chan_num  READ tilt_sbus_chan_num WRITE settilt_sbus_chan_num NOTIFY tilt_sbus_chan_numChanged)
+    Q_PROPERTY(int  tilt_rc_sbus_level READ tilt_rc_sbus_level WRITE settilt_rc_sbus_level NOTIFY tilt_rc_sbus_levelChanged)
+    Q_PROPERTY(int  tilt_pwm_level READ tilt_pwm_level WRITE settilt_pwm_level NOTIFY tilt_pwm_levelChanged)
+
+
 
     //Yaw axis, Pan Motor
         // use in QML, PIDConfigDialog
@@ -183,6 +187,13 @@ public:
 
     int tilt_sbus_chan_num() const;
     void settilt_sbus_chan_num(int _chan_num);
+
+    int tilt_rc_sbus_level() const;
+    void settilt_rc_sbus_level(int _rc_level);
+
+    int tilt_pwm_level() const;
+    void settilt_pwm_level(int _pwm_level);
+
 
 
 //    [1]
@@ -313,6 +324,8 @@ signals:
     void tilt_trimChanged(int);
     void tilt_modeChanged(int);
     void tilt_sbus_chan_numChanged(int);
+    void tilt_rc_sbus_levelChanged(int);
+    void tilt_pwm_levelChanged(int);
 
 //    [1]
 //    [2] pan Motor
@@ -364,6 +377,8 @@ private:
     void RestartLinkConnectionTimer(int msec);
     void write_a_param_to_board(const char *param_id, float _value);
     void update_all_parameters(uint8_t index, float value);
+    void update_rc_sbus_value();
+    void update_pwm_values();
 
 
 private:
@@ -384,10 +399,13 @@ private:
     mavlink_param_request_read_t request_read;
     mavlink_param_value_t paramValue;
     mavlink_sbus_chan_values_t sbus_chan_values;
+    mavlink_ppm_chan_values_t pwm_values;
     global_struct global_data;
     gConfig_t current_params_on_board;
     mavlink_heartbeat_t m_mavlink_heartbeat;
     mavlink_system_status_t m_g_system_status;
+    int rc_sbus_level[18];
+
 //    [!] Q_PROPERTY
 
     bool m_hb_pulse;
@@ -403,7 +421,7 @@ private:
 //    [1] Tilt Motor
     float m_tilt_kp, m_tilt_ki, m_tilt_kd, m_tilt_power, m_tilt_follow, m_tilt_filter;
     int m_motor_tilt_dir, m_tilt_up_limit_angle, m_tilt_down_limit_angle, m_motor_tilt_num_poles;
-    int m_tilt_lpf, m_tilt_trim, m_tilt_mode, m_tilt_sbus_chan_num;
+    int m_tilt_lpf, m_tilt_trim, m_tilt_mode, m_tilt_sbus_chan_num, m_tilt_rc_sbus_level, m_tilt_pwm_level;
 //    [2] Pan Motor
     float m_pan_kp, m_pan_ki, m_pan_kd, m_pan_power, m_pan_follow, m_pan_filter;
     int m_motor_pan_dir, m_pan_cw_limit_angle, m_pan_ccw_limit_angle, m_motor_pan_num_poles, m_pan_lpf, m_pan_trim, m_pan_mode;

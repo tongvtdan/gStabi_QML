@@ -71,25 +71,63 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
                 break;
             case MAVLINK_MSG_ID_SBUS_CHAN_VALUES:{ // get SBUS channel values
                 sbus_chan_values.ch1 = mavlink_msg_sbus_chan_values_get_ch1(&message);
+                rc_sbus_level[0] = sbus_chan_values.ch1;
+                qDebug()<< "C++ SBUS ID, value: " << sbus_chan_values.ch1 << "channel: 1 ";
+
                 sbus_chan_values.ch2 = mavlink_msg_sbus_chan_values_get_ch2(&message);
+                rc_sbus_level[1] = sbus_chan_values.ch2;
+                qDebug()<< "C++ SBUS ID, value: " << sbus_chan_values.ch2 << "channel: 2 ";
+
                 sbus_chan_values.ch3 = mavlink_msg_sbus_chan_values_get_ch3(&message);
+                rc_sbus_level[2] = sbus_chan_values.ch3;
+                qDebug()<< "C++ SBUS ID, value: " << sbus_chan_values.ch3 << "channel: 3";
+
                 sbus_chan_values.ch4 = mavlink_msg_sbus_chan_values_get_ch4(&message);
+                rc_sbus_level[3] = sbus_chan_values.ch4;
+                qDebug()<< "C++ SBUS ID, value: " << sbus_chan_values.ch4 << "channel: 4 ";
+
                 sbus_chan_values.ch5 = mavlink_msg_sbus_chan_values_get_ch5(&message);
+                rc_sbus_level[4] = sbus_chan_values.ch5;
                 sbus_chan_values.ch6 = mavlink_msg_sbus_chan_values_get_ch6(&message);
+                rc_sbus_level[5] = sbus_chan_values.ch6;
                 sbus_chan_values.ch7 = mavlink_msg_sbus_chan_values_get_ch7(&message);
+                rc_sbus_level[6] = sbus_chan_values.ch7;
                 sbus_chan_values.ch8 = mavlink_msg_sbus_chan_values_get_ch8(&message);
+                rc_sbus_level[7] = sbus_chan_values.ch8;
                 sbus_chan_values.ch9 = mavlink_msg_sbus_chan_values_get_ch9(&message);
+                rc_sbus_level[8] = sbus_chan_values.ch9;
                 sbus_chan_values.ch10 = mavlink_msg_sbus_chan_values_get_ch10(&message);
+                rc_sbus_level[9] = sbus_chan_values.ch10;
                 sbus_chan_values.ch11 = mavlink_msg_sbus_chan_values_get_ch11(&message);
+                rc_sbus_level[10] = sbus_chan_values.ch11;
                 sbus_chan_values.ch12 = mavlink_msg_sbus_chan_values_get_ch12(&message);
+                rc_sbus_level[11] = sbus_chan_values.ch12;
                 sbus_chan_values.ch13 = mavlink_msg_sbus_chan_values_get_ch13(&message);
+                rc_sbus_level[12] = sbus_chan_values.ch13;
                 sbus_chan_values.ch14 = mavlink_msg_sbus_chan_values_get_ch14(&message);
+                rc_sbus_level[13] = sbus_chan_values.ch14;
                 sbus_chan_values.ch15 = mavlink_msg_sbus_chan_values_get_ch15(&message);
+                rc_sbus_level[14] = sbus_chan_values.ch15;
                 sbus_chan_values.ch16 = mavlink_msg_sbus_chan_values_get_ch16(&message);
+                rc_sbus_level[15] = sbus_chan_values.ch16;
                 sbus_chan_values.ch17 = mavlink_msg_sbus_chan_values_get_ch17(&message);
+                rc_sbus_level[16] = sbus_chan_values.ch17;
                 sbus_chan_values.ch18 = mavlink_msg_sbus_chan_values_get_ch18(&message);
+                rc_sbus_level[17] = sbus_chan_values.ch18;
+
+                update_rc_sbus_value();
+
+
             }
             break;
+            case MAVLINK_MSG_ID_PPM_CHAN_VALUES: {
+                pwm_values.tilt = mavlink_msg_ppm_chan_values_get_tilt(&message);
+                pwm_values.roll = mavlink_msg_ppm_chan_values_get_roll(&message);
+                pwm_values.pan  = mavlink_msg_ppm_chan_values_get_pan(&message);
+                pwm_values.mode = mavlink_msg_ppm_chan_values_get_mode(&message);
+                update_pwm_values();
+            }
+                break;
             case MAVLINK_MSG_ID_SYSTEM_STATUS:{
                 m_g_system_status.battery_voltage = mavlink_msg_system_status_get_battery_voltage(&message);
                 setbattery_voltage(m_g_system_status.battery_voltage);
@@ -106,7 +144,7 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
 void MavLinkManager::connection_timeout()
 {
     setboard_connection_state(OFFLINE);
-    setmavlink_message_log("System does not response.");
+//    setmavlink_message_log("System does not response.");
     RestartLinkConnectionTimer(1000);
 }
 
@@ -299,6 +337,25 @@ void MavLinkManager::update_all_parameters(uint8_t index, float value)
         break;
     }
 
+}
+
+void MavLinkManager::update_rc_sbus_value()
+{
+    int i;
+    for(i = 0; i<18; i++){
+        qDebug()<< "C++ SBUS ID, value: " << rc_sbus_level[i] << "channel: " << i;
+
+        if(tilt_sbus_chan_num() == i){  // tilt channel
+            settilt_rc_sbus_level(rc_sbus_level[1]);
+//            settilt_rc_sbus_level(40);    // simulate the value
+        }
+    }
+}
+
+void MavLinkManager::update_pwm_values()
+{
+    settilt_pwm_level(pwm_values.tilt);
+//    settilt_pwm_level(30);
 }
 
 
@@ -628,7 +685,6 @@ void MavLinkManager::send_control_command(int tilt_angle_setpoint, int pan_angle
     mavlink_msg_rc_simulation_pack(SYSTEM_ID, MAV_COMP_ID_SERVO1, &msg, tilt_angle_setpoint, roll_angle_setpoint, pan_angle_setpoint);
     len = mavlink_msg_to_send_buffer(buf, &msg);
     emit messge_write_to_comport_ready((const char*)buf, len);
-    qDebug()<< QString("C++>>Control angle: %1, %2, %3").arg(tilt_angle_setpoint).arg(pan_angle_setpoint).arg(roll_angle_setpoint);
 }
 
 
@@ -876,6 +932,28 @@ void MavLinkManager::settilt_sbus_chan_num(int _chan_num)
 {
     m_tilt_sbus_chan_num = _chan_num;
     emit tilt_sbus_chan_numChanged(m_tilt_sbus_chan_num);
+}
+
+int MavLinkManager::tilt_rc_sbus_level() const
+{
+    return m_tilt_rc_sbus_level;
+}
+
+void MavLinkManager::settilt_rc_sbus_level(int _rc_level)
+{
+    m_tilt_rc_sbus_level = _rc_level;
+    emit tilt_rc_sbus_levelChanged(m_tilt_rc_sbus_level);
+}
+
+int MavLinkManager::tilt_pwm_level() const
+{
+    return m_tilt_pwm_level;
+}
+
+void MavLinkManager::settilt_pwm_level(int _pwm_level)
+{
+    m_tilt_pwm_level = _pwm_level;
+    emit tilt_pwm_levelChanged(m_tilt_pwm_level);
 }
 
 

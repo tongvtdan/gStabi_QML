@@ -44,6 +44,7 @@ GFrame {
             onLpf_valueChanged          :   _mavlink_manager.tilt_lpf = lpf_value;
             onTrim_valueChanged         :   _mavlink_manager.tilt_trim = trim_value;
             onChannel_num_valueChanged  :   _mavlink_manager.tilt_sbus_chan_num = channel_num_value;
+
         }
         GRCSettings{
             id: panRC
@@ -153,6 +154,10 @@ GFrame {
         onTilt_lpfChanged             : tiltRC.lpf_value   = _mavlink_manager.tilt_lpf;
         onTilt_trimChanged            : tiltRC.trim_value  = _mavlink_manager.tilt_trim;
         onTilt_sbus_chan_numChanged    : tiltRC.channel_num_value = _mavlink_manager.tilt_sbus_chan_num;
+        onTilt_rc_sbus_levelChanged    : tiltRC.rc_value = _mavlink_manager.tilt_rc_sbus_level;
+        onTilt_pwm_levelChanged        : tiltRC.rc_pwm_level = _mavlink_manager.tilt_pwm_level;
+
+
 
         onPan_lpfChanged             : panRC.lpf_value   = _mavlink_manager.pan_lpf;
         onPan_trimChanged            : panRC.trim_value  = _mavlink_manager.pan_trim;
