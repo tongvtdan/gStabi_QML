@@ -157,7 +157,11 @@ Item{
     Item{
         id: gaugeControlItem
         anchors.fill: parent
-        rotation: {if(!out_of_range){return (gauge_config_mode? gauge_up_limit_set_angle : gauge_setpoint_angle) - gauge_offset}}
+        rotation: {
+            if(!out_of_range){
+                return gauge_config_mode ? gauge_up_limit_set_angle : gauge_setpoint_angle - gauge_offset
+            }
+        }
         Image {
             id: gaugeHandlePressedImage
             asynchronous: true

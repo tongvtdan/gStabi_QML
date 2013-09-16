@@ -251,6 +251,7 @@ void MavLinkManager::update_all_parameters(uint8_t index, float value)
         setpan_lpf(current_params_on_board.rcYawLPF);
         break;
     case PARAM_SBUS_PITCH_CHAN: current_params_on_board.sbusPitchChan = value;
+        settilt_sbus_chan_num(current_params_on_board.sbusPitchChan + 1); // +1 for display, value of chan: 0 for chan1, 1 for  chan2,...
         break;
     case PARAM_SBUS_ROLL_CHAN:  current_params_on_board.sbusRollChan = value;
         break;
@@ -386,6 +387,10 @@ void MavLinkManager::write_params_to_board()
     if(tilt_mode() != current_params_on_board.rcPitchMode){
         current_params_on_board.rcPitchMode = tilt_mode();
         write_a_param_to_board("RC_PITCH_MODE", current_params_on_board.rcPitchMode);
+    }
+    if(tilt_sbus_chan_num() != current_params_on_board.sbusPitchChan){
+        current_params_on_board.sbusPitchChan = tilt_sbus_chan_num() - 1;      // - 1 to get a real value for channel from display value in QML
+        write_a_param_to_board("SBUS_PITCH_CHAN", current_params_on_board.sbusPitchChan);
     }
 //    [2] Pan Motor
     if(pan_power() != current_params_on_board.yawPower){  // if power level changed, it will be store in params
@@ -860,6 +865,17 @@ void MavLinkManager::settilt_mode(int _mode)
 {
     m_tilt_mode = _mode;
     emit tilt_modeChanged(m_tilt_mode);
+}
+
+int MavLinkManager::tilt_sbus_chan_num() const
+{
+    return m_tilt_sbus_chan_num;
+}
+
+void MavLinkManager::settilt_sbus_chan_num(int _chan_num)
+{
+    m_tilt_sbus_chan_num = _chan_num;
+    emit tilt_sbus_chan_numChanged(m_tilt_sbus_chan_num);
 }
 
 

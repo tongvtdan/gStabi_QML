@@ -2,11 +2,11 @@ import QtQuick 2.0
 
 Rectangle {
     id: rcSettingsContainer
-    property string title       : "Tilt"
-    property int    lpf_value   : 5
-    property int    trim_value  : 5
-    property int    channel_value: 1
-    property int    rc_value: 50
+    property string title               : "Tilt"
+    property int    lpf_value           : 5
+    property int    trim_value          : 5
+    property int    channel_num_value   : 1
+    property int    rc_value            : 50
 
 
     width: 200;     height: 100
@@ -110,10 +110,10 @@ Rectangle {
         GTextInput{
             id: channelValue
             width: 30
-            top_value: 18
-            text_value: channel_value.toString()
+            bottom_value: 1 ;top_value: 18
+            text_value: channel_num_value + 1
             read_only: (control_type_selected === 0)
-
+            onText_valueChanged: channel_num_value = text_value
         }
     }
 
@@ -158,5 +158,8 @@ Rectangle {
     onTrim_valueChanged: {
         trimLevelInput.text_value = trim_value
         trimSlider.value = trim_value
+    }
+    onChannel_num_valueChanged: {
+        channelValue.text_value = channel_num_value  // + 1 for display only, the value 0 is for channel 1, 1 for chan 2 and so on
     }
 }

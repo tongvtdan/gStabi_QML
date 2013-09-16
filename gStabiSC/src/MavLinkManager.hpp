@@ -67,7 +67,7 @@ class MavLinkManager : public QObject
     Q_PROPERTY(int  tilt_lpf     READ tilt_lpf    WRITE settilt_lpf    NOTIFY tilt_lpfChanged)
     Q_PROPERTY(int  tilt_trim    READ tilt_trim   WRITE settilt_trim   NOTIFY tilt_trimChanged)
     Q_PROPERTY(int  tilt_mode    READ tilt_mode   WRITE settilt_mode   NOTIFY tilt_modeChanged)
-//    Q_PROPERTY(int  tilt_sbus_chan  READ tilt_sbus_chan WRITE settilt_sbus_chan NOTIFY tilt_sbus_chanChanged)
+    Q_PROPERTY(int  tilt_sbus_chan_num  READ tilt_sbus_chan_num WRITE settilt_sbus_chan_num NOTIFY tilt_sbus_chan_numChanged)
 
     //Yaw axis, Pan Motor
         // use in QML, PIDConfigDialog
@@ -180,6 +180,11 @@ public:
 
     int tilt_mode() const;
     void settilt_mode(int _mode);
+
+    int tilt_sbus_chan_num() const;
+    void settilt_sbus_chan_num(int _chan_num);
+
+
 //    [1]
 //    [2] Pan Motor
     float pan_kp() const;
@@ -307,6 +312,7 @@ signals:
     void tilt_lpfChanged(int);
     void tilt_trimChanged(int);
     void tilt_modeChanged(int);
+    void tilt_sbus_chan_numChanged(int);
 
 //    [1]
 //    [2] pan Motor
@@ -396,7 +402,8 @@ private:
     // Parameters on board
 //    [1] Tilt Motor
     float m_tilt_kp, m_tilt_ki, m_tilt_kd, m_tilt_power, m_tilt_follow, m_tilt_filter;
-    int m_motor_tilt_dir, m_tilt_up_limit_angle, m_tilt_down_limit_angle, m_motor_tilt_num_poles, m_tilt_lpf, m_tilt_trim, m_tilt_mode;
+    int m_motor_tilt_dir, m_tilt_up_limit_angle, m_tilt_down_limit_angle, m_motor_tilt_num_poles;
+    int m_tilt_lpf, m_tilt_trim, m_tilt_mode, m_tilt_sbus_chan_num;
 //    [2] Pan Motor
     float m_pan_kp, m_pan_ki, m_pan_kd, m_pan_power, m_pan_follow, m_pan_filter;
     int m_motor_pan_dir, m_pan_cw_limit_angle, m_pan_ccw_limit_angle, m_motor_pan_num_poles, m_pan_lpf, m_pan_trim, m_pan_mode;
