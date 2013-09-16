@@ -123,7 +123,12 @@ void MavLinkManager::link_connection_state_changed(bool connection_state)
 }
 
 // Get Paramter to store in current_params_on_board
-
+/**
+ * @brief MavLinkManager::update_all_parameters
+ *          Called when received a message  contain changes in parameters
+ * @param index : the index of parameter
+ * @param value : value of parameter
+ */
 void MavLinkManager::update_all_parameters(uint8_t index, float value)
 {
 
@@ -133,79 +138,117 @@ void MavLinkManager::update_all_parameters(uint8_t index, float value)
         break;
     case PARAM_SERIAL_NUMBER:   current_params_on_board.serialNumber = value;
         break;
-    case PARAM_PITCH_P:         current_params_on_board.pitchKp = value;
+    case PARAM_PITCH_P:         { current_params_on_board.pitchKp = value;
+        settilt_kp(current_params_on_board.pitchKp);
+    }
         break;
-    case PARAM_PITCH_I:         current_params_on_board.pitchKi = value;
+    case PARAM_PITCH_I: {        current_params_on_board.pitchKi = value;
+            settilt_ki(current_params_on_board.pitchKi); }
         break;
     case PARAM_PITCH_D:         current_params_on_board.pitchKd = value;
+        settilt_kd(current_params_on_board.pitchKd);
         break;
     case PARAM_ROLL_P:          current_params_on_board.rollKp = value;
+        setroll_kp(current_params_on_board.rollKp);
         break;
     case PARAM_ROLL_I:          current_params_on_board.rollKi = value;
+        setroll_ki(current_params_on_board.rollKi);
         break;
     case PARAM_ROLL_D:          current_params_on_board.rollKd = value;
+         setroll_kd(current_params_on_board.rollKd);
         break;
     case PARAM_YAW_P:           current_params_on_board.yawKp = value;
+        setpan_kp(current_params_on_board.yawKp);
         break;
     case PARAM_YAW_I:           current_params_on_board.yawKi = value;
+        setpan_ki(current_params_on_board.yawKi);
         break;
     case PARAM_YAW_D:           current_params_on_board.yawKd = value;
+        setpan_kd(current_params_on_board.yawKd);
         break;
     case PARAM_PITCH_POWER:     current_params_on_board.pitchPower = value;
+        settilt_power(current_params_on_board.pitchPower);
         break;
     case PARAM_ROLL_POWER:      current_params_on_board.rollPower = value;
+        setroll_power(current_params_on_board.rollPower);
         break;
     case PARAM_YAW_POWER:       current_params_on_board.yawPower = value;
+        setpan_power(current_params_on_board.yawPower);
         break;
     case PARAM_PITCH_FOLLOW:    current_params_on_board.pitchFollow = value;
+        settilt_follow(current_params_on_board.pitchFollow);
         break;
     case PARAM_ROLL_FOLLOW:     current_params_on_board.rollFollow = value;
+        setroll_follow(current_params_on_board.rollFollow);
         break;
     case PARAM_YAW_FOLLOW:      current_params_on_board.yawFollow = value;
+        setpan_follow(current_params_on_board.yawFollow);
         break;
     case PARAM_PITCH_FILTER:    current_params_on_board.tiltFilter = value;
+        settilt_filter(current_params_on_board.tiltFilter);
         break;
     case PARAM_ROLL_FILTER:     current_params_on_board.rollFilter = value;
+        setroll_filter(current_params_on_board.rollFilter);
+
         break;
     case PARAM_YAW_FILTER:      current_params_on_board.panFilter = value;
+        setpan_filter(current_params_on_board.panFilter);
         break;
     case PARAM_GYRO_TRUST:      current_params_on_board.gyroTrust = value;
+
         break;
     case PARAM_NPOLES_PITCH:    current_params_on_board.nPolesPitch = value;
+        setmotor_tilt_num_poles(current_params_on_board.nPolesPitch);
         break;
     case PARAM_NPOLES_ROLL:     current_params_on_board.nPolesRoll= value;
+        setmotor_roll_num_poles(current_params_on_board.nPolesRoll);
         break;
     case PARAM_NPOLES_YAW:      current_params_on_board.nPolesYaw = value;
+        setmotor_pan_num_poles(current_params_on_board.nPolesYaw);
         break;
     case PARAM_DIR_MOTOR_PITCH: current_params_on_board.dirMotorPitch = value;
+        setmotor_tilt_dir(current_params_on_board.dirMotorPitch);
         break;
     case PARAM_DIR_MOTOR_ROLL:  current_params_on_board.dirMotorRoll = value;
+        setmotor_roll_dir(current_params_on_board.dirMotorRoll);
         break;
     case PARAM_DIR_MOTOR_YAW:   current_params_on_board.dirMotorYaw = value;
+         setmotor_pan_dir(current_params_on_board.dirMotorYaw);
         break;
     case PARAM_MOTOR_FREQ:      current_params_on_board.motorFreq = value;
         break;
-    case PARAM_RADIO_TYPE:      current_params_on_board.radioType = value;
+    case PARAM_RADIO_TYPE:      { current_params_on_board.radioType = value;
+         setcontrol_type(current_params_on_board.radioType);
+    }
         break;
     case PARAM_GYRO_LPF:        current_params_on_board.gyroLPF = value;
         break;
     case PARAM_TRAVEL_MIN_PITCH:current_params_on_board.travelMinPitch = value;
+        settilt_up_limit_angle(current_params_on_board.travelMinPitch);
         break;
     case PARAM_TRAVEL_MAX_PITCH:current_params_on_board.travelMaxPitch = value;
+        settilt_down_limit_angle(current_params_on_board.travelMaxPitch);
         break;
     case PARAM_TRAVEL_MIN_ROLL: current_params_on_board.travelMinRoll = value;
+         setroll_up_limit_angle(current_params_on_board.travelMinRoll);
         break;
     case PARAM_TRAVEL_MAX_ROLL: current_params_on_board.travelMaxRoll = value;
+         setroll_down_limit_angle(current_params_on_board.travelMaxRoll);
         break;
     case PARAM_TRAVEL_MIN_YAW:  current_params_on_board.travelMinYaw = value;
+        setpan_ccw_limit_angle(current_params_on_board.travelMinYaw);
         break;
     case PARAM_TRAVEL_MAX_YAW:  current_params_on_board.travelMaxYaw = value;
+        setpan_cw_limit_angle(current_params_on_board.travelMaxYaw);
         break;
     case PARAM_RC_PITCH_LPF:    current_params_on_board.rcPitchLPF = value;
+        settilt_lpf(current_params_on_board.rcPitchLPF);
         break;
     case PARAM_RC_ROLL_LPF:     current_params_on_board.rcRollLPF = value;
+        setroll_lpf(current_params_on_board.rcRollLPF);
         break;
     case PARAM_RC_YAW_LPF:      current_params_on_board.rcYawLPF = value;
+        setpan_lpf(current_params_on_board.rcYawLPF);
         break;
     case PARAM_SBUS_PITCH_CHAN: current_params_on_board.sbusPitchChan = value;
         break;
@@ -232,17 +275,24 @@ void MavLinkManager::update_all_parameters(uint8_t index, float value)
     case PARAM_SKIP_GYRO_CALIB: current_params_on_board.skipGyroCalib = value;
         break;
     case PARAM_RC_PITCH_TRIM:   current_params_on_board.rcPitchTrim = value;
+        settilt_trim(current_params_on_board.rcPitchTrim);
         break;
     case PARAM_RC_ROLL_TRIM:    current_params_on_board.rcRollTrim = value;
+        setroll_trim(current_params_on_board.rcRollTrim = value);
         break;
     case PARAM_RC_YAW_TRIM:     current_params_on_board.rcYawTrim = value;
+        setpan_trim(current_params_on_board.rcYawTrim);
         break;
     case PARAM_RC_PITCH_MODE:   current_params_on_board.rcPitchMode = value;
+        settilt_mode(current_params_on_board.rcPitchMode);
         break;
     case PARAM_RC_ROLL_MODE:    current_params_on_board.rcRollMode = value;
+        setroll_mode(current_params_on_board.rcRollMode);
         break;
     case PARAM_RC_YAW_MODE:     current_params_on_board.rcYawMode = value;
-        update_all_parameters_to_UI();
+         setpan_mode(current_params_on_board.rcYawMode);
+
+//        update_all_parameters_to_UI();
         break;
     default:
         break;
@@ -253,64 +303,17 @@ void MavLinkManager::update_all_parameters(uint8_t index, float value)
 
 void MavLinkManager::update_all_parameters_to_UI()
 {
-    if(!first_data_pack)    // to ensure all params read
-    {
-        setmavlink_message_log("Updating parameters...");
-//        get_firmware_version();
-//        get_hardware_serial_number();
-        // General
-        setcontrol_type(current_params_on_board.radioType);
-        // Tilt
-        settilt_kp(current_params_on_board.pitchKp);
-        settilt_ki(current_params_on_board.pitchKi);
-        settilt_kd(current_params_on_board.pitchKd);
-        settilt_follow(current_params_on_board.pitchFollow);
-        setmotor_tilt_dir(current_params_on_board.dirMotorPitch);
+//    if(!first_data_pack)    // to ensure all params read
+//    {
+//        setmavlink_message_log("Updating parameters...");
+////        get_firmware_version();
+////        get_hardware_serial_number();
+//        // General
 
-        settilt_power(current_params_on_board.pitchPower);
-        settilt_filter(current_params_on_board.tiltFilter);
-        setmotor_tilt_num_poles(current_params_on_board.nPolesPitch);
-        settilt_up_limit_angle(current_params_on_board.travelMinPitch);
-        settilt_down_limit_angle(current_params_on_board.travelMaxPitch);
-        settilt_lpf(current_params_on_board.rcPitchLPF);
-        settilt_trim(current_params_on_board.rcPitchTrim);
-        settilt_mode(current_params_on_board.rcPitchMode);
 
-        // Pan
-        setpan_kp(current_params_on_board.yawKp);
-        setpan_ki(current_params_on_board.yawKi);
-        setpan_kd(current_params_on_board.yawKd);
-        setpan_filter(current_params_on_board.panFilter);
-        setpan_follow(current_params_on_board.yawFollow);
-
-        setpan_power(current_params_on_board.yawPower);
-        setmotor_pan_dir(current_params_on_board.dirMotorYaw);
-        setmotor_pan_num_poles(current_params_on_board.nPolesYaw);
-        setpan_ccw_limit_angle(current_params_on_board.travelMinYaw);
-        setpan_cw_limit_angle(current_params_on_board.travelMaxYaw);
-        setpan_lpf(current_params_on_board.rcYawLPF);
-        setpan_trim(current_params_on_board.rcYawTrim);
-        setpan_mode(current_params_on_board.rcYawMode);
-
-        // Roll
-        setroll_kp(current_params_on_board.rollKp);
-        setroll_ki(current_params_on_board.rollKi);
-        setroll_kd(current_params_on_board.rollKd);
-        setroll_filter(current_params_on_board.rollFilter);
-        setroll_follow(current_params_on_board.rollFollow);
-
-        setroll_power(current_params_on_board.rollPower);
-        setmotor_roll_dir(current_params_on_board.dirMotorRoll);
-        setmotor_roll_num_poles(current_params_on_board.nPolesRoll);
-        setroll_up_limit_angle(current_params_on_board.travelMinRoll);
-        setroll_down_limit_angle(current_params_on_board.travelMaxRoll);
-        setroll_lpf(current_params_on_board.rcRollLPF);
-        setroll_trim(current_params_on_board.rcRollTrim);
-        setroll_mode(current_params_on_board.rcRollMode);
-
-        setmavlink_message_log("Updating parameters...Done");
-    }
-    else setmavlink_message_log("Waiting for reading parameters...");
+//        setmavlink_message_log("Updating parameters...Done");
+//    }
+//    else setmavlink_message_log("Waiting for reading parameters...");
 }
 
 void MavLinkManager::get_firmware_version()
@@ -535,7 +538,7 @@ void MavLinkManager::get_mavlink_info()
 
 }
 
-double MavLinkManager::get_battery_percent_remain(double _vol)
+float MavLinkManager::get_battery_percent_remain(float _vol)
 {
     int batt_cells = 0;
     if(_vol < (BATT_3_CELL*BATT_CELL_MIN - 4)){
@@ -703,12 +706,12 @@ void MavLinkManager::setcontrol_type(int _type)
     emit control_typeChanged(m_control_type);
 }
 
-int MavLinkManager::battery_voltage() const
+float MavLinkManager::battery_voltage() const
 {
     return m_battery_voltage;
 }
 
-void MavLinkManager::setbattery_voltage(int _vol)
+void MavLinkManager::setbattery_voltage(float _vol)
 {
     m_battery_voltage = _vol;
     emit battery_voltageChanged(m_battery_voltage);

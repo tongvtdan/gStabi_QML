@@ -5,10 +5,8 @@ Rectangle {
     property string title       : "Tilt"
     property int    lpf_value   : 5
     property int    trim_value  : 5
-    property int    pwm_channel_value: 1
+    property int    channel_value: 1
     property int    rc_value: 50
-//    property bool   rc_enabled: false
-//    property bool   m_read_only : false
 
 
     width: 200;     height: 100
@@ -94,12 +92,15 @@ Rectangle {
 
     Row{
         id: channelRow
-        visible: rc_enabled
+        visible: (control_type_selected === 0 || control_type_selected === 1)
         spacing: 7
         anchors.left: parent.left ;  anchors.leftMargin: 5
         anchors.top: trimRow.bottom ;anchors.topMargin: 20
         GTextStyled{
-            text: rc_label
+            text: {
+                if (control_type_selected === 0) return "Value";
+                else if (control_type_selected === 1) return "Channel";
+            }
             anchors.verticalCenter: parent.verticalCenter
             color: "cyan"
             verticalAlignment: Text.AlignVCenter
@@ -110,15 +111,15 @@ Rectangle {
             id: channelValue
             width: 30
             top_value: 18
-            text_value: pwm_channel_value.toString()
-            read_only: m_read_only
+            text_value: channel_value.toString()
+            read_only: (control_type_selected === 0)
 
         }
     }
 
     Item{
         id: rcValueChannel
-        visible: rc_enabled
+        visible: (control_type_selected === 0 || control_type_selected === 1)
         anchors.top: trimRow.bottom;  anchors.topMargin: 20
         anchors.left: channelRow.right ;  anchors.leftMargin: 5
         Rectangle{
@@ -127,7 +128,6 @@ Rectangle {
             height: 20
             color: "transparent"
             border{ color: "#088bee"; width: 2}
-
             Rectangle{
                 id: rcValueChannelLevelIndicator
                 anchors.centerIn: parent.Center
@@ -137,19 +137,17 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 transformOrigin: Item.Bottom
             }
-
             GTextStyled {
                 id: rcValueChannelLevelLabel
                 width: 10
                 color: "#035bf3"
-                text: (rc_value - 50).toString()
+                text: (rc_value - 50).toString() // 50 is the offset value
                 font.pixelSize: 12
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
             }
-
         }
     }
 

@@ -133,9 +133,8 @@ Item{
         anchors.left: gaugeAngleDeltaNumDisplay.right
         anchors.leftMargin: 0
         anchors.verticalCenter: gaugeAngleDeltaNumDisplay.verticalCenter
-//        width:  gauge_angle_delta >= 0 ? gauge_angle_delta:0
         width:  {
-            if(gauge_control_enabled) {return gauge_angle_delta >= 0 ? -gauge_angle_delta:0}
+            if(gauge_control_enabled) {return gauge_angle_delta >= 0 ? (gauge_angle_delta/5):0}
             else return 0;
         }
         height: 10
@@ -150,7 +149,7 @@ Item{
         anchors.rightMargin: 0
         anchors.verticalCenter: gaugeAngleDeltaNumDisplay.verticalCenter
         width:  {
-            if(gauge_control_enabled) {return gauge_angle_delta <= 0 ? -gauge_angle_delta:0}
+            if(gauge_control_enabled) {return gauge_angle_delta <= 0 ? (0-gauge_angle_delta/5):0}
             else return 0;
         }
         height: 10
@@ -158,8 +157,7 @@ Item{
     Item{
         id: gaugeControlItem
         anchors.fill: parent
-
-        rotation: if(!out_of_range){return (gauge_config_mode? gauge_up_limit_set_angle : gauge_setpoint_angle) - gauge_offset}
+        rotation: {if(!out_of_range){return (gauge_config_mode? gauge_up_limit_set_angle : gauge_setpoint_angle) - gauge_offset}}
         Image {
             id: gaugeHandlePressedImage
             asynchronous: true
@@ -216,7 +214,7 @@ Item{
     Item{
         id: gaugeDownLimitSetItem
         anchors.fill: parent
-        rotation: {if(!out_of_range) gauge_down_limit_set_angle - gauge_offset}
+        rotation: {if(!out_of_range) return (gauge_down_limit_set_angle - gauge_offset)}
         Image {
             id: gaugeDownRangeHandleSelectedImage
             asynchronous: true

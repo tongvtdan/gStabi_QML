@@ -15,6 +15,12 @@ Rectangle {
     property string main_log_msg: ""
     property string popup_msg: ""
     property bool popup_show: false
+
+    property string selected_portname: "COM1"
+    property int    selected_port_index: 1
+    property string profile_name    : "Profile_Default"
+
+
     width:1024; height: 700
     color: "transparent"
     BorderImage {
@@ -115,7 +121,6 @@ Rectangle {
     Connections{
         target: _mavlink_manager;
         onMavlink_message_logChanged: {main_log_msg = _mavlink_manager.mavlink_message_log + "\n" + main_log_msg}
-
     }
 
     GTextStyled {
@@ -129,45 +134,49 @@ Rectangle {
         font.pixelSize: 12
     }
     Component.onCompleted: {
-//        Storage.getSettingDatabaseSync();
-//        Storage.initializeSettings();
-//        if(Storage.getSetting("Port name") !== "NA"){   // if already exist, get it
-//            generalSettingsPanel.selected_portname = Storage.getSetting("Port name")
-//        }
-//        if(Storage.getSetting("Port index") !== "NA"){   // if already exist, get it
-//            generalSettingsPanel.selected_port_index = Storage.getSetting("Port index")
-//        }
-//        if(Storage.getSetting("Profile") !== "NA"){   // if already exist, get it
-//            profileDialog.profile_name = Storage.getSetting("Profile")
-//        }
+        Storage.getSettingDatabaseSync();
+        Storage.initializeSettings();
+        if(Storage.getSetting("Port name") !== "NA"){   // if already exist, get it
+            selected_portname = Storage.getSetting("Port name")
+        }
+        if(Storage.getSetting("Port index") !== "NA"){   // if already exist, get it
+            selected_port_index = Storage.getSetting("Port index")
+        }
+        if(Storage.getSetting("Profile") !== "NA"){   // if already exist, get it
+            profile_name = Storage.getSetting("Profile")
+        }
         dialog_log("************************************\n")
         dialog_log("Before you can start to control or config your system, please connect your system to PC then open the serial port to establish the communication with controller board on gStabi Systtem \n")
         dialog_log("Welcome to gStabi Station Controller \n")
         dialog_log("************************************\n")
-
+        popup_msg = "Welcome to gStabi Station Controller \n
+1. Power on gStabi system \n
+2. Open Serial port\n
+3. Application is ready to Monitor or Setup gStabi Controller"
+        popup_show = true
 
 
     }
     Component.onDestruction: {
-//        Storage.getSettingDatabaseSync();
-//        Storage.initializeSettings();
-//        if(Storage.getSetting("Port name") !== "NA"){ // already in table, do update
-//            Storage.updateSetting("Port name", generalSettingsPanel.selected_portname);
-//        } else {
-//            Storage.saveSetting("Port name", generalSettingsPanel.selected_portname)
-//        }
+        Storage.getSettingDatabaseSync();
+        Storage.initializeSettings();
+        if(Storage.getSetting("Port name") !== "NA"){ // already in table, do update
+            Storage.updateSetting("Port name", selected_portname);
+        } else {
+            Storage.saveSetting("Port name", selected_portname)
+        }
 
-//        if(Storage.getSetting("Port index") !== "NA"){ // already in table, do update
-//            Storage.updateSetting("Port index", generalSettingsPanel.selected_port_index);
-//        } else {
-//            Storage.saveSetting("Port index", generalSettingsPanel.selected_port_index)
-//        }
+        if(Storage.getSetting("Port index") !== "NA"){ // already in table, do update
+            Storage.updateSetting("Port index", selected_port_index);
+        } else {
+            Storage.saveSetting("Port index", selected_port_index)
+        }
 
-//        if(Storage.getSetting("Profile") !== "NA"){ // already in table, do update
-//            Storage.updateSetting("Profile", profileDialog.profile_name);
-//        } else {        // else do create
-//            Storage.saveSetting("Profile", profileDialog.profile_name)
-//        }
+        if(Storage.getSetting("Profile") !== "NA"){ // already in table, do update
+            Storage.updateSetting("Profile", profile_name);
+        } else {        // else do create
+            Storage.saveSetting("Profile", profile_name)
+        }
 
     }
     /* function dialog_log(_message)

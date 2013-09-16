@@ -6,7 +6,7 @@ import "../Components"
 GFrame{
     id: profileDialog
 
-    property string profile_name    : "Profile_Default"
+//    property string profile_name    : "Profile_Default"
     property int    bottom_value    : 0
     property int    top_value       : 100
     property bool   read_only       : false

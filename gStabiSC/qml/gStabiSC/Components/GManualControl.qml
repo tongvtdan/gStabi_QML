@@ -3,11 +3,11 @@ import QtQuick 2.0
 GFrame {
     id: manualControlSettingsContainer
 
-    property int  control_type_selected: -1
-    property bool   rc_enabled: false
-    property bool   m_read_only : false
-    property string rc_label       : "Channel"
-    property int  mode_channel_num: 1
+    property int    control_type_selected   : 0
+    property bool   rc_enabled              : false
+    property bool   m_read_only             : false
+    property string rc_label                : "Channel"
+    property int    mode_channel_num        : 1
 
     border_normal: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_normal_manual_control_frame.png"
     border_hover: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_focus_manual_control_frame.png"
@@ -32,7 +32,6 @@ GFrame {
             controlTypeList.list_model.append({"value": "gMotion"});
             controlTypeList.list_model.append({"value": "PC"});
         }
-
     }
 
     Row{
@@ -68,7 +67,7 @@ GFrame {
         anchors.topMargin: 40
         border.color: "cyan"; border.width: 1
         width: 100; height: 30
-        visible: rc_enabled
+        visible:(control_type_selected == 0 || control_type_selected == 1)// rc_enabled
 
         GTextStyled{
             id: titleText
@@ -89,7 +88,7 @@ GFrame {
             GTextStyled{
                 text: rc_label
                 color: "cyan"
-                verticalAlignment: Text.AlignVCenter
+                verticalAlignment: Text.AlignBottom
                 horizontalAlignment: Text.AlignRight
                 font.pixelSize: 12
             }
@@ -98,8 +97,7 @@ GFrame {
                 width: 30
                 top_value: 18
                 text_value: mode_channel_num.toString()
-                read_only: m_read_only
-
+                read_only: control_type_selected === 0
             }
         }
     }
@@ -107,25 +105,25 @@ GFrame {
         // reset all variables before they can be set
         motor_control_enabled = false
         popup_show = false
-        rc_enabled = false
+//        rc_enabled = false
         m_read_only = false
 
         // temporary comment for testing function
 
 //        if(_serialLink.isConnected)
-        {
+//        {
 //            _mavlink_manager.control_type = control_type_selected;
 //            _mavlink_manager.write_params_to_board();
 
             switch(control_type_selected){
             case 0:   // PWM
-                rc_enabled = true
-                m_read_only = true
-                rc_label = "Value"
+//                rc_enabled = true
+//                m_read_only = true
+//                rc_label = "Value"
                 break;
             case 1:   // SBUS
-                rc_enabled = true
-                rc_label = "Channel"
+//                rc_enabled = true
+//                rc_label = "Channel"
                 break;
             case 2:   // gMotion
                 popup_msg = "Disconnect system from PC then turn on gMotion System for pairing Bluetooth communication"
@@ -137,7 +135,7 @@ GFrame {
             default:
                 break;
             }
-        }
+//        }
 //        else{
 //            popup_msg = "Controller board is not connected. Please connect the board to your PC through USB cable then try again"
 //            popup_show = true;

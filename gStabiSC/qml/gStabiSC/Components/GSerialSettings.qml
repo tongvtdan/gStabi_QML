@@ -2,13 +2,13 @@ import QtQuick 2.0
 
 GFrame{
     id: serialSettingDialog
-    property string selected_portname: "COM1"
-    property int    selected_port_index: 1
+//    property string selected_portname: "COM1"
+//    property int    selected_port_index: 1
     property bool   showPortSetting: true
 
     property string serial_port_info_details: ""
     property bool   view_details: false
-    property string connection_image_src: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.2_run_0_port_connect.png"
+    property string connection_image_src: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_run_0_port_connect.png"
 
 
     border_normal: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_serialports_normal_frame.png"
@@ -36,10 +36,13 @@ GFrame{
             }
             _serialLink.open_close_comport();
             if(_serialLink.isConnected) {
-                dialog_log("Port " + selected_portname + " state: Opened");
-                dialog_log("Waiting response from controller board...");
+                popup_msg = "Port " + selected_portname + " is Opened \n Connecting to gStabi Controller ..."
+                popup_show = true
             }
-            else dialog_log("Port " + selected_portname + " state: Closed")
+            else {
+                popup_msg = "Port " + selected_portname + " is Closed."
+                popup_show = true
+            }
         }
     }
 
@@ -49,7 +52,7 @@ GFrame{
         height: 30
         anchors.top: parent.top; anchors.topMargin: 40
         anchors.left: serialportNameList.right ;    anchors.leftMargin: 0
-        checkbox_text: "View details"
+        checkbox_text: "View port details"
         state: "unchecked"
         onChecked_stateChanged: {
             view_details = checked_state
@@ -96,6 +99,7 @@ GFrame{
                 openCloseComportButton.imagePressed = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_port_connect.png"
                 openCloseComportButton.imageHover   = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_port_connect.png"
                 connectedImage.visible = true;
+                popup_msg = "gStabi controller is connected"
             }
             else{
                 openCloseComportButton.imageNormal  = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_normal_ports_disconnect.png"

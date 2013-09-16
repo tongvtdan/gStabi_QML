@@ -47,7 +47,7 @@ class MavLinkManager : public QObject
     Q_PROPERTY(float yaw_angle   READ yaw_angle     WRITE setyaw_angle      NOTIFY yaw_angleChanged)
     //General
     Q_PROPERTY(int control_type READ control_type WRITE setcontrol_type NOTIFY control_typeChanged)
-    Q_PROPERTY(int battery_voltage READ battery_voltage WRITE setbattery_voltage NOTIFY battery_voltageChanged)
+    Q_PROPERTY(float battery_voltage READ battery_voltage WRITE setbattery_voltage NOTIFY battery_voltageChanged)
 
     // Parameters data
     //Pitch axis, Tilt Motor
@@ -136,8 +136,8 @@ public:
     int control_type() const;
     void setcontrol_type(int _type);
 
-    int battery_voltage() const;
-    void setbattery_voltage(int _vol);
+    float battery_voltage() const;
+    void setbattery_voltage(float _vol);
 
 
     // Parameters on board
@@ -273,7 +273,7 @@ public:
 // function can be called form QML
     Q_INVOKABLE void write_params_to_board();
     Q_INVOKABLE void get_mavlink_info();
-    Q_INVOKABLE double get_battery_percent_remain(double _vol);
+    Q_INVOKABLE float get_battery_percent_remain(float _vol);
     Q_INVOKABLE void request_all_params();      // function to read parameters from controller board
     Q_INVOKABLE void send_control_command(int tilt_angle_setpoint, int pan_angle_setpoint, int roll_angle_setpoint);
 
@@ -291,7 +291,7 @@ signals:
     void yaw_angleChanged(float);
 // General
     void control_typeChanged(int);
-    void battery_voltageChanged(int);
+    void battery_voltageChanged(float);
     // Parameters on board;
 //    [1] Tilt Motor
     void tilt_kpChanged(float);
@@ -392,7 +392,7 @@ private:
     float m_roll_angle, m_pitch_angle, m_yaw_angle;
     // General
     int m_control_type;
-    int m_battery_voltage;
+    float m_battery_voltage;
     // Parameters on board
 //    [1] Tilt Motor
     float m_tilt_kp, m_tilt_ki, m_tilt_kd, m_tilt_power, m_tilt_follow, m_tilt_filter;

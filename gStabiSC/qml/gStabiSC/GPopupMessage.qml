@@ -2,7 +2,7 @@ import QtQuick 2.0
 import "Components"
 Rectangle{
     id: root
-    width: 300; height: 100
+    width: 300; height: messageTextContainer.height + 50
     color: "#0c48ec"
     radius: 5
     border.width: 3
@@ -11,23 +11,21 @@ Rectangle{
     GButton{
         y: 10
         text: "OK"
-        anchors.left: parent.left
-        anchors.leftMargin: 10
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 5
+        anchors.left: parent.left;    anchors.leftMargin: 10
+        anchors.bottom: parent.bottom;        anchors.bottomMargin: 5
         onClicked: popup_show = false
     }
 
     Rectangle{
-        id: popUpDialog
-        width: 280; height: 50
+        id: messageTextContainer
+        width: 280; height: messageText.contentHeight + 20
         color: "transparent"
         radius: 5
         anchors.horizontalCenter: parent.horizontalCenter
         border.color: "#00aaff"; border.width: 1
         anchors.top: parent.top; anchors.topMargin: 10
         Text{
-            id: logText
+            id: messageText
             wrapMode: Text.WordWrap
             color: "#21fb04"
             textFormat: Text.PlainText
