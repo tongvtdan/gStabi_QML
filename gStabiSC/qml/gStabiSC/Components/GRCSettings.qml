@@ -15,6 +15,7 @@ Rectangle {
     color: "transparent"
     radius: 5
     border.color: "cyan"; border.width: 1
+    state: rc_setting_state
     GTextStyled{
         id: titleText
         text: title;
@@ -93,16 +94,12 @@ Rectangle {
     }
 
     Row{
-        id: channelRow
-        visible: (control_type_selected === 0 || control_type_selected === 1)
+        id: channeNumlRow
         spacing: 7
         anchors.left: parent.left ;  anchors.leftMargin: 5
         anchors.top: trimRow.bottom ;anchors.topMargin: 20
         GTextStyled{
-            text: {
-                if (control_type_selected === 0) return "Value";
-                else if (control_type_selected === 1) return "Channel";
-            }
+            text: "Channel"
             anchors.verticalCenter: parent.verticalCenter
             color: "cyan"
             verticalAlignment: Text.AlignVCenter
@@ -112,48 +109,30 @@ Rectangle {
         GTextInput{
             id: channelValue
             width: 30
+            height: 15
             bottom_value: 1 ;top_value: 18
-            text_value:{ return channel_num_value
-//                if(control_type_selected === 0)  return rc_pwm_level;
-//                else if(control_type_selected === 1) return channel_num_value;
-            }
-            read_only: (control_type_selected === 0)
+            text_value: channel_num_value
             onText_valueChanged: channel_num_value = text_value
         }
     }
 
     Item{
-        id: rcValueChannel
-        visible: (control_type_selected === 0 || control_type_selected === 1)
+        id: rcSBUS_PWM_Level
+        width: rcValueChannelIndicator.width; height: rcValueChannelIndicator.height
         anchors.top: trimRow.bottom;  anchors.topMargin: 20
-        anchors.left: channelRow.right ;  anchors.leftMargin: 5
-        Rectangle{
-            id: rcValueChannelIndicatorBorder
-            width: 100
-            height: 20
-            color: "transparent"
-            border{ color: "#088bee"; width: 2}
-            Rectangle{
-                id: rcValueChannelLevelIndicator
-                anchors.centerIn: parent.Center
-                width: { return rc_value
-//                    if(control_type_selected === 0)  return rc_pwm_level;
-//                    else if(control_type_selected === 1) return rc_value;
-                }
-                height: rcValueChannelIndicatorBorder.height - 2*rcValueChannelIndicatorBorder.border.width
-                color: "#0ef1e2"
-                anchors.left: parent.left; anchors.leftMargin: rcValueChannelIndicatorBorder.border.width
-                anchors.verticalCenter: parent.verticalCenter
-                transformOrigin: Item.Bottom
-            }
+        anchors.left: channeNumlRow.right ;  anchors.leftMargin: 10
+        GSlider{
+            id: rcValueChannelIndicator
+            display_only: true
+            width: 90
+            height: 15
+            lowerLimit: 0; upperLimit: 1000
             GTextStyled {
                 id: rcValueChannelLevelLabel
                 width: 10
                 color: "#035bf3"
-                text:{ return (rc_value - 50)
-//                    if(control_type_selected === 0)  return rc_pwm_level - 50;
-//                    else if(control_type_selected === 1) return (rc_value - 50);
-                }
+                text: rcValueChannelIndicator.value-500
+
                 font.pixelSize: 12
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -162,6 +141,27 @@ Rectangle {
             }
         }
     }
+    states: [
+        State {
+            name: "sbus"
+//            when: control_type_selected = 1
+            PropertyChanges {  target: channeNumlRow;    visible: true     }
+            PropertyChanges {  target: rcSBUS_PWM_Level;  visible: true   }
+        },
+        State {
+            name: "pwm"
+//            when: control_type_selected = 0
+            PropertyChanges {  target: channeNumlRow;    visible: false   }
+            PropertyChanges { target: rcValueChannelIndicator ; width: 170 }
+            PropertyChanges { target: rcSBUS_PWM_Level ; anchors.leftMargin: -70 }
+        },
+        State {
+            name: "other"
+            PropertyChanges {  target: channeNumlRow;    visible: false  }
+            PropertyChanges {  target: rcSBUS_PWM_Level;  visible: false }
+        }
+
+    ]
 
     onLpf_valueChanged: {
         lpfLevelInput.text_value = lpf_value
@@ -173,8 +173,15 @@ Rectangle {
     }
     onChannel_num_valueChanged: {
         channelValue.text_value = channel_num_value
-//        if(control_type_selected === 0)  channelValue.text_value =  rc_pwm_level;
-//        else if(control_type_selected === 1) channelValue.text_value = channel_num_value;
     }
-//    onRc_valueChanged: rcValueChannelLevelIndicator.width = rc_value;
+    onRc_valueChanged: {
+        if(rc_value > 500) rc_value =500;
+        if(rc_value < -500) rc_value = -500;
+        rcValueChannelIndicator.value = rc_value + 500;
+    }
+    onRc_pwm_levelChanged: {
+        if(rc_value > 500) rc_value =500;
+        if(rc_value < -500) rc_value = -500;
+        rcValueChannelIndicator.value = rc_pwm_level + 500;
+    }
 }

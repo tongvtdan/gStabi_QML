@@ -72,20 +72,12 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
             case MAVLINK_MSG_ID_SBUS_CHAN_VALUES:{ // get SBUS channel values
                 sbus_chan_values.ch1 = mavlink_msg_sbus_chan_values_get_ch1(&message);
                 rc_sbus_level[0] = sbus_chan_values.ch1;
-                qDebug()<< "C++ SBUS ID, value: " << sbus_chan_values.ch1 << "channel: 1 ";
-
                 sbus_chan_values.ch2 = mavlink_msg_sbus_chan_values_get_ch2(&message);
                 rc_sbus_level[1] = sbus_chan_values.ch2;
-                qDebug()<< "C++ SBUS ID, value: " << sbus_chan_values.ch2 << "channel: 2 ";
-
                 sbus_chan_values.ch3 = mavlink_msg_sbus_chan_values_get_ch3(&message);
                 rc_sbus_level[2] = sbus_chan_values.ch3;
-                qDebug()<< "C++ SBUS ID, value: " << sbus_chan_values.ch3 << "channel: 3";
-
                 sbus_chan_values.ch4 = mavlink_msg_sbus_chan_values_get_ch4(&message);
                 rc_sbus_level[3] = sbus_chan_values.ch4;
-                qDebug()<< "C++ SBUS ID, value: " << sbus_chan_values.ch4 << "channel: 4 ";
-
                 sbus_chan_values.ch5 = mavlink_msg_sbus_chan_values_get_ch5(&message);
                 rc_sbus_level[4] = sbus_chan_values.ch5;
                 sbus_chan_values.ch6 = mavlink_msg_sbus_chan_values_get_ch6(&message);
@@ -343,10 +335,11 @@ void MavLinkManager::update_rc_sbus_value()
 {
     int i;
     for(i = 0; i<18; i++){
-        qDebug()<< "C++ SBUS ID, value: " << rc_sbus_level[i] << "channel: " << i;
 
-        if(tilt_sbus_chan_num() == i){  // tilt channel
-            settilt_rc_sbus_level(rc_sbus_level[1]);
+        if((tilt_sbus_chan_num() - 1) == i){  // tilt channel
+            settilt_rc_sbus_level(rc_sbus_level[i]);
+            qDebug()<< "C++ SBUS ID, value: " << rc_sbus_level[i];
+
 //            settilt_rc_sbus_level(40);    // simulate the value
         }
     }

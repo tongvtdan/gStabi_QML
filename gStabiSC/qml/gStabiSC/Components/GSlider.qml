@@ -16,6 +16,7 @@ Rectangle {
     property double convert_ratio: (handleMouseArea.drag.maximumX - handleMouseArea.drag.minimumX)/(Math.abs(upperLimit) - Math.abs(lowerLimit))
     property string handle_normal   : "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.2_normal_slider_handle.png"
     property string handle_pressed  : "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.2_pressed_slider_handle.png"
+    property bool   display_only: false
 
     id: background
     color: "#00000000"
@@ -42,6 +43,7 @@ Rectangle {
     }
     Item {
         id: handle
+
         height:  25 ; width: 25; anchors.verticalCenter: grooveRect.verticalCenter;
         x: -handle_offset_x + background.border.width + fillRect.width
         Image{
@@ -97,7 +99,7 @@ Rectangle {
             id: handleMouseArea
             anchors.fill: parent
             hoverEnabled: true
-            drag.target: parent
+
             drag.axis: Drag.XAxis
             drag.minimumX: -handle_offset_x + background.border.width
             drag.maximumX: background.width - handle_offset_x - background.border.width
@@ -106,9 +108,11 @@ Rectangle {
             onEntered: handleReleasedImage.source = handle_pressed
             onExited:  handleReleasedImage.source = handle_normal
             onPositionChanged: {
+                if(!display_only){
+                drag.target =  parent
                 fill_width = handle.x + handle_offset_x  - background.border.width
-                value = lowerLimit + (fill_width )/convert_ratio    //(drag.maximumX - drag.minimumX)*(Math.abs(upperLimit) - Math.abs(lowerLimit));
-//                console.log("Handle pos x: "+ handle.x + ", Fill width: " + fill_width +  ", Slider pos: " + value)
+                value = lowerLimit + (fill_width )/convert_ratio
+                }
             }
         }
     }
