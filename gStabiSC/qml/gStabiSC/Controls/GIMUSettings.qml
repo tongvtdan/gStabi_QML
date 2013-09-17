@@ -109,11 +109,11 @@ Item{
                     width: 180; //height: 4
                     anchors.verticalCenter: parent.verticalCenter
                     value: gyroTrust_value
-                    onValueChanged: gyroTrust_value = gyroTrustSlider.value
+                    onValueChanged: gyroTrust_value = value
                 }
                 GTextInput{
                     id: gyroTrustLevelInput
-                    bottom_value: 0; top_value: 100
+                    bottom_value: 0; top_value: 255
                     text_value: gyroTrust_value.toString()
                     onText_valueChanged: gyroTrust_value = text_value
                 }
@@ -136,11 +136,11 @@ Item{
                 }
                 GSlider{
                     id: gyroLpfSlider
-                    lowerLimit: 0 ; upperLimit: 100
+                    lowerLimit: 0 ; upperLimit: 255
                     width: 180; //height: 4
                     anchors.verticalCenter: parent.verticalCenter
                     value: gyroLpf_value
-                    onValueChanged: gyroLpf_value = gyroLpfSlider.value
+                    onValueChanged: gyroLpf_value = value
                 }
                 GTextInput{
                     id: gyroLpfLevelInput
@@ -296,6 +296,16 @@ Item{
         calibNormal.checked_state = calib_normal_mode
         calib6Faces.checked_state = !calib_normal_mode
     }
+    onGyroTrust_valueChanged: {
+        gyroTrustSlider.value = gyroTrust_value;
+        gyroTrustLevelInput.text_value = gyroTrust_value
+        _mavlink_manager.gyro_trust = gyroTrust_value
+    }
+    onGyroLpf_valueChanged: {
+        gyroLpfSlider.value = gyroLpf_value
+        gyroLpfLevelInput.text_value = gyroLpf_value
+        _mavlink_manager.gyro_lpf = gyroLpf_value
+    }
 
     Connections{
         target: _mavlink_manager
@@ -308,6 +318,8 @@ Item{
         onAcc_z_offsetChanged   : accelZAxisOffsetValueLabel.text_value = _mavlink_manager.acc_z_offset
         onSkip_gyro_calibChanged: calibOnStartUpChecked.checked_state   = _mavlink_manager.skip_gyro_calib;
         onUse_gpsChanged        : gpsCorrectionChecked.checked_state    = _mavlink_manager.use_gps
+        onGyro_trustChanged     : gyroTrust_value = _mavlink_manager.gyro_trust
+        onGyro_lpfChanged       : gyroLpf_value = _mavlink_manager.gyro_lpf
     }
 
 

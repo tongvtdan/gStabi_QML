@@ -336,8 +336,10 @@ void MavLinkManager::update_all_parameters(uint8_t index, float value)
         setuse_gps(current_params_on_board.useGPS);
         break;
     case PARAM_GYRO_TRUST:      current_params_on_board.gyroTrust = value;
+        setgyro_trust(current_params_on_board.gyroTrust);
         break;
     case PARAM_GYRO_LPF:        current_params_on_board.gyroLPF = value;
+        setgyro_lpf(current_params_on_board.gyroLPF);
         break;
 //  >>> IMU Settings End
 //  <<< Others
@@ -440,6 +442,14 @@ void MavLinkManager::write_params_to_board()
     if(use_gps() != current_params_on_board.useGPS){
         current_params_on_board.useGPS = use_gps();
         write_a_param_to_board("USE_GPS", current_params_on_board.useGPS);
+    }
+    if(gyro_trust() != current_params_on_board.gyroTrust){
+        current_params_on_board.gyroTrust = gyro_trust();
+        write_a_param_to_board("GYRO_TRUST", current_params_on_board.gyroTrust);
+    }
+    if(gyro_lpf() != current_params_on_board.gyroLPF){
+        current_params_on_board.gyroLPF = gyro_lpf();
+        write_a_param_to_board("GYRO_LPF", current_params_on_board.gyroLPF);
     }
 //    [!] *** SBUS Channel ***
     if(mode_sbus_chan_num() != current_params_on_board.sbusModeChan){
@@ -903,6 +913,28 @@ void MavLinkManager::setskip_gyro_calib(int _skip)
 {
     m_skip_gyro_calib = _skip;
     emit skip_gyro_calibChanged(m_skip_gyro_calib);
+}
+
+int MavLinkManager::gyro_trust() const
+{
+    return m_gyro_trust;
+}
+
+void MavLinkManager::setgyro_trust(int _value)
+{
+    m_gyro_trust = _value;
+    emit gyro_trustChanged(m_gyro_trust);
+}
+
+int MavLinkManager::gyro_lpf() const
+{
+   return m_gyro_lpf;
+}
+
+void MavLinkManager::setgyro_lpf(int _value)
+{
+    m_gyro_lpf = _value;
+    emit gyro_lpfChanged(m_gyro_lpf);
 }
 
 int MavLinkManager::mode_sbus_chan_num() const

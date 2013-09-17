@@ -62,7 +62,8 @@ class MavLinkManager : public QObject
     Q_PROPERTY(float battery_voltage READ battery_voltage WRITE setbattery_voltage NOTIFY battery_voltageChanged)
     Q_PROPERTY(bool use_gps READ use_gps WRITE setuse_gps NOTIFY use_gpsChanged)
     Q_PROPERTY(bool skip_gyro_calib READ skip_gyro_calib WRITE setskip_gyro_calib NOTIFY skip_gyro_calibChanged)
-
+    Q_PROPERTY(int  gyro_trust READ gyro_trust WRITE setgyro_trust NOTIFY gyro_trustChanged)
+    Q_PROPERTY(int  gyro_lpf READ gyro_lpf WRITE setgyro_lpf NOTIFY gyro_lpfChanged)
 
     // for RC Mode Channel or RC Modw PWM
     Q_PROPERTY(int  mode_sbus_chan_num  READ mode_sbus_chan_num WRITE setmode_sbus_chan_num NOTIFY mode_sbus_chan_numChanged)
@@ -200,6 +201,13 @@ public:
     bool skip_gyro_calib() const;
     void setskip_gyro_calib(int _skip);
 
+    int gyro_trust() const;
+    void setgyro_trust(int _value);
+
+    int gyro_lpf() const;
+    void setgyro_lpf(int _value);
+
+
  // *********** RC Settings
 // RC Mode
     int mode_sbus_chan_num() const;
@@ -280,9 +288,6 @@ public:
 
     int tilt_mode() const;
     void settilt_mode(int _mode);
-
-
-
 //    [1]
 //    [2] Pan Motor
     float pan_kp() const;
@@ -407,6 +412,9 @@ signals:
     void battery_voltageChanged(float);
     void use_gpsChanged(bool);
     void skip_gyro_calibChanged(bool);
+    void gyro_trustChanged(int);
+    void gyro_lpfChanged(int);
+
     // RC Settings
     // RC Mode
     void mode_sbus_chan_numChanged(int);
@@ -536,6 +544,7 @@ private:
     // General
     int m_control_type;
     float m_battery_voltage;
+    int m_gyro_trust, m_gyro_lpf;
 
     // [!]RC Settings
     //    Mode
