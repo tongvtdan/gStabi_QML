@@ -8,24 +8,30 @@ import "Components"
   */
 Item {
     id: root
-    property int gauge_width: 220
-    property int gauge_height: 220
-    property bool   gauge_config_mode    : false   // if false: dashbord mode; if true: config mode
+    property int    gauge_width     : 220
+    property int    gauge_height    : 220
+    property double gauge_center_x  : gauge_width/2
+    property double gauge_center_y  : gauge_height/2
+    property double gauge_radius    : gauge_width - gauge_center_x
+    property int    angle_precision : 1        // number after dot
+
+    property bool   gauge_config_mode    : false   // to display control handle
     property bool   gauge_control_enabled: false
 
     width: 700; height: 220
     GGauge{
         id: tiltGauge
-//        width: 220; height: 220
-        anchors.left: parent.left; anchors.leftMargin: 0
-        anchors.verticalCenter: parent.verticalCenter
         gauge_tilte: "Tilt"
         gauge_type: 1; gauge_offset: 0 ; axis_direcion: 1
-        gauge_width: root.gauge_width; gauge_height:root.gauge_height
+
+        anchors.left: parent.left; anchors.leftMargin: 0
+        anchors.verticalCenter: parent.verticalCenter
+
         gauge_back  : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.3_back_tilt.png"
         gauge_needle: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.3_needle_tilt.png"
         gauge_handle_normal:  "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_normal_green_handle.png"
         gauge_handle_pressed:  "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_pressed_green_handle.png"
+
         onEntered: dialog_log("Tilt axis of the system")
         onGauge_up_limit_set_angleChanged: _mavlink_manager.tilt_up_limit_angle = gauge_up_limit_set_angle;
         onGauge_down_limit_set_angleChanged:  _mavlink_manager.tilt_down_limit_angle = gauge_down_limit_set_angle;
@@ -33,16 +39,17 @@ Item {
     }
     GGauge{
         id: panGauge
-//        width: 220; height: 220
-        anchors.verticalCenter: parent.verticalCenter
         gauge_tilte: "Pan"
         gauge_type: 2; gauge_offset: 90
-        gauge_width: root.gauge_width; gauge_height:root.gauge_height
+
+        anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
+
         gauge_back  : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.3_back_pan.png"
         gauge_needle: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.3_needle_pan.png"
         gauge_handle_normal: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_normal_blue_handle.png"
         gauge_handle_pressed: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_pressed_blue_handle.png"
+
         onEntered: dialog_log("Pan axis of the system")
         onGauge_down_limit_set_angleChanged: _mavlink_manager.pan_cw_limit_angle = gauge_down_limit_set_angle
         onGauge_up_limit_set_angleChanged:   _mavlink_manager.pan_ccw_limit_angle = gauge_up_limit_set_angle
@@ -50,19 +57,17 @@ Item {
     }
     GGauge{
         id: rollGauge
-//        width: 220; height: 220
-        gauge_width: root.gauge_width; gauge_height:root.gauge_height
-
-        gauge_center_x: 0
-        anchors.right: parent.right
-        anchors.rightMargin: 0
-        anchors.verticalCenter: parent.verticalCenter
         gauge_tilte: "Roll"
         gauge_type: 3; gauge_offset: 0
+
+        anchors.right: parent.right;     anchors.rightMargin: 0
+        anchors.verticalCenter: parent.verticalCenter
+
         gauge_back  : "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.3_back_roll.png"
         gauge_needle: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.3_needle_roll.png"
         gauge_handle_normal: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_normal_cyan_handle.png"
         gauge_handle_pressed: "qrc:/images/qml/gStabiSC/images/gauges/gStabiUI_3.2_pressed_cyan_handle.png"
+
         onEntered: dialog_log("Roll axis of the system")
         onGauge_down_limit_set_angleChanged: _mavlink_manager.roll_down_limit_angle = gauge_down_limit_set_angle
         onGauge_up_limit_set_angleChanged:   _mavlink_manager.roll_up_limit_angle = gauge_up_limit_set_angle

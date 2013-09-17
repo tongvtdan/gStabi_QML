@@ -171,8 +171,8 @@ GFrame {
         rc_setting_state = "other"
         // temporary comment for testing function
 
-        if(_serialLink.isConnected)
-        {
+//        if(_serialLink.isConnected)
+//        {
             _mavlink_manager.control_type = control_type_selected;
 //            _mavlink_manager.write_params_to_board();
 
@@ -193,11 +193,11 @@ GFrame {
             default:
                 break;
             }
-        }
-        else{
-            popup_msg = "Controller board is not connected. Please connect the board to your PC through USB cable then try again"
-            popup_show = true;
-        }
+//        }
+//        else{
+//            popup_msg = "Controller board is not connected. Please connect the board to your PC through USB cable then try again"
+//            popup_show = true;
+//        }
     }
     Connections{
         target: _mavlink_manager

@@ -11,10 +11,6 @@ import Charts 1.0
 Item{
     id: gaugeContainer
 //[!] Variables can be change in using code
-//    property string dialog_log_message           : "Gauge Log"
-    property int    gauge_width                 : 220
-    property int    gauge_height                : 220
-//    property bool   gauge_config_mode           : false
     property double gauge_sensor_value          : 0
     property int    gauge_type                  : 1      // 1: Tilt, 2: pan; 3: roll
     property string gauge_tilte                 : "Tilt"
@@ -34,10 +30,6 @@ Item{
 //        property string down_limit_handle_pressed   : "../images/gauges/gStabiUI_3.2_pressed_red_handle.png"
     //[!]
 // [!]
-    property double gauge_center_x  : gauge_width/2
-    property double gauge_center_y  : gauge_height/2
-    property double gauge_radius    : gauge_width - gauge_center_x
-    property int    angle_precision : 1        // number after dot
 
     property double     gauge_setpoint_angle                : 0         // to control the gauge angle of camera
     property double     gauge_down_limit_set_angle          : 15
@@ -51,7 +43,7 @@ Item{
     property bool  select_handle2: false
     property bool  select_handle1: false
 
-    property bool out_of_range: false
+    property bool   out_of_range: false
     property double   scale_ratio: 0.8          // use to scale element inside the gauge
     property string  up_limit_pie_color     : "blue"
     property string  down_limit_pie_color   : "cyan"
@@ -85,11 +77,8 @@ Item{
         id: outOfRangeLabel
         width: 20; height: 13
         color: "#ff0000"
-
-//        font.pixelSize: 20 ; font.family:"Segoe UI" ; font.bold: true
         anchors.centerIn: parent
         verticalAlignment: Text.AlignVCenter ; horizontalAlignment: Text.AlignHCenter
-//        style: Text.Normal
         text: "Out of range"
         anchors.verticalCenterOffset: -50
         visible: out_of_range
@@ -100,10 +89,8 @@ Item{
         id: gaugeAngleValueText
         width: 20; height: 13
         color: "#00ffff"
-//        font.pixelSize: 20 ; font.family:"Segoe UI" ; font.bold: true
         anchors.centerIn: parent
         verticalAlignment: Text.AlignVCenter ; horizontalAlignment: Text.AlignHCenter
-//        style: Text.Normal
         text: gaugeNeedleImage.rotation.toFixed(angle_precision)
     }
     // display different value from setpoint
@@ -159,7 +146,7 @@ Item{
         anchors.fill: parent
         rotation: {
             if(!out_of_range){
-                return gauge_config_mode ? gauge_up_limit_set_angle : gauge_setpoint_angle - gauge_offset
+                return gauge_config_mode ? (gauge_up_limit_set_angle - gauge_offset) : (gauge_setpoint_angle - gauge_offset)
             }
         }
         Image {
@@ -218,7 +205,9 @@ Item{
     Item{
         id: gaugeDownLimitSetItem
         anchors.fill: parent
-        rotation: {if(!out_of_range) return (gauge_down_limit_set_angle - gauge_offset)}
+        rotation: {
+            if(!out_of_range) return (gauge_down_limit_set_angle - gauge_offset)
+        }
         Image {
             id: gaugeDownRangeHandleSelectedImage
             asynchronous: true
@@ -419,8 +408,7 @@ Item{
             if(gauge_set_enabled)
             {
                 return gauge_up_limit_set_angle;
-            } else
-            if(gauge_down_limit_set_enabled)      // down limit setting
+            } else if(gauge_down_limit_set_enabled)      // down limit setting
             {
                 return gauge_down_limit_set_angle;
             } else {

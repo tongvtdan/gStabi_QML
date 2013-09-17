@@ -287,4 +287,16 @@ Item{
         calib6Faces.checked_state = !calib_normal_mode
     }
 
+    Connections{
+        target: _mavlink_manager
+
+        onGyro_x_offsetChanged  : xAxisOffsetValueLabel.text_value = _mavlink_manager.gyro_x_offset
+        onGyro_y_offsetChanged  : yAxisOffsetValueLabel.text_value = _mavlink_manager.gyro_y_offset
+        onGyro_z_offsetChanged  : zAxisOffsetValueLabel.text_value = _mavlink_manager.gyro_z_offset
+        onAcc_x_offsetChanged   : accelXAxisOffsetValueLabel.text_value = _mavlink_manager.acc_x_offset
+        onAcc_y_offsetChanged   : accelYAxisOffsetValueLabel.text_value = _mavlink_manager.acc_y_offset
+        onAcc_z_offsetChanged   : accelZAxisOffsetValueLabel.text_value = _mavlink_manager.acc_z_offset
+    }
+
+
 }
