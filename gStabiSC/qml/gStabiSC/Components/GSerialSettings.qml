@@ -36,12 +36,10 @@ GFrame{
             }
             _serialLink.open_close_comport();
             if(_serialLink.isConnected) {
-                popup_msg = "Port " + selected_portname + " is Opened \n Connecting to gStabi Controller ..."
-                popup_show = true
+                show_popup_message("Port " + selected_portname + " is Opened \n Connecting to gStabi Controller ...")
             }
             else {
-                popup_msg = "Port " + selected_portname + " is Closed."
-                popup_show = true
+                show_popup_message("Port " + selected_portname + " is Closed.")
             }
         }
     }
@@ -106,8 +104,7 @@ GFrame{
                 openCloseComportButton.imagePressed = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_ports_disconnect.png"
                 openCloseComportButton.imageHover   = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_ports_disconnect.png"
                 connectedImage.visible = false
-                popup_msg = "gStabi controller is disconnected."
-                popup_show = true;
+                show_popup_message("gStabi controller is disconnected.")
             }
         }
         onHb_pulseChanged: {

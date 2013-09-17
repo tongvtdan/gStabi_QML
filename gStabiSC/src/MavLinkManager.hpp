@@ -49,6 +49,12 @@ class MavLinkManager : public QObject
     Q_PROPERTY(int control_type READ control_type WRITE setcontrol_type NOTIFY control_typeChanged)
     Q_PROPERTY(float battery_voltage READ battery_voltage WRITE setbattery_voltage NOTIFY battery_voltageChanged)
 
+    // for RC Mode Channel or RC Modw PWM
+    Q_PROPERTY(int  mode_sbus_chan_num  READ mode_sbus_chan_num WRITE setmode_sbus_chan_num NOTIFY mode_sbus_chan_numChanged)
+    Q_PROPERTY(int  mode_rc_sbus_level READ mode_rc_sbus_level WRITE setmode_rc_sbus_level NOTIFY mode_rc_sbus_levelChanged)
+    Q_PROPERTY(int  mode_pwm_level READ mode_pwm_level WRITE setmode_pwm_level NOTIFY mode_pwm_levelChanged)
+
+
     // Parameters data
     //Pitch axis, Tilt Motor
         // use in QML, PIDConfigDialog
@@ -67,6 +73,7 @@ class MavLinkManager : public QObject
     Q_PROPERTY(int  tilt_lpf     READ tilt_lpf    WRITE settilt_lpf    NOTIFY tilt_lpfChanged)
     Q_PROPERTY(int  tilt_trim    READ tilt_trim   WRITE settilt_trim   NOTIFY tilt_trimChanged)
     Q_PROPERTY(int  tilt_mode    READ tilt_mode   WRITE settilt_mode   NOTIFY tilt_modeChanged)
+    // RC Settings
     Q_PROPERTY(int  tilt_sbus_chan_num  READ tilt_sbus_chan_num WRITE settilt_sbus_chan_num NOTIFY tilt_sbus_chan_numChanged)
     Q_PROPERTY(int  tilt_rc_sbus_level READ tilt_rc_sbus_level WRITE settilt_rc_sbus_level NOTIFY tilt_rc_sbus_levelChanged)
     Q_PROPERTY(int  tilt_pwm_level READ tilt_pwm_level WRITE settilt_pwm_level NOTIFY tilt_pwm_levelChanged)
@@ -90,26 +97,35 @@ class MavLinkManager : public QObject
     Q_PROPERTY(int  pan_lpf     READ pan_lpf    WRITE setpan_lpf    NOTIFY pan_lpfChanged)
     Q_PROPERTY(int  pan_trim    READ pan_trim   WRITE setpan_trim   NOTIFY pan_trimChanged)
     Q_PROPERTY(int  pan_mode    READ pan_mode   WRITE setpan_mode   NOTIFY pan_modeChanged)
-//    Q_PROPERTY(int  pan_sbus_chan  READ pan_sbus_chan WRITE setpan_sbus_chan NOTIFY pan_sbus_chanChanged)
+    // RC Settings
+    Q_PROPERTY(int  pan_sbus_chan_num  READ pan_sbus_chan_num WRITE setpan_sbus_chan_num NOTIFY pan_sbus_chan_numChanged)
+    Q_PROPERTY(int  pan_rc_sbus_level READ pan_rc_sbus_level WRITE setpan_rc_sbus_level NOTIFY pan_rc_sbus_levelChanged)
+    Q_PROPERTY(int  pan_pwm_level READ pan_pwm_level WRITE setpan_pwm_level NOTIFY pan_pwm_levelChanged)
+
+
 
     //Roll axis, Roll Motor
-        // use in QML, PIDConfigDialog
+    // use in QML, PIDConfigDialog
     Q_PROPERTY(float roll_kp        READ roll_kp     WRITE setroll_kp     NOTIFY roll_kpChanged)
     Q_PROPERTY(float roll_ki        READ roll_ki     WRITE setroll_ki     NOTIFY roll_kiChanged)
     Q_PROPERTY(float roll_kd        READ roll_kd     WRITE setroll_kd     NOTIFY roll_kdChanged)
     Q_PROPERTY(float roll_follow    READ roll_follow WRITE setroll_follow NOTIFY roll_followChanged)
     Q_PROPERTY(float roll_filter    READ roll_filter WRITE setroll_filter NOTIFY roll_filterChanged)
-        // use in QML, MotorConfigDialog
+    // use in QML, MotorConfigDialog
     Q_PROPERTY(float roll_power         READ roll_power             WRITE setroll_power             NOTIFY roll_powerChanged)
     Q_PROPERTY(int motor_roll_dir       READ motor_roll_dir         WRITE setmotor_roll_dir         NOTIFY motor_roll_dirChanged)
     Q_PROPERTY(int motor_roll_num_poles READ motor_roll_num_poles   WRITE setmotor_roll_num_poles   NOTIFY motor_roll_num_polesChanged)
     Q_PROPERTY(int roll_up_limit_angle  READ roll_up_limit_angle    WRITE setroll_up_limit_angle    NOTIFY roll_up_limit_angleChanged)
     Q_PROPERTY(int roll_down_limit_angle READ roll_down_limit_angle WRITE setroll_down_limit_angle  NOTIFY roll_down_limit_angleChanged)
-        // use in QML, others dialog
+    // use in QML, others dialog
     Q_PROPERTY(int  roll_lpf     READ roll_lpf    WRITE setroll_lpf    NOTIFY roll_lpfChanged)
     Q_PROPERTY(int  roll_trim    READ roll_trim   WRITE setroll_trim   NOTIFY roll_trimChanged)
     Q_PROPERTY(int  roll_mode    READ roll_mode   WRITE setroll_mode   NOTIFY roll_modeChanged)
-//    Q_PROPERTY(int  roll_sbus_chan  READ roll_sbus_chan WRITE setroll_sbus_chan NOTIFY roll_sbus_chanChanged)
+    // RC Settings
+    Q_PROPERTY(int  roll_sbus_chan_num  READ roll_sbus_chan_num WRITE setroll_sbus_chan_num NOTIFY roll_sbus_chan_numChanged)
+    Q_PROPERTY(int  roll_rc_sbus_level READ roll_rc_sbus_level WRITE setroll_rc_sbus_level NOTIFY roll_rc_sbus_levelChanged)
+    Q_PROPERTY(int  roll_pwm_level READ roll_pwm_level WRITE setroll_pwm_level NOTIFY roll_pwm_levelChanged)
+
 
 
 
@@ -142,7 +158,45 @@ public:
 
     float battery_voltage() const;
     void setbattery_voltage(float _vol);
+// *********** RC Settings
+// RC Mode
+    int mode_sbus_chan_num() const;
+    void setmode_sbus_chan_num(int _chan_num);
 
+    int mode_rc_sbus_level() const;
+    void setmode_rc_sbus_level(int _rc_level);
+
+    int mode_pwm_level() const;
+    void setmode_pwm_level(int _pwm_level);
+    // RC Tilt
+    int tilt_sbus_chan_num() const;
+    void settilt_sbus_chan_num(int _chan_num);
+
+    int tilt_rc_sbus_level() const;
+    void settilt_rc_sbus_level(int _rc_level);
+
+    int tilt_pwm_level() const;
+    void settilt_pwm_level(int _pwm_level);
+    // RC Pan
+    int pan_sbus_chan_num() const;
+    void setpan_sbus_chan_num(int _chan_num);
+
+    int pan_rc_sbus_level() const;
+    void setpan_rc_sbus_level(int _rc_level);
+
+    int pan_pwm_level() const;
+    void setpan_pwm_level(int _pwm_level);
+    // RC Roll
+    int roll_sbus_chan_num() const;
+    void setroll_sbus_chan_num(int _chan_num);
+
+    int roll_rc_sbus_level() const;
+    void setroll_rc_sbus_level(int _rc_level);
+
+    int roll_pwm_level() const;
+    void setroll_pwm_level(int _pwm_level);
+
+// *********** RC Settings End
 
     // Parameters on board
     //[1] Tilt Motor
@@ -184,15 +238,6 @@ public:
 
     int tilt_mode() const;
     void settilt_mode(int _mode);
-
-    int tilt_sbus_chan_num() const;
-    void settilt_sbus_chan_num(int _chan_num);
-
-    int tilt_rc_sbus_level() const;
-    void settilt_rc_sbus_level(int _rc_level);
-
-    int tilt_pwm_level() const;
-    void settilt_pwm_level(int _pwm_level);
 
 
 
@@ -308,6 +353,26 @@ signals:
 // General
     void control_typeChanged(int);
     void battery_voltageChanged(float);
+    // RC Settings
+    // RC Mode
+    void mode_sbus_chan_numChanged(int);
+    void mode_rc_sbus_levelChanged(int);
+    void mode_pwm_levelChanged(int);
+    // RC Tilt
+    void tilt_sbus_chan_numChanged(int);
+    void tilt_rc_sbus_levelChanged(int);
+    void tilt_pwm_levelChanged(int);
+    // RC Pan
+    void pan_sbus_chan_numChanged(int);
+    void pan_rc_sbus_levelChanged(int);
+    void pan_pwm_levelChanged(int);
+    // RC Roll
+    void roll_sbus_chan_numChanged(int);
+    void roll_rc_sbus_levelChanged(int);
+    void roll_pwm_levelChanged(int);
+
+
+
     // Parameters on board;
 //    [1] Tilt Motor
     void tilt_kpChanged(float);
@@ -323,9 +388,6 @@ signals:
     void tilt_lpfChanged(int);
     void tilt_trimChanged(int);
     void tilt_modeChanged(int);
-    void tilt_sbus_chan_numChanged(int);
-    void tilt_rc_sbus_levelChanged(int);
-    void tilt_pwm_levelChanged(int);
 
 //    [1]
 //    [2] pan Motor
@@ -417,11 +479,24 @@ private:
     // General
     int m_control_type;
     float m_battery_voltage;
+
+    // [!]RC Settings
+    //    Mode
+    int m_mode_sbus_chan_num, m_mode_rc_sbus_level, m_mode_pwm_level;
+    //    Tilt
+    int m_tilt_sbus_chan_num, m_tilt_rc_sbus_level, m_tilt_pwm_level;
+    //    Pan
+    int m_pan_sbus_chan_num, m_pan_rc_sbus_level, m_pan_pwm_level;
+    //    Roll
+    int m_roll_sbus_chan_num, m_roll_rc_sbus_level, m_roll_pwm_level;
+//    [!]
+
     // Parameters on board
 //    [1] Tilt Motor
     float m_tilt_kp, m_tilt_ki, m_tilt_kd, m_tilt_power, m_tilt_follow, m_tilt_filter;
     int m_motor_tilt_dir, m_tilt_up_limit_angle, m_tilt_down_limit_angle, m_motor_tilt_num_poles;
-    int m_tilt_lpf, m_tilt_trim, m_tilt_mode, m_tilt_sbus_chan_num, m_tilt_rc_sbus_level, m_tilt_pwm_level;
+    int m_tilt_lpf, m_tilt_trim, m_tilt_mode ;
+
 //    [2] Pan Motor
     float m_pan_kp, m_pan_ki, m_pan_kd, m_pan_power, m_pan_follow, m_pan_filter;
     int m_motor_pan_dir, m_pan_cw_limit_angle, m_pan_ccw_limit_angle, m_motor_pan_num_poles, m_pan_lpf, m_pan_trim, m_pan_mode;

@@ -61,10 +61,10 @@ Rectangle {
                 onClicked: {
                     if(_serialLink.isConnected) {
                         _mavlink_manager.write_params_to_board();
+                        show_popup_message("Sent parameters to gStabi Controller...Done")
                     }
                     else{
-                        popup_msg = ("Controller board is not connected. Please connect the board to your PC through USB cable then try again")
-                        popup_show = true;
+                       show_popup_message("gStabi controller is not connected. Please check the connection then try again")
                     }
                 }
                 onEntered: dialog_log("Write parameters to controller board")
@@ -74,10 +74,12 @@ Rectangle {
                 width: 100; height: 30
                 text: "Read"
                 onClicked: {
-                    if(_serialLink.isConnected){ _mavlink_manager.request_all_params(); }
+                    if(_serialLink.isConnected){
+                        _mavlink_manager.request_all_params();
+                        show_popup_message("Read parameters from gStabi Controller... Done")
+                    }
                     else {
-                        popup_msg = "Controller board is not connected. Please connect the board to your PC through USB cable then try again"
-                        popup_show = true;
+                        show_popup_message("Controller board is not connected. Please connect the board to your PC through USB cable then try again")
                     }
                 }
                 onEntered: dialog_log("Read parameters from controller board")
@@ -149,11 +151,10 @@ Rectangle {
         dialog_log("Before you can start to control or config your system, please connect your system to PC then open the serial port to establish the communication with controller board on gStabi Systtem \n")
         dialog_log("Welcome to gStabi Station Controller \n")
         dialog_log("************************************\n")
-        popup_msg = "Welcome to gStabi Station Controller \n
+        show_popup_message("Welcome to gStabi Station Controller \n
 1. Power on gStabi system \n
 2. Open Serial port\n
-3. Application is ready to Monitor or Setup gStabi Controller"
-        popup_show = true
+3. Application is ready to Monitor or Setup gStabi Controller")
 
 
     }
@@ -177,7 +178,6 @@ Rectangle {
         } else {        // else do create
             Storage.saveSetting("Profile", profile_name)
         }
-
     }
     /* function dialog_log(_message)
        @brief: put message to log
@@ -187,5 +187,9 @@ Rectangle {
     function dialog_log(_message){
 //        main_log_msg = "<font color=\"white\">" + _message+ "</font><br>" + main_log_msg;
         main_log_msg ="- "+_message + "\n" + main_log_msg;
+    }
+    function show_popup_message(_message){
+        popup_msg = _message;
+        popup_show = true;
     }
 }

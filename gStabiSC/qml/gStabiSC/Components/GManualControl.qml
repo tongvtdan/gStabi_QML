@@ -4,8 +4,9 @@ GFrame {
     id: manualControlSettingsContainer
 
     property int    control_type_selected   : 0
-    property int    rc_mode_channel_num        : 1
+    property int    rc_mode_channel_num     : 1
     property int    rc_mode_level           : 0
+    property int    rc_mode_pwm_level       : 0
     property string rc_setting_state        : "pwm"
 
     border_normal: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_normal_manual_control_frame.png"
@@ -156,7 +157,11 @@ GFrame {
         if(rc_mode_level > 500) rc_mode_level =500;
         if(rc_mode_level < -500) rc_mode_level = -500;
         rcValueChannelIndicator.value = rc_mode_level + 500;
-
+    }
+    onRc_mode_pwm_levelChanged: {
+        if(rc_mode_pwm_level > 500) rc_mode_pwm_level =500;
+        if(rc_mode_pwm_level < -500) rc_mode_pwm_level = -500;
+        rcValueChannelIndicator.value = rc_mode_pwm_level + 500;
     }
 
     onControl_type_selectedChanged:{
@@ -166,9 +171,9 @@ GFrame {
         rc_setting_state = "other"
         // temporary comment for testing function
 
-//        if(_serialLink.isConnected)
-//        {
-//            _mavlink_manager.control_type = control_type_selected;
+        if(_serialLink.isConnected)
+        {
+            _mavlink_manager.control_type = control_type_selected;
 //            _mavlink_manager.write_params_to_board();
 
             switch(control_type_selected){
@@ -188,11 +193,11 @@ GFrame {
             default:
                 break;
             }
-//        }
-//        else{
-//            popup_msg = "Controller board is not connected. Please connect the board to your PC through USB cable then try again"
-//            popup_show = true;
-//        }
+        }
+        else{
+            popup_msg = "Controller board is not connected. Please connect the board to your PC through USB cable then try again"
+            popup_show = true;
+        }
     }
     Connections{
         target: _mavlink_manager
@@ -201,23 +206,27 @@ GFrame {
             controlTypeList.current_index = _mavlink_manager.control_type
         }
 
+        onTilt_lpfChanged           : tiltRC.lpf_value        = _mavlink_manager.tilt_lpf;
+        onTilt_trimChanged          : tiltRC.trim_value       = _mavlink_manager.tilt_trim;
+        onTilt_sbus_chan_numChanged : tiltRC.rc_channel_num   = _mavlink_manager.tilt_sbus_chan_num;
+        onTilt_rc_sbus_levelChanged : tiltRC.rc_value         = _mavlink_manager.tilt_rc_sbus_level;
+        onTilt_pwm_levelChanged     : tiltRC.rc_pwm_level     = _mavlink_manager.tilt_pwm_level;
 
-        onTilt_lpfChanged             : tiltRC.lpf_value   = _mavlink_manager.tilt_lpf;
-        onTilt_trimChanged            : tiltRC.trim_value  = _mavlink_manager.tilt_trim;
-        onTilt_sbus_chan_numChanged    : tiltRC.rc_channel_num = _mavlink_manager.tilt_sbus_chan_num;
-        onTilt_rc_sbus_levelChanged    : tiltRC.rc_value = _mavlink_manager.tilt_rc_sbus_level;
-        onTilt_pwm_levelChanged        : tiltRC.rc_pwm_level = _mavlink_manager.tilt_pwm_level;
+        onPan_lpfChanged            : panRC.lpf_value      = _mavlink_manager.pan_lpf;
+        onPan_trimChanged           : panRC.trim_value     = _mavlink_manager.pan_trim;
+        onPan_sbus_chan_numChanged  : panRC.rc_channel_num = _mavlink_manager.pan_sbus_chan_num;
+        onPan_rc_sbus_levelChanged  : panRC.rc_value       = _mavlink_manager.pan_rc_sbus_level;
+        onPan_pwm_levelChanged      : panRC.rc_pwm_level   = _mavlink_manager.pan_pwm_level;
 
+        onRoll_lpfChanged           : rollRC.lpf_value        = _mavlink_manager.roll_lpf;
+        onRoll_trimChanged          : rollRC.trim_value       = _mavlink_manager.roll_trim;
+        onRoll_sbus_chan_numChanged : rollRC.rc_channel_num   = _mavlink_manager.roll_sbus_chan_num;
+        onRoll_rc_sbus_levelChanged : rollRC.rc_value         = _mavlink_manager.roll_rc_sbus_level;
+        onRoll_pwm_levelChanged     : rollRC.rc_pwm_level     = _mavlink_manager.roll_pwm_level;
 
-
-        onPan_lpfChanged             : panRC.lpf_value   = _mavlink_manager.pan_lpf;
-        onPan_trimChanged            : panRC.trim_value  = _mavlink_manager.pan_trim;
-
-        onRoll_lpfChanged             : rollRC.lpf_value   = _mavlink_manager.roll_lpf;
-        onRoll_trimChanged            : rollRC.trim_value  = _mavlink_manager.roll_trim;
-
-
-
+        onMode_sbus_chan_numChanged : rc_mode_channel_num     = _mavlink_manager.mode_sbus_chan_num;
+        onMode_rc_sbus_levelChanged : rc_mode_level           = _mavlink_manager.mode_rc_sbus_level;
+        onMode_pwm_levelChanged     : rc_mode_pwm_level       = _mavlink_manager.mode_pwm_level;
     }
 
 }

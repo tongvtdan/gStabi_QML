@@ -180,8 +180,8 @@ Rectangle {
         rcValueChannelIndicator.value = rc_value + 500;
     }
     onRc_pwm_levelChanged: {
-        if(rc_value > 500) rc_value =500;
-        if(rc_value < -500) rc_value = -500;
+        if(rc_pwm_level > 500) rc_pwm_level =500;
+        if(rc_pwm_level < -500) rc_pwm_level = -500;
         rcValueChannelIndicator.value = rc_pwm_level + 500;
     }
 }

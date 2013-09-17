@@ -117,6 +117,7 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
                 pwm_values.roll = mavlink_msg_ppm_chan_values_get_roll(&message);
                 pwm_values.pan  = mavlink_msg_ppm_chan_values_get_pan(&message);
                 pwm_values.mode = mavlink_msg_ppm_chan_values_get_mode(&message);
+
                 update_pwm_values();
             }
                 break;
@@ -168,12 +169,12 @@ void MavLinkManager::update_all_parameters(uint8_t index, float value)
         break;
     case PARAM_SERIAL_NUMBER:   current_params_on_board.serialNumber = value;
         break;
-    case PARAM_PITCH_P:         { current_params_on_board.pitchKp = value;
+//   <<< Controller Settings
+    case PARAM_PITCH_P:          current_params_on_board.pitchKp = value;
         settilt_kp(current_params_on_board.pitchKp);
-    }
         break;
-    case PARAM_PITCH_I: {        current_params_on_board.pitchKi = value;
-            settilt_ki(current_params_on_board.pitchKi); }
+    case PARAM_PITCH_I:        current_params_on_board.pitchKi = value;
+        settilt_ki(current_params_on_board.pitchKi);
         break;
     case PARAM_PITCH_D:         current_params_on_board.pitchKd = value;
         settilt_kd(current_params_on_board.pitchKd);
@@ -196,15 +197,6 @@ void MavLinkManager::update_all_parameters(uint8_t index, float value)
     case PARAM_YAW_D:           current_params_on_board.yawKd = value;
         setpan_kd(current_params_on_board.yawKd);
         break;
-    case PARAM_PITCH_POWER:     current_params_on_board.pitchPower = value;
-        settilt_power(current_params_on_board.pitchPower);
-        break;
-    case PARAM_ROLL_POWER:      current_params_on_board.rollPower = value;
-        setroll_power(current_params_on_board.rollPower);
-        break;
-    case PARAM_YAW_POWER:       current_params_on_board.yawPower = value;
-        setpan_power(current_params_on_board.yawPower);
-        break;
     case PARAM_PITCH_FOLLOW:    current_params_on_board.pitchFollow = value;
         settilt_follow(current_params_on_board.pitchFollow);
         break;
@@ -219,13 +211,23 @@ void MavLinkManager::update_all_parameters(uint8_t index, float value)
         break;
     case PARAM_ROLL_FILTER:     current_params_on_board.rollFilter = value;
         setroll_filter(current_params_on_board.rollFilter);
-
         break;
     case PARAM_YAW_FILTER:      current_params_on_board.panFilter = value;
         setpan_filter(current_params_on_board.panFilter);
         break;
-    case PARAM_GYRO_TRUST:      current_params_on_board.gyroTrust = value;
+//   >>>  Controller Settings End
+//   <<<  Motor Settings
+    case PARAM_MOTOR_FREQ:      current_params_on_board.motorFreq = value;
+        break;
 
+    case PARAM_PITCH_POWER:     current_params_on_board.pitchPower = value;
+        settilt_power(current_params_on_board.pitchPower);
+        break;
+    case PARAM_ROLL_POWER:      current_params_on_board.rollPower = value;
+        setroll_power(current_params_on_board.rollPower);
+        break;
+    case PARAM_YAW_POWER:       current_params_on_board.yawPower = value;
+        setpan_power(current_params_on_board.yawPower);
         break;
     case PARAM_NPOLES_PITCH:    current_params_on_board.nPolesPitch = value;
         setmotor_tilt_num_poles(current_params_on_board.nPolesPitch);
@@ -245,14 +247,6 @@ void MavLinkManager::update_all_parameters(uint8_t index, float value)
     case PARAM_DIR_MOTOR_YAW:   current_params_on_board.dirMotorYaw = value;
          setmotor_pan_dir(current_params_on_board.dirMotorYaw);
         break;
-    case PARAM_MOTOR_FREQ:      current_params_on_board.motorFreq = value;
-        break;
-    case PARAM_RADIO_TYPE:      { current_params_on_board.radioType = value;
-         setcontrol_type(current_params_on_board.radioType);
-    }
-        break;
-    case PARAM_GYRO_LPF:        current_params_on_board.gyroLPF = value;
-        break;
     case PARAM_TRAVEL_MIN_PITCH:current_params_on_board.travelMinPitch = value;
         settilt_up_limit_angle(current_params_on_board.travelMinPitch);
         break;
@@ -271,6 +265,18 @@ void MavLinkManager::update_all_parameters(uint8_t index, float value)
     case PARAM_TRAVEL_MAX_YAW:  current_params_on_board.travelMaxYaw = value;
         setpan_cw_limit_angle(current_params_on_board.travelMaxYaw);
         break;
+    case PARAM_RC_PITCH_MODE:   current_params_on_board.rcPitchMode = value;
+        settilt_mode(current_params_on_board.rcPitchMode);
+        break;
+    case PARAM_RC_ROLL_MODE:    current_params_on_board.rcRollMode = value;
+        setroll_mode(current_params_on_board.rcRollMode);
+        break;
+    case PARAM_RC_YAW_MODE:     current_params_on_board.rcYawMode = value;
+         setpan_mode(current_params_on_board.rcYawMode);
+        break;
+//   >>> Motor Settings End
+
+//   <<< RC Settings
     case PARAM_RC_PITCH_LPF:    current_params_on_board.rcPitchLPF = value;
         settilt_lpf(current_params_on_board.rcPitchLPF);
         break;
@@ -280,15 +286,30 @@ void MavLinkManager::update_all_parameters(uint8_t index, float value)
     case PARAM_RC_YAW_LPF:      current_params_on_board.rcYawLPF = value;
         setpan_lpf(current_params_on_board.rcYawLPF);
         break;
+    case PARAM_RC_PITCH_TRIM:   current_params_on_board.rcPitchTrim = value;
+        settilt_trim(current_params_on_board.rcPitchTrim);
+        break;
+    case PARAM_RC_ROLL_TRIM:    current_params_on_board.rcRollTrim = value;
+        setroll_trim(current_params_on_board.rcRollTrim = value);
+        break;
+    case PARAM_RC_YAW_TRIM:     current_params_on_board.rcYawTrim = value;
+        setpan_trim(current_params_on_board.rcYawTrim);
+        break;
+    // **** SBUS Channel
     case PARAM_SBUS_PITCH_CHAN: current_params_on_board.sbusPitchChan = value;
         settilt_sbus_chan_num(current_params_on_board.sbusPitchChan + 1); // +1 for display, value of chan: 0 for chan1, 1 for  chan2,...
         break;
     case PARAM_SBUS_ROLL_CHAN:  current_params_on_board.sbusRollChan = value;
+        setroll_sbus_chan_num(current_params_on_board.sbusRollChan + 1); // +1 for display, value of chan: 0 for chan1, 1 for  chan2,...
         break;
     case PARAM_SBUS_YAW_CHAN:   current_params_on_board.sbusYawChan = value;
+        setpan_sbus_chan_num(current_params_on_board.sbusYawChan + 1); // +1 for display, value of chan: 0 for chan1, 1 for  chan2,...
         break;
     case PARAM_SBUS_MODE_CHAN:  current_params_on_board.sbusModeChan = value;
+        setmode_sbus_chan_num(current_params_on_board.sbusModeChan + 1);
         break;
+//   >>> RC Settings End
+//   <<< IMU Settings
     case PARAM_ACCX_OFFSET:     current_params_on_board.accXOffset = value;
         break;
     case PARAM_ACCY_OFFSET:     current_params_on_board.accYOffset = value;
@@ -305,26 +326,18 @@ void MavLinkManager::update_all_parameters(uint8_t index, float value)
         break;
     case PARAM_SKIP_GYRO_CALIB: current_params_on_board.skipGyroCalib = value;
         break;
-    case PARAM_RC_PITCH_TRIM:   current_params_on_board.rcPitchTrim = value;
-        settilt_trim(current_params_on_board.rcPitchTrim);
+    case PARAM_GYRO_TRUST:      current_params_on_board.gyroTrust = value;
         break;
-    case PARAM_RC_ROLL_TRIM:    current_params_on_board.rcRollTrim = value;
-        setroll_trim(current_params_on_board.rcRollTrim = value);
+    case PARAM_GYRO_LPF:        current_params_on_board.gyroLPF = value;
         break;
-    case PARAM_RC_YAW_TRIM:     current_params_on_board.rcYawTrim = value;
-        setpan_trim(current_params_on_board.rcYawTrim);
+//  >>> IMU Settings End
+//  <<< Others
+    case PARAM_RADIO_TYPE:      { current_params_on_board.radioType = value;
+        setcontrol_type(current_params_on_board.radioType);
+    }
         break;
-    case PARAM_RC_PITCH_MODE:   current_params_on_board.rcPitchMode = value;
-        settilt_mode(current_params_on_board.rcPitchMode);
-        break;
-    case PARAM_RC_ROLL_MODE:    current_params_on_board.rcRollMode = value;
-        setroll_mode(current_params_on_board.rcRollMode);
-        break;
-    case PARAM_RC_YAW_MODE:     current_params_on_board.rcYawMode = value;
-         setpan_mode(current_params_on_board.rcYawMode);
+//  >>> Others end
 
-//        update_all_parameters_to_UI();
-        break;
     default:
         break;
     }
@@ -335,20 +348,28 @@ void MavLinkManager::update_rc_sbus_value()
 {
     int i;
     for(i = 0; i<18; i++){
-
+        if((mode_sbus_chan_num() - 1) == i){      // mode channel
+            setmode_rc_sbus_level(rc_sbus_level[i]);
+        }
         if((tilt_sbus_chan_num() - 1) == i){  // tilt channel
             settilt_rc_sbus_level(rc_sbus_level[i]);
-            qDebug()<< "C++ SBUS ID, value: " << rc_sbus_level[i];
-
-//            settilt_rc_sbus_level(40);    // simulate the value
         }
+        if((pan_sbus_chan_num() - 1) == i){  // pan channel
+            setpan_rc_sbus_level(rc_sbus_level[i]);
+        }
+        if((roll_sbus_chan_num() - 1) == i){  // roll channel
+            setroll_rc_sbus_level(rc_sbus_level[i]);
+        }
+
     }
 }
 
 void MavLinkManager::update_pwm_values()
 {
+    setmode_pwm_level(pwm_values.mode);
     settilt_pwm_level(pwm_values.tilt);
-//    settilt_pwm_level(30);
+    setpan_pwm_level(pwm_values.pan);
+    setroll_pwm_level(pwm_values.roll);
 }
 
 
@@ -397,13 +418,33 @@ void MavLinkManager::get_attitude_data()
 void MavLinkManager::write_params_to_board()
 {
     if(board_connection_state() == ONLINE){
-    setmavlink_message_log("Sending parameters to controller board...");
+    qDebug("Sending parameters to controller board...");
     // Motor config params
 // General
     if(control_type() != current_params_on_board.radioType){
         current_params_on_board.radioType = control_type();
         write_a_param_to_board("RADIO_TYPE", current_params_on_board.radioType);
     }
+//    [!] *** SBUS Channel ***
+    if(mode_sbus_chan_num() != current_params_on_board.sbusModeChan){
+        current_params_on_board.sbusModeChan = mode_sbus_chan_num() - 1;
+        write_a_param_to_board("SBUS_MODE_CHAN", current_params_on_board.sbusModeChan);
+    }
+    if(tilt_sbus_chan_num() != current_params_on_board.sbusPitchChan){
+        current_params_on_board.sbusPitchChan = tilt_sbus_chan_num() - 1;      // - 1 to get a real value for channel from display value in QML
+        write_a_param_to_board("SBUS_PITCH_CHAN", current_params_on_board.sbusPitchChan);
+    }
+    if(pan_sbus_chan_num() != current_params_on_board.sbusYawChan){
+        current_params_on_board.sbusYawChan = pan_sbus_chan_num() - 1;      // - 1 to get a real value for channel from display value in QML
+        write_a_param_to_board("SBUS_YAW_CHAN", current_params_on_board.sbusYawChan);
+    }
+    if(roll_sbus_chan_num() != current_params_on_board.sbusRollChan){
+        current_params_on_board.sbusRollChan = roll_sbus_chan_num() - 1;      // - 1 to get a real value for channel from display value in QML
+        write_a_param_to_board("SBUS_ROLL_CHAN", current_params_on_board.sbusRollChan);
+    }
+
+
+//    [!]
 //    [1] Tilt Motor
     if(tilt_power() != current_params_on_board.pitchPower){  // if power level changed, it will be store in params
         current_params_on_board.pitchPower = tilt_power();   // update current value to params struct
@@ -437,10 +478,6 @@ void MavLinkManager::write_params_to_board()
     if(tilt_mode() != current_params_on_board.rcPitchMode){
         current_params_on_board.rcPitchMode = tilt_mode();
         write_a_param_to_board("RC_PITCH_MODE", current_params_on_board.rcPitchMode);
-    }
-    if(tilt_sbus_chan_num() != current_params_on_board.sbusPitchChan){
-        current_params_on_board.sbusPitchChan = tilt_sbus_chan_num() - 1;      // - 1 to get a real value for channel from display value in QML
-        write_a_param_to_board("SBUS_PITCH_CHAN", current_params_on_board.sbusPitchChan);
     }
 //    [2] Pan Motor
     if(pan_power() != current_params_on_board.yawPower){  // if power level changed, it will be store in params
@@ -576,10 +613,10 @@ void MavLinkManager::write_params_to_board()
     }
     // other params
 
-    setmavlink_message_log("Sending parameters to controller board...Done!");
+    qDebug("C++>> Sending parameters to controller board...Done!");
     }
     else {
-        setmavlink_message_log("* Communication error, please check the connection then write parammeters again *");
+        qDebug("C++>> Communication error, please check the connection then write parammeters again *");
     }
 }
 
@@ -656,12 +693,11 @@ void MavLinkManager::request_all_params()
 {
     uint16_t len;
     mavlink_message_t msg;
-
     uint8_t buf[MAVLINK_MAX_PACKET_LEN];
     mavlink_msg_param_request_list_pack(SYSTEM_ID, MAV_COMP_ID_SERVO1, &msg, TARGET_SYSTEM_ID, MAV_COMP_ID_IMU);
     len = mavlink_msg_to_send_buffer(buf, &msg);
     emit messge_write_to_comport_ready((const char*)buf, len);
-    setmavlink_message_log("Requesting parameters on board...");
+    qDebug("C++>> Requesting parameters on board...");
 }
 
 
@@ -670,10 +706,6 @@ void MavLinkManager::send_control_command(int tilt_angle_setpoint, int pan_angle
     uint16_t len=0;
     mavlink_message_t msg;
     uint8_t buf[MAVLINK_MAX_PACKET_LEN];
-
-//    tilt_temp = ui->pitchSlider->value();  // degree then convert to angle speed
-//    roll_temp = ui->rollSlider->value();
-//    yaw_temp  = ui->yawknob->value();
 
     mavlink_msg_rc_simulation_pack(SYSTEM_ID, MAV_COMP_ID_SERVO1, &msg, tilt_angle_setpoint, roll_angle_setpoint, pan_angle_setpoint);
     len = mavlink_msg_to_send_buffer(buf, &msg);
@@ -769,6 +801,39 @@ void MavLinkManager::setbattery_voltage(float _vol)
 {
     m_battery_voltage = _vol;
     emit battery_voltageChanged(m_battery_voltage);
+}
+
+int MavLinkManager::mode_sbus_chan_num() const
+{
+    return m_mode_sbus_chan_num;
+}
+
+void MavLinkManager::setmode_sbus_chan_num(int _chan_num)
+{
+    m_mode_sbus_chan_num = _chan_num;
+    emit mode_sbus_chan_numChanged(m_mode_sbus_chan_num);
+}
+
+int MavLinkManager::mode_rc_sbus_level() const
+{
+    return m_mode_rc_sbus_level;
+}
+
+void MavLinkManager::setmode_rc_sbus_level(int _rc_level)
+{
+    m_mode_rc_sbus_level = _rc_level;
+    emit mode_rc_sbus_levelChanged(m_mode_rc_sbus_level);
+}
+
+int MavLinkManager::mode_pwm_level() const
+{
+    return m_mode_pwm_level;
+}
+
+void MavLinkManager::setmode_pwm_level(int _pwm_level)
+{
+    m_mode_pwm_level = _pwm_level;
+    emit mode_pwm_levelChanged(m_mode_pwm_level);
 }
 /**
  * @brief Tilt motor functions to control tilt parameters
@@ -947,6 +1012,72 @@ void MavLinkManager::settilt_pwm_level(int _pwm_level)
 {
     m_tilt_pwm_level = _pwm_level;
     emit tilt_pwm_levelChanged(m_tilt_pwm_level);
+}
+
+int MavLinkManager::pan_sbus_chan_num() const
+{
+    return m_pan_sbus_chan_num;
+}
+
+void MavLinkManager::setpan_sbus_chan_num(int _chan_num)
+{
+    m_pan_sbus_chan_num = _chan_num;
+    emit pan_sbus_chan_numChanged(m_pan_sbus_chan_num);
+}
+
+int MavLinkManager::pan_rc_sbus_level() const
+{
+    return m_pan_rc_sbus_level;
+}
+
+void MavLinkManager::setpan_rc_sbus_level(int _rc_level)
+{
+    m_pan_rc_sbus_level = _rc_level;
+    emit pan_rc_sbus_levelChanged(m_pan_rc_sbus_level);
+}
+
+int MavLinkManager::pan_pwm_level() const
+{
+    return m_pan_pwm_level;
+}
+
+void MavLinkManager::setpan_pwm_level(int _pwm_level)
+{
+    m_pan_pwm_level = _pwm_level;
+    emit pan_pwm_levelChanged(m_pan_pwm_level);
+}
+
+int MavLinkManager::roll_sbus_chan_num() const
+{
+    return m_roll_sbus_chan_num;
+}
+
+void MavLinkManager::setroll_sbus_chan_num(int _chan_num)
+{
+    m_roll_sbus_chan_num = _chan_num;
+    emit roll_sbus_chan_numChanged(m_roll_sbus_chan_num);
+}
+
+int MavLinkManager::roll_rc_sbus_level() const
+{
+    return m_roll_rc_sbus_level;
+}
+
+void MavLinkManager::setroll_rc_sbus_level(int _rc_level)
+{
+    m_roll_rc_sbus_level = _rc_level;
+    emit roll_rc_sbus_levelChanged(m_roll_rc_sbus_level);
+}
+
+int MavLinkManager::roll_pwm_level() const
+{
+    return m_roll_pwm_level;
+}
+
+void MavLinkManager::setroll_pwm_level(int _pwm_level)
+{
+    m_roll_pwm_level = _pwm_level;
+    emit roll_pwm_levelChanged(m_roll_pwm_level);
 }
 
 
