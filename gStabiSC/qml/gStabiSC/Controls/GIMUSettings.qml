@@ -10,6 +10,7 @@ Item{
     property bool use_gps_correction: false
 
 
+
     Row{
         id: motorsParamsRow
         anchors.horizontalCenter: parent.horizontalCenter
@@ -51,6 +52,7 @@ Item{
                         GTextInput{
                             id: xAxisOffsetValueLabel
                             read_only: true;
+//                            text_value: _mavlink_manager.gyro_x_offset
                         }
                     }
                     Column{
@@ -65,6 +67,7 @@ Item{
                         GTextInput{
                             id: yAxisOffsetValueLabel
                             read_only: true;
+//                            text_value: _mavlink_manager.gyro_y_offset
                         }
                     }
                     Column{
@@ -79,6 +82,7 @@ Item{
                         GTextInput{
                             id: zAxisOffsetValueLabel
                             read_only: true;
+//                            text_value: _mavlink_manager.gyro_z_offset
                         }
                     }
                 }
@@ -86,7 +90,7 @@ Item{
             Row{
                 id: gyroTrust
                 width: 300
-                anchors.top: gyroOffsetContainer.bottom; anchors.topMargin: 20
+                anchors.top: gyroOffsetContainer.bottom; anchors.topMargin: 15
                 anchors.left: parent.left ; anchors.leftMargin: 10
                 spacing: 5
                 GTextStyled{
@@ -117,7 +121,7 @@ Item{
             Row{
                 id: gyroLpf
                 width: 300
-                anchors.top: gyroTrust.bottom; anchors.topMargin: 20
+                anchors.top: gyroTrust.bottom; anchors.topMargin: 10
                 anchors.left: parent.left ; anchors.leftMargin: 10
                 spacing: 5
                 GTextStyled{
@@ -152,6 +156,10 @@ Item{
                 anchors.leftMargin: 10
                 anchors.top: gyroLpf.bottom
                 anchors.topMargin: 10
+//                state: "unchecked"
+                onChecked_stateChanged: {
+                    _mavlink_manager.skip_gyro_calib = checked_state
+                }
             }
             GButton{
                 id: calibGyroButton
@@ -277,7 +285,9 @@ Item{
                 anchors.left: parent.left;  anchors.leftMargin: 50
                 checked_state: use_gps_correction
                 onChecked_stateChanged: {
-                    use_gps_correction = checked_state
+//                    use_gps_correction = checked_state
+                    _mavlink_manager.use_gps = checked_state
+
                 }
             }
         }
@@ -296,6 +306,8 @@ Item{
         onAcc_x_offsetChanged   : accelXAxisOffsetValueLabel.text_value = _mavlink_manager.acc_x_offset
         onAcc_y_offsetChanged   : accelYAxisOffsetValueLabel.text_value = _mavlink_manager.acc_y_offset
         onAcc_z_offsetChanged   : accelZAxisOffsetValueLabel.text_value = _mavlink_manager.acc_z_offset
+        onSkip_gyro_calibChanged: calibOnStartUpChecked.checked_state   = _mavlink_manager.skip_gyro_calib;
+        onUse_gpsChanged        : gpsCorrectionChecked.checked_state    = _mavlink_manager.use_gps
     }
 
 

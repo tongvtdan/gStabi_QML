@@ -207,6 +207,7 @@ Item{
         anchors.fill: parent
         rotation: {
             if(!out_of_range) return (gauge_down_limit_set_angle - gauge_offset)
+
         }
         Image {
             id: gaugeDownRangeHandleSelectedImage

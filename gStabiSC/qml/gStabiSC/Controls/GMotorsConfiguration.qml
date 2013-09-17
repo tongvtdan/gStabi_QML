@@ -51,7 +51,7 @@ Item{
             pan_ccw_limit = min_value;
         }
         onPower_levelChanged:   _mavlink_manager.pan_power = power_level;
-        onPoles_numChanged:     {_mavlink_manager.motor_pan_num_poles = poles_num; }
+        onPoles_numChanged:     _mavlink_manager.motor_pan_num_poles = poles_num;
         onMotor_dirChanged:     _mavlink_manager.motor_pan_dir = motor_dir;
         onSpeed_modeChanged:    _mavlink_manager.pan_mode = speed_mode;
 

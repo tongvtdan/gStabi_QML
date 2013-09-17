@@ -2,7 +2,7 @@ import QtQuick 2.0
 
 Rectangle{
     id: container
-    property string text_value      : "10"
+    property int    text_value      : 0
     property int    bottom_value    : 0
     property int    top_value       : 100
     property bool   read_only       : false

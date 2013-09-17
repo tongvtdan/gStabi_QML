@@ -311,20 +311,29 @@ void MavLinkManager::update_all_parameters(uint8_t index, float value)
 //   >>> RC Settings End
 //   <<< IMU Settings
     case PARAM_ACCX_OFFSET:     current_params_on_board.accXOffset = value;
+        setacc_x_offset(current_params_on_board.accXOffset);
         break;
     case PARAM_ACCY_OFFSET:     current_params_on_board.accYOffset = value;
+        setacc_y_offset(current_params_on_board.accYOffset);
         break;
     case PARAM_ACCZ_OFFSET:     current_params_on_board.accZOffset = value;
-        break;
-    case PARAM_USE_GPS:         current_params_on_board.useGPS = value;
+        setacc_z_offset(current_params_on_board.accZOffset);
         break;
     case PARAM_GYROX_OFFSET:    current_params_on_board.gyroXOffset = value;
+        setgyro_x_offset(current_params_on_board.gyroXOffset);
         break;
     case PARAM_GYROY_OFFSET:    current_params_on_board.gyroYOffset = value;
+        setgyro_y_offset(current_params_on_board.gyroYOffset);
         break;
     case PARAM_GYROZ_OFFSET:    current_params_on_board.gyroZOffset = value;
+        setgyro_z_offset(current_params_on_board.gyroZOffset);
         break;
+
     case PARAM_SKIP_GYRO_CALIB: current_params_on_board.skipGyroCalib = value;
+        setskip_gyro_calib(current_params_on_board.skipGyroCalib);
+        break;
+    case PARAM_USE_GPS:         current_params_on_board.useGPS = value;
+        setuse_gps(current_params_on_board.useGPS);
         break;
     case PARAM_GYRO_TRUST:      current_params_on_board.gyroTrust = value;
         break;
@@ -423,6 +432,14 @@ void MavLinkManager::write_params_to_board()
     if(control_type() != current_params_on_board.radioType){
         current_params_on_board.radioType = control_type();
         write_a_param_to_board("RADIO_TYPE", current_params_on_board.radioType);
+    }
+    if(skip_gyro_calib() != current_params_on_board.skipGyroCalib){
+        current_params_on_board.skipGyroCalib = skip_gyro_calib();
+        write_a_param_to_board("SKIP_GYRO_CALIB", current_params_on_board.skipGyroCalib);
+    }
+    if(use_gps() != current_params_on_board.useGPS){
+        current_params_on_board.useGPS = use_gps();
+        write_a_param_to_board("USE_GPS", current_params_on_board.useGPS);
     }
 //    [!] *** SBUS Channel ***
     if(mode_sbus_chan_num() != current_params_on_board.sbusModeChan){
