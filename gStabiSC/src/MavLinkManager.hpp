@@ -45,9 +45,24 @@ class MavLinkManager : public QObject
     Q_PROPERTY(float roll_angle  READ roll_angle    WRITE setroll_angle     NOTIFY roll_angleChanged)
     Q_PROPERTY(float pitch_angle READ pitch_angle   WRITE setpitch_angle    NOTIFY pitch_angleChanged)
     Q_PROPERTY(float yaw_angle   READ yaw_angle     WRITE setyaw_angle      NOTIFY yaw_angleChanged)
+
+    // Gyro
+    Q_PROPERTY(int gyro_x_offset READ gyro_x_offset WRITE setgyro_x_offset NOTIFY gyro_x_offsetChanged)
+    Q_PROPERTY(int gyro_y_offset READ gyro_y_offset WRITE setgyro_y_offset NOTIFY gyro_y_offsetChanged)
+    Q_PROPERTY(int gyro_z_offset READ gyro_z_offset WRITE setgyro_z_offset NOTIFY gyro_z_offsetChanged)
+
+    // Accel
+    Q_PROPERTY(int acc_x_offset READ acc_x_offset WRITE setacc_x_offset NOTIFY acc_x_offsetChanged)
+    Q_PROPERTY(int acc_y_offset READ acc_y_offset WRITE setacc_y_offset NOTIFY acc_y_offsetChanged)
+    Q_PROPERTY(int acc_z_offset READ acc_z_offset WRITE setacc_z_offset NOTIFY acc_z_offsetChanged)
+
+
     //General
     Q_PROPERTY(int control_type READ control_type WRITE setcontrol_type NOTIFY control_typeChanged)
     Q_PROPERTY(float battery_voltage READ battery_voltage WRITE setbattery_voltage NOTIFY battery_voltageChanged)
+    Q_PROPERTY(bool use_gps READ use_gps WRITE setuse_gps NOTIFY use_gpsChanged)
+    Q_PROPERTY(bool skip_gyro_calib READ skip_gyro_calib WRITE setskip_gyro_calib NOTIFY skip_gyro_calibChanged)
+
 
     // for RC Mode Channel or RC Modw PWM
     Q_PROPERTY(int  mode_sbus_chan_num  READ mode_sbus_chan_num WRITE setmode_sbus_chan_num NOTIFY mode_sbus_chan_numChanged)
@@ -152,13 +167,40 @@ public:
 
     float yaw_angle() const;
     void setyaw_angle(float _angle);
+
+    int gyro_x_offset() const;
+    void setgyro_x_offset(int _xoffset);
+
+    int gyro_y_offset() const;
+    void setgyro_y_offset(int _yoffset);
+
+    int gyro_z_offset() const;
+    void setgyro_z_offset(int _zoffset);
+
+    int acc_x_offset() const;
+    void setacc_x_offset(int _xoffset);
+
+    int acc_y_offset() const;
+    void setacc_y_offset(int _yoffset);
+
+    int acc_z_offset() const;
+    void setacc_z_offset(int _zoffset);
+
+
     // General
     int control_type() const;
     void setcontrol_type(int _type);
 
     float battery_voltage() const;
     void setbattery_voltage(float _vol);
-// *********** RC Settings
+
+    bool use_gps() const;
+    void setuse_gps(bool _use);
+
+    bool skip_gyro_calib() const;
+    void setskip_gyro_calib(int _skip);
+
+ // *********** RC Settings
 // RC Mode
     int mode_sbus_chan_num() const;
     void setmode_sbus_chan_num(int _chan_num);
@@ -350,9 +392,21 @@ signals:
     void roll_angleChanged(float);
     void pitch_angleChanged(float);
     void yaw_angleChanged(float);
+
+    void gyro_x_offsetChanged(int);
+    void gyro_y_offsetChanged(int);
+    void gyro_z_offsetChanged(int);
+
+    void acc_x_offsetChanged(int);
+    void acc_y_offsetChanged(int);
+    void acc_z_offsetChanged(int);
+
+
 // General
     void control_typeChanged(int);
     void battery_voltageChanged(float);
+    void use_gpsChanged(bool);
+    void skip_gyro_calibChanged(bool);
     // RC Settings
     // RC Mode
     void mode_sbus_chan_numChanged(int);
@@ -476,6 +530,9 @@ private:
 
     // IMU data
     float m_roll_angle, m_pitch_angle, m_yaw_angle;
+    int m_gyro_x_offset, m_gyro_y_offset, m_gyro_z_offset ;
+    int m_acc_x_offset, m_acc_y_offset, m_acc_z_offset ;
+    bool m_use_gps, m_skip_gyro_calib;
     // General
     int m_control_type;
     float m_battery_voltage;

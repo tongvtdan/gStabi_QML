@@ -332,9 +332,8 @@ void MavLinkManager::update_all_parameters(uint8_t index, float value)
         break;
 //  >>> IMU Settings End
 //  <<< Others
-    case PARAM_RADIO_TYPE:      { current_params_on_board.radioType = value;
+    case PARAM_RADIO_TYPE:      current_params_on_board.radioType = value;
         setcontrol_type(current_params_on_board.radioType);
-    }
         break;
 //  >>> Others end
 
@@ -442,8 +441,6 @@ void MavLinkManager::write_params_to_board()
         current_params_on_board.sbusRollChan = roll_sbus_chan_num() - 1;      // - 1 to get a real value for channel from display value in QML
         write_a_param_to_board("SBUS_ROLL_CHAN", current_params_on_board.sbusRollChan);
     }
-
-
 //    [!]
 //    [1] Tilt Motor
     if(tilt_power() != current_params_on_board.pitchPower){  // if power level changed, it will be store in params
@@ -781,6 +778,72 @@ void MavLinkManager::setyaw_angle(float _angle)
     emit yaw_angleChanged(m_yaw_angle);
 }
 
+int MavLinkManager::gyro_x_offset() const
+{
+    return m_gyro_x_offset;
+}
+
+void MavLinkManager::setgyro_x_offset(int _xoffset)
+{
+    m_gyro_x_offset = _xoffset;
+    emit gyro_x_offsetChanged(m_gyro_x_offset);
+}
+
+int MavLinkManager::gyro_y_offset() const
+{
+    return m_gyro_y_offset;
+}
+
+void MavLinkManager::setgyro_y_offset(int _yoffset)
+{
+    m_gyro_y_offset = _yoffset;
+    emit gyro_y_offsetChanged(m_gyro_y_offset);
+}
+
+int MavLinkManager::gyro_z_offset() const
+{
+    return m_gyro_z_offset;
+}
+
+void MavLinkManager::setgyro_z_offset(int _zoffset)
+{
+    m_gyro_z_offset = _zoffset;
+    emit gyro_z_offsetChanged(m_gyro_z_offset);
+}
+
+int MavLinkManager::acc_x_offset() const
+{
+    return m_acc_x_offset;
+}
+
+void MavLinkManager::setacc_x_offset(int _xoffset)
+{
+    m_acc_x_offset = _xoffset;
+    emit acc_x_offsetChanged(m_acc_x_offset);
+}
+
+int MavLinkManager::acc_y_offset() const
+{
+    return m_acc_y_offset;
+}
+
+void MavLinkManager::setacc_y_offset(int _yoffset)
+{
+    m_acc_y_offset = _yoffset;
+    emit acc_y_offsetChanged(m_acc_y_offset);
+}
+
+int MavLinkManager::acc_z_offset() const
+{
+    return m_acc_z_offset;
+}
+
+void MavLinkManager::setacc_z_offset(int _zoffset)
+{
+    m_acc_z_offset = _zoffset;
+    emit acc_z_offsetChanged(m_acc_z_offset);
+}
+
 int MavLinkManager::control_type() const
 {
     return m_control_type;
@@ -801,6 +864,28 @@ void MavLinkManager::setbattery_voltage(float _vol)
 {
     m_battery_voltage = _vol;
     emit battery_voltageChanged(m_battery_voltage);
+}
+
+bool MavLinkManager::use_gps() const
+{
+    return m_use_gps;
+}
+
+void MavLinkManager::setuse_gps(bool _use)
+{
+    m_use_gps = _use;
+    emit use_gpsChanged(m_use_gps);
+}
+
+bool MavLinkManager::skip_gyro_calib() const
+{
+    return m_skip_gyro_calib;
+}
+
+void MavLinkManager::setskip_gyro_calib(int _skip)
+{
+    m_skip_gyro_calib = _skip;
+    emit skip_gyro_calibChanged(m_skip_gyro_calib);
 }
 
 int MavLinkManager::mode_sbus_chan_num() const
