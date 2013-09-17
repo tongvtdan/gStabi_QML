@@ -16,7 +16,7 @@ Item {
     width: 700; height: 220
     GGauge{
         id: tiltGauge
-        width: 220; height: 220
+//        width: 220; height: 220
         anchors.left: parent.left; anchors.leftMargin: 0
         anchors.verticalCenter: parent.verticalCenter
         gauge_tilte: "Tilt"
@@ -33,7 +33,7 @@ Item {
     }
     GGauge{
         id: panGauge
-        width: 220; height: 220
+//        width: 220; height: 220
         anchors.verticalCenter: parent.verticalCenter
         gauge_tilte: "Pan"
         gauge_type: 2; gauge_offset: 90
@@ -50,7 +50,9 @@ Item {
     }
     GGauge{
         id: rollGauge
-        width: 220; height: 220
+//        width: 220; height: 220
+        gauge_width: root.gauge_width; gauge_height:root.gauge_height
+
         gauge_center_x: 0
         anchors.right: parent.right
         anchors.rightMargin: 0

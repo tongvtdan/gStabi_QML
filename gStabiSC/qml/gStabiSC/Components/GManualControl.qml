@@ -4,10 +4,7 @@ GFrame {
     id: manualControlSettingsContainer
 
     property int    control_type_selected   : 0
-    property bool   rc_enabled              : false
-    property bool   m_read_only             : false
-    property string rc_label                : "Channel"
-    property int    mode_channel_num        : 1
+    property int    rc_mode_channel_num        : 1
     property int    rc_mode_level           : 0
     property string rc_setting_state        : "pwm"
 
@@ -45,7 +42,7 @@ GFrame {
             id: tiltRC
             onLpf_valueChanged          :   _mavlink_manager.tilt_lpf = lpf_value;
             onTrim_valueChanged         :   _mavlink_manager.tilt_trim = trim_value;
-            onChannel_num_valueChanged  :   _mavlink_manager.tilt_sbus_chan_num = channel_num_value;
+            onRc_channel_numChanged     :   _mavlink_manager.tilt_sbus_chan_num = rc_channel_num;
 
         }
         GRCSettings{
@@ -103,8 +100,8 @@ GFrame {
                 width: 30
                 height: 15
                 bottom_value: 1 ;top_value: 18
-                text_value: mode_channel_num
-                onText_valueChanged: mode_channel_num = text_value
+                text_value: rc_mode_channel_num
+                onText_valueChanged: rc_mode_channel_num = text_value
             }
         }
 
@@ -154,7 +151,7 @@ GFrame {
         ]
 
     }
-    onMode_channel_numChanged: {channelValue.text_value = mode_channel_num }
+    onRc_mode_channel_numChanged: {channelValue.text_value = rc_mode_channel_num }
     onRc_mode_levelChanged:  {
         if(rc_mode_level > 500) rc_mode_level =500;
         if(rc_mode_level < -500) rc_mode_level = -500;
@@ -166,8 +163,6 @@ GFrame {
         // reset all variables before they can be set
         motor_control_enabled = false
         popup_show = false
-//        rc_enabled = false
-        m_read_only = false
         rc_setting_state = "other"
         // temporary comment for testing function
 

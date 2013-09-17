@@ -5,7 +5,7 @@ Rectangle {
     property string title               : "Tilt"
     property int    lpf_value           : 5
     property int    trim_value          : 5
-    property int    channel_num_value   : 1
+    property int    rc_channel_num      : 1
     property int    rc_value            : 50
     property int    rc_pwm_level: 50
 
@@ -111,8 +111,8 @@ Rectangle {
             width: 30
             height: 15
             bottom_value: 1 ;top_value: 18
-            text_value: channel_num_value
-            onText_valueChanged: channel_num_value = text_value
+            text_value: rc_channel_num
+            onText_valueChanged: rc_channel_num = text_value
         }
     }
 
@@ -171,8 +171,8 @@ Rectangle {
         trimLevelInput.text_value = trim_value
         trimSlider.value = trim_value
     }
-    onChannel_num_valueChanged: {
-        channelValue.text_value = channel_num_value
+    onRc_channel_numChanged: {
+        channelValue.text_value = rc_channel_num
     }
     onRc_valueChanged: {
         if(rc_value > 500) rc_value =500;
