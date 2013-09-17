@@ -96,7 +96,7 @@ GFrame {
                 font.pixelSize: 12
             }
             GTextInput{
-                id: channelValue
+                id: rcModeChannelNumInput
                 width: 30
                 height: 15
                 bottom_value: 1 ;top_value: 18
@@ -151,7 +151,7 @@ GFrame {
         ]
 
     }
-    onRc_mode_channel_numChanged: {channelValue.text_value = rc_mode_channel_num }
+    onRc_mode_channel_numChanged: {rcModeChannelNumInput.text_value = rc_mode_channel_num }
     onRc_mode_levelChanged:  {
         if(rc_mode_level > 500) rc_mode_level =500;
         if(rc_mode_level < -500) rc_mode_level = -500;
@@ -204,7 +204,7 @@ GFrame {
 
         onTilt_lpfChanged             : tiltRC.lpf_value   = _mavlink_manager.tilt_lpf;
         onTilt_trimChanged            : tiltRC.trim_value  = _mavlink_manager.tilt_trim;
-        onTilt_sbus_chan_numChanged    : tiltRC.channel_num_value = _mavlink_manager.tilt_sbus_chan_num;
+        onTilt_sbus_chan_numChanged    : tiltRC.rc_channel_num = _mavlink_manager.tilt_sbus_chan_num;
         onTilt_rc_sbus_levelChanged    : tiltRC.rc_value = _mavlink_manager.tilt_rc_sbus_level;
         onTilt_pwm_levelChanged        : tiltRC.rc_pwm_level = _mavlink_manager.tilt_pwm_level;
 
