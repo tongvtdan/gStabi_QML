@@ -9,15 +9,17 @@ GFrame{
     property string serial_port_info_details: ""
     property bool   view_details: false
     property string connection_image_src: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_run_0_port_connect.png"
+    width: 200
 
 
-    border_normal: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_serialports_normal_frame.png"
+    border_normal   : "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_normal_serialports_frame.png"
+    border_hover    : "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_hover_serialports_frame.png"
     // Open Close Port Button
     GImageButton{
         id: openCloseComportButton
         width: 70; height: 50;
         anchors.left: serialportNameList.right; anchors.leftMargin: 10
-        anchors.top: viewportDetailsChecked.bottom; anchors.topMargin: 20
+        anchors.top: serialportNameList.top; anchors.topMargin: 20
         text: ""
         imageNormal : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_normal_ports_disconnect.png"
         imagePressed: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_ports_disconnect.png"
@@ -48,8 +50,8 @@ GFrame{
         id: viewportDetailsChecked
         width: 100
         height: 30
-        anchors.top: parent.top; anchors.topMargin: 40
-        anchors.left: serialportNameList.right ;    anchors.leftMargin: 0
+        anchors.top: serialportNameList.bottom; anchors.topMargin: 30
+        anchors.left: parent.left;    anchors.leftMargin: 10
         checkbox_text: "View port details"
         state: "unchecked"
         onChecked_stateChanged: {

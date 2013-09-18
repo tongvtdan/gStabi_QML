@@ -781,7 +781,6 @@ void MavLinkManager::request_all_params()
     mavlink_msg_param_request_list_pack(SYSTEM_ID, MAV_COMP_ID_SERVO1, &msg, TARGET_SYSTEM_ID, MAV_COMP_ID_IMU);
     len = mavlink_msg_to_send_buffer(buf, &msg);
     emit messge_write_to_comport_ready((const char*)buf, len);
-    qDebug("debug>> Requesting parameters on board...");
     setmavlink_message_log("Requesting parameters on board...");
 }
 
