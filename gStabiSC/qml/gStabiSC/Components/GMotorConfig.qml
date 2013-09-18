@@ -100,7 +100,7 @@ Item{
         GTextInput{
             id: polesNumInput
             bottom_value: 0; top_value: 100
-            read_only: true
+            read_only: gremsy_product_id !== 0
             text_value: poles_num
             onText_valueChanged: poles_num = text_value
         }

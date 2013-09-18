@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QTimer>
 
+#include "configuration.h"
 
 #include "thirdParty/mavlink/v1.0/gremsyBGC/mavlink.h"
 #include "thirdParty/mavlink/v1.0/globalData.h"
@@ -35,6 +36,8 @@
 
 #define ACCEL_CALIB_MODE_BASIC      0   // calib accelerometer in basic mode
 #define ACCEL_CALIB_MODE_ADVACNED   1   // calib accel in advanced mode, 6 faces mode
+
+
 class MavLinkManager : public QObject
 {
     Q_OBJECT
@@ -43,6 +46,8 @@ class MavLinkManager : public QObject
     Q_PROPERTY(bool hb_pulse READ hb_pulse WRITE sethb_pulse NOTIFY hb_pulseChanged)
     Q_PROPERTY(bool board_connection_state READ board_connection_state WRITE setboard_connection_state NOTIFY board_connection_stateChanged )
     Q_PROPERTY(QString mavlink_message_log READ mavlink_message_log WRITE setmavlink_message_log NOTIFY mavlink_message_logChanged)
+    Q_PROPERTY(bool gremsy_product_id READ gremsy_product_id WRITE setgremsy_product_id NOTIFY gremsy_product_idChanged)
+
     // IMU data
     Q_PROPERTY(float roll_angle  READ roll_angle    WRITE setroll_angle     NOTIFY roll_angleChanged)
     Q_PROPERTY(float pitch_angle READ pitch_angle   WRITE setpitch_angle    NOTIFY pitch_angleChanged)
@@ -67,6 +72,7 @@ class MavLinkManager : public QObject
     Q_PROPERTY(int  gyro_trust READ gyro_trust WRITE setgyro_trust NOTIFY gyro_trustChanged)
     Q_PROPERTY(int  gyro_lpf READ gyro_lpf WRITE setgyro_lpf NOTIFY gyro_lpfChanged)
     Q_PROPERTY(int  calib_mode READ calib_mode WRITE setcalib_mode NOTIFY calib_modeChanged)
+    Q_PROPERTY(int  motor_freq READ motor_freq WRITE setmotor_freq NOTIFY motor_freqChanged)
 
     // for RC Mode Channel or RC Modw PWM
     Q_PROPERTY(int  mode_sbus_chan_num  READ mode_sbus_chan_num WRITE setmode_sbus_chan_num NOTIFY mode_sbus_chan_numChanged)
@@ -151,6 +157,8 @@ class MavLinkManager : public QObject
 public:
     explicit MavLinkManager(QObject *parent = 0);
 
+
+
     //[!] Q_PROPERTY functions
     bool hb_pulse() const;
     void sethb_pulse(bool state);
@@ -160,6 +168,11 @@ public:
 
     QString mavlink_message_log() const;
     void setmavlink_message_log(QString msg_data);
+
+    int gremsy_product_id() const;
+    void setgremsy_product_id(int _product_id);
+
+
 
 
     //IMU data
@@ -212,6 +225,9 @@ public:
 
     int calib_mode() const;
     void setcalib_mode(int _mode);
+
+    int motor_freq() const;
+    void setmotor_freq(int _freq);
 
 
  // *********** RC Settings
@@ -401,6 +417,8 @@ signals:
     void hb_pulseChanged(bool);
     void board_connection_stateChanged(bool);
     void mavlink_message_logChanged(QString);
+    void gremsy_product_idChanged(int);
+
     // IMU data
     void roll_angleChanged(float);
     void pitch_angleChanged(float);
@@ -423,6 +441,7 @@ signals:
     void gyro_trustChanged(int);
     void gyro_lpfChanged(int);
     void calib_modeChanged(int);
+    void motor_freqChanged(int);
 
     // RC Settings
     // RC Mode
@@ -544,6 +563,7 @@ private:
     bool m_hb_pulse;
     bool m_board_connection_state;
     QString m_mavlink_message_log;
+    int m_gremsy_product_id;
 
     // IMU data
     float m_roll_angle, m_pitch_angle, m_yaw_angle;
@@ -555,6 +575,7 @@ private:
     float m_battery_voltage;
     int m_gyro_trust, m_gyro_lpf;
     int m_calib_mode;
+    int m_motor_freq;
 
     // [!]RC Settings
     //    Mode

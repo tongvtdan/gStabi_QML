@@ -9,6 +9,8 @@ Item{
     property int  pan_ccw_limit: 0
     property int  roll_up_limit: 0
     property int  roll_down_limit: 0
+    property int  motor_freq_selected : 0
+
 
     width: 930; height: 250
     Row{
@@ -75,10 +77,33 @@ Item{
         onPoles_numChanged:     _mavlink_manager.motor_roll_num_poles = poles_num;
         onMotor_dirChanged:     _mavlink_manager.motor_roll_dir = motor_dir;
         onSpeed_modeChanged:    _mavlink_manager.roll_mode = speed_mode;
-
-
     }
 }
+    Item{
+        id: motorFreqContainer
+        width: 150; height: 50
+        anchors.right: parent.right
+        anchors.rightMargin: 0
+        anchors.bottom: parent.top
+        GListView{
+            id: motorFreqList;
+            anchors.fill: parent
+            list_header_title: "Motor Frequency"
+            orientation: ListView.Horizontal
+            onClicked: {
+                motor_freq_selected = item_index
+            }
+            Component.onCompleted: {
+                motorFreqList.list_model.append({"value": "High"});
+                motorFreqList.list_model.append({"value": "Medium"});
+                motorFreqList.list_model.append({"value": "Low"});
+            }
+        }
+    }
+    onMotor_freq_selectedChanged: {
+        _mavlink_manager.motor_freq = motor_freq_selected
+    }
+
     Connections{
         target: _mavlink_manager
 
@@ -103,6 +128,11 @@ Item{
         onRoll_up_limit_angleChanged:   rollMotorParams.min_value   = _mavlink_manager.roll_up_limit_angle;
         onRoll_down_limit_angleChanged: rollMotorParams.max_value   = _mavlink_manager.roll_down_limit_angle;
         onRoll_modeChanged            : rollMotorParams.speed_mode  = _mavlink_manager.roll_mode;
+
+        onMotor_freqChanged:            {
+            motor_freq_selected         = _mavlink_manager.motor_freq;
+            motorFreqList.current_index = motor_freq_selected;
+        }
 
     }
 }

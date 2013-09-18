@@ -1,6 +1,6 @@
 #include "MavLinkManager.hpp"
 #include <QDebug>
-#include "configuration.h"
+
 
 MavLinkManager::MavLinkManager(QObject *parent) :
     QObject(parent)
@@ -126,7 +126,6 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
                 setbattery_voltage(m_g_system_status.battery_voltage);
                 // IMU Calib
                  m_g_system_status.imu_calib = mavlink_msg_system_status_get_imu_calib(&message);
-                 qDebug() << "debug <<< IMU Calib" << m_g_system_status.imu_calib;
                 if(calib_type == ACC_CALIB)
                 {
                     switch(m_g_system_status.imu_calib)
@@ -187,7 +186,7 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
 void MavLinkManager::connection_timeout()
 {
     setboard_connection_state(OFFLINE);
-//    setmavlink_message_log("System does not response.");
+    setmavlink_message_log("System does not response.");
     RestartLinkConnectionTimer(1000);
 }
 
@@ -269,6 +268,7 @@ void MavLinkManager::update_all_parameters(uint8_t index, float value)
 //   <<<  Motor Settings
 //**********************
     case PARAM_MOTOR_FREQ:      current_params_on_board.motorFreq = value;
+        setmotor_freq(current_params_on_board.motorFreq);
         break;
 //**************************
     case PARAM_PITCH_POWER:     current_params_on_board.pitchPower = value;
@@ -503,6 +503,12 @@ void MavLinkManager::write_params_to_board()
         current_params_on_board.gyroLPF = gyro_lpf();
         write_a_param_to_board("GYRO_LPF", current_params_on_board.gyroLPF);
     }
+    if(motor_freq() != current_params_on_board.motorFreq){
+        current_params_on_board.motorFreq = motor_freq();
+        write_a_param_to_board("MOTOR_FREQ", current_params_on_board.motorFreq);
+        qDebug()<< "debug>> Motor freq save"<< current_params_on_board.motorFreq;
+    }
+
 //    [!] *** SBUS Channel ***
     if(mode_sbus_chan_num() != current_params_on_board.sbusModeChan){
         current_params_on_board.sbusModeChan = mode_sbus_chan_num() - 1;
@@ -862,6 +868,17 @@ void MavLinkManager::setmavlink_message_log(QString msg_data)
     emit mavlink_message_logChanged(m_mavlink_message_log);
 }
 
+int MavLinkManager::gremsy_product_id() const
+{
+    return m_gremsy_product_id;
+}
+
+void MavLinkManager::setgremsy_product_id(int _product_id)
+{
+    m_gremsy_product_id = _product_id;
+    emit gremsy_product_idChanged(m_gremsy_product_id);
+}
+
 float MavLinkManager::roll_angle() const
 {
     return m_roll_angle;
@@ -1037,6 +1054,17 @@ void MavLinkManager::setcalib_mode(int _mode)
 {
     m_calib_mode = _mode;
     emit calib_modeChanged(m_calib_mode);
+}
+
+int MavLinkManager::motor_freq() const
+{
+    return m_motor_freq;
+}
+
+void MavLinkManager::setmotor_freq(int _freq)
+{
+    m_motor_freq = _freq;
+    emit motor_freqChanged(m_motor_freq);
 }
 
 int MavLinkManager::mode_sbus_chan_num() const

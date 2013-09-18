@@ -97,6 +97,7 @@ GFrame{
                 openCloseComportButton.imagePressed = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_port_connect.png"
                 openCloseComportButton.imageHover   = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_port_connect.png"
                 connectedImage.visible = true;
+                gremsy_product_id = _configuration.gremsy_product_id()
 //                popup_msg = "gStabi controller is connected"
             }
             else{

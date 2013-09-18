@@ -20,6 +20,9 @@ Rectangle {
     property int    selected_port_index: 1
     property string profile_name    : "Profile_Default"
 
+    property int gremsy_product_id: 0
+
+
 
     width:1024; height: 700
     color: "transparent"

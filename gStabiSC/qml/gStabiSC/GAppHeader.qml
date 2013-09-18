@@ -16,6 +16,6 @@ Item {
         verticalAlignment: Text.AlignVCenter
         anchors.verticalCenter: parent.verticalCenter
         anchors.centerIn: parent.Center
-        text: m_configuration.application_name() + " " + m_configuration.application_version()
+        text: _configuration.application_name() + " " + _configuration.application_version()
     }
 }

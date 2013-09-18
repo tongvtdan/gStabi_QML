@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     viewer.setMinimumSize(QSize(APPLICATION_WIDTH,APPLICATION_HEIGHT));
     viewer.setMaximumSize(QSize(APPLICATION_WIDTH,APPLICATION_HEIGHT));
 
-    viewer.rootContext()->setContextProperty("m_configuration",&m_configuration);
+    viewer.rootContext()->setContextProperty("_configuration",&m_configuration);
     viewer.rootContext()->setContextProperty("_serialLink", &m_serialLink);
     viewer.rootContext()->setContextProperty("_mavlink_manager", &m_mavlink_manager);
 
