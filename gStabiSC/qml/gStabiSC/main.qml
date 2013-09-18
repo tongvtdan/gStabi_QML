@@ -21,6 +21,7 @@ Rectangle {
     property string profile_name    : "Profile_Default"
 
     property int gremsy_product_id: 0
+    property bool   speed_mode  : false   // 0: angle mode; 1: speed mode
 
 
 

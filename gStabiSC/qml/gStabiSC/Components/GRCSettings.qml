@@ -11,7 +11,7 @@ Rectangle {
 
 
 
-    width: 200;     height: 100
+    width: 240;     height: 120
     color: "transparent"
     radius: 5
     border.color: "cyan"; border.width: 1
@@ -29,7 +29,7 @@ Rectangle {
     }
     Row{
         id: lpfRow
-        width: 180
+        width: 220
         height: 20
         anchors.top: parent.top
         anchors.topMargin: 5
@@ -48,7 +48,7 @@ Rectangle {
         GSlider{
             id: lpfSlider
             lowerLimit: 0 ; upperLimit: 100
-            width: 80; //height: 4
+            width: 120; //height: 4
             anchors.verticalCenter: parent.verticalCenter
             value: lpf_value
             onValueChanged: lpf_value = lpfSlider.value
@@ -63,7 +63,7 @@ Rectangle {
 
     Row{
         id: trimRow
-        width: 180
+        width: 220
         anchors.top: lpfRow.bottom; anchors.topMargin: 5
         anchors.left: parent.left; anchors.leftMargin: 5
         spacing: 10
@@ -80,7 +80,7 @@ Rectangle {
         GSlider{
             id: trimSlider
             lowerLimit: 0 ; upperLimit: 100
-            width: 80; //height: 4
+            width: 120; //height: 4
             anchors.verticalCenter: parent.verticalCenter
             value: trim_value
             onValueChanged: trim_value = trimSlider.value
@@ -97,7 +97,7 @@ Rectangle {
         id: channeNumlRow
         spacing: 7
         anchors.left: parent.left ;  anchors.leftMargin: 5
-        anchors.top: trimRow.bottom ;anchors.topMargin: 20
+        anchors.top: trimRow.bottom ;anchors.topMargin: 10
         GTextStyled{
             text: "Channel"
             anchors.verticalCenter: parent.verticalCenter
@@ -119,12 +119,12 @@ Rectangle {
     Item{
         id: rcSBUS_PWM_Level
         width: rcValueChannelIndicator.width; height: rcValueChannelIndicator.height
-        anchors.top: trimRow.bottom;  anchors.topMargin: 20
+        anchors.top: channeNumlRow.top;  anchors.topMargin: 0
         anchors.left: channeNumlRow.right ;  anchors.leftMargin: 10
         GSlider{
             id: rcValueChannelIndicator
             display_only: true
-            width: 90
+            width: 130
             height: 15
             lowerLimit: 0; upperLimit: 1000
             GTextStyled {
@@ -141,6 +141,41 @@ Rectangle {
             }
         }
     }
+    Rectangle{
+        id: modeContainer
+        anchors.left: parent.left
+        anchors.leftMargin: 5
+        anchors.top: rcSBUS_PWM_Level.bottom; anchors.topMargin: 5
+        width: 230
+        height: 30
+        color: "transparent"
+        radius: 5
+        border.color: "cyan"; border.width: 1
+        GCheckBox{
+            id: angleModeChecked
+            height: 30
+            anchors.left: parent.left
+            anchors.leftMargin: 0
+            anchors.verticalCenter: parent.verticalCenter
+            checkbox_text: "Angle Mode"
+            checked_state: !speed_mode
+            onChecked_stateChanged: {
+                speed_mode = !checked_state
+            }
+        }
+        GCheckBox{
+            id: velocityModeChecked
+            height: 30
+            anchors.left: angleModeChecked.right
+            anchors.leftMargin: 0
+            anchors.verticalCenter: parent.verticalCenter
+            checkbox_text: "Speed Mode"
+            checked_state: speed_mode
+            onChecked_stateChanged: {
+                speed_mode = checked_state
+            }
+        }
+    }
     states: [
         State {
             name: "sbus"
@@ -152,7 +187,7 @@ Rectangle {
             name: "pwm"
 //            when: control_type_selected = 0
             PropertyChanges {  target: channeNumlRow;    visible: false   }
-            PropertyChanges { target: rcValueChannelIndicator ; width: 170 }
+            PropertyChanges { target: rcValueChannelIndicator ; width: 210 }
             PropertyChanges { target: rcSBUS_PWM_Level ; anchors.leftMargin: -70 }
         },
         State {

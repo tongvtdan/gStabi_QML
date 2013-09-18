@@ -126,56 +126,9 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
                 setbattery_voltage(m_g_system_status.battery_voltage);
                 // IMU Calib
                  m_g_system_status.imu_calib = mavlink_msg_system_status_get_imu_calib(&message);
-                if(calib_type == ACC_CALIB)
-                {
-                    switch(m_g_system_status.imu_calib)
-                    {
-                        case CALIB_FINISH:
-                            qDebug("Accelerometer calibration completed!");
-                            setmavlink_message_log("Accelerometer calibration completed!");
-                            calib_type = CALIB_NONE;
-                        break;
-                        case ONE_REMAINING_FACE:
-                            qDebug("One face remaining");
-                        break;
-                        case TWO_REMAINING_FACES:
-                            qDebug("Two faces remaining");
-                        break;
-                        case THREE_REMAINING_FACES:
-                            qDebug("Three faces remaining");
-                        break;
-                        case FOUR_REMAINING_FACES:
-                            qDebug("Four faces remaining");
-                        break;
-                        case FIVE_REMAINING_FACES:
-                            qDebug("Five faces remaining");
-                        break;
-                        case SIX_REMAINING_FACES:
-                            qDebug("Six faces remaining");
-                        break;
-                        case CALIB_FAIL:
-                            qDebug("Accelerometer calibration failed!");
-                            setmavlink_message_log("Accelerometer calibration failed!");
-                            calib_type = CALIB_NONE;
-                        break;
-                    }
-                }
-                else if(calib_type == GYRO_CALIB)
-                {
-                    if(m_g_system_status.imu_calib == 0){
-                        qDebug("Gyro calibration completed!");
-                        setmavlink_message_log("Gyro calibration completed!");
-                    }
-                    else {
-                        qDebug("Gyro calibration failed!");
-                        setmavlink_message_log("Gyro calibration failed!");
-                    }
-                    calib_type = CALIB_NONE;
-                }
-               }
+                 update_calib_status();
+            }
                 break;
-
-
             default:
             break;
             } // end of switch
@@ -431,6 +384,77 @@ void MavLinkManager::update_pwm_values()
     settilt_pwm_level(pwm_values.tilt);
     setpan_pwm_level(pwm_values.pan);
     setroll_pwm_level(pwm_values.roll);
+}
+
+void MavLinkManager::update_calib_status()
+{
+    if(calib_type == ACC_CALIB)
+    {
+        switch(m_g_system_status.imu_calib)
+        {
+        case CALIB_FINISH:
+            qDebug("Accelerometer sensors calibration completed!");
+            setmavlink_message_log("Accelerometer sensors calibration completed! \nDon't move sensors until the sensor value reach to 0 on gauge display");
+            request_all_params();   // then request all parameters from Board
+            calib_type = CALIB_NONE;
+            break;
+        case ONE_REMAINING_FACE:
+            if(calib_mode() == 0)   // basic mode
+            {
+                qDebug("Calibrating accelerometer sensors ... ");
+                setmavlink_message_log("Calibrating accelerometer sensors ... \n.Don't move sensors untill calibration process completed");
+            }
+            else if(calib_mode() == 1) // adv mode
+            {
+                qDebug("One face remaining");
+            // nhac nguoi dung nhan tiep
+            }
+            break;
+        case TWO_REMAINING_FACES:
+            qDebug("Two faces remaining");
+            break;
+        case THREE_REMAINING_FACES:
+            qDebug("Three faces remaining");
+            break;
+        case FOUR_REMAINING_FACES:
+            qDebug("Four faces remaining");
+            break;
+        case FIVE_REMAINING_FACES:
+            qDebug("Five faces remaining");
+            break;
+        case SIX_REMAINING_FACES:
+            qDebug("Six faces remaining");
+            break;
+        case CALIB_FAIL:
+            qDebug("Accelerometer sensors calibration failed!");
+            setmavlink_message_log("Accelerometer sensors calibration failed!");
+            calib_type = CALIB_NONE;
+            break;
+        default:
+
+            break;
+        }
+    } else if(calib_type == GYRO_CALIB)
+    {
+        switch(m_g_system_status.imu_calib){
+        case CALIB_FINISH:
+            qDebug("Gyroscope sensors calibration completed!");
+            setmavlink_message_log("Gyroscope sensors calibration completed!");
+
+            request_all_params();   // then request all parameters from Board
+            calib_type = CALIB_NONE;
+            break;
+        case CALIB_FAIL:
+            qDebug("Gyroscope sensors calibration failed!");
+            setmavlink_message_log("Gyroscope sensors calibration failed!");
+            calib_type = CALIB_NONE;
+            break;
+        default:
+            qDebug("Calibrating gyroscope sensors ... ");
+            setmavlink_message_log("Calibrating gyroscope sensors ... \nDon't move sensors untill calibration process completed ");
+            break;
+        }
+    }
 }
 
 
@@ -781,7 +805,6 @@ void MavLinkManager::request_all_params()
     mavlink_msg_param_request_list_pack(SYSTEM_ID, MAV_COMP_ID_SERVO1, &msg, TARGET_SYSTEM_ID, MAV_COMP_ID_IMU);
     len = mavlink_msg_to_send_buffer(buf, &msg);
     emit messge_write_to_comport_ready((const char*)buf, len);
-    setmavlink_message_log("Requesting parameters on board...");
 }
 
 
@@ -801,13 +824,10 @@ void MavLinkManager::calib_gyro()
     uint16_t len=0;
     mavlink_message_t msg;
     uint8_t buf[MAVLINK_MAX_PACKET_LEN];
-
     mavlink_msg_imu_calib_request_pack(SYSTEM_ID, MAV_COMP_ID_SERVO1, &msg, 1, 0);  // '1' means gyro calib
     len = mavlink_msg_to_send_buffer(buf, &msg);
     emit messge_write_to_comport_ready((const char*)buf, len);
-
     calib_type = GYRO_CALIB;
-    setmavlink_message_log("Start to calib Gyro");
 }
 
 void MavLinkManager::calib_accel()
@@ -1635,5 +1655,7 @@ void MavLinkManager::setroll_mode(int _mode)
     m_roll_mode = _mode;
     emit roll_modeChanged(m_roll_mode);
 }
+
+
 
 

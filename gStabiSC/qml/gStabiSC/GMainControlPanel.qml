@@ -6,7 +6,7 @@ Rectangle {
     width: 1000 ;  height: 350
     color: "transparent"
     property int    control_width           : 1000
-    property int    control_height          : 280
+    property int    control_height          : 250
     property bool   motor_config_enabled    : false
     property bool   motor_control_enabled   : false
     property int    control_selected_index  : 0     // store the current index of control tab selected in taskBar
@@ -62,7 +62,7 @@ Rectangle {
     GTaskBar{
         id: taskBar
         width: 600
-        height: 100
+        height: 80
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom;
         z: 100
@@ -73,12 +73,13 @@ Rectangle {
         width: control_width   ; height: control_height
         anchors.centerIn: parent.Center
         color: "transparent"
+        anchors.bottom: taskBar.top
+        anchors.bottomMargin: 0
         Item{
             id: controlXPosContainer
             width: control_width; height: control_height
             Item{
                 id: generalSettings
-                x: 0; y: 0;
                 width: control_width; height: control_height
                 GGeneralSettings{
                     id: gGeneralSettings
@@ -229,7 +230,6 @@ Rectangle {
             PropertyChanges { target: profileSettings; opacity: 0; }
             PropertyChanges { target: realtimeChart; opacity: 0; }
             PropertyChanges { target: info; opacity: 1; }
-
         }
     ]
 

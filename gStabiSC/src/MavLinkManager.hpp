@@ -531,6 +531,7 @@ private:
     void update_all_parameters(uint8_t index, float value);
     void update_rc_sbus_value();
     void update_pwm_values();
+    void update_calib_status();
 
 
 private:

@@ -4,7 +4,7 @@ Item{
     id: frameContainer
     property string border_normal   : "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_tilt_normal_frame.png"
     property string border_hover    : "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_hover_frame.png"
-    width: 310; height:  210
+    width: 310; height:  250
 
     MouseArea{
         anchors.fill: parent

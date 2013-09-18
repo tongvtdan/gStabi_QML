@@ -10,9 +10,9 @@ GFrame {
     property string rc_setting_state        : "pwm"
 
     border_normal: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_normal_manual_control_frame.png"
-    border_hover: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_focus_manual_control_frame.png"
+    border_hover: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_hover_manual_control_frame.png"
 
-    width: 650
+    width: 770
 
     // Control Type
     GListView{
@@ -36,9 +36,9 @@ GFrame {
 
     Row{
         id: rcSettingRow
+        anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: controlTypeList.bottom; anchors.topMargin: 20
-        anchors.left: parent.left; anchors.leftMargin: 10
-        spacing: 5
+        spacing: 10
         GRCSettings{
             id: tiltRC
             onLpf_valueChanged          :   _mavlink_manager.tilt_lpf = lpf_value;
@@ -184,7 +184,12 @@ GFrame {
                 rc_setting_state = "sbus"
                 break;
             case 2:   // gMotion
-                popup_msg = "Disconnect system from PC then turn on gMotion System for pairing Bluetooth communication"
+//                popup_msg = "gMotion was chosen\n
+//To activate gMotion:\n
+//1/ Press Write button to save parameters to gStabi Controller.\n
+//2/ Disconnect PC from gStabi Controller.\n
+//3/ Power gMotion."
+                popup_msg = "This feature is used with gMotion System"
                 popup_show = true
                 break;
             case 3:  // PC

@@ -4,9 +4,6 @@ Image {
     id: taskBar
 
     property alias controlModel: controlView.model
-    property int  task_bar_width: 300
-    property int  task_bar_height: 100
-
 
     height: 100
     width: 600
@@ -63,7 +60,7 @@ Image {
     ListView {
         id: controlView
         signal clicked( string stateId )
-        height: task_bar_height
+        height: parent.height
         orientation: ListView.Horizontal
         anchors.left: parent.left
         anchors.right: parent.right

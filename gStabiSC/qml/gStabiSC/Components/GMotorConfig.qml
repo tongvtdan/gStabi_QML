@@ -15,7 +15,6 @@ Item{
     property string min_label   : "Min"
     property string max_label   : "Max"
 
-    property bool   speed_mode  : false   // 0: angle mode; 1: speed mode
 
     property string border_normal   : "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_tilt_normal_frame.png"
     property string border_hover    : "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_hover_frame.png"
@@ -160,13 +159,14 @@ Item{
     GCheckBox{
         id: reversedCheckBox
         checkbox_text: "Reverse Direction"
-        anchors.top: modeContainer.bottom; anchors.topMargin: 5
-        anchors.left: modeContainer.left;  anchors.leftMargin: 5
+        anchors.top: powerRow.bottom; anchors.topMargin: 30
+        anchors.left: parent.left;  anchors.leftMargin: 10
         state:  "unchecked"
         onChecked_stateChanged: {
             motor_dir = checked_state;
         }
     }
+    /*
     Rectangle{
         id: modeContainer
         anchors.left: parent.left
@@ -199,7 +199,7 @@ Item{
             }
         }
     }
-
+*/
     onPower_levelChanged: {
         powerLevelInput.text_value = power_level;
         powerSlider.value = power_level;
@@ -209,9 +209,9 @@ Item{
     }
     onMotor_dirChanged: reversedCheckBox.checked_state = motor_dir;
 
-    onSpeed_modeChanged: {
-        angleModeChecked.checked_state = !speed_mode
-        velocityModeChecked.checked_state = speed_mode
-    }
+//    onSpeed_modeChanged: {
+//        angleModeChecked.checked_state = !speed_mode
+//        velocityModeChecked.checked_state = speed_mode
+//    }
 
 }
