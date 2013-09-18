@@ -20,8 +20,8 @@
 #define OFFLINE false
 
 #define BATT_CELL_MIN		3.5
-#define BATT_CELL_MAX 	4.2
-#define BATT_CELL_ALARM	3.6
+#define BATT_CELL_MAX       4.2
+#define BATT_CELL_ALARM     3.6
 
 #define BATT_ALARM_OK		1
 #define BATT_ALARM_LOW      2
@@ -33,6 +33,8 @@
 #define BATT_5_CELL			5
 #define BATT_6_CELL			6
 
+#define ACCEL_CALIB_MODE_BASIC      0   // calib accelerometer in basic mode
+#define ACCEL_CALIB_MODE_ADVACNED   1   // calib accel in advanced mode, 6 faces mode
 class MavLinkManager : public QObject
 {
     Q_OBJECT
@@ -64,6 +66,7 @@ class MavLinkManager : public QObject
     Q_PROPERTY(bool skip_gyro_calib READ skip_gyro_calib WRITE setskip_gyro_calib NOTIFY skip_gyro_calibChanged)
     Q_PROPERTY(int  gyro_trust READ gyro_trust WRITE setgyro_trust NOTIFY gyro_trustChanged)
     Q_PROPERTY(int  gyro_lpf READ gyro_lpf WRITE setgyro_lpf NOTIFY gyro_lpfChanged)
+    Q_PROPERTY(int  calib_mode READ calib_mode WRITE setcalib_mode NOTIFY calib_modeChanged)
 
     // for RC Mode Channel or RC Modw PWM
     Q_PROPERTY(int  mode_sbus_chan_num  READ mode_sbus_chan_num WRITE setmode_sbus_chan_num NOTIFY mode_sbus_chan_numChanged)
@@ -206,6 +209,9 @@ public:
 
     int gyro_lpf() const;
     void setgyro_lpf(int _value);
+
+    int calib_mode() const;
+    void setcalib_mode(int _mode);
 
 
  // *********** RC Settings
@@ -384,6 +390,8 @@ public:
     Q_INVOKABLE float get_battery_percent_remain(float _vol);
     Q_INVOKABLE void request_all_params();      // function to read parameters from controller board
     Q_INVOKABLE void send_control_command(int tilt_angle_setpoint, int pan_angle_setpoint, int roll_angle_setpoint);
+    Q_INVOKABLE void calib_gyro();
+    Q_INVOKABLE void calib_accel();
 
 
 signals:
@@ -414,6 +422,7 @@ signals:
     void skip_gyro_calibChanged(bool);
     void gyro_trustChanged(int);
     void gyro_lpfChanged(int);
+    void calib_modeChanged(int);
 
     // RC Settings
     // RC Mode
@@ -545,6 +554,7 @@ private:
     int m_control_type;
     float m_battery_voltage;
     int m_gyro_trust, m_gyro_lpf;
+    int m_calib_mode;
 
     // [!]RC Settings
     //    Mode
@@ -579,6 +589,7 @@ private:
     bool first_data_pack;        // this will be check when mavlink message was received, to check whether it's 1st time to received the message
                                 // if true: Request to Read all parameters to display on UI and store in current parameters.
                                 // if false: continue to parse message to get data.
+    uint8_t calib_type;
 
 };
 

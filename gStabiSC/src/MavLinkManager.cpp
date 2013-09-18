@@ -112,7 +112,7 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
 
             }
             break;
-            case MAVLINK_MSG_ID_PPM_CHAN_VALUES: {
+            case MAVLINK_MSG_ID_PPM_CHAN_VALUES: {  // get value of PWM from RC Remote control
                 pwm_values.tilt = mavlink_msg_ppm_chan_values_get_tilt(&message);
                 pwm_values.roll = mavlink_msg_ppm_chan_values_get_roll(&message);
                 pwm_values.pan  = mavlink_msg_ppm_chan_values_get_pan(&message);
@@ -124,8 +124,49 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
             case MAVLINK_MSG_ID_SYSTEM_STATUS:{
                 m_g_system_status.battery_voltage = mavlink_msg_system_status_get_battery_voltage(&message);
                 setbattery_voltage(m_g_system_status.battery_voltage);
+                // IMU Calib
+                 m_g_system_status.imu_calib = mavlink_msg_system_status_get_imu_calib(&message);
+                 qDebug() << "IMU Calib" << m_g_system_status.imu_calib;
+                if(calib_type == ACC_CALIB)
+                {
+                    switch(m_g_system_status.imu_calib)
+                    {
+                        case CALIB_FINISH:
+                            qDebug("IMU calib finished!");
+                        break;
+                        case ONE_REMAINING_FACE:
+                            qDebug("One face remaining");
+                        break;
+                        case TWO_REMAINING_FACES:
+                            qDebug("Two faces remaining");
+                        break;
+                        case THREE_REMAINING_FACES:
+                            qDebug("Three faces remaining");
+                        break;
+                        case FOUR_REMAINING_FACES:
+                            qDebug("Four faces remaining");
+                        break;
+                        case FIVE_REMAINING_FACES:
+                            qDebug("Five faces remaining");
+                        break;
+                        case SIX_REMAINING_FACES:
+                            qDebug("Six faces remaining");
+                        break;
+                        case CALIB_FAIL:
+                            qDebug("IMU calib failed!");
+                        break;
+                    }
+                }
+                else if(calib_type == GYRO_CALIB)
+                {
+                    if(m_g_system_status.imu_calib == 0)
+                        qDebug("IMU calib finished!");
+                    else
+                        qDebug("IMU calib failed!");
+                }
                    }
                 break;
+
 
             default:
             break;
@@ -217,9 +258,10 @@ void MavLinkManager::update_all_parameters(uint8_t index, float value)
         break;
 //   >>>  Controller Settings End
 //   <<<  Motor Settings
+//**********************
     case PARAM_MOTOR_FREQ:      current_params_on_board.motorFreq = value;
         break;
-
+//**************************
     case PARAM_PITCH_POWER:     current_params_on_board.pitchPower = value;
         settilt_power(current_params_on_board.pitchPower);
         break;
@@ -429,6 +471,7 @@ void MavLinkManager::write_params_to_board()
 {
     if(board_connection_state() == ONLINE){
     qDebug("Sending parameters to controller board...");
+    setmavlink_message_log("Sending parameters to controller board...");
     // Motor config params
 // General
     if(control_type() != current_params_on_board.radioType){
@@ -638,9 +681,11 @@ void MavLinkManager::write_params_to_board()
     // other params
 
     qDebug("C++>> Sending parameters to controller board...Done!");
+    setmavlink_message_log("Sent parameters to controller board!");
     }
     else {
         qDebug("C++>> Communication error, please check the connection then write parammeters again *");
+        setmavlink_message_log("Communication error, please check the connection then write parammeters again");
     }
 }
 
@@ -721,7 +766,8 @@ void MavLinkManager::request_all_params()
     mavlink_msg_param_request_list_pack(SYSTEM_ID, MAV_COMP_ID_SERVO1, &msg, TARGET_SYSTEM_ID, MAV_COMP_ID_IMU);
     len = mavlink_msg_to_send_buffer(buf, &msg);
     emit messge_write_to_comport_ready((const char*)buf, len);
-    qDebug("C++>> Requesting parameters on board...");
+    qDebug("debug>> Requesting parameters on board...");
+    setmavlink_message_log("Requesting parameters on board...");
 }
 
 
@@ -734,6 +780,39 @@ void MavLinkManager::send_control_command(int tilt_angle_setpoint, int pan_angle
     mavlink_msg_rc_simulation_pack(SYSTEM_ID, MAV_COMP_ID_SERVO1, &msg, tilt_angle_setpoint, roll_angle_setpoint, pan_angle_setpoint);
     len = mavlink_msg_to_send_buffer(buf, &msg);
     emit messge_write_to_comport_ready((const char*)buf, len);
+}
+
+void MavLinkManager::calib_gyro()
+{
+    uint16_t len=0;
+    mavlink_message_t msg;
+    uint8_t buf[MAVLINK_MAX_PACKET_LEN];
+    mavlink_msg_imu_calib_request_pack(SYSTEM_ID, MAV_COMP_ID_SERVO1, &msg, 1, 0);  // '1' means gyro calib
+    len = mavlink_msg_to_send_buffer(buf, &msg);
+    emit messge_write_to_comport_ready((const char*)buf, len);
+    calib_type = GYRO_CALIB;
+    setmavlink_message_log("Start to calib Gyro");
+}
+
+void MavLinkManager::calib_accel()
+{
+    uint16_t len=0;
+    mavlink_message_t msg;
+    uint8_t buf[MAVLINK_MAX_PACKET_LEN];
+
+    if(calib_mode() == 0) {
+        qDebug("debug >> Calib acc in Basic mode");
+        setmavlink_message_log("Start to calib Accel in Basic mode");
+    }
+    else if(calib_mode() == 1) {
+        qDebug("debug >> Calib acc in Adv mode");
+        setmavlink_message_log("Start to calib Accel in Advanced mode");
+    }
+    mavlink_msg_imu_calib_request_pack(SYSTEM_ID, MAV_COMP_ID_SERVO1, &msg, 0, calib_mode());  // '0' means acc calib
+    len = mavlink_msg_to_send_buffer(buf, &msg);
+    emit messge_write_to_comport_ready((const char*)buf, len);
+    calib_type = ACC_CALIB;
+
 }
 
 
@@ -935,6 +1014,18 @@ void MavLinkManager::setgyro_lpf(int _value)
 {
     m_gyro_lpf = _value;
     emit gyro_lpfChanged(m_gyro_lpf);
+}
+
+int MavLinkManager::calib_mode() const
+{
+    return m_calib_mode;
+
+}
+
+void MavLinkManager::setcalib_mode(int _mode)
+{
+    m_calib_mode = _mode;
+    emit calib_modeChanged(m_calib_mode);
 }
 
 int MavLinkManager::mode_sbus_chan_num() const

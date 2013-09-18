@@ -122,7 +122,10 @@ Rectangle {
     }
     Connections{
         target: _mavlink_manager;
-        onMavlink_message_logChanged: {main_log_msg = _mavlink_manager.mavlink_message_log + "\n" + main_log_msg}
+        onMavlink_message_logChanged: {
+            show_popup_message(_mavlink_manager.mavlink_message_log)
+            main_log_msg = _mavlink_manager.mavlink_message_log + "\n" + main_log_msg
+        }
     }
 
     GTextStyled {

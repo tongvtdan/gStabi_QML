@@ -4,10 +4,10 @@ Item{
     id: imuMainContainer
     width: 930; height: 250
 
-    property int  gyroTrust_value   : 5
-    property int  gyroLpf_value     : 5
-    property bool calib_normal_mode : true
-    property bool use_gps_correction: false
+    property int  gyroTrust_value       : 5
+    property int  gyroLpf_value         : 5
+    property bool acc_calib_mode_adv  : true
+    property bool use_gps_correction    : false
 
 
 
@@ -105,7 +105,7 @@ Item{
                 }
                 GSlider{
                     id: gyroTrustSlider
-                    lowerLimit: 0 ; upperLimit: 100
+                    lowerLimit: 0 ; upperLimit: 255
                     width: 180; //height: 4
                     anchors.verticalCenter: parent.verticalCenter
                     value: gyroTrust_value
@@ -144,7 +144,7 @@ Item{
                 }
                 GTextInput{
                     id: gyroLpfLevelInput
-                    bottom_value: 0; top_value: 100
+                    bottom_value: 0; top_value: 255
                     text_value: gyroLpf_value.toString()
                     onText_valueChanged: gyroLpf_value = text_value
                 }
@@ -152,10 +152,8 @@ Item{
             GCheckBox{
                 id: calibOnStartUpChecked
                 checkbox_text: "Calib Gyro on Start up"
-                anchors.left: parent.left
-                anchors.leftMargin: 10
-                anchors.top: gyroLpf.bottom
-                anchors.topMargin: 10
+                anchors.left: parent.left ;      anchors.leftMargin: 10
+                anchors.top: gyroLpf.bottom ;    anchors.topMargin: 10
 //                state: "unchecked"
                 onChecked_stateChanged: {
                     _mavlink_manager.skip_gyro_calib = checked_state
@@ -166,6 +164,9 @@ Item{
                 text: "Calib Gyro"
                 anchors.top: calibOnStartUpChecked.top;    anchors.topMargin: 0
                 anchors.left: calibOnStartUpChecked.right; anchors.leftMargin: 10
+                onClicked: {
+                    _mavlink_manager.calib_gyro()
+                }
             }
         }
         GFrame{
@@ -241,30 +242,30 @@ Item{
                 anchors.left: parent.left
                 anchors.leftMargin: 10
                 anchors.top: accelOffsetContainer.bottom; anchors.topMargin: 20
-                width: Math.max(calibNormal.width, calib6Faces.width) + 10
-                height: (calibNormal.height + calib6Faces.height + 10)
+                width: Math.max(accCalibModeBasicChecked.width, accCalibModeAdvancedChecked.width) + 10
+                height: (accCalibModeBasicChecked.height + accCalibModeAdvancedChecked.height + 10)
                 color: "transparent"
                 radius: 5
                 border.color: "cyan"; border.width: 1
                 GCheckBox{
-                    id: calibNormal
+                    id: accCalibModeBasicChecked
                     height: 30
                     checkbox_text: "Basic Mode"
                     anchors.top: parent.top ; anchors.topMargin: 5
                     anchors.left: parent.left;  anchors.leftMargin: 5
-                    checked_state: calib_normal_mode
+                    checked_state: acc_calib_mode_adv
                     onChecked_stateChanged: {
-                        calib_normal_mode = checked_state
+                        acc_calib_mode_adv = !checked_state
                     }
                 }
                 GCheckBox{
-                    id: calib6Faces
+                    id: accCalibModeAdvancedChecked
                     checkbox_text: "Advanced Mode"
-                    anchors.top: calibNormal.bottom ; anchors.topMargin: 5
+                    anchors.top: accCalibModeBasicChecked.bottom ; anchors.topMargin: 5
                     anchors.left: parent.left;  anchors.leftMargin: 5
-                    checked_state: !calib_normal_mode
+                    checked_state: !acc_calib_mode_adv
                     onChecked_stateChanged: {
-                        calib_normal_mode = !checked_state
+                        acc_calib_mode_adv = checked_state
                     }
                 }
             }
@@ -273,6 +274,10 @@ Item{
                 text: "Calib Accel"
                 anchors.top: modeContainer.top;    anchors.topMargin: 0
                 anchors.left: modeContainer.right; anchors.leftMargin: 10
+                onClicked: {
+                    _mavlink_manager.calib_mode = acc_calib_mode_adv
+                    _mavlink_manager.calib_accel()
+                }
             }
         }
         GFrame{
@@ -285,16 +290,15 @@ Item{
                 anchors.left: parent.left;  anchors.leftMargin: 50
                 checked_state: use_gps_correction
                 onChecked_stateChanged: {
-//                    use_gps_correction = checked_state
                     _mavlink_manager.use_gps = checked_state
 
                 }
             }
         }
    }
-    onCalib_normal_modeChanged:  {
-        calibNormal.checked_state = calib_normal_mode
-        calib6Faces.checked_state = !calib_normal_mode
+    onAcc_calib_mode_advChanged:  {
+        accCalibModeBasicChecked.checked_state      = !acc_calib_mode_adv
+        accCalibModeAdvancedChecked.checked_state   = acc_calib_mode_adv
     }
     onGyroTrust_valueChanged: {
         gyroTrustSlider.value = gyroTrust_value;
