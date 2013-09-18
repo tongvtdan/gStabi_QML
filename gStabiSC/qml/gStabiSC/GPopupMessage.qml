@@ -3,15 +3,17 @@ import "Components"
 Rectangle{
     id: root
     width: 300; height: messageTextContainer.height + 50
-    color: "#0c48ec"
+    color: "#c8000000"
     radius: 5
-    border.width: 3
+    border.width: 1
     border.color: "#04d6f1"
-
+    MouseArea{
+        anchors.fill: parent
+    }
     GButton{
         y: 10
         text: "OK"
-        anchors.left: parent.left;    anchors.leftMargin: 10
+        anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom;        anchors.bottomMargin: 5
         onClicked: popup_show = false
     }
@@ -19,15 +21,16 @@ Rectangle{
     Rectangle{
         id: messageTextContainer
         width: 280; height: messageText.contentHeight + 20
-        color: "transparent"
         radius: 5
+        color: "transparent"
         anchors.horizontalCenter: parent.horizontalCenter
         border.color: "#00aaff"; border.width: 1
         anchors.top: parent.top; anchors.topMargin: 10
         Text{
             id: messageText
             wrapMode: Text.WordWrap
-            color: "#21fb04"
+            color: "white"
+//            color: "#21fb04"
             textFormat: Text.PlainText
             text: popup_msg
             anchors.rightMargin: 5
@@ -38,6 +41,8 @@ Rectangle{
         }
 
     }
+
+
     states:[
            State{
                name: "showDialog"
@@ -63,7 +68,7 @@ Rectangle{
                from: "hideDialog" ; to: "showDialog"
                ParallelAnimation{
                    NumberAnimation { target: root; property: "opacity"; duration: 500; }
-                   NumberAnimation { target: root; property: "scale"; duration: 500; easing.type: Easing.OutElastic}
+                   NumberAnimation { target: root; property: "scale"; duration: 500; easing.type: Easing.Bezier}
                }
 
            }

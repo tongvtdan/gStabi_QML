@@ -158,11 +158,13 @@ Item{
             }
             GButton{
                 id: calibGyroButton
-                text: "Calib Gyro"
+                text: "1.Calib Gyro"
                 anchors.top: calibOnStartUpChecked.top;    anchors.topMargin: 0
                 anchors.left: calibOnStartUpChecked.right; anchors.leftMargin: 10
                 onClicked: {
+                    if(_serialLink.isConnected){
                     _mavlink_manager.calib_gyro()
+                    } else show_popup_message("gStabi Controller is disconnected.\nCheck connection then try again")
                 }
             }
         }
@@ -268,12 +270,15 @@ Item{
             }
             GButton{
                 id: calibAccelButton
-                text: "Calib Accel"
+                text: "2.Calib Accel"
                 anchors.top: modeContainer.top;    anchors.topMargin: 0
                 anchors.left: modeContainer.right; anchors.leftMargin: 10
                 onClicked: {
-                    _mavlink_manager.calib_mode = acc_calib_mode_adv
-                    _mavlink_manager.calib_accel()
+                    if(_serialLink.isConnected){
+                        _mavlink_manager.calib_mode = acc_calib_mode_adv
+                        _mavlink_manager.calib_accel()
+                    } else show_popup_message("gStabi Controller is disconnected.\nCheck connection then try again")
+
                 }
             }
         }

@@ -70,7 +70,7 @@ Rectangle {
                         show_popup_message("Sent parameters to gStabi Controller...Done")
                     }
                     else{
-                       show_popup_message("gStabi controller is not connected. Please check the connection then try again")
+                       show_popup_message("gStabi controller is not connected.\n Check the connection then try again")
                     }
                 }
                 onEntered: dialog_log("Write parameters to controller board")
@@ -88,7 +88,7 @@ Rectangle {
                         show_popup_message("Read parameters from gStabi Controller... Done")
                     }
                     else {
-                        show_popup_message("Controller board is not connected. Please connect the board to your PC through USB cable then try again")
+                        show_popup_message("gStabi Controller is disconnected.\nCheck the connection then try again")
                     }
                 }
                 onEntered: dialog_log("Read parameters from controller board")
@@ -175,7 +175,7 @@ Rectangle {
         target: _mavlink_manager;
         onMavlink_message_logChanged: {
             show_popup_message(_mavlink_manager.mavlink_message_log)
-            main_log_msg = _mavlink_manager.mavlink_message_log + "\n" + main_log_msg
+//            main_log_msg = _mavlink_manager.mavlink_message_log + "\n" + main_log_msg
         }
         onBoard_connection_stateChanged: {
             if(_mavlink_manager.board_connection_state){
@@ -204,7 +204,7 @@ Rectangle {
 
     GTextStyled {
         id: gremsyText
-        color: "#0cf708"
+        color: "#04ff00"
         text: qsTr("Developed by Gremsy Co., Ltd")
         anchors.right: gstabiBackgroundImage.right
         anchors.rightMargin: 15

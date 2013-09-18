@@ -401,29 +401,28 @@ void MavLinkManager::update_calib_status()
         case ONE_REMAINING_FACE:
             if(calib_mode() == 0)   // basic mode
             {
-                qDebug("Calibrating accelerometer sensors ... ");
-                setmavlink_message_log("Calibrating accelerometer sensors ... \n.Don't move sensors untill calibration process completed");
+                setmavlink_message_log("Calibrating accelerometer sensors ... \nDon't move sensors untill calibration process completed");
             }
             else if(calib_mode() == 1) // adv mode
             {
-                qDebug("One face remaining");
+                setmavlink_message_log("Accelerometer Calibration for Face 1 - Done.\nPress '2.Calib Accel' button to calib next face");
             // nhac nguoi dung nhan tiep
             }
             break;
         case TWO_REMAINING_FACES:
-            qDebug("Two faces remaining");
+            setmavlink_message_log("Accelerometer Calibration for Face 2 - Done.\nPress '2.Calib Accel' button to calib next face");
             break;
         case THREE_REMAINING_FACES:
-            qDebug("Three faces remaining");
+            setmavlink_message_log("Accelerometer Calibration for Face 3 - Done.\nPress '2.Calib Accel' button to calib next face");
             break;
         case FOUR_REMAINING_FACES:
-            qDebug("Four faces remaining");
+            setmavlink_message_log("Accelerometer Calibration for Face 4 - Done.\nPress '2.Calib Accel' button to calib next face");
             break;
         case FIVE_REMAINING_FACES:
-            qDebug("Five faces remaining");
+            setmavlink_message_log("Accelerometer Calibration for Face 5 - Done.\nPress '2.Calib Accel' button to calib next face");
             break;
         case SIX_REMAINING_FACES:
-            qDebug("Six faces remaining");
+            setmavlink_message_log("Accelerometer Calibration for Face 6 - Done.\nPress '2.Calib Accel' button to calib next face");
             break;
         case CALIB_FAIL:
             qDebug("Accelerometer sensors calibration failed!");
@@ -842,7 +841,7 @@ void MavLinkManager::calib_accel()
     }
     else if(calib_mode() == 1) {
         qDebug("debug >> Calib acc in Adv mode");
-        setmavlink_message_log("Start to calib Accel in Advanced mode");
+        setmavlink_message_log("Start to calib Accel in Advanced mode\n Calibration process will go through 6 steps for 6 faces.");
     }
     mavlink_msg_imu_calib_request_pack(SYSTEM_ID, MAV_COMP_ID_SERVO1, &msg, 0, calib_mode());  // '0' means acc calib
     len = mavlink_msg_to_send_buffer(buf, &msg);
