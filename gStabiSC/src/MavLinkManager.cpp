@@ -132,7 +132,9 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
                     switch(m_g_system_status.imu_calib)
                     {
                         case CALIB_FINISH:
-                            qDebug("IMU calib finished!");
+                            qDebug("Accelerometer calibration completed!");
+                            setmavlink_message_log("Accelerometer calibration completed!");
+                            calib_type = 2;
                         break;
                         case ONE_REMAINING_FACE:
                             qDebug("One face remaining");
@@ -153,18 +155,25 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
                             qDebug("Six faces remaining");
                         break;
                         case CALIB_FAIL:
-                            qDebug("IMU calib failed!");
+                            qDebug("Accelerometer calibration failed!");
+                            setmavlink_message_log("Accelerometer calibration failed!");
+                            calib_type = 2;
                         break;
                     }
                 }
                 else if(calib_type == GYRO_CALIB)
                 {
-                    if(m_g_system_status.imu_calib == 0)
-                        qDebug("IMU calib finished!");
-                    else
-                        qDebug("IMU calib failed!");
+                    if(m_g_system_status.imu_calib == 0){
+                        qDebug("Gyro calibration completed!");
+                        setmavlink_message_log("Gyro calibration completed!");
+                    }
+                    else {
+                        qDebug("Gyro calibration failed!");
+                        setmavlink_message_log("Gyro calibration failed!");
+                    }
+                    calib_type = 2;
                 }
-                   }
+               }
                 break;
 
 
@@ -787,9 +796,11 @@ void MavLinkManager::calib_gyro()
     uint16_t len=0;
     mavlink_message_t msg;
     uint8_t buf[MAVLINK_MAX_PACKET_LEN];
+
     mavlink_msg_imu_calib_request_pack(SYSTEM_ID, MAV_COMP_ID_SERVO1, &msg, 1, 0);  // '1' means gyro calib
     len = mavlink_msg_to_send_buffer(buf, &msg);
     emit messge_write_to_comport_ready((const char*)buf, len);
+
     calib_type = GYRO_CALIB;
     setmavlink_message_log("Start to calib Gyro");
 }

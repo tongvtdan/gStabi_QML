@@ -6,7 +6,7 @@
 #include "thirdParty/mavlink/config.h"
 
 #define APPLICATION_NAME "gStabiSC"
-#define APPLICATION_VERSION "V.2.0.1(alpha-rc1)"
+#define APPLICATION_VERSION "V.2.1.1(beta-rc1)"
 #define APPLICATION_WIDTH 1024
 #define APPLICATION_HEIGHT 700
 

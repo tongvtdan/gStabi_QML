@@ -92,9 +92,10 @@ enum CALIB_STATUS_ENUM
 #define HAVE_ENUM_IMU_CALIB_TYPES
 enum IMU_CALIB_TYPES
 {
-	ACC_CALIB=0, /* acc one face calib mode | */
-	GYRO_CALIB=1, /* acc six faces calib mode | */
-	IMU_CALIB_TYPES_ENUM_END=2, /*  | */
+	ACC_CALIB=0, /* acc calib type | */
+	GYRO_CALIB=1, /* gyro calib type | */
+	CALIB_NONE=2, /* imu not calib | */
+	IMU_CALIB_TYPES_ENUM_END=3, /*  | */
 };
 #endif
 

@@ -52,7 +52,7 @@ Item{
                         GTextInput{
                             id: xAxisOffsetValueLabel
                             read_only: true;
-//                            text_value: _mavlink_manager.gyro_x_offset
+                            text_value: _mavlink_manager.gyro_x_offset
                         }
                     }
                     Column{
@@ -67,7 +67,7 @@ Item{
                         GTextInput{
                             id: yAxisOffsetValueLabel
                             read_only: true;
-//                            text_value: _mavlink_manager.gyro_y_offset
+                            text_value: _mavlink_manager.gyro_y_offset
                         }
                     }
                     Column{
