@@ -13,6 +13,9 @@ BorderImage{
     property bool  hover_enabled: true
     property bool toggle: false;
     property bool toggle_enabled: false
+    property int  horizontalCenterOffset_value  : 0
+    property int  verticalCenterOffset_value    : 0
+
     signal clicked
     signal entered
     signal exited
@@ -41,6 +44,8 @@ BorderImage{
     GTextStyled{
         id: buttonText
         text: rootItem.text
+        anchors.verticalCenterOffset: verticalCenterOffset_value
+        anchors.horizontalCenterOffset: horizontalCenterOffset_value
         anchors.centerIn: parent
         color : "#00e3f9"
         font.pixelSize: 16

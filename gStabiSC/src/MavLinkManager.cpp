@@ -126,7 +126,7 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
                 setbattery_voltage(m_g_system_status.battery_voltage);
                 // IMU Calib
                  m_g_system_status.imu_calib = mavlink_msg_system_status_get_imu_calib(&message);
-                 qDebug() << "IMU Calib" << m_g_system_status.imu_calib;
+                 qDebug() << "debug <<< IMU Calib" << m_g_system_status.imu_calib;
                 if(calib_type == ACC_CALIB)
                 {
                     switch(m_g_system_status.imu_calib)
@@ -134,7 +134,7 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
                         case CALIB_FINISH:
                             qDebug("Accelerometer calibration completed!");
                             setmavlink_message_log("Accelerometer calibration completed!");
-                            calib_type = 2;
+                            calib_type = CALIB_NONE;
                         break;
                         case ONE_REMAINING_FACE:
                             qDebug("One face remaining");
@@ -157,7 +157,7 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
                         case CALIB_FAIL:
                             qDebug("Accelerometer calibration failed!");
                             setmavlink_message_log("Accelerometer calibration failed!");
-                            calib_type = 2;
+                            calib_type = CALIB_NONE;
                         break;
                     }
                 }
@@ -171,7 +171,7 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
                         qDebug("Gyro calibration failed!");
                         setmavlink_message_log("Gyro calibration failed!");
                     }
-                    calib_type = 2;
+                    calib_type = CALIB_NONE;
                 }
                }
                 break;

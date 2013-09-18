@@ -46,18 +46,20 @@ Rectangle {
 
     Item{
         id: buttonsPanel
-        width: 210; height: 40
-        anchors.verticalCenterOffset: -20
+        width: 400; height: 50
+        anchors.verticalCenterOffset: -25
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        Row{
-
-            anchors.top: parent.top; anchors.topMargin: 5
-            spacing: 5
+        Item{
+            id: buttonsRow
+            anchors.fill: parent
             GButton{
                 id: writeConfigParamsToMCU
                 width: 100; height: 30
                 text: "Write"
+                anchors.left: parent.left
+                anchors.leftMargin: 5
+                anchors.verticalCenter: parent.verticalCenter
                 onClicked: {
                     if(_serialLink.isConnected) {
                         _mavlink_manager.write_params_to_board();
@@ -73,6 +75,9 @@ Rectangle {
                 id: readConfigParamsFromMCU
                 width: 100; height: 30
                 text: "Read"
+                anchors.left: writeConfigParamsToMCU.right
+                anchors.leftMargin: 5
+                anchors.verticalCenter: parent.verticalCenter
                 onClicked: {
                     if(_serialLink.isConnected){
                         _mavlink_manager.request_all_params();
@@ -83,6 +88,48 @@ Rectangle {
                     }
                 }
                 onEntered: dialog_log("Read parameters from controller board")
+            }
+            GImageButton{
+                id: quickOpenCloseComportButton
+                width: 70; height: 50;
+                text: ""
+                anchors.left: readConfigParamsFromMCU.right
+                anchors.leftMargin: 20
+//                horizontalCenterOffset_value: 90
+                anchors.verticalCenter: parent.verticalCenter
+                imageNormal : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_normal_ports_disconnect.png"
+                imagePressed: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_ports_disconnect.png"
+                imageHover  : "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_ports_disconnect.png"
+                Image{
+                    id: connectedImage
+                    anchors.fill: parent
+                    width: 50; height: 35
+                    source: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_run_0_port_connect.png"
+                    visible: false
+                }
+                onEntered: dialog_log("* Open or Close Comport *")
+                onClicked: {
+                    if(!_serialLink.isConnected){       // if port is being closed, can update port name
+                        _serialLink.update_comport_settings(selected_portname);
+                    }
+                    _serialLink.open_close_comport();
+                    if(_serialLink.isConnected) {
+                        show_popup_message("Port " + selected_portname + " is Opened \n Connecting to gStabi Controller ...")
+                    }
+                    else {
+                        show_popup_message("Port " + selected_portname + " is Closed.")
+                    }
+                }
+            }
+            GTextStyled{
+                id: comportButtonLabel
+                anchors.verticalCenter: parent.verticalCenter
+                text: "Disconnected"
+                anchors.left: quickOpenCloseComportButton.right
+                anchors.leftMargin: 0
+                verticalAlignment: Text.AlignVCenter
+                font.pixelSize: 14
+                color: "cyan"
             }
         }
     }
@@ -125,6 +172,29 @@ Rectangle {
         onMavlink_message_logChanged: {
             show_popup_message(_mavlink_manager.mavlink_message_log)
             main_log_msg = _mavlink_manager.mavlink_message_log + "\n" + main_log_msg
+        }
+        onBoard_connection_stateChanged: {
+            if(_mavlink_manager.board_connection_state){
+                quickOpenCloseComportButton.imageNormal  = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_normal_port_connect.png"
+                quickOpenCloseComportButton.imagePressed = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_port_connect.png"
+                quickOpenCloseComportButton.imageHover   = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_port_connect.png"
+                comportButtonLabel.text = "Connected"
+                connectedImage.visible = true;
+//                popup_msg = "gStabi controller is connected"
+            }
+            else{
+                quickOpenCloseComportButton.imageNormal  = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_normal_ports_disconnect.png"
+                quickOpenCloseComportButton.imagePressed = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_ports_disconnect.png"
+                quickOpenCloseComportButton.imageHover   = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_ports_disconnect.png"
+                comportButtonLabel.text = "Disconnected"
+                connectedImage.visible = false
+//                show_popup_message("gStabi controller is disconnected.")
+            }
+        }
+        onHb_pulseChanged: {
+            if(_mavlink_manager.hb_pulse)
+                connectedImage.source  = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_run_0_port_connect.png"
+            else connectedImage.source = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_run_1_port_connect.png"
         }
     }
 
