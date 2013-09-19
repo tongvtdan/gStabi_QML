@@ -69,7 +69,6 @@ Item{
         anchors.verticalCenter: parent.verticalCenter
         source: gauge_needle
         asynchronous: true
-
         rotation: gauge_sensor_value//get_rotation_angle();
     }
     GTextStyled{
@@ -430,11 +429,11 @@ Item{
             {
                 rot_angle = gauge_setpoint_angle;
                 if(rot_angle >= gauge_down_limit_set_angle) { // check whether the setpoint is in travel range
-//                    dialog_log(gauge_tilte + ": Reach max travel limit");
+                    dialog_log(gauge_tilte + ": Reach max travel limit");
                     out_of_range = true;
                     return gauge_down_limit_set_angle;
                 } else if(rot_angle <=gauge_up_limit_set_angle){
-//                    dialog_log(gauge_tilte + ": Reach min travel limit");
+                    dialog_log(gauge_tilte + ": Reach min travel limit");
                     out_of_range = true;
                     return gauge_up_limit_set_angle;
                 } else {                    // the setpoint is in travel limit

@@ -209,9 +209,6 @@ Item{
     }
     onMotor_dirChanged: reversedCheckBox.checked_state = motor_dir;
 
-//    onSpeed_modeChanged: {
-//        angleModeChecked.checked_state = !speed_mode
-//        velocityModeChecked.checked_state = speed_mode
-//    }
+
 
 }

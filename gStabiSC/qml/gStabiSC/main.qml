@@ -21,7 +21,6 @@ Rectangle {
     property string profile_name    : "Profile_Default"
 
     property int gremsy_product_id: 0
-    property bool   speed_mode  : false   // 0: angle mode; 1: speed mode
 
 
 
@@ -199,6 +198,7 @@ Rectangle {
             if(_mavlink_manager.hb_pulse)
                 connectedImage.source  = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_run_0_port_connect.png"
             else connectedImage.source = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_run_1_port_connect.png"
+//            if(popup_show)popup_show = false
         }
     }
 

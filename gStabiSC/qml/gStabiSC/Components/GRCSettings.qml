@@ -7,7 +7,8 @@ Rectangle {
     property int    trim_value          : 5
     property int    rc_channel_num      : 1
     property int    rc_value            : 50
-    property int    rc_pwm_level: 50
+    property int    rc_pwm_level        : 50
+    property bool   speed_mode          : false   // 0: angle mode; 1: speed mode
 
 
 
@@ -154,11 +155,12 @@ Rectangle {
         GCheckBox{
             id: angleModeChecked
             height: 30
+            checked_state: true
             anchors.left: parent.left
             anchors.leftMargin: 0
             anchors.verticalCenter: parent.verticalCenter
             checkbox_text: "Angle Mode"
-            checked_state: !speed_mode
+            state: "checked"
             onChecked_stateChanged: {
                 speed_mode = !checked_state
             }
@@ -166,11 +168,12 @@ Rectangle {
         GCheckBox{
             id: velocityModeChecked
             height: 30
+            checked_state: false
             anchors.left: angleModeChecked.right
             anchors.leftMargin: 0
             anchors.verticalCenter: parent.verticalCenter
             checkbox_text: "Speed Mode"
-            checked_state: speed_mode
+            state: "unchecked"
             onChecked_stateChanged: {
                 speed_mode = checked_state
             }
@@ -179,13 +182,11 @@ Rectangle {
     states: [
         State {
             name: "sbus"
-//            when: control_type_selected = 1
             PropertyChanges {  target: channeNumlRow;    visible: true     }
             PropertyChanges {  target: rcSBUS_PWM_Level;  visible: true   }
         },
         State {
             name: "pwm"
-//            when: control_type_selected = 0
             PropertyChanges {  target: channeNumlRow;    visible: false   }
             PropertyChanges { target: rcValueChannelIndicator ; width: 210 }
             PropertyChanges { target: rcSBUS_PWM_Level ; anchors.leftMargin: -70 }
@@ -218,5 +219,9 @@ Rectangle {
         if(rc_pwm_level > 500) rc_pwm_level =500;
         if(rc_pwm_level < -500) rc_pwm_level = -500;
         rcValueChannelIndicator.value = rc_pwm_level + 500;
+    }
+    onSpeed_modeChanged: {
+        angleModeChecked.checked_state = !speed_mode
+        velocityModeChecked.checked_state = speed_mode
     }
 }

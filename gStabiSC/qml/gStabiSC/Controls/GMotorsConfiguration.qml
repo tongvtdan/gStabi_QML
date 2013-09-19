@@ -34,7 +34,6 @@ Item{
         onPower_levelChanged:   _mavlink_manager.tilt_power = power_level;
         onPoles_numChanged:     _mavlink_manager.motor_tilt_num_poles = poles_num;
         onMotor_dirChanged:     _mavlink_manager.motor_tilt_dir = motor_dir;
-//        onSpeed_modeChanged:    _mavlink_manager.tilt_mode = speed_mode;
 
 
     }
@@ -55,7 +54,6 @@ Item{
         onPower_levelChanged:   _mavlink_manager.pan_power = power_level;
         onPoles_numChanged:     _mavlink_manager.motor_pan_num_poles = poles_num;
         onMotor_dirChanged:     _mavlink_manager.motor_pan_dir = motor_dir;
-//        onSpeed_modeChanged:    _mavlink_manager.pan_mode = speed_mode;
 
 
     }
@@ -76,7 +74,6 @@ Item{
         onPower_levelChanged:   _mavlink_manager.roll_power = power_level;
         onPoles_numChanged:     _mavlink_manager.motor_roll_num_poles = poles_num;
         onMotor_dirChanged:     _mavlink_manager.motor_roll_dir = motor_dir;
-//        onSpeed_modeChanged:    _mavlink_manager.roll_mode = speed_mode;
     }
 }
     Item{
@@ -112,14 +109,12 @@ Item{
         onMotor_tilt_dirChanged:        tiltMotorParams.motor_dir   = _mavlink_manager.motor_tilt_dir;
         onTilt_up_limit_angleChanged:   tiltMotorParams.min_value   = _mavlink_manager.tilt_up_limit_angle;
         onTilt_down_limit_angleChanged: tiltMotorParams.max_value   = _mavlink_manager.tilt_down_limit_angle;
-//        onTilt_modeChanged            : tiltMotorParams.speed_mode  = _mavlink_manager.tilt_mode;
 
         onPan_powerChanged:             panMotorParams.power_level = _mavlink_manager.pan_power;
         onMotor_pan_num_polesChanged:   panMotorParams.poles_num   = _mavlink_manager.motor_pan_num_poles;
         onMotor_pan_dirChanged:         panMotorParams.motor_dir   = _mavlink_manager.motor_pan_dir;
         onPan_ccw_limit_angleChanged:   panMotorParams.min_value   = _mavlink_manager.pan_ccw_limit_angle;
         onPan_cw_limit_angleChanged:    panMotorParams.max_value   = _mavlink_manager.pan_cw_limit_angle;
-//        onPan_modeChanged            : panMotorParams.speed_mode  = _mavlink_manager.pan_mode;
 
 
         onRoll_powerChanged:            rollMotorParams.power_level = _mavlink_manager.roll_power;
@@ -127,7 +122,6 @@ Item{
         onMotor_roll_dirChanged:        rollMotorParams.motor_dir   = _mavlink_manager.motor_roll_dir;
         onRoll_up_limit_angleChanged:   rollMotorParams.min_value   = _mavlink_manager.roll_up_limit_angle;
         onRoll_down_limit_angleChanged: rollMotorParams.max_value   = _mavlink_manager.roll_down_limit_angle;
-//        onRoll_modeChanged            : rollMotorParams.speed_mode  = _mavlink_manager.roll_mode;
 
         onMotor_freqChanged:            {
             motor_freq_selected         = _mavlink_manager.motor_freq;

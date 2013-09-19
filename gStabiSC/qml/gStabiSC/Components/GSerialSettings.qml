@@ -38,7 +38,7 @@ GFrame{
             }
             _serialLink.open_close_comport();
             if(_serialLink.isConnected) {
-                show_popup_message("Port " + selected_portname + " is Opened \n Connecting to gStabi Controller ...")
+                show_popup_message("Port " + selected_portname + " is Opened\nConnected to gStabi Controller !")
             }
             else {
                 show_popup_message("Port " + selected_portname + " is Closed.")

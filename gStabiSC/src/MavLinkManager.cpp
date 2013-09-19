@@ -106,10 +106,7 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
                 rc_sbus_level[16] = sbus_chan_values.ch17;
                 sbus_chan_values.ch18 = mavlink_msg_sbus_chan_values_get_ch18(&message);
                 rc_sbus_level[17] = sbus_chan_values.ch18;
-
                 update_rc_sbus_value();
-
-
             }
             break;
             case MAVLINK_MSG_ID_PPM_CHAN_VALUES: {  // get value of PWM from RC Remote control
@@ -117,7 +114,6 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
                 pwm_values.roll = mavlink_msg_ppm_chan_values_get_roll(&message);
                 pwm_values.pan  = mavlink_msg_ppm_chan_values_get_pan(&message);
                 pwm_values.mode = mavlink_msg_ppm_chan_values_get_mode(&message);
-
                 update_pwm_values();
             }
                 break;
@@ -140,7 +136,7 @@ void MavLinkManager::connection_timeout()
 {
     setboard_connection_state(OFFLINE);
     setmavlink_message_log("System does not response.");
-    RestartLinkConnectionTimer(1000);
+    RestartLinkConnectionTimer(2000);
 }
 
 void MavLinkManager::link_connection_state_changed(bool connection_state)
@@ -529,7 +525,6 @@ void MavLinkManager::write_params_to_board()
     if(motor_freq() != current_params_on_board.motorFreq){
         current_params_on_board.motorFreq = motor_freq();
         write_a_param_to_board("MOTOR_FREQ", current_params_on_board.motorFreq);
-        qDebug()<< "debug>> Motor freq save"<< current_params_on_board.motorFreq;
     }
 
 //    [!] *** SBUS Channel ***

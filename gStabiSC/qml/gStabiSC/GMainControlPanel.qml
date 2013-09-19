@@ -154,8 +154,6 @@ Rectangle {
             PropertyChanges { target: profileSettings; opacity: 0; }
             PropertyChanges { target: realtimeChart; opacity: 0; }
             PropertyChanges { target: info; opacity: 0; }
-
-
         },
         State {
             name: "Motor Settings"
@@ -167,10 +165,6 @@ Rectangle {
             PropertyChanges { target: profileSettings; opacity: 0; }
             PropertyChanges { target: realtimeChart; opacity: 0; }
             PropertyChanges { target: info; opacity: 0; }
-//            PropertyChanges { target: mainControlPanel;  motor_config_enabled: true }
-
-
-
         },
         State {
             name: "Controller Settings"
@@ -182,7 +176,6 @@ Rectangle {
             PropertyChanges { target: profileSettings; opacity: 0; }
             PropertyChanges { target: realtimeChart; opacity: 0; }
             PropertyChanges { target: info; opacity: 0; }
-
         },
         State {
             name: "IMU Settings"
@@ -194,7 +187,6 @@ Rectangle {
             PropertyChanges { target: profileSettings; opacity: 0; }
             PropertyChanges { target: realtimeChart; opacity: 0; }
             PropertyChanges { target: info; opacity: 0; }
-
         },
         State {
             name: "Profile"
@@ -206,7 +198,6 @@ Rectangle {
             PropertyChanges { target: profileSettings; opacity: 1; }
             PropertyChanges { target: realtimeChart; opacity: 0; }
             PropertyChanges { target: info; opacity: 0; }
-
         },
         State {
             name: "Realtime Charts"
@@ -218,7 +209,6 @@ Rectangle {
             PropertyChanges { target: profileSettings; opacity: 0; }
             PropertyChanges { target: realtimeChart; opacity: 1; }
             PropertyChanges { target: info; opacity: 0; }
-
         },
         State {
             name: "Information"

@@ -44,19 +44,23 @@ GFrame {
             onLpf_valueChanged          :   _mavlink_manager.tilt_lpf = lpf_value;
             onTrim_valueChanged         :   _mavlink_manager.tilt_trim = trim_value;
             onRc_channel_numChanged     :   _mavlink_manager.tilt_sbus_chan_num = rc_channel_num;
-
+            onSpeed_modeChanged         :   { _mavlink_manager.tilt_mode = speed_mode; console.log("console >> Tilt mode: " +_mavlink_manager.tilt_mode)}
         }
         GRCSettings{
             id: panRC
             title: "Pan"
-            onLpf_valueChanged:     _mavlink_manager.pan_lpf = lpf_value;
-            onTrim_valueChanged:    _mavlink_manager.pan_trim = trim_value;
+            onLpf_valueChanged          :   _mavlink_manager.pan_lpf = lpf_value;
+            onTrim_valueChanged         :   _mavlink_manager.pan_trim = trim_value;
+            onRc_channel_numChanged     :   _mavlink_manager.pan_sbus_chan_num = rc_channel_num;
+            onSpeed_modeChanged         :   _mavlink_manager.pan_mode = speed_mode;
         }
         GRCSettings{
             id: rollRC
             title: "Roll"
-            onLpf_valueChanged:     _mavlink_manager.roll_lpf = lpf_value;
-            onTrim_valueChanged:    _mavlink_manager.roll_trim = trim_value;
+            onLpf_valueChanged          :   _mavlink_manager.roll_lpf = lpf_value;
+            onTrim_valueChanged         :   _mavlink_manager.roll_trim = trim_value;
+            onRc_channel_numChanged     :   _mavlink_manager.roll_sbus_chan_num = rc_channel_num;
+            onSpeed_modeChanged         :   _mavlink_manager.roll_mode = speed_mode;
         }
     }
     Rectangle{
@@ -81,7 +85,6 @@ GFrame {
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
         }
-
         Row{
             id: modeNumRow
             anchors.left: parent.left
@@ -216,18 +219,22 @@ GFrame {
         onTilt_sbus_chan_numChanged : tiltRC.rc_channel_num   = _mavlink_manager.tilt_sbus_chan_num;
         onTilt_rc_sbus_levelChanged : tiltRC.rc_value         = _mavlink_manager.tilt_rc_sbus_level;
         onTilt_pwm_levelChanged     : tiltRC.rc_pwm_level     = _mavlink_manager.tilt_pwm_level;
+        onTilt_modeChanged          : tiltRC.speed_mode       = _mavlink_manager.tilt_mode;
+
 
         onPan_lpfChanged            : panRC.lpf_value      = _mavlink_manager.pan_lpf;
         onPan_trimChanged           : panRC.trim_value     = _mavlink_manager.pan_trim;
         onPan_sbus_chan_numChanged  : panRC.rc_channel_num = _mavlink_manager.pan_sbus_chan_num;
         onPan_rc_sbus_levelChanged  : panRC.rc_value       = _mavlink_manager.pan_rc_sbus_level;
         onPan_pwm_levelChanged      : panRC.rc_pwm_level   = _mavlink_manager.pan_pwm_level;
+        onPan_modeChanged           : panRC.speed_mode     = _mavlink_manager.pan_mode;
 
         onRoll_lpfChanged           : rollRC.lpf_value        = _mavlink_manager.roll_lpf;
         onRoll_trimChanged          : rollRC.trim_value       = _mavlink_manager.roll_trim;
         onRoll_sbus_chan_numChanged : rollRC.rc_channel_num   = _mavlink_manager.roll_sbus_chan_num;
         onRoll_rc_sbus_levelChanged : rollRC.rc_value         = _mavlink_manager.roll_rc_sbus_level;
         onRoll_pwm_levelChanged     : rollRC.rc_pwm_level     = _mavlink_manager.roll_pwm_level;
+        onRoll_modeChanged          : rollRC.speed_mode       = _mavlink_manager.roll_mode;
 
         onMode_sbus_chan_numChanged : rc_mode_channel_num     = _mavlink_manager.mode_sbus_chan_num;
         onMode_rc_sbus_levelChanged : rc_mode_level           = _mavlink_manager.mode_rc_sbus_level;
