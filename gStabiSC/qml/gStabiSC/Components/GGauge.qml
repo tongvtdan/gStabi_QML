@@ -30,12 +30,11 @@ Item{
 //        property string down_limit_handle_pressed   : "../images/gauges/gStabiUI_3.2_pressed_red_handle.png"
     //[!]
 // [!]
-
-    property double     gauge_setpoint_angle                : 0         // to control the gauge angle of camera
-    property double     gauge_down_limit_set_angle          : 15
-    property double     gauge_up_limit_set_angle            : -10
-    property bool       gauge_down_limit_set_enabled        : false
     property bool       gauge_set_enabled                   : false
+    property double     gauge_setpoint_angle                : 0         // to control the gauge angle of camera
+    property double     gauge_down_limit_set_angle          : 45
+    property double     gauge_up_limit_set_angle            : -45
+    property bool       gauge_down_limit_set_enabled        : false
     property double     gauge_angle_delta                   : gaugeNeedleImage.rotation - gauge_setpoint_angle
     property int        gauge_control_handler_no_of_clicks  : 0
     property int        gauge_down_limit_handle_no_of_clicks: 0
@@ -43,13 +42,13 @@ Item{
     property bool  select_handle2: false
     property bool  select_handle1: false
 
-    property bool   out_of_range: false
-    property double   scale_ratio: 0.8          // use to scale element inside the gauge
-    property string  up_limit_pie_color     : "blue"
-    property string  down_limit_pie_color   : "cyan"
-    property double  range_limit_opacity: 0.2
-    property int axis_direcion: 1   // 1: normal, -1 reverse, use with sensor_value
-    property bool gauge_handle_enabled: false
+    property bool       out_of_range            : false
+    property double     scale_ratio             : 0.8          // use to scale element inside the gauge
+    property string     up_limit_pie_color      : "blue"
+    property string     down_limit_pie_color    : "cyan"
+    property double     range_limit_opacity     : 0.2
+    property int        axis_direcion           : 1   // 1: normal, -1 reverse, use with sensor_value
+    property bool       gauge_handle_enabled    : false
 
     signal clicked
     signal entered
@@ -71,7 +70,7 @@ Item{
         source: gauge_needle
         asynchronous: true
 
-        rotation: get_rotation_angle();
+        rotation: gauge_sensor_value//get_rotation_angle();
     }
     GTextStyled{
         id: outOfRangeLabel
@@ -144,11 +143,13 @@ Item{
     Item{
         id: gaugeControlItem
         anchors.fill: parent
-        rotation: {
-            if(!out_of_range){
-                return gauge_config_mode ? (gauge_up_limit_set_angle - gauge_offset) : (gauge_setpoint_angle - gauge_offset)
-            }
-        }
+        rotation: gauge_config_mode ? (gauge_up_limit_set_angle - gauge_offset) : (gauge_setpoint_angle - gauge_offset)
+//        {
+//            if(!out_of_range)
+//            {
+//                return gauge_config_mode ? (gauge_up_limit_set_angle - gauge_offset) : (gauge_setpoint_angle - gauge_offset)
+//            }
+//        }
         Image {
             id: gaugeHandlePressedImage
             asynchronous: true
@@ -205,10 +206,11 @@ Item{
     Item{
         id: gaugeDownLimitSetItem
         anchors.fill: parent
-        rotation: {
-            if(!out_of_range) return (gauge_down_limit_set_angle - gauge_offset)
+        rotation: gauge_down_limit_set_angle - gauge_offset
+//        {
+//            if(!out_of_range) return (gauge_down_limit_set_angle - gauge_offset)
 
-        }
+//        }
         Image {
             id: gaugeDownRangeHandleSelectedImage
             asynchronous: true
@@ -428,11 +430,11 @@ Item{
             {
                 rot_angle = gauge_setpoint_angle;
                 if(rot_angle >= gauge_down_limit_set_angle) { // check whether the setpoint is in travel range
-                    dialog_log(gauge_tilte + ": Reach max travel limit");
+//                    dialog_log(gauge_tilte + ": Reach max travel limit");
                     out_of_range = true;
                     return gauge_down_limit_set_angle;
                 } else if(rot_angle <=gauge_up_limit_set_angle){
-                    dialog_log(gauge_tilte + ": Reach min travel limit");
+//                    dialog_log(gauge_tilte + ": Reach min travel limit");
                     out_of_range = true;
                     return gauge_up_limit_set_angle;
                 } else {                    // the setpoint is in travel limit
