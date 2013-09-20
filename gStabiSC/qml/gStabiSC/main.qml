@@ -157,6 +157,12 @@ Rectangle {
     }
     GPopupMessage{
         id: popupDialog
+        x: gstabiBackgroundImage.width/2
+        y: 200
+    }
+    GKeyCodeInput{
+        id: keycodeInputDialog
+        focus: true
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         anchors.centerIn: gstabiBackgroundImage.Center;

@@ -1,4 +1,4 @@
-#ifndef  GLOBALDATA_H
+#ifndef  GLOBALDATA_H 
 #define  GLOBALDATA_H
 
 #include <math.h>
@@ -20,8 +20,8 @@
 #define ONBOARD_PARAM_COUNT    57
 #define ONBOARD_PARAM_NAME_LENGTH 16
 
-
-
+					 
+ 
 
 
   enum gMAV_ENUM
@@ -30,72 +30,72 @@
    gMAV_SEND_NONE,
   };
 enum
-{
-    PARAM_VERSION,
-    PARAM_SERIAL_NUMBER,
-    PARAM_PITCH_P,
-    PARAM_PITCH_I,
-    PARAM_PITCH_D,
+{ 
+	PARAM_VERSION,
+	PARAM_SERIAL_NUMBER,
+	PARAM_PITCH_P,
+	PARAM_PITCH_I,
+	PARAM_PITCH_D,
+	
+	PARAM_ROLL_P,
+	PARAM_ROLL_I,
+	PARAM_ROLL_D,
 
-    PARAM_ROLL_P,
-    PARAM_ROLL_I,
-    PARAM_ROLL_D,
+	PARAM_YAW_P,
+	PARAM_YAW_I,
+	PARAM_YAW_D,
 
-    PARAM_YAW_P,
-    PARAM_YAW_I,
-    PARAM_YAW_D,
+	PARAM_PITCH_POWER,
+	PARAM_ROLL_POWER,
+	PARAM_YAW_POWER,
 
-    PARAM_PITCH_POWER,
-    PARAM_ROLL_POWER,
-    PARAM_YAW_POWER,
+	PARAM_PITCH_FOLLOW,
+	PARAM_ROLL_FOLLOW,
+	PARAM_YAW_FOLLOW,
 
-    PARAM_PITCH_FOLLOW,
-    PARAM_ROLL_FOLLOW,
-    PARAM_YAW_FOLLOW,
+	PARAM_PITCH_FILTER,
+	PARAM_ROLL_FILTER,
+	PARAM_YAW_FILTER,
+	PARAM_GYRO_TRUST,
 
-    PARAM_PITCH_FILTER,
-    PARAM_ROLL_FILTER,
-    PARAM_YAW_FILTER,
-    PARAM_GYRO_TRUST,
+	PARAM_NPOLES_PITCH,
+	PARAM_NPOLES_ROLL,
+	PARAM_NPOLES_YAW,
 
-    PARAM_NPOLES_PITCH,
-    PARAM_NPOLES_ROLL,
-    PARAM_NPOLES_YAW,
+	PARAM_DIR_MOTOR_PITCH,
+	PARAM_DIR_MOTOR_ROLL,
+	PARAM_DIR_MOTOR_YAW,
+	PARAM_MOTOR_FREQ,
+	PARAM_RADIO_TYPE,
+	PARAM_GYRO_LPF,
+	PARAM_TRAVEL_MIN_PITCH,
+	PARAM_TRAVEL_MAX_PITCH,
+	PARAM_TRAVEL_MIN_ROLL,
+	PARAM_TRAVEL_MAX_ROLL,
+	PARAM_TRAVEL_MIN_YAW,
+	PARAM_TRAVEL_MAX_YAW,
 
-    PARAM_DIR_MOTOR_PITCH,
-    PARAM_DIR_MOTOR_ROLL,
-    PARAM_DIR_MOTOR_YAW,
-    PARAM_MOTOR_FREQ,
-    PARAM_RADIO_TYPE,
-    PARAM_GYRO_LPF,
-    PARAM_TRAVEL_MIN_PITCH,
-    PARAM_TRAVEL_MAX_PITCH,
-    PARAM_TRAVEL_MIN_ROLL,
-    PARAM_TRAVEL_MAX_ROLL,
-    PARAM_TRAVEL_MIN_YAW,
-    PARAM_TRAVEL_MAX_YAW,
-
-    PARAM_RC_PITCH_LPF,
-    PARAM_RC_ROLL_LPF,
-    PARAM_RC_YAW_LPF,
-    PARAM_SBUS_PITCH_CHAN,
-    PARAM_SBUS_ROLL_CHAN,
-    PARAM_SBUS_YAW_CHAN,
-    PARAM_SBUS_MODE_CHAN,
-    PARAM_ACCX_OFFSET,
-    PARAM_ACCY_OFFSET,
-    PARAM_ACCZ_OFFSET,
-    PARAM_GYROX_OFFSET,
-    PARAM_GYROY_OFFSET,
-    PARAM_GYROZ_OFFSET,
-    PARAM_USE_GPS,
-    PARAM_SKIP_GYRO_CALIB,
-    PARAM_RC_PITCH_TRIM,
-    PARAM_RC_ROLL_TRIM,
-    PARAM_RC_YAW_TRIM,
-    PARAM_RC_PITCH_MODE,
-    PARAM_RC_ROLL_MODE,
-    PARAM_RC_YAW_MODE,
+	PARAM_RC_PITCH_LPF,
+	PARAM_RC_ROLL_LPF,
+	PARAM_RC_YAW_LPF,
+	PARAM_SBUS_PITCH_CHAN,
+	PARAM_SBUS_ROLL_CHAN,
+	PARAM_SBUS_YAW_CHAN,
+	PARAM_SBUS_MODE_CHAN,
+	PARAM_ACCX_OFFSET,
+	PARAM_ACCY_OFFSET,
+	PARAM_ACCZ_OFFSET,
+	PARAM_GYROX_OFFSET,
+	PARAM_GYROY_OFFSET,
+	PARAM_GYROZ_OFFSET,
+	PARAM_USE_GPS,
+	PARAM_SKIP_GYRO_CALIB,
+	PARAM_RC_PITCH_TRIM,
+	PARAM_RC_ROLL_TRIM,
+	PARAM_RC_YAW_TRIM,
+	PARAM_RC_PITCH_MODE,
+	PARAM_RC_ROLL_MODE,
+	PARAM_RC_YAW_MODE,
 
 };
 enum
@@ -103,7 +103,7 @@ enum
   gMODE_FOLLOW_PAN,
   gMODE_FOLLOW_PAN_TILT,
 
-}  ;
+}  ; 
 enum
 { gSTATE_CALIB_ACC,
   gSTATE_CALIB_GYRO,
@@ -138,7 +138,7 @@ enum
 typedef struct __global_struct
 {
     float param[ONBOARD_PARAM_COUNT];
-    char * param_name[ONBOARD_PARAM_COUNT];
+    char * param_name[ONBOARD_PARAM_COUNT]; 
     uint16_t parameter_i; // parameter index
 
 }global_struct;
@@ -173,10 +173,10 @@ typedef struct __gConfig
   uint8_t nPolesPitch;
   uint8_t nPolesRoll;
   uint8_t nPolesYaw;
-
+ 
   uint8_t 	gyroLPF;
-
-
+  
+  
   int16_t travelMinRoll;
   int16_t travelMaxRoll;
   int16_t travelMinPitch;
@@ -207,7 +207,7 @@ typedef struct __gConfig
 }	gConfig_t;
 
 typedef struct __gSensor
-{
+{ 
   int16_t gyroX;
   int16_t gyroY;
   int16_t gyroZ;
@@ -226,10 +226,10 @@ typedef struct __gSensor
   uint8_t INT;
   uint8_t i2cBus;
   uint8_t i2cError;
-
+ 
 
 }  gSensor_t;
-
+ 
  typedef struct __gAtti
 { float	theta;
   float phi;
@@ -239,20 +239,20 @@ typedef struct __gSensor
   float psiDot;
   float time;
 }	gAtti_t;
-
+ 
 
 typedef struct __gMotor
 { float pitchPos;
-
+  
   int32_t pitchDamp;
   int32_t pitchDrive;
   float pitchPosLock;
-
+  
   float rollPos;
   int32_t rollDamp;
   int32_t rollDrive;
   float rollPosLock;
-
+ 
   float yawPos;
   int32_t yawDamp;
   int32_t yawDrive;
@@ -273,7 +273,7 @@ typedef struct __gRadio
   int16_t sbusChan[18];
   uint8_t update;
 
-}gRadio_t;
+}	gRadio_t;
 
 typedef struct __gState
 { uint8_t calibAcc;
@@ -296,4 +296,4 @@ typedef struct __gMav
   uint8_t update;
 } gMav_t ;
 
-#endif
+#endif	  

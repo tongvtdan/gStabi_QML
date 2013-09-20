@@ -9,6 +9,11 @@ Rectangle{
     border.color: "#04d6f1"
     MouseArea{
         anchors.fill: parent
+        id: dragConsolWindowArea
+//        width: parent.width ; height: 30
+//        anchors.top: parent.top;  anchors.horizontalCenter: parent.horizontalCenter
+        drag.target: parent
+
     }
     GButton{
         y: 10
@@ -41,8 +46,6 @@ Rectangle{
         }
 
     }
-
-
     states:[
            State{
                name: "showDialog"

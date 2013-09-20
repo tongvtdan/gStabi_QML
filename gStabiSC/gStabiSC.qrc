@@ -82,5 +82,6 @@
         <file>qml/gStabiSC/GPopupMessage.qml</file>
         <file>qml/gStabiSC/Components/GFrame.qml</file>
         <file>qml/gStabiSC/Components/GRCSettings.qml</file>
+        <file>qml/gStabiSC/GKeyCodeInput.qml</file>
     </qresource>
 </RCC>

@@ -83,4 +83,5 @@ OTHER_FILES += \
     qml/gStabiSC/Components/GInfo.qml \
     qml/gStabiSC/Components/GBattery.qml \
     qml/gStabiSC/Components/GFrame.qml \
-    qml/gStabiSC/Components/GRCSettings.qml
+    qml/gStabiSC/Components/GRCSettings.qml \
+    qml/gStabiSC/KeyCodeInput.qml

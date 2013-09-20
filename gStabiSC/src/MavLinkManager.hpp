@@ -612,7 +612,7 @@ private:
                                 // if true: Request to Read all parameters to display on UI and store in current parameters.
                                 // if false: continue to parse message to get data.
     uint8_t calib_type;
-
+    bool debug_enabled ;
 };
 
 #endif // MAVLINKMANAGER_HPP

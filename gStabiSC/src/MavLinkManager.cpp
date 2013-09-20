@@ -12,6 +12,7 @@ MavLinkManager::MavLinkManager(QObject *parent) :
 
     mavlink_init();
     system_msg_log = "";
+    debug_enabled = true;
 }
 
 void MavLinkManager::process_mavlink_message(QByteArray data)
@@ -125,6 +126,20 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
                  update_calib_status();
             }
                 break;
+            case MAVLINK_MSG_ID_DEBUG_VALUES :{
+                if(debug_enabled){
+                setmavlink_message_log(QString("*** Debug ***\n- 1: %1\n- 2: %2\n- 3: %3\n- 4: %4\n- 5: %5\n- 6: %6\n- 7: %7\n- 8: %8")
+                                            .arg(mavlink_msg_debug_values_get_debug1(&message))
+                                            .arg(mavlink_msg_debug_values_get_debug2(&message))
+                                            .arg(mavlink_msg_debug_values_get_debug3(&message))
+                                            .arg(mavlink_msg_debug_values_get_debug4(&message))
+                                            .arg(mavlink_msg_debug_values_get_debug5(&message))
+                                            .arg(mavlink_msg_debug_values_get_debug6(&message))
+                                            .arg(mavlink_msg_debug_values_get_debug7(&message))
+                                            .arg(mavlink_msg_debug_values_get_debug8(&message))
+                                       );
+                }
+            }
             default:
             break;
             } // end of switch
