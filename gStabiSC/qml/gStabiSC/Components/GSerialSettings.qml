@@ -14,6 +14,7 @@ GFrame{
 
     border_normal   : "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_normal_serialports_frame.png"
     border_hover    : "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_hover_serialports_frame.png"
+    title: "Serial ports"
     // Open Close Port Button
     GImageButton{
         id: openCloseComportButton

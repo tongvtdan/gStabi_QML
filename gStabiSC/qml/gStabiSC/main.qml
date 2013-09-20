@@ -42,8 +42,7 @@ Rectangle {
         implicitHeight: gstabiBackgroundImage.height ; implicitWidth: gstabiBackgroundImage.width
     }
     GBattery{
-        anchors.left: gstabiBackgroundImage.left
-        anchors.leftMargin: 5
+        anchors.left: gstabiBackgroundImage.left;  anchors.leftMargin: 5
         anchors.verticalCenter: parent.verticalCenter
     }
 

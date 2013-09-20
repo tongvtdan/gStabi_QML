@@ -14,6 +14,7 @@ Item{
             id: tiltParameters
             anchors.left: parent.left; anchors.leftMargin: 0
             anchors.top: parent.top; anchors.topMargin: 0
+            title: "TILT"
             onP_valueChanged:       _mavlink_manager.tilt_kp     = p_value;
             onI_valueChanged:       _mavlink_manager.tilt_ki     = i_value;
             onD_valueChanged:       _mavlink_manager.tilt_kd     = d_value;
@@ -30,7 +31,7 @@ Item{
             id: panParameters
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.top; anchors.topMargin: 0
-            border_normal: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_pan_normal_frame.png"
+            title: "PAN"
             onP_valueChanged:       _mavlink_manager.pan_kp     = p_value;
             onI_valueChanged:       _mavlink_manager.pan_ki     = i_value;
             onD_valueChanged:       _mavlink_manager.pan_kd     = d_value;
@@ -48,7 +49,7 @@ Item{
             id: rollParameters
             anchors.right: parent.right; anchors.rightMargin: 0
             anchors.top: parent.top; anchors.topMargin: 0
-            border_normal: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_roll_normal_frame.png"
+            title: "ROLL"
             onP_valueChanged:       _mavlink_manager.roll_kp     = p_value;
             onI_valueChanged:       _mavlink_manager.roll_ki     = i_value;
             onD_valueChanged:       _mavlink_manager.roll_kd     = d_value;

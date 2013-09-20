@@ -4,7 +4,7 @@ import "../Components"
 GFrame{
     id: infoContainer
     anchors.centerIn: parent.Center
-    border_normal: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_info_normal_frame.png"
+    title: "INFO"
     GTextStyled{
         id: aboutText
         text: "gStabiSC Application\n

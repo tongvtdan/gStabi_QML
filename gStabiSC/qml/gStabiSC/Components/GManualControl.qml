@@ -13,7 +13,7 @@ GFrame {
     border_hover: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_hover_manual_control_frame.png"
 
     width: 770
-
+    title: "Remote Control"
     // Control Type
     GListView{
         id: controlTypeList;

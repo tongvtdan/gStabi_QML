@@ -1,8 +1,7 @@
 import QtQuick 2.0
 
-BorderImage{
+GFrame{
     id: rootContainer
-    asynchronous: true
     // variables for P
     property int  p_value   : 45
     property int  p_min     : 0;
@@ -24,28 +23,8 @@ BorderImage{
     property int  filter_min     : 0;
     property int  filter_max     : 255;
 
-    property string text_color: "cyan"
+    property string text_color  : "cyan"
 
-    // uncomment these lines to use resources
-    property string border_normal   : "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_tilt_normal_frame.png"
-    property string border_hover    : "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_hover_frame.png"
-
-    width: 320; height: 230;
-    source: border_normal
-    MouseArea{
-        anchors.fill: parent
-        hoverEnabled: true
-        onEntered: borderHover.visible = true
-        onExited: borderHover.visible = false
-
-    }
-    BorderImage {
-        id: borderHover
-        source: border_hover
-        asynchronous: true
-        visible: false
-        anchors.fill: parent
-    }
     Column{
         // p parameters
         id: paramsColumn

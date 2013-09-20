@@ -59,6 +59,7 @@
         <file>qml/gStabiSC/Components/images/gStabiUI_3.3_normal_serialports_frame.png</file>
         <file>qml/gStabiSC/Components/images/gStabiUI_3.3_hover_serialports_frame.png</file>
         <file>qml/gStabiSC/Components/images/gStabiUI_3.3_hover_manual_control_frame.png</file>
+        <file>qml/gStabiSC/Components/images/gStabiUI_3.3_normal_frame.png</file>
     </qresource>
     <qresource prefix="/">
         <file>qml/gStabiSC/main.qml</file>
@@ -93,5 +94,6 @@
         <file>qml/gStabiSC/GPopupMessage.qml</file>
         <file>qml/gStabiSC/Components/GFrame.qml</file>
         <file>qml/gStabiSC/Components/GRCSettings.qml</file>
+        <file>qml/gStabiSC/Components/images/gStabiUI_3.3_normal_frame.png</file>
     </qresource>
 </RCC>

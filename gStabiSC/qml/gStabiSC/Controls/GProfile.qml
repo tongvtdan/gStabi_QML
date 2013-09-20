@@ -16,9 +16,7 @@ GFrame{
     property string roll_motor_class_name   : "Roll Motor"
 
 
-    //    width: 400; height:200
-    border_normal: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_profile_normal_frame.png"
-
+    title: "PROFILE"
     Rectangle{
         id: profileNameContainer
         width: 130;  height: 30

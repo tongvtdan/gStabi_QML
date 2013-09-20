@@ -47,7 +47,7 @@ Item{
         State{
             name: "checked"
             when: checked_state
-            PropertyChanges { target: checkBoxChecked; color: "limegreen"; anchors.horizontalCenterOffset: 0; anchors.verticalCenterOffset: 0   }
+            PropertyChanges { target: checkBoxChecked; color: "cyan"; anchors.horizontalCenterOffset: 0; anchors.verticalCenterOffset: 0   }
         }
         ,State {
             name:"unchecked"

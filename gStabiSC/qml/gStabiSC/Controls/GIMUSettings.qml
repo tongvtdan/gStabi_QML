@@ -9,8 +9,6 @@ Item{
     property bool acc_calib_mode_adv  : true
     property bool use_gps_correction    : false
 
-
-
     Row{
         id: motorsParamsRow
         anchors.horizontalCenter: parent.horizontalCenter
@@ -18,7 +16,7 @@ Item{
         spacing: 0
         GFrame{
             id: gyroSettings
-            border_normal: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_gyro_normal_frame.png"
+            title: "Gyro"
             GTextStyled{
                 id: gyroFrameLabel
                 text: "Offset"
@@ -170,7 +168,7 @@ Item{
         }
         GFrame{
             id: accelSettings
-            border_normal: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_accel_normal_frame.png"
+            title: "Accel"
             GTextStyled{
                 id: accelFrameLabel
                 text: "Offset"
@@ -284,7 +282,7 @@ Item{
         }
         GFrame{
             id: gpsSettings
-            border_normal: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_gps_normal_frame.png"
+            title: "GPS"
             GCheckBox{
                 id: gpsCorrectionChecked
                 checkbox_text: "Use GPS Correction"

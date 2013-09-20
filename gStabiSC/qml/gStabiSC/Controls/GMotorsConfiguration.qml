@@ -20,9 +20,9 @@ Item{
         spacing: 0
     GMotorConfig{
         id: tiltMotorParams
-        border_normal: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_tilt_normal_frame.png"
         min_label: "Up Limit"
         max_label: "Down Limit"
+        title: "TILT"
         onMax_valueChanged: {
             _mavlink_manager.tilt_down_limit_angle = max_value; // update variable in mavlink, in cpp file
             tilt_down_limit = max_value                         // update to Gauge display
@@ -39,10 +39,9 @@ Item{
     }
     GMotorConfig{
         id: panMotorParams
-        border_normal: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_pan_normal_frame.png"
         min_label: "CCW Limit"
         max_label: "CW Limit"
-
+        title: "PAN"
         onMax_valueChanged: {
             _mavlink_manager.pan_cw_limit_angle = max_value;
            pan_cw_limit = max_value;
@@ -59,9 +58,9 @@ Item{
     }
     GMotorConfig{
         id: rollMotorParams
-        border_normal: "qrc:/images/qml/gStabiSC/Components/images/gStabiUI_3.3_roll_normal_frame.png"
         min_label: "Up Limit"
         max_label: "Down Limit"
+        title: "ROLL"
 
         onMax_valueChanged: {
             _mavlink_manager.roll_down_limit_angle = max_value;
