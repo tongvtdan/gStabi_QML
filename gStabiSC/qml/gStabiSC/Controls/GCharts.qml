@@ -8,7 +8,7 @@ Rectangle {
     GTextStyled{
         anchors.centerIn: parent
         color: "cyan"
-        text: "Comming soon..."
+        text: "Coming soon..."
     }
 }
 
