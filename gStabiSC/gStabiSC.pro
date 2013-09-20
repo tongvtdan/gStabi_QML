@@ -14,6 +14,7 @@ QML_IMPORT_PATH =
 
 INCLUDEPATH += src \
                thirdParty/mavlink/v1.0/gremsyBGC \
+               thirdParty/mavlink/v1.0/common \
                thirdParty/mavlink/v1.0 \
                thirdParty/mavlink
 
