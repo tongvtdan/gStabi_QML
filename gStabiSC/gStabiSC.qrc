@@ -1,13 +1,8 @@
 <RCC>
     <qresource prefix="/images">
         <file>qml/gStabiSC/images/gStabiUI_3.2_background.png</file>
-        <file>qml/gStabiSC/images/animation.gif</file>
-        <file>qml/gStabiSC/images/buttons/gStabiUI_3.2_pressed_button.png</file>
-        <file>qml/gStabiSC/images/buttons/gStabiUI_3.2_released_button.png</file>
-        <file>qml/gStabiSC/images/gStabiUI_3.2_serial_setting_dialog.png</file>
         <file>qml/gStabiSC/images/gauges/gStabiUI_3.2_dashboard_panel.png</file>
         <file>qml/gStabiSC/Components/images/gStabiUI_3.2_pressed_slider_handle.png</file>
-        <file>qml/gStabiSC/images/gStabiUI_3.2_tilt_config_dialog.png</file>
         <file>qml/gStabiSC/images/gauges/gStabiUI_3.2_normal_blue_handle.png</file>
         <file>qml/gStabiSC/images/gauges/gStabiUI_3.2_normal_cyan_handle.png</file>
         <file>qml/gStabiSC/images/gauges/gStabiUI_3.2_normal_green_handle.png</file>
@@ -23,9 +18,6 @@
         <file>qml/gStabiSC/images/gauges/gStabiUI_3.3_needle_pan.png</file>
         <file>qml/gStabiSC/images/gauges/gStabiUI_3.3_needle_roll.png</file>
         <file>qml/gStabiSC/images/gauges/gStabiUI_3.3_needle_tilt.png</file>
-        <file>qml/gStabiSC/Components/images/gStabiUI_3.3_pan_normal_frame.png</file>
-        <file>qml/gStabiSC/Components/images/gStabiUI_3.3_roll_normal_frame.png</file>
-        <file>qml/gStabiSC/Components/images/gStabiUI_3.3_tilt_normal_frame.png</file>
         <file>qml/gStabiSC/Components/images/gStabiUI_3.3_hover_frame.png</file>
         <file>qml/gStabiSC/images/buttons/gStabiUI_3.3_hover_button_border.png</file>
         <file>qml/gStabiSC/images/buttons/gStabiUI_3.3_normal_button_border.png</file>
@@ -49,17 +41,13 @@
         <file>qml/gStabiSC/images/buttons/gStabiUI_3.3_normal_ports_disconnect.png</file>
         <file>qml/gStabiSC/images/buttons/gStabiUI_3.3_run_0_port_connect.png</file>
         <file>qml/gStabiSC/images/buttons/gStabiUI_3.3_run_1_port_connect.png</file>
-        <file>qml/gStabiSC/Components/images/gStabiUI_3.3_accel_normal_frame.png</file>
-        <file>qml/gStabiSC/Components/images/gStabiUI_3.3_gps_normal_frame.png</file>
-        <file>qml/gStabiSC/Components/images/gStabiUI_3.3_gyro_normal_frame.png</file>
-        <file>qml/gStabiSC/Components/images/gStabiUI_3.3_info_normal_frame.png</file>
-        <file>qml/gStabiSC/Components/images/gStabiUI_3.3_profile_normal_frame.png</file>
-        <file>qml/gStabiSC/Components/images/gStabiUI_3.3_controltype_normal_frame.png</file>
         <file>qml/gStabiSC/Components/images/gStabiUI_3.3_normal_manual_control_frame.png</file>
         <file>qml/gStabiSC/Components/images/gStabiUI_3.3_normal_serialports_frame.png</file>
         <file>qml/gStabiSC/Components/images/gStabiUI_3.3_hover_serialports_frame.png</file>
         <file>qml/gStabiSC/Components/images/gStabiUI_3.3_hover_manual_control_frame.png</file>
         <file>qml/gStabiSC/Components/images/gStabiUI_3.3_normal_frame.png</file>
+        <file>qml/gStabiSC/Components/images/gStabiUI_3.3_unchecked_checkbox.png</file>
+        <file>qml/gStabiSC/Components/images/gStabiUI_3.3_checked_checkbox.png</file>
     </qresource>
     <qresource prefix="/">
         <file>qml/gStabiSC/main.qml</file>
@@ -94,6 +82,5 @@
         <file>qml/gStabiSC/GPopupMessage.qml</file>
         <file>qml/gStabiSC/Components/GFrame.qml</file>
         <file>qml/gStabiSC/Components/GRCSettings.qml</file>
-        <file>qml/gStabiSC/Components/images/gStabiUI_3.3_normal_frame.png</file>
     </qresource>
 </RCC>

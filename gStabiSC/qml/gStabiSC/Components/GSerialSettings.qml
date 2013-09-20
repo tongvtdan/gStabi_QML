@@ -28,7 +28,7 @@ GFrame{
         Image{
             id: connectedImage
             anchors.fill: parent
-            width: 50; height: 35
+            width: 32; height: 20
             source: connection_image_src
             visible: false
         }

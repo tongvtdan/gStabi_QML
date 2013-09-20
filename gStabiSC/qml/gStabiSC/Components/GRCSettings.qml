@@ -142,22 +142,16 @@ Rectangle {
             }
         }
     }
-    Rectangle{
+    Item{
         id: modeContainer
-        anchors.left: parent.left
-        anchors.leftMargin: 5
-        anchors.top: rcSBUS_PWM_Level.bottom; anchors.topMargin: 5
-        width: 230
-        height: 30
-        color: "transparent"
-        radius: 5
-        border.color: "cyan"; border.width: 1
+        anchors.left: parent.left;   anchors.leftMargin: 5
+        anchors.top: rcSBUS_PWM_Level.bottom; anchors.topMargin: 10
+        width: 230 ;    height: 30
         GCheckBox{
             id: angleModeChecked
             height: 30
             checked_state: true
-            anchors.left: parent.left
-            anchors.leftMargin: 0
+            anchors.left: parent.left;       anchors.leftMargin: 0
             anchors.verticalCenter: parent.verticalCenter
             checkbox_text: "Angle Mode"
             state: "checked"
@@ -169,8 +163,7 @@ Rectangle {
             id: velocityModeChecked
             height: 30
             checked_state: false
-            anchors.left: angleModeChecked.right
-            anchors.leftMargin: 0
+            anchors.left: angleModeChecked.right;    anchors.leftMargin: 0
             anchors.verticalCenter: parent.verticalCenter
             checkbox_text: "Speed Mode"
             state: "unchecked"

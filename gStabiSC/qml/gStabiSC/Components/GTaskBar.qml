@@ -51,8 +51,7 @@ Image {
             Image {
                 id: highlightRect
                  width: 70; height: 50
-//                anchors.fill: parent
-                source: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_hover_button_border.png"
+                 source: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_hover_button_border.png"
             }
         }
     }

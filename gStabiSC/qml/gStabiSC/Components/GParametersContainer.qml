@@ -28,14 +28,18 @@ GFrame{
     Column{
         // p parameters
         id: paramsColumn
-        anchors.leftMargin: 20
-        anchors.topMargin: 20
+        width: 310
+        height: 198
+        anchors.bottomMargin: 30
+        anchors.topMargin: 30
+//        anchors.leftMargin: 20
+//        anchors.topMargin: 20
         anchors.fill: parent
         spacing: 20
         Row{
             id: pParamsRow
             width: 300
-            anchors.right: parent.right;anchors.rightMargin: -20
+            anchors.right: parent.right;anchors.rightMargin: -30
             spacing: 10
             GTextStyled{
                 id: pLabel
@@ -67,7 +71,7 @@ GFrame{
         Row{
             id: iParamsRow
             width: 300
-            anchors.right: parent.right;anchors.rightMargin: -20
+            anchors.right: parent.right;anchors.rightMargin: -30
             spacing: 10
             GTextStyled{
                 id: iLabel
@@ -99,7 +103,7 @@ GFrame{
         Row{
             id: dParamsRow
             width: 300
-            anchors.right: parent.right;anchors.rightMargin: -20
+            anchors.right: parent.right;anchors.rightMargin: -30
             spacing: 10
             GTextStyled{
                 id: dLabel
@@ -131,7 +135,7 @@ GFrame{
         Row{
             id: followParamsRow
             width: 300
-            anchors.right: parent.right;anchors.rightMargin: -20
+            anchors.right: parent.right;anchors.rightMargin: -30
             spacing: 10
             GTextStyled{
                 id: followLabel
@@ -164,7 +168,7 @@ GFrame{
         Row{
             id: filterParamsRow
             width: 300
-            anchors.right: parent.right;anchors.rightMargin: -20
+            anchors.right: parent.right;anchors.rightMargin: -30
             spacing: 10
             GTextStyled{
                 id: filterLabel

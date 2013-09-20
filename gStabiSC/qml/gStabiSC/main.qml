@@ -105,7 +105,8 @@ Rectangle {
                 Image{
                     id: connectedImage
                     anchors.fill: parent
-                    width: 50; height: 35
+                    width: 32; height: 20
+
                     source: "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_run_0_port_connect.png"
                     visible: false
                 }
