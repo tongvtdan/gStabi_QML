@@ -12,7 +12,7 @@ MavLinkManager::MavLinkManager(QObject *parent) :
 
     mavlink_init();
     system_msg_log = "";
-    debug_enabled = true;
+    debug_enabled = false;  // send/not send debug message to QML
 }
 
 void MavLinkManager::process_mavlink_message(QByteArray data)
@@ -32,6 +32,7 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
             if(first_data_pack){    // if it is the first time receive mavlink message
                 first_data_pack = false; // From now on, all message is treated as normal.
                 request_all_params();   // then request all parameters from Board
+                setkeycode_request(true);  // simulate the request from MCU
             }
             switch (message.msgid)
             {
@@ -140,6 +141,17 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
                                        );
                 }
             }
+                break;
+            case MAVLINK_MSG_ID_KEYCODE_REQUEST:{
+                if(mavlink_msg_keycode_request_get_device_name(&message) == GSTABI){
+                    setkeycode_request(true);
+                }
+            }
+                break;
+            case MAVLINK_MSG_ID_UNIQUE_ID_VALUES:{
+
+            }
+                break;
             default:
             break;
             } // end of switch
@@ -163,6 +175,7 @@ void MavLinkManager::link_connection_state_changed(bool connection_state)
     else {
         linkConnectionTimer->stop();
         setboard_connection_state(OFFLINE);
+        first_data_pack = true;
     }
 }
 
@@ -798,6 +811,7 @@ void MavLinkManager::mavlink_init()
     system_state = MAV_STATE_STANDBY; ///< System ready for flight
     first_data_pack = true;           // this will be check when mavlink message was received, to check whether it's 1st time to received the message
     heartbeat_state = false;
+    setkeycode_request(false);
 }
 
 void MavLinkManager::RestartLinkConnectionTimer(int msec)
@@ -858,6 +872,17 @@ void MavLinkManager::calib_accel()
     emit messge_write_to_comport_ready((const char*)buf, len);
     calib_type = ACC_CALIB;
 
+}
+
+void MavLinkManager::send_keycode(int _keycode_value)
+{
+    uint16_t len=0;
+    mavlink_message_t msg;
+    uint8_t buf[MAVLINK_MAX_PACKET_LEN];
+    mavlink_msg_keycode_value_pack(SYSTEM_ID, MAV_COMP_ID_SERVO1, &msg, GSTABI, _keycode_value);
+    len = mavlink_msg_to_send_buffer(buf, &msg);
+    emit messge_write_to_comport_ready((const char*)buf, len);
+    qDebug() << "Sent keycode";
 }
 
 
@@ -1093,6 +1118,17 @@ void MavLinkManager::setmotor_freq(int _freq)
 {
     m_motor_freq = _freq;
     emit motor_freqChanged(m_motor_freq);
+}
+
+bool MavLinkManager::keycode_request() const
+{
+    return m_keycode_request;
+}
+
+void MavLinkManager::setkeycode_request(bool _request)
+{
+    m_keycode_request = _request;
+    emit keycode_requestChanged(m_keycode_request);
 }
 
 int MavLinkManager::mode_sbus_chan_num() const

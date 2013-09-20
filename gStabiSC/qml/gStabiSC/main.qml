@@ -157,15 +157,30 @@ Rectangle {
     }
     GPopupMessage{
         id: popupDialog
-        x: gstabiBackgroundImage.width/2
+        x: gstabiBackgroundImage.width/2 -200
         y: 200
     }
     GKeyCodeInput{
         id: keycodeInputDialog
+        state: "hideDialog"
         focus: true
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         anchors.centerIn: gstabiBackgroundImage.Center;
+        onStateChanged: {
+            if(state === "showDialog"){
+                popup_show = false;
+            }
+        }
+    }
+    GSplashScreen{
+        id:splashScreen
+        imageSource: "qrc:/images/qml/gStabiSC/images/Logo_Slogan_Gremsy.png"
+        anchors.fill: parent
+        onSplashScreenCompleted: {
+            // do whatever you want splash screen loaded completely
+            console.log("Splash Screen Loaded");
+        }
     }
 
     onMain_log_msgChanged: {
@@ -205,6 +220,9 @@ Rectangle {
                 connectedImage.source  = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_run_0_port_connect.png"
             else connectedImage.source = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_run_1_port_connect.png"
 //            if(popup_show)popup_show = false
+        }
+        onKeycode_requestChanged: {
+            if(_mavlink_manager.keycode_request === true) keycodeInputDialog.state = "showDialog"
         }
     }
 

@@ -91,7 +91,8 @@ void SerialLink::update_comport_settings(QString portname_str)
 
 void SerialLink::fillSerialPortInfo()
 {
-
+//    QextPortInfo portInfo ;
+    QString gremsy_virtual_portname;
     serial_port_info = QextSerialEnumerator::getPorts();
 //   // Add the ports in reverse order, because we prepend them to the list
    for(int i = serial_port_info.size() - 1; i >= 0; i--){
@@ -102,13 +103,20 @@ void SerialLink::fillSerialPortInfo()
        if(serialport_name == ""){
            serial_port_info.removeAt(i);    // remove all dummy serial ports
        }
-//       int venderID;
-//       venderID = portInfo.vendorID;
-//       if(venderID == 0){
+//       int m_productID;
+//       m_productID = portInfo.productID;
+//       if(m_productID != 35068){   // 0x88FC, Gremsy gStabi Product ID
+////           qDebug()<< "C++>>Gremsy gStabi Product: " << portInfo.portName;
+////           update_comport_settings(portInfo.portName);
+////           gremsy_virtual_portname = portInfo.portName;
 //           serial_port_info.removeAt(i);    // remove all dummy serial ports
-//           qDebug()<< "C++>>Remove port: " << portInfo.portName;
 //       }
    }
+//   if(gremsy_virtual_portname != ""){
+//        qDebug()<< "C++>>Gremsy gStabi Product: " << gremsy_virtual_portname;
+//       update_comport_settings(gremsy_virtual_portname);
+//       open_close_comport();
+//   }
    if(serial_port_info.size() > 0){
         selected_port_name = serial_port_info.at(0).portName; // get the latest port
    }

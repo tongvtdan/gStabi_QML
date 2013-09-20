@@ -47,6 +47,7 @@ class MavLinkManager : public QObject
     Q_PROPERTY(bool board_connection_state READ board_connection_state WRITE setboard_connection_state NOTIFY board_connection_stateChanged )
     Q_PROPERTY(QString mavlink_message_log READ mavlink_message_log WRITE setmavlink_message_log NOTIFY mavlink_message_logChanged)
     Q_PROPERTY(bool gremsy_product_id READ gremsy_product_id WRITE setgremsy_product_id NOTIFY gremsy_product_idChanged)
+    Q_PROPERTY(bool keycode_request READ keycode_request WRITE setkeycode_request NOTIFY keycode_requestChanged) // true: show Keycode pop up dialog
 
     // IMU data
     Q_PROPERTY(float roll_angle  READ roll_angle    WRITE setroll_angle     NOTIFY roll_angleChanged)
@@ -229,6 +230,8 @@ public:
     int motor_freq() const;
     void setmotor_freq(int _freq);
 
+    bool keycode_request() const;
+    void setkeycode_request(bool _request);
 
  // *********** RC Settings
 // RC Mode
@@ -408,6 +411,7 @@ public:
     Q_INVOKABLE void send_control_command(int tilt_angle_setpoint, int pan_angle_setpoint, int roll_angle_setpoint);
     Q_INVOKABLE void calib_gyro();
     Q_INVOKABLE void calib_accel();
+    Q_INVOKABLE void send_keycode(int _keycode_value);
 
 
 signals:
@@ -442,6 +446,7 @@ signals:
     void gyro_lpfChanged(int);
     void calib_modeChanged(int);
     void motor_freqChanged(int);
+    void keycode_requestChanged(bool);
 
     // RC Settings
     // RC Mode
@@ -577,6 +582,7 @@ private:
     int m_gyro_trust, m_gyro_lpf;
     int m_calib_mode;
     int m_motor_freq;
+    bool m_keycode_request;
 
     // [!]RC Settings
     //    Mode
