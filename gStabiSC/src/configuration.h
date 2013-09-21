@@ -8,7 +8,7 @@
 #define APPLICATION_NAME "gStabiSC"
 #define APPLICATION_VERSION "V.2.1.2-rc2"
 #define APPLICATION_WIDTH 1024
-#define APPLICATION_HEIGHT 700
+#define APPLICATION_HEIGHT 650
 
 #define GREMSY_PRODUCT_ID 1;   //0: no, 1: gStabi, 2: gMotion
 

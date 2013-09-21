@@ -2,30 +2,24 @@ import QtQuick 2.0
 import QtQuick.LocalStorage 2.0
 
 import "Components"
-
-
-//import "../../javascript/storage.js" as Storage
-
 import "qrc:/javascript/storage.js" as Storage
 
 
-Rectangle {
+Item {
     id: mainWindow
-    property int header_height: 30
-    property string main_log_msg: ""
-    property string popup_msg: ""
-    property bool popup_show: false
+    property int    header_height   : 30
+    property string main_log_msg    : ""
+    property string popup_msg       : ""
+    property bool   popup_show      : false
 
     property string selected_portname: "COM1"
     property int    selected_port_index: 1
     property string profile_name    : "Profile_Default"
 
-    property int gremsy_product_id: 0
-
-
+    property int    gremsy_product_id: 0
 
     width:1024; height: 700
-    color: "transparent"
+
     BorderImage {
         id: gstabiBackgroundImage
         asynchronous: true
@@ -173,15 +167,15 @@ Rectangle {
             }
         }
     }
-    GSplashScreen{
-        id:splashScreen
-        imageSource: "qrc:/images/qml/gStabiSC/images/Logo_Slogan_Gremsy.png"
-        anchors.fill: parent
-        onSplashScreenCompleted: {
-            // do whatever you want splash screen loaded completely
-            console.log("Splash Screen Loaded");
-        }
-    }
+//    GSplashScreen{
+//        id:splashScreen
+//        imageSource: "qrc:/images/qml/gStabiSC/images/Logo_Slogan_Gremsy.png"
+//        anchors.fill: parent
+//        onSplashScreenCompleted: {
+//            // do whatever you want splash screen loaded completely
+//            console.log("Splash Screen Loaded");
+//        }
+//    }
 
     onMain_log_msgChanged: {
         if(main_log_msg.length >=5000){

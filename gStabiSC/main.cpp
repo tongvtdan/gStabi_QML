@@ -30,6 +30,7 @@ int main(int argc, char *argv[])
     LinkManager m_gLinkManager;
 
     QtQuick2ApplicationViewer viewer;
+    QtQuick2ApplicationViewer splashscreen;
 
     QString customPath = "Sqlite/OfflineStorage";
     QDir dir;
@@ -42,17 +43,27 @@ int main(int argc, char *argv[])
     // using as normal
 //    viewer.setMainQmlFile(QStringLiteral("qml/gStabiSC/main.qml"));
     // using qml files form resources file, uncomment this to compile all qml file to .exe
-//    viewer.setSource(QUrl("qrc:/qml/gStabiSC/main.qml"));
-    viewer.addImportPath("qrc:/qml/gStabiSC");
-    viewer.addImportPath("qrc:/qml/gStabiSC/Components");
-    viewer.addImportPath("qrc:/qml/gStabiSC/GDashboard");
-    viewer.addImportPath("qrc:/javascript/storage.js");
 
-    viewer.setSource(QUrl("qrc:/qml/gStabiSC/main.qml"));
+    splashscreen.setSource(QUrl("qrc:/qml/gStabiSC/GSplashScreen.qml"));
+    splashscreen.setFlags(Qt::FramelessWindowHint);
+    splashscreen.setMinimumSize(QSize(1000,500));
+    splashscreen.show();
 
+
+    viewer.setSource(QUrl("qrc:/qml/gStabiSC/GMain.qml"));
     viewer.setTitle(QString("%1 %2").arg(APPLICATION_NAME).arg(APPLICATION_VERSION));
     viewer.setMinimumSize(QSize(APPLICATION_WIDTH,APPLICATION_HEIGHT));
     viewer.setMaximumSize(QSize(APPLICATION_WIDTH,APPLICATION_HEIGHT));
+
+//    viewer.setMinimumSize(QSize(1000,60));
+//    viewer.setMaximumSize(QSize(1000,600));
+//    viewer.addImportPath("qrc:/qml/gStabiSC");
+//    viewer.addImportPath("qrc:/qml/gStabiSC/Components");
+//    viewer.addImportPath("qrc:/qml/gStabiSC/GDashboard");
+//    viewer.addImportPath("qrc:/javascript/storage.js");
+
+
+
 
     viewer.rootContext()->setContextProperty("_configuration",&m_configuration);
     viewer.rootContext()->setContextProperty("_serialLink", &m_serialLink);
@@ -60,7 +71,10 @@ int main(int argc, char *argv[])
 
     m_gLinkManager.connectLink(&m_serialLink,&m_mavlink_manager);
 
-    viewer.showExpanded();
+    QTimer::singleShot(3000, &splashscreen, SLOT(close()));
+    QTimer::singleShot(3000, &viewer, SLOT(show()));
+
+//    viewer.showExpanded();
 
     return app.exec();
 }

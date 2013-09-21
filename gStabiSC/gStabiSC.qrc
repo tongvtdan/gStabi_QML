@@ -85,5 +85,6 @@
         <file>qml/gStabiSC/Components/GRCSettings.qml</file>
         <file>qml/gStabiSC/GKeyCodeInput.qml</file>
         <file>qml/gStabiSC/GSplashScreen.qml</file>
+        <file>qml/gStabiSC/GMain.qml</file>
     </qresource>
 </RCC>

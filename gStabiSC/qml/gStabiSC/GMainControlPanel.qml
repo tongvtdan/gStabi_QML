@@ -63,6 +63,7 @@ Rectangle {
         id: taskBar
         width: 600
         height: 80
+        anchors.horizontalCenterOffset: -150
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom;
         z: 100

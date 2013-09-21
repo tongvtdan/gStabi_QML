@@ -17,7 +17,7 @@ Rectangle{
         id: buttonLabel
         anchors.centerIn: parent
         color : "#00e3f9"
-        font.pixelSize: 16
+        font.pixelSize: 14
         text: button.text
         Behavior on color { ColorAnimation { duration: 200 }}
 
