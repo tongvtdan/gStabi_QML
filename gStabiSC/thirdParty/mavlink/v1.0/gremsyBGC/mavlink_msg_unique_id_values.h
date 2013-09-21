@@ -4,13 +4,13 @@
 
 typedef struct __mavlink_unique_id_values_t
 {
- uint16_t unique_id_0; ///< value of U_ID_15:0 register
- uint16_t unique_id_1; ///< value of U_ID_31:16 register
- uint16_t unique_id_2; ///< value of U_ID_47:32 register
- uint16_t unique_id_3; ///< value of U_ID_63:48 register
- uint16_t unique_id_4; ///< value of U_ID_79:64 register
- uint16_t unique_id_5; ///< value of U_ID_95:80 register
- uint8_t device_name; ///< name of device: can be one of following values: GSTABI, GMOTION
+ uint16_t unique_id_0; ///< value of U0
+ uint16_t unique_id_1; ///< value of U1
+ uint16_t unique_id_2; ///< value of U2
+ uint16_t unique_id_3; ///< value of U3
+ uint16_t unique_id_4; ///< value of U4
+ uint16_t unique_id_5; ///< value of U5
+ uint8_t device_name2; ///< name of device can be one of following values
 } mavlink_unique_id_values_t;
 
 #define MAVLINK_MSG_ID_UNIQUE_ID_VALUES_LEN 13
@@ -27,7 +27,7 @@ typedef struct __mavlink_unique_id_values_t
          { "unique_id_3", NULL, MAVLINK_TYPE_UINT16_T, 0, 6, offsetof(mavlink_unique_id_values_t, unique_id_3) }, \
          { "unique_id_4", NULL, MAVLINK_TYPE_UINT16_T, 0, 8, offsetof(mavlink_unique_id_values_t, unique_id_4) }, \
          { "unique_id_5", NULL, MAVLINK_TYPE_UINT16_T, 0, 10, offsetof(mavlink_unique_id_values_t, unique_id_5) }, \
-         { "device_name", NULL, MAVLINK_TYPE_UINT8_T, 0, 12, offsetof(mavlink_unique_id_values_t, device_name) }, \
+         { "device_name2", NULL, MAVLINK_TYPE_UINT8_T, 0, 12, offsetof(mavlink_unique_id_values_t, device_name2) }, \
          } \
 }
 
@@ -38,17 +38,17 @@ typedef struct __mavlink_unique_id_values_t
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param msg The MAVLink message to compress the data into
  *
- * @param device_name name of device: can be one of following values: GSTABI, GMOTION
- * @param unique_id_0 value of U_ID_15:0 register
- * @param unique_id_1 value of U_ID_31:16 register
- * @param unique_id_2 value of U_ID_47:32 register
- * @param unique_id_3 value of U_ID_63:48 register
- * @param unique_id_4 value of U_ID_79:64 register
- * @param unique_id_5 value of U_ID_95:80 register
+ * @param device_name2 name of device can be one of following values
+ * @param unique_id_0 value of U0
+ * @param unique_id_1 value of U1
+ * @param unique_id_2 value of U2
+ * @param unique_id_3 value of U3
+ * @param unique_id_4 value of U4
+ * @param unique_id_5 value of U5
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_unique_id_values_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint8_t device_name, uint16_t unique_id_0, uint16_t unique_id_1, uint16_t unique_id_2, uint16_t unique_id_3, uint16_t unique_id_4, uint16_t unique_id_5)
+						       uint8_t device_name2, uint16_t unique_id_0, uint16_t unique_id_1, uint16_t unique_id_2, uint16_t unique_id_3, uint16_t unique_id_4, uint16_t unique_id_5)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[13];
@@ -58,7 +58,7 @@ static inline uint16_t mavlink_msg_unique_id_values_pack(uint8_t system_id, uint
 	_mav_put_uint16_t(buf, 6, unique_id_3);
 	_mav_put_uint16_t(buf, 8, unique_id_4);
 	_mav_put_uint16_t(buf, 10, unique_id_5);
-	_mav_put_uint8_t(buf, 12, device_name);
+	_mav_put_uint8_t(buf, 12, device_name2);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 13);
 #else
@@ -69,13 +69,13 @@ static inline uint16_t mavlink_msg_unique_id_values_pack(uint8_t system_id, uint
 	packet.unique_id_3 = unique_id_3;
 	packet.unique_id_4 = unique_id_4;
 	packet.unique_id_5 = unique_id_5;
-	packet.device_name = device_name;
+	packet.device_name2 = device_name2;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 13);
 #endif
 
 	msg->msgid = MAVLINK_MSG_ID_UNIQUE_ID_VALUES;
-	return mavlink_finalize_message(msg, system_id, component_id, 13, 120);
+	return mavlink_finalize_message(msg, system_id, component_id, 13, 152);
 }
 
 /**
@@ -84,18 +84,18 @@ static inline uint16_t mavlink_msg_unique_id_values_pack(uint8_t system_id, uint
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param chan The MAVLink channel this message was sent over
  * @param msg The MAVLink message to compress the data into
- * @param device_name name of device: can be one of following values: GSTABI, GMOTION
- * @param unique_id_0 value of U_ID_15:0 register
- * @param unique_id_1 value of U_ID_31:16 register
- * @param unique_id_2 value of U_ID_47:32 register
- * @param unique_id_3 value of U_ID_63:48 register
- * @param unique_id_4 value of U_ID_79:64 register
- * @param unique_id_5 value of U_ID_95:80 register
+ * @param device_name2 name of device can be one of following values
+ * @param unique_id_0 value of U0
+ * @param unique_id_1 value of U1
+ * @param unique_id_2 value of U2
+ * @param unique_id_3 value of U3
+ * @param unique_id_4 value of U4
+ * @param unique_id_5 value of U5
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_unique_id_values_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           uint8_t device_name,uint16_t unique_id_0,uint16_t unique_id_1,uint16_t unique_id_2,uint16_t unique_id_3,uint16_t unique_id_4,uint16_t unique_id_5)
+						           uint8_t device_name2,uint16_t unique_id_0,uint16_t unique_id_1,uint16_t unique_id_2,uint16_t unique_id_3,uint16_t unique_id_4,uint16_t unique_id_5)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[13];
@@ -105,7 +105,7 @@ static inline uint16_t mavlink_msg_unique_id_values_pack_chan(uint8_t system_id,
 	_mav_put_uint16_t(buf, 6, unique_id_3);
 	_mav_put_uint16_t(buf, 8, unique_id_4);
 	_mav_put_uint16_t(buf, 10, unique_id_5);
-	_mav_put_uint8_t(buf, 12, device_name);
+	_mav_put_uint8_t(buf, 12, device_name2);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 13);
 #else
@@ -116,13 +116,13 @@ static inline uint16_t mavlink_msg_unique_id_values_pack_chan(uint8_t system_id,
 	packet.unique_id_3 = unique_id_3;
 	packet.unique_id_4 = unique_id_4;
 	packet.unique_id_5 = unique_id_5;
-	packet.device_name = device_name;
+	packet.device_name2 = device_name2;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 13);
 #endif
 
 	msg->msgid = MAVLINK_MSG_ID_UNIQUE_ID_VALUES;
-	return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 13, 120);
+	return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 13, 152);
 }
 
 /**
@@ -135,24 +135,24 @@ static inline uint16_t mavlink_msg_unique_id_values_pack_chan(uint8_t system_id,
  */
 static inline uint16_t mavlink_msg_unique_id_values_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_unique_id_values_t* unique_id_values)
 {
-	return mavlink_msg_unique_id_values_pack(system_id, component_id, msg, unique_id_values->device_name, unique_id_values->unique_id_0, unique_id_values->unique_id_1, unique_id_values->unique_id_2, unique_id_values->unique_id_3, unique_id_values->unique_id_4, unique_id_values->unique_id_5);
+	return mavlink_msg_unique_id_values_pack(system_id, component_id, msg, unique_id_values->device_name2, unique_id_values->unique_id_0, unique_id_values->unique_id_1, unique_id_values->unique_id_2, unique_id_values->unique_id_3, unique_id_values->unique_id_4, unique_id_values->unique_id_5);
 }
 
 /**
  * @brief Send a unique_id_values message
  * @param chan MAVLink channel to send the message
  *
- * @param device_name name of device: can be one of following values: GSTABI, GMOTION
- * @param unique_id_0 value of U_ID_15:0 register
- * @param unique_id_1 value of U_ID_31:16 register
- * @param unique_id_2 value of U_ID_47:32 register
- * @param unique_id_3 value of U_ID_63:48 register
- * @param unique_id_4 value of U_ID_79:64 register
- * @param unique_id_5 value of U_ID_95:80 register
+ * @param device_name2 name of device can be one of following values
+ * @param unique_id_0 value of U0
+ * @param unique_id_1 value of U1
+ * @param unique_id_2 value of U2
+ * @param unique_id_3 value of U3
+ * @param unique_id_4 value of U4
+ * @param unique_id_5 value of U5
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_unique_id_values_send(mavlink_channel_t chan, uint8_t device_name, uint16_t unique_id_0, uint16_t unique_id_1, uint16_t unique_id_2, uint16_t unique_id_3, uint16_t unique_id_4, uint16_t unique_id_5)
+static inline void mavlink_msg_unique_id_values_send(mavlink_channel_t chan, uint8_t device_name2, uint16_t unique_id_0, uint16_t unique_id_1, uint16_t unique_id_2, uint16_t unique_id_3, uint16_t unique_id_4, uint16_t unique_id_5)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[13];
@@ -162,9 +162,9 @@ static inline void mavlink_msg_unique_id_values_send(mavlink_channel_t chan, uin
 	_mav_put_uint16_t(buf, 6, unique_id_3);
 	_mav_put_uint16_t(buf, 8, unique_id_4);
 	_mav_put_uint16_t(buf, 10, unique_id_5);
-	_mav_put_uint8_t(buf, 12, device_name);
+	_mav_put_uint8_t(buf, 12, device_name2);
 
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_UNIQUE_ID_VALUES, buf, 13, 120);
+	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_UNIQUE_ID_VALUES, buf, 13, 152);
 #else
 	mavlink_unique_id_values_t packet;
 	packet.unique_id_0 = unique_id_0;
@@ -173,9 +173,9 @@ static inline void mavlink_msg_unique_id_values_send(mavlink_channel_t chan, uin
 	packet.unique_id_3 = unique_id_3;
 	packet.unique_id_4 = unique_id_4;
 	packet.unique_id_5 = unique_id_5;
-	packet.device_name = device_name;
+	packet.device_name2 = device_name2;
 
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_UNIQUE_ID_VALUES, (const char *)&packet, 13, 120);
+	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_UNIQUE_ID_VALUES, (const char *)&packet, 13, 152);
 #endif
 }
 
@@ -185,11 +185,11 @@ static inline void mavlink_msg_unique_id_values_send(mavlink_channel_t chan, uin
 
 
 /**
- * @brief Get field device_name from unique_id_values message
+ * @brief Get field device_name2 from unique_id_values message
  *
- * @return name of device: can be one of following values: GSTABI, GMOTION
+ * @return name of device can be one of following values
  */
-static inline uint8_t mavlink_msg_unique_id_values_get_device_name(const mavlink_message_t* msg)
+static inline uint8_t mavlink_msg_unique_id_values_get_device_name2(const mavlink_message_t* msg)
 {
 	return _MAV_RETURN_uint8_t(msg,  12);
 }
@@ -197,7 +197,7 @@ static inline uint8_t mavlink_msg_unique_id_values_get_device_name(const mavlink
 /**
  * @brief Get field unique_id_0 from unique_id_values message
  *
- * @return value of U_ID_15:0 register
+ * @return value of U0
  */
 static inline uint16_t mavlink_msg_unique_id_values_get_unique_id_0(const mavlink_message_t* msg)
 {
@@ -207,7 +207,7 @@ static inline uint16_t mavlink_msg_unique_id_values_get_unique_id_0(const mavlin
 /**
  * @brief Get field unique_id_1 from unique_id_values message
  *
- * @return value of U_ID_31:16 register
+ * @return value of U1
  */
 static inline uint16_t mavlink_msg_unique_id_values_get_unique_id_1(const mavlink_message_t* msg)
 {
@@ -217,7 +217,7 @@ static inline uint16_t mavlink_msg_unique_id_values_get_unique_id_1(const mavlin
 /**
  * @brief Get field unique_id_2 from unique_id_values message
  *
- * @return value of U_ID_47:32 register
+ * @return value of U2
  */
 static inline uint16_t mavlink_msg_unique_id_values_get_unique_id_2(const mavlink_message_t* msg)
 {
@@ -227,7 +227,7 @@ static inline uint16_t mavlink_msg_unique_id_values_get_unique_id_2(const mavlin
 /**
  * @brief Get field unique_id_3 from unique_id_values message
  *
- * @return value of U_ID_63:48 register
+ * @return value of U3
  */
 static inline uint16_t mavlink_msg_unique_id_values_get_unique_id_3(const mavlink_message_t* msg)
 {
@@ -237,7 +237,7 @@ static inline uint16_t mavlink_msg_unique_id_values_get_unique_id_3(const mavlin
 /**
  * @brief Get field unique_id_4 from unique_id_values message
  *
- * @return value of U_ID_79:64 register
+ * @return value of U4
  */
 static inline uint16_t mavlink_msg_unique_id_values_get_unique_id_4(const mavlink_message_t* msg)
 {
@@ -247,7 +247,7 @@ static inline uint16_t mavlink_msg_unique_id_values_get_unique_id_4(const mavlin
 /**
  * @brief Get field unique_id_5 from unique_id_values message
  *
- * @return value of U_ID_95:80 register
+ * @return value of U5
  */
 static inline uint16_t mavlink_msg_unique_id_values_get_unique_id_5(const mavlink_message_t* msg)
 {
@@ -269,7 +269,7 @@ static inline void mavlink_msg_unique_id_values_decode(const mavlink_message_t* 
 	unique_id_values->unique_id_3 = mavlink_msg_unique_id_values_get_unique_id_3(msg);
 	unique_id_values->unique_id_4 = mavlink_msg_unique_id_values_get_unique_id_4(msg);
 	unique_id_values->unique_id_5 = mavlink_msg_unique_id_values_get_unique_id_5(msg);
-	unique_id_values->device_name = mavlink_msg_unique_id_values_get_device_name(msg);
+	unique_id_values->device_name2 = mavlink_msg_unique_id_values_get_device_name2(msg);
 #else
 	memcpy(unique_id_values, _MAV_PAYLOAD(msg), 13);
 #endif

@@ -259,7 +259,7 @@ static void mavlink_test_system_status(uint8_t system_id, uint8_t component_id, 
         	packet1.battery_voltage = packet_in.battery_voltage;
         	packet1.imu_calib = packet_in.imu_calib;
         	packet1.sat_numbers = packet_in.sat_numbers;
-        	packet1.system_activated = packet_in.system_activated;
+        	packet1.status1 = packet_in.status1;
         	packet1.status2 = packet_in.status2;
         
         
@@ -270,12 +270,12 @@ static void mavlink_test_system_status(uint8_t system_id, uint8_t component_id, 
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-	mavlink_msg_system_status_pack(system_id, component_id, &msg , packet1.battery_voltage , packet1.imu_calib , packet1.sat_numbers , packet1.system_activated , packet1.status2 );
+	mavlink_msg_system_status_pack(system_id, component_id, &msg , packet1.battery_voltage , packet1.imu_calib , packet1.sat_numbers , packet1.status1 , packet1.status2 );
 	mavlink_msg_system_status_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-	mavlink_msg_system_status_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.battery_voltage , packet1.imu_calib , packet1.sat_numbers , packet1.system_activated , packet1.status2 );
+	mavlink_msg_system_status_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.battery_voltage , packet1.imu_calib , packet1.sat_numbers , packet1.status1 , packet1.status2 );
 	mavlink_msg_system_status_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -288,7 +288,7 @@ static void mavlink_test_system_status(uint8_t system_id, uint8_t component_id, 
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-	mavlink_msg_system_status_send(MAVLINK_COMM_1 , packet1.battery_voltage , packet1.imu_calib , packet1.sat_numbers , packet1.system_activated , packet1.status2 );
+	mavlink_msg_system_status_send(MAVLINK_COMM_1 , packet1.battery_voltage , packet1.imu_calib , packet1.sat_numbers , packet1.status1 , packet1.status2 );
 	mavlink_msg_system_status_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 }
@@ -360,7 +360,7 @@ static void mavlink_test_unique_id_request(uint8_t system_id, uint8_t component_
 	};
 	mavlink_unique_id_request_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
-        	packet1.device_name = packet_in.device_name;
+        	packet1.device_name1 = packet_in.device_name1;
         
         
 
@@ -370,12 +370,12 @@ static void mavlink_test_unique_id_request(uint8_t system_id, uint8_t component_
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-	mavlink_msg_unique_id_request_pack(system_id, component_id, &msg , packet1.device_name );
+	mavlink_msg_unique_id_request_pack(system_id, component_id, &msg , packet1.device_name1 );
 	mavlink_msg_unique_id_request_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-	mavlink_msg_unique_id_request_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.device_name );
+	mavlink_msg_unique_id_request_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.device_name1 );
 	mavlink_msg_unique_id_request_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -388,7 +388,7 @@ static void mavlink_test_unique_id_request(uint8_t system_id, uint8_t component_
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-	mavlink_msg_unique_id_request_send(MAVLINK_COMM_1 , packet1.device_name );
+	mavlink_msg_unique_id_request_send(MAVLINK_COMM_1 , packet1.device_name1 );
 	mavlink_msg_unique_id_request_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 }
@@ -415,7 +415,7 @@ static void mavlink_test_unique_id_values(uint8_t system_id, uint8_t component_i
         	packet1.unique_id_3 = packet_in.unique_id_3;
         	packet1.unique_id_4 = packet_in.unique_id_4;
         	packet1.unique_id_5 = packet_in.unique_id_5;
-        	packet1.device_name = packet_in.device_name;
+        	packet1.device_name2 = packet_in.device_name2;
         
         
 
@@ -425,12 +425,12 @@ static void mavlink_test_unique_id_values(uint8_t system_id, uint8_t component_i
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-	mavlink_msg_unique_id_values_pack(system_id, component_id, &msg , packet1.device_name , packet1.unique_id_0 , packet1.unique_id_1 , packet1.unique_id_2 , packet1.unique_id_3 , packet1.unique_id_4 , packet1.unique_id_5 );
+	mavlink_msg_unique_id_values_pack(system_id, component_id, &msg , packet1.device_name2 , packet1.unique_id_0 , packet1.unique_id_1 , packet1.unique_id_2 , packet1.unique_id_3 , packet1.unique_id_4 , packet1.unique_id_5 );
 	mavlink_msg_unique_id_values_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-	mavlink_msg_unique_id_values_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.device_name , packet1.unique_id_0 , packet1.unique_id_1 , packet1.unique_id_2 , packet1.unique_id_3 , packet1.unique_id_4 , packet1.unique_id_5 );
+	mavlink_msg_unique_id_values_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.device_name2 , packet1.unique_id_0 , packet1.unique_id_1 , packet1.unique_id_2 , packet1.unique_id_3 , packet1.unique_id_4 , packet1.unique_id_5 );
 	mavlink_msg_unique_id_values_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -443,7 +443,7 @@ static void mavlink_test_unique_id_values(uint8_t system_id, uint8_t component_i
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-	mavlink_msg_unique_id_values_send(MAVLINK_COMM_1 , packet1.device_name , packet1.unique_id_0 , packet1.unique_id_1 , packet1.unique_id_2 , packet1.unique_id_3 , packet1.unique_id_4 , packet1.unique_id_5 );
+	mavlink_msg_unique_id_values_send(MAVLINK_COMM_1 , packet1.device_name2 , packet1.unique_id_0 , packet1.unique_id_1 , packet1.unique_id_2 , packet1.unique_id_3 , packet1.unique_id_4 , packet1.unique_id_5 );
 	mavlink_msg_unique_id_values_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 }
@@ -458,7 +458,7 @@ static void mavlink_test_keycode_request(uint8_t system_id, uint8_t component_id
 	};
 	mavlink_keycode_request_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
-        	packet1.device_name = packet_in.device_name;
+        	packet1.device_name3 = packet_in.device_name3;
         
         
 
@@ -468,12 +468,12 @@ static void mavlink_test_keycode_request(uint8_t system_id, uint8_t component_id
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-	mavlink_msg_keycode_request_pack(system_id, component_id, &msg , packet1.device_name );
+	mavlink_msg_keycode_request_pack(system_id, component_id, &msg , packet1.device_name3 );
 	mavlink_msg_keycode_request_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-	mavlink_msg_keycode_request_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.device_name );
+	mavlink_msg_keycode_request_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.device_name3 );
 	mavlink_msg_keycode_request_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -486,7 +486,7 @@ static void mavlink_test_keycode_request(uint8_t system_id, uint8_t component_id
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-	mavlink_msg_keycode_request_send(MAVLINK_COMM_1 , packet1.device_name );
+	mavlink_msg_keycode_request_send(MAVLINK_COMM_1 , packet1.device_name3 );
 	mavlink_msg_keycode_request_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 }
@@ -503,7 +503,7 @@ static void mavlink_test_keycode_value(uint8_t system_id, uint8_t component_id, 
 	mavlink_keycode_value_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
         	packet1.keycode = packet_in.keycode;
-        	packet1.device_name = packet_in.device_name;
+        	packet1.device_name4 = packet_in.device_name4;
         
         
 
@@ -513,12 +513,12 @@ static void mavlink_test_keycode_value(uint8_t system_id, uint8_t component_id, 
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-	mavlink_msg_keycode_value_pack(system_id, component_id, &msg , packet1.device_name , packet1.keycode );
+	mavlink_msg_keycode_value_pack(system_id, component_id, &msg , packet1.device_name4 , packet1.keycode );
 	mavlink_msg_keycode_value_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-	mavlink_msg_keycode_value_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.device_name , packet1.keycode );
+	mavlink_msg_keycode_value_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.device_name4 , packet1.keycode );
 	mavlink_msg_keycode_value_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -531,7 +531,7 @@ static void mavlink_test_keycode_value(uint8_t system_id, uint8_t component_id, 
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-	mavlink_msg_keycode_value_send(MAVLINK_COMM_1 , packet1.device_name , packet1.keycode );
+	mavlink_msg_keycode_value_send(MAVLINK_COMM_1 , packet1.device_name4 , packet1.keycode );
 	mavlink_msg_keycode_value_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 }
