@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
+<<<<<<< HEAD
 <!-- Written by QtCreator 2.8.1, 2013-09-21T15:14:54. -->
+=======
+<!-- Written by QtCreator 2.8.1, 2013-09-21T13:45:53. -->
+>>>>>>> e46e4504f7068b25a200999d8448ff1f3d9ba778
 <qtcreator>
  <data>
   <variable>ProjectExplorer.Project.ActiveTarget</variable>
-  <value type="int">1</value>
+  <value type="int">0</value>
  </data>
  <data>
   <variable>ProjectExplorer.Project.EditorSettings</variable>

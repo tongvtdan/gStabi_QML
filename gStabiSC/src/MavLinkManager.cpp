@@ -120,7 +120,11 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
             }
                 break;
             case MAVLINK_MSG_ID_SYSTEM_STATUS:{
+                qDebug()<< "Sys status";
                 m_g_system_status.battery_voltage = mavlink_msg_system_status_get_battery_voltage(&message);
+                m_system_activated = mavlink_msg_system_status_get_system_activated(&message);
+                qDebug() << m_system_activated;
+
                 setbattery_voltage(m_g_system_status.battery_voltage);
                 // IMU Calib
                  m_g_system_status.imu_calib = mavlink_msg_system_status_get_imu_calib(&message);
@@ -143,7 +147,7 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
             }
                 break;
             case MAVLINK_MSG_ID_KEYCODE_REQUEST:{
-                if(mavlink_msg_keycode_request_get_device_name(&message) == GSTABI){
+                if(mavlink_msg_keycode_request_get_device_name3(&message) == GSTABI){
                     setkeycode_request(true);
                 }
             }
