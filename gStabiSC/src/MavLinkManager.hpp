@@ -619,6 +619,7 @@ private:
                                 // if false: continue to parse message to get data.
     uint8_t calib_type;
     bool debug_enabled ;
+    int m_system_activated;       // 0: not; 1: activated
 };
 
 #endif // MAVLINKMANAGER_HPP

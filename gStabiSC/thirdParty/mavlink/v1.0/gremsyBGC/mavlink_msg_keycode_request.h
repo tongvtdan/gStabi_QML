@@ -4,7 +4,7 @@
 
 typedef struct __mavlink_keycode_request_t
 {
- uint8_t device_name; ///< name of device: can be one of following values: GSTABI, GMOTION
+ uint8_t device_name3; ///< name of device: can be one of following values: GSTABI, GMOTION
 } mavlink_keycode_request_t;
 
 #define MAVLINK_MSG_ID_KEYCODE_REQUEST_LEN 1
@@ -15,7 +15,7 @@ typedef struct __mavlink_keycode_request_t
 #define MAVLINK_MESSAGE_INFO_KEYCODE_REQUEST { \
 	"KEYCODE_REQUEST", \
 	1, \
-	{  { "device_name", NULL, MAVLINK_TYPE_UINT8_T, 0, 0, offsetof(mavlink_keycode_request_t, device_name) }, \
+	{  { "device_name3", NULL, MAVLINK_TYPE_UINT8_T, 0, 0, offsetof(mavlink_keycode_request_t, device_name3) }, \
          } \
 }
 
@@ -26,26 +26,26 @@ typedef struct __mavlink_keycode_request_t
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param msg The MAVLink message to compress the data into
  *
- * @param device_name name of device: can be one of following values: GSTABI, GMOTION
+ * @param device_name3 name of device: can be one of following values: GSTABI, GMOTION
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_keycode_request_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint8_t device_name)
+						       uint8_t device_name3)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[1];
-	_mav_put_uint8_t(buf, 0, device_name);
+	_mav_put_uint8_t(buf, 0, device_name3);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 1);
 #else
 	mavlink_keycode_request_t packet;
-	packet.device_name = device_name;
+	packet.device_name3 = device_name3;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 1);
 #endif
 
 	msg->msgid = MAVLINK_MSG_ID_KEYCODE_REQUEST;
-	return mavlink_finalize_message(msg, system_id, component_id, 1, 99);
+	return mavlink_finalize_message(msg, system_id, component_id, 1, 178);
 }
 
 /**
@@ -54,27 +54,27 @@ static inline uint16_t mavlink_msg_keycode_request_pack(uint8_t system_id, uint8
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param chan The MAVLink channel this message was sent over
  * @param msg The MAVLink message to compress the data into
- * @param device_name name of device: can be one of following values: GSTABI, GMOTION
+ * @param device_name3 name of device: can be one of following values: GSTABI, GMOTION
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_keycode_request_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           uint8_t device_name)
+						           uint8_t device_name3)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[1];
-	_mav_put_uint8_t(buf, 0, device_name);
+	_mav_put_uint8_t(buf, 0, device_name3);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 1);
 #else
 	mavlink_keycode_request_t packet;
-	packet.device_name = device_name;
+	packet.device_name3 = device_name3;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 1);
 #endif
 
 	msg->msgid = MAVLINK_MSG_ID_KEYCODE_REQUEST;
-	return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 1, 99);
+	return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 1, 178);
 }
 
 /**
@@ -87,29 +87,29 @@ static inline uint16_t mavlink_msg_keycode_request_pack_chan(uint8_t system_id, 
  */
 static inline uint16_t mavlink_msg_keycode_request_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_keycode_request_t* keycode_request)
 {
-	return mavlink_msg_keycode_request_pack(system_id, component_id, msg, keycode_request->device_name);
+	return mavlink_msg_keycode_request_pack(system_id, component_id, msg, keycode_request->device_name3);
 }
 
 /**
  * @brief Send a keycode_request message
  * @param chan MAVLink channel to send the message
  *
- * @param device_name name of device: can be one of following values: GSTABI, GMOTION
+ * @param device_name3 name of device: can be one of following values: GSTABI, GMOTION
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_keycode_request_send(mavlink_channel_t chan, uint8_t device_name)
+static inline void mavlink_msg_keycode_request_send(mavlink_channel_t chan, uint8_t device_name3)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[1];
-	_mav_put_uint8_t(buf, 0, device_name);
+	_mav_put_uint8_t(buf, 0, device_name3);
 
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_KEYCODE_REQUEST, buf, 1, 99);
+	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_KEYCODE_REQUEST, buf, 1, 178);
 #else
 	mavlink_keycode_request_t packet;
-	packet.device_name = device_name;
+	packet.device_name3 = device_name3;
 
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_KEYCODE_REQUEST, (const char *)&packet, 1, 99);
+	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_KEYCODE_REQUEST, (const char *)&packet, 1, 178);
 #endif
 }
 
@@ -119,11 +119,11 @@ static inline void mavlink_msg_keycode_request_send(mavlink_channel_t chan, uint
 
 
 /**
- * @brief Get field device_name from keycode_request message
+ * @brief Get field device_name3 from keycode_request message
  *
  * @return name of device: can be one of following values: GSTABI, GMOTION
  */
-static inline uint8_t mavlink_msg_keycode_request_get_device_name(const mavlink_message_t* msg)
+static inline uint8_t mavlink_msg_keycode_request_get_device_name3(const mavlink_message_t* msg)
 {
 	return _MAV_RETURN_uint8_t(msg,  0);
 }
@@ -137,7 +137,7 @@ static inline uint8_t mavlink_msg_keycode_request_get_device_name(const mavlink_
 static inline void mavlink_msg_keycode_request_decode(const mavlink_message_t* msg, mavlink_keycode_request_t* keycode_request)
 {
 #if MAVLINK_NEED_BYTE_SWAP
-	keycode_request->device_name = mavlink_msg_keycode_request_get_device_name(msg);
+	keycode_request->device_name3 = mavlink_msg_keycode_request_get_device_name3(msg);
 #else
 	memcpy(keycode_request, _MAV_PAYLOAD(msg), 1);
 #endif
