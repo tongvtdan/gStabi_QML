@@ -9,39 +9,34 @@ Rectangle {
 
     // signal emits when splashscreen animation completes
     signal splashScreenCompleted()
-    width: 1000 ;   height: 400
+    width: 600   ;   height: 500
     BorderImage {
         id: splashImage
-//        fillMode: Image.PreserveAspectFit
-//        source: "images/Logo_Slogan_Gremsy.png"
-        source: "qrc:/images/qml/gStabiSC/images/Logo_Slogan_Gremsy.png"
+//        source: "images/gStabi_splashscreen.png"
+        source: "qrc:/images/qml/gStabiSC/images/gStabi_splashscreen.png"
         anchors.fill: splashScreenContainer // do specify the size and position
     }
-
-    // simple QML animation to give a good user experience
+    GTextStyled {
+        id: loading
+        text: "Loading..."
+        anchors.right: parent.right
+        anchors.rightMargin: 10
+        font.italic: true
+        verticalAlignment: Text.AlignVCenter
+        color: "white"
+        font.pixelSize: 20
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 2
+    }
     SequentialAnimation {
         id:splashanimation
-        PauseAnimation { duration: 1000 }
+        PauseAnimation { duration: 3000 }
         PropertyAnimation {
-            target: splashImage
-            duration: 2000
-            properties: "opacity"
-            to:0
+            target: splashScreenContainer;  duration: 1000;  properties: "opacity";  to:0
         }
         onStopped:  {
             splashScreenContainer.splashScreenCompleted()
         }
-    }
-
-    GTextStyled {
-        id: gStabi
-        text: "gStabi"
-        color: "green"
-        anchors.horizontalCenterOffset: 158
-        font.pixelSize: 30
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 80
-        anchors.horizontalCenter: parent.horizontalCenter
     }
     //starts the splashScreen
     Component.onCompleted: splashanimation.start()

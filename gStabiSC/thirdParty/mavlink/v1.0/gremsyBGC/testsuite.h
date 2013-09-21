@@ -259,7 +259,7 @@ static void mavlink_test_system_status(uint8_t system_id, uint8_t component_id, 
         	packet1.battery_voltage = packet_in.battery_voltage;
         	packet1.imu_calib = packet_in.imu_calib;
         	packet1.sat_numbers = packet_in.sat_numbers;
-        	packet1.status1 = packet_in.status1;
+        	packet1.system_activated = packet_in.system_activated;
         	packet1.status2 = packet_in.status2;
         
         
@@ -270,12 +270,12 @@ static void mavlink_test_system_status(uint8_t system_id, uint8_t component_id, 
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-	mavlink_msg_system_status_pack(system_id, component_id, &msg , packet1.battery_voltage , packet1.imu_calib , packet1.sat_numbers , packet1.status1 , packet1.status2 );
+	mavlink_msg_system_status_pack(system_id, component_id, &msg , packet1.battery_voltage , packet1.imu_calib , packet1.sat_numbers , packet1.system_activated , packet1.status2 );
 	mavlink_msg_system_status_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-	mavlink_msg_system_status_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.battery_voltage , packet1.imu_calib , packet1.sat_numbers , packet1.status1 , packet1.status2 );
+	mavlink_msg_system_status_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.battery_voltage , packet1.imu_calib , packet1.sat_numbers , packet1.system_activated , packet1.status2 );
 	mavlink_msg_system_status_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -288,7 +288,7 @@ static void mavlink_test_system_status(uint8_t system_id, uint8_t component_id, 
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-	mavlink_msg_system_status_send(MAVLINK_COMM_1 , packet1.battery_voltage , packet1.imu_calib , packet1.sat_numbers , packet1.status1 , packet1.status2 );
+	mavlink_msg_system_status_send(MAVLINK_COMM_1 , packet1.battery_voltage , packet1.imu_calib , packet1.sat_numbers , packet1.system_activated , packet1.status2 );
 	mavlink_msg_system_status_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 }

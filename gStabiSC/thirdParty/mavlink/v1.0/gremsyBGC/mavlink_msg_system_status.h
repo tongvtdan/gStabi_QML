@@ -7,7 +7,7 @@ typedef struct __mavlink_system_status_t
  float battery_voltage; ///< current battery voltage
  uint8_t imu_calib; ///< imu calib status
  uint8_t sat_numbers; ///< number of sattelites if use GPS
- uint8_t status1; ///< additional status 1
+ uint8_t system_activated; ///< system activation status: 0-not activated, 1-activated
  uint8_t status2; ///< additional status 2
 } mavlink_system_status_t;
 
@@ -22,7 +22,7 @@ typedef struct __mavlink_system_status_t
 	{  { "battery_voltage", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_system_status_t, battery_voltage) }, \
          { "imu_calib", NULL, MAVLINK_TYPE_UINT8_T, 0, 4, offsetof(mavlink_system_status_t, imu_calib) }, \
          { "sat_numbers", NULL, MAVLINK_TYPE_UINT8_T, 0, 5, offsetof(mavlink_system_status_t, sat_numbers) }, \
-         { "status1", NULL, MAVLINK_TYPE_UINT8_T, 0, 6, offsetof(mavlink_system_status_t, status1) }, \
+         { "system_activated", NULL, MAVLINK_TYPE_UINT8_T, 0, 6, offsetof(mavlink_system_status_t, system_activated) }, \
          { "status2", NULL, MAVLINK_TYPE_UINT8_T, 0, 7, offsetof(mavlink_system_status_t, status2) }, \
          } \
 }
@@ -37,19 +37,19 @@ typedef struct __mavlink_system_status_t
  * @param battery_voltage current battery voltage
  * @param imu_calib imu calib status
  * @param sat_numbers number of sattelites if use GPS
- * @param status1 additional status 1
+ * @param system_activated system activation status: 0-not activated, 1-activated
  * @param status2 additional status 2
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_system_status_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       float battery_voltage, uint8_t imu_calib, uint8_t sat_numbers, uint8_t status1, uint8_t status2)
+						       float battery_voltage, uint8_t imu_calib, uint8_t sat_numbers, uint8_t system_activated, uint8_t status2)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[8];
 	_mav_put_float(buf, 0, battery_voltage);
 	_mav_put_uint8_t(buf, 4, imu_calib);
 	_mav_put_uint8_t(buf, 5, sat_numbers);
-	_mav_put_uint8_t(buf, 6, status1);
+	_mav_put_uint8_t(buf, 6, system_activated);
 	_mav_put_uint8_t(buf, 7, status2);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 8);
@@ -58,14 +58,14 @@ static inline uint16_t mavlink_msg_system_status_pack(uint8_t system_id, uint8_t
 	packet.battery_voltage = battery_voltage;
 	packet.imu_calib = imu_calib;
 	packet.sat_numbers = sat_numbers;
-	packet.status1 = status1;
+	packet.system_activated = system_activated;
 	packet.status2 = status2;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 8);
 #endif
 
 	msg->msgid = MAVLINK_MSG_ID_SYSTEM_STATUS;
-	return mavlink_finalize_message(msg, system_id, component_id, 8, 76);
+	return mavlink_finalize_message(msg, system_id, component_id, 8, 77);
 }
 
 /**
@@ -77,20 +77,20 @@ static inline uint16_t mavlink_msg_system_status_pack(uint8_t system_id, uint8_t
  * @param battery_voltage current battery voltage
  * @param imu_calib imu calib status
  * @param sat_numbers number of sattelites if use GPS
- * @param status1 additional status 1
+ * @param system_activated system activation status: 0-not activated, 1-activated
  * @param status2 additional status 2
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_system_status_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           float battery_voltage,uint8_t imu_calib,uint8_t sat_numbers,uint8_t status1,uint8_t status2)
+						           float battery_voltage,uint8_t imu_calib,uint8_t sat_numbers,uint8_t system_activated,uint8_t status2)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[8];
 	_mav_put_float(buf, 0, battery_voltage);
 	_mav_put_uint8_t(buf, 4, imu_calib);
 	_mav_put_uint8_t(buf, 5, sat_numbers);
-	_mav_put_uint8_t(buf, 6, status1);
+	_mav_put_uint8_t(buf, 6, system_activated);
 	_mav_put_uint8_t(buf, 7, status2);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 8);
@@ -99,14 +99,14 @@ static inline uint16_t mavlink_msg_system_status_pack_chan(uint8_t system_id, ui
 	packet.battery_voltage = battery_voltage;
 	packet.imu_calib = imu_calib;
 	packet.sat_numbers = sat_numbers;
-	packet.status1 = status1;
+	packet.system_activated = system_activated;
 	packet.status2 = status2;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 8);
 #endif
 
 	msg->msgid = MAVLINK_MSG_ID_SYSTEM_STATUS;
-	return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 8, 76);
+	return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 8, 77);
 }
 
 /**
@@ -119,7 +119,7 @@ static inline uint16_t mavlink_msg_system_status_pack_chan(uint8_t system_id, ui
  */
 static inline uint16_t mavlink_msg_system_status_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_system_status_t* system_status)
 {
-	return mavlink_msg_system_status_pack(system_id, component_id, msg, system_status->battery_voltage, system_status->imu_calib, system_status->sat_numbers, system_status->status1, system_status->status2);
+	return mavlink_msg_system_status_pack(system_id, component_id, msg, system_status->battery_voltage, system_status->imu_calib, system_status->sat_numbers, system_status->system_activated, system_status->status2);
 }
 
 /**
@@ -129,31 +129,31 @@ static inline uint16_t mavlink_msg_system_status_encode(uint8_t system_id, uint8
  * @param battery_voltage current battery voltage
  * @param imu_calib imu calib status
  * @param sat_numbers number of sattelites if use GPS
- * @param status1 additional status 1
+ * @param system_activated system activation status: 0-not activated, 1-activated
  * @param status2 additional status 2
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_system_status_send(mavlink_channel_t chan, float battery_voltage, uint8_t imu_calib, uint8_t sat_numbers, uint8_t status1, uint8_t status2)
+static inline void mavlink_msg_system_status_send(mavlink_channel_t chan, float battery_voltage, uint8_t imu_calib, uint8_t sat_numbers, uint8_t system_activated, uint8_t status2)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[8];
 	_mav_put_float(buf, 0, battery_voltage);
 	_mav_put_uint8_t(buf, 4, imu_calib);
 	_mav_put_uint8_t(buf, 5, sat_numbers);
-	_mav_put_uint8_t(buf, 6, status1);
+	_mav_put_uint8_t(buf, 6, system_activated);
 	_mav_put_uint8_t(buf, 7, status2);
 
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SYSTEM_STATUS, buf, 8, 76);
+	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SYSTEM_STATUS, buf, 8, 77);
 #else
 	mavlink_system_status_t packet;
 	packet.battery_voltage = battery_voltage;
 	packet.imu_calib = imu_calib;
 	packet.sat_numbers = sat_numbers;
-	packet.status1 = status1;
+	packet.system_activated = system_activated;
 	packet.status2 = status2;
 
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SYSTEM_STATUS, (const char *)&packet, 8, 76);
+	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SYSTEM_STATUS, (const char *)&packet, 8, 77);
 #endif
 }
 
@@ -193,11 +193,11 @@ static inline uint8_t mavlink_msg_system_status_get_sat_numbers(const mavlink_me
 }
 
 /**
- * @brief Get field status1 from system_status message
+ * @brief Get field system_activated from system_status message
  *
- * @return additional status 1
+ * @return system activation status: 0-not activated, 1-activated
  */
-static inline uint8_t mavlink_msg_system_status_get_status1(const mavlink_message_t* msg)
+static inline uint8_t mavlink_msg_system_status_get_system_activated(const mavlink_message_t* msg)
 {
 	return _MAV_RETURN_uint8_t(msg,  6);
 }
@@ -224,7 +224,7 @@ static inline void mavlink_msg_system_status_decode(const mavlink_message_t* msg
 	system_status->battery_voltage = mavlink_msg_system_status_get_battery_voltage(msg);
 	system_status->imu_calib = mavlink_msg_system_status_get_imu_calib(msg);
 	system_status->sat_numbers = mavlink_msg_system_status_get_sat_numbers(msg);
-	system_status->status1 = mavlink_msg_system_status_get_status1(msg);
+	system_status->system_activated = mavlink_msg_system_status_get_system_activated(msg);
 	system_status->status2 = mavlink_msg_system_status_get_status2(msg);
 #else
 	memcpy(system_status, _MAV_PAYLOAD(msg), 8);
