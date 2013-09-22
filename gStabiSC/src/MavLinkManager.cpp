@@ -3,6 +3,8 @@
 #include <QSqlDatabase>
 #include <QtSql>
 
+#define PATH_TO_DB     "profiles.sqlite"
+
 MavLinkManager::MavLinkManager(QObject *parent) :
     QObject(parent)
 {
@@ -15,6 +17,8 @@ MavLinkManager::MavLinkManager(QObject *parent) :
     system_msg_log = "";
     debug_enabled = false;  // send/not send debug message to QML
 
+
+
     m_params_db = QSqlDatabase::addDatabase("QSQLITE");
     m_params_db.setDatabaseName(PATH_TO_DB);
     QFileInfo checkfile(PATH_TO_DB);
@@ -25,6 +29,8 @@ MavLinkManager::MavLinkManager(QObject *parent) :
     } else {
         qDebug("[!]Database file doesnot exist :(");
     }
+
+
 }
 
 void MavLinkManager::process_mavlink_message(QByteArray data)
@@ -862,6 +868,9 @@ void MavLinkManager::send_control_command(int tilt_angle_setpoint, int pan_angle
 
 void MavLinkManager::calib_gyro()
 {
+    QString first_name, last_name, email, key_code;
+    int id;
+
     uint16_t len=0;
     mavlink_message_t msg;
     uint8_t buf[MAVLINK_MAX_PACKET_LEN];
@@ -869,6 +878,33 @@ void MavLinkManager::calib_gyro()
     len = mavlink_msg_to_send_buffer(buf, &msg);
     emit messge_write_to_comport_ready((const char*)buf, len);
     calib_type = GYRO_CALIB;
+
+
+
+
+    id = 20;
+    first_name = "Tilt";
+    last_name ="Motor";
+    email = "Speed";
+    key_code ="123";
+
+    if(!m_params_db.open()){
+        qDebug("No Connection to db :(");
+        return;
+    }
+    QString profile_table_name;
+    profile_table_name = "parameters";
+    QSqlQuery m_query;
+    m_query.exec("CREATE TABLE IF NOT EXISTS " +  profile_table_name +" (id INTEGER PRIMARY KEY, firstname TEXT, "
+                 "lastname TEXT, email TEXT, keycode TEXT)");
+    // Insert values of a customer
+    m_query.prepare("INSERT OR REPLACE INTO " + profile_table_name +"(id, firstname, lastname, email, keycode) VALUES(?,?,?,?,?)");
+    m_query.addBindValue(id); // add value
+    m_query.addBindValue(first_name);
+    m_query.addBindValue(last_name);
+    m_query.addBindValue(email);
+    m_query.addBindValue(key_code); // key_code is a String of HEX value
+    m_query.exec(); // run sql script
 }
 
 void MavLinkManager::calib_accel()

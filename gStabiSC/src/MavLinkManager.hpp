@@ -13,7 +13,7 @@
 #include "thirdParty/mavlink/v1.0/gremsyBGC/mavlink.h"
 #include "thirdParty/mavlink/v1.0/globalData.h"
 
-#define PATH_TO_DB      "parameters.sqlite"
+
 
 /*
  * Some names are equal:

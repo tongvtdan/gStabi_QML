@@ -159,10 +159,10 @@ Item{
                 text: "1.Calib Gyro"
                 anchors.top: calibOnStartUpChecked.top;    anchors.topMargin: 0
                 anchors.left: calibOnStartUpChecked.right; anchors.leftMargin: 10
-                onClicked: {
-                    if(_serialLink.isConnected){
-                    _mavlink_manager.calib_gyro()
-                    } else show_popup_message("gStabi Controller is disconnected.\nCheck connection then try again")
+                onClicked: { _mavlink_manager.calib_gyro()
+//                    if(_serialLink.isConnected){
+//                    _mavlink_manager.calib_gyro()
+//                    } else show_popup_message("gStabi Controller is disconnected.\nCheck connection then try again")
                 }
             }
         }
