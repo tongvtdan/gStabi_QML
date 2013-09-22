@@ -4,10 +4,16 @@
 #include <QObject>
 #include <QTimer>
 
+#include <QFileInfo>
+#include <QSqlDatabase>
+#include <QSql>
+
 #include "configuration.h"
 
 #include "thirdParty/mavlink/v1.0/gremsyBGC/mavlink.h"
 #include "thirdParty/mavlink/v1.0/globalData.h"
+
+#define PATH_TO_DB      "parameters.sqlite"
 
 /*
  * Some names are equal:
@@ -626,6 +632,8 @@ private:
     uint8_t calib_type;
     bool calib_finished;
     bool debug_enabled ;
+
+    QSqlDatabase m_params_db;
 };
 
 #endif // MAVLINKMANAGER_HPP

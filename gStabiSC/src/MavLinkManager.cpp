@@ -1,6 +1,7 @@
 #include "MavLinkManager.hpp"
 #include <QDebug>
-
+#include <QSqlDatabase>
+#include <QtSql>
 
 MavLinkManager::MavLinkManager(QObject *parent) :
     QObject(parent)
@@ -13,6 +14,17 @@ MavLinkManager::MavLinkManager(QObject *parent) :
     mavlink_init();
     system_msg_log = "";
     debug_enabled = false;  // send/not send debug message to QML
+
+    m_params_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_params_db.setDatabaseName(PATH_TO_DB);
+    QFileInfo checkfile(PATH_TO_DB);
+    if(checkfile.isFile()){
+        if(m_params_db.open()){
+           qDebug("[+] Connected to Database file :)");
+        }
+    } else {
+        qDebug("[!]Database file doesnot exist :(");
+    }
 }
 
 void MavLinkManager::process_mavlink_message(QByteArray data)
