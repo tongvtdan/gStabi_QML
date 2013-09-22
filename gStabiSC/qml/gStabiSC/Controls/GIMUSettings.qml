@@ -279,6 +279,61 @@ Item{
 
                 }
             }
+            Row{
+                id: calibSteps
+                spacing: 5
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 20
+                Rectangle{
+                    id: step1Finished
+                    width: 30
+                    height: 20
+                    color: _mavlink_manager.accel_calib_steps >= 1? "cyan" : "transparent"
+                    radius: 1
+                    border.color: "cyan"; border.width: 1
+                }
+                Rectangle{
+                    id: step2Finished
+                    width: 30
+                    height: 20
+                    color: _mavlink_manager.accel_calib_steps >= 2? "cyan" : "transparent"
+                    radius: 1
+                    border.color: "cyan"; border.width: 1
+                }
+                Rectangle{
+                    id: step3Finished
+                    width: 30
+                    height: 20
+                    color: _mavlink_manager.accel_calib_steps >= 3? "cyan" : "transparent"
+                    radius: 1
+                    border.color: "cyan"; border.width: 1
+                }
+                Rectangle{
+                    id: step4Finished
+                    width: 30
+                    height: 20
+                    color: _mavlink_manager.accel_calib_steps >= 4? "cyan" : "transparent"
+                    radius: 1
+                    border.color: "cyan"; border.width: 1
+                }
+                Rectangle{
+                    id: step5Finished
+                    width: 30
+                    height: 20
+                    color: _mavlink_manager.accel_calib_steps >= 5? "cyan" : "transparent"
+                    radius: 1
+                    border.color: "cyan"; border.width: 1
+                }
+                Rectangle{
+                    id: step6Finished
+                    width: 30
+                    height: 20
+                    color: (_mavlink_manager.accel_calib_steps === 6 )? "cyan" : "transparent"
+                    radius: 1
+                    border.color: "cyan"; border.width: 1
+                }
+            }
         }
         GFrame{
             id: gpsSettings

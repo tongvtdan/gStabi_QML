@@ -74,6 +74,7 @@ class MavLinkManager : public QObject
     Q_PROPERTY(int  gyro_lpf READ gyro_lpf WRITE setgyro_lpf NOTIFY gyro_lpfChanged)
     Q_PROPERTY(int  calib_mode READ calib_mode WRITE setcalib_mode NOTIFY calib_modeChanged)
     Q_PROPERTY(int  motor_freq READ motor_freq WRITE setmotor_freq NOTIFY motor_freqChanged)
+    Q_PROPERTY(int accel_calib_steps READ accel_calib_steps WRITE setaccel_calib_steps NOTIFY accel_calib_stepsChanged)
 
     // for RC Mode Channel or RC Modw PWM
     Q_PROPERTY(int  mode_sbus_chan_num  READ mode_sbus_chan_num WRITE setmode_sbus_chan_num NOTIFY mode_sbus_chan_numChanged)
@@ -232,6 +233,9 @@ public:
 
     bool keycode_request() const;
     void setkeycode_request(bool _request);
+
+    int accel_calib_steps() const;
+    void setaccel_calib_steps(int _step);
 
  // *********** RC Settings
 // RC Mode
@@ -447,6 +451,7 @@ signals:
     void calib_modeChanged(int);
     void motor_freqChanged(int);
     void keycode_requestChanged(bool);
+    void accel_calib_stepsChanged(int);
 
     // RC Settings
     // RC Mode
@@ -583,6 +588,7 @@ private:
     int m_calib_mode;
     int m_motor_freq;
     bool m_keycode_request;
+    int m_accel_calib_steps;
 
     // [!]RC Settings
     //    Mode
@@ -618,6 +624,7 @@ private:
                                 // if true: Request to Read all parameters to display on UI and store in current parameters.
                                 // if false: continue to parse message to get data.
     uint8_t calib_type;
+    bool calib_finished;
     bool debug_enabled ;
 };
 

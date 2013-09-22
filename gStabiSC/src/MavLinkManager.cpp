@@ -32,7 +32,7 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
             if(first_data_pack){    // if it is the first time receive mavlink message
                 first_data_pack = false; // From now on, all message is treated as normal.
                 request_all_params();   // then request all parameters from Board
-                setkeycode_request(true);  // simulate the request from MCU
+//                setkeycode_request(true);  // simulate the request from MCU
             }
             switch (message.msgid)
             {
@@ -124,6 +124,7 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
                 setbattery_voltage(m_g_system_status.battery_voltage);
                 // IMU Calib
                  m_g_system_status.imu_calib = mavlink_msg_system_status_get_imu_calib(&message);
+                 qDebug() << m_g_system_status.imu_calib;
                  update_calib_status();
             }
                 break;
@@ -143,7 +144,7 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
             }
                 break;
             case MAVLINK_MSG_ID_KEYCODE_REQUEST:{
-                if(mavlink_msg_keycode_request_get_device_name(&message) == GSTABI){
+                if(mavlink_msg_keycode_request_get_device_name3(&message) == GSTABI){
                     setkeycode_request(true);
                 }
             }
@@ -414,13 +415,16 @@ void MavLinkManager::update_calib_status()
 {
     if(calib_type == ACC_CALIB)
     {
+        setaccel_calib_steps(m_g_system_status.imu_calib);
         switch(m_g_system_status.imu_calib)
         {
         case CALIB_FINISH:
+            if(calib_finished){
             qDebug("Accelerometer sensors calibration completed!");
             setmavlink_message_log("Accelerometer sensors calibration completed! \nDon't move sensors until the sensor value reach to 0 on gauge display");
             request_all_params();   // then request all parameters from Board
             calib_type = CALIB_NONE;
+            }
             break;
         case ONE_REMAINING_FACE:
             if(calib_mode() == 0)   // basic mode
@@ -429,24 +433,25 @@ void MavLinkManager::update_calib_status()
             }
             else if(calib_mode() == 1) // adv mode
             {
-                setmavlink_message_log("Accelerometer Calibration for Face 1 - Done.\nPress '2.Calib Accel' button to calib next face");
+                setmavlink_message_log("Accelerometer Calibration for Face 1 - Done.\nContinue to calibrate next face\nPress '2.Calib Accel' button to calib next face");
             // nhac nguoi dung nhan tiep
             }
             break;
         case TWO_REMAINING_FACES:
-            setmavlink_message_log("Accelerometer Calibration for Face 2 - Done.\nPress '2.Calib Accel' button to calib next face");
+            setmavlink_message_log("Accelerometer Calibration for Face 2 - Done.\nContinue to calibrate next face\nPress '2.Calib Accel' button to calib next face");
             break;
         case THREE_REMAINING_FACES:
-            setmavlink_message_log("Accelerometer Calibration for Face 3 - Done.\nPress '2.Calib Accel' button to calib next face");
+            setmavlink_message_log("Accelerometer Calibration for Face 3 - Done.\nContinue to calibrate next face\nPress '2.Calib Accel' button to calib next face");
             break;
         case FOUR_REMAINING_FACES:
-            setmavlink_message_log("Accelerometer Calibration for Face 4 - Done.\nPress '2.Calib Accel' button to calib next face");
+            setmavlink_message_log("Accelerometer Calibration for Face 4 - Done.\nContinue to calibrate next face\nPress '2.Calib Accel' button to calib next face");
             break;
         case FIVE_REMAINING_FACES:
-            setmavlink_message_log("Accelerometer Calibration for Face 5 - Done.\nPress '2.Calib Accel' button to calib next face");
+            setmavlink_message_log("Accelerometer Calibration for Face 5 - Done.\nContinue to calibrate next face\nPress '2.Calib Accel' button to calib next face");
             break;
         case SIX_REMAINING_FACES:
-            setmavlink_message_log("Accelerometer Calibration for Face 6 - Done.\nPress '2.Calib Accel' button to calib next face");
+            setmavlink_message_log("Accelerometer Calibration for Face 6 - Done.\nAccelerometer Calibration process is completed.\nPress '2.Calib Accel' again");
+            calib_finished = true;
             break;
         case CALIB_FAIL:
             qDebug("Accelerometer sensors calibration failed!");
@@ -812,6 +817,7 @@ void MavLinkManager::mavlink_init()
     first_data_pack = true;           // this will be check when mavlink message was received, to check whether it's 1st time to received the message
     heartbeat_state = false;
     setkeycode_request(false);
+
 }
 
 void MavLinkManager::RestartLinkConnectionTimer(int msec)
@@ -871,6 +877,7 @@ void MavLinkManager::calib_accel()
     len = mavlink_msg_to_send_buffer(buf, &msg);
     emit messge_write_to_comport_ready((const char*)buf, len);
     calib_type = ACC_CALIB;
+    calib_finished = false;
 
 }
 
@@ -1129,6 +1136,17 @@ void MavLinkManager::setkeycode_request(bool _request)
 {
     m_keycode_request = _request;
     emit keycode_requestChanged(m_keycode_request);
+}
+
+int MavLinkManager::accel_calib_steps() const
+{
+   return m_accel_calib_steps;
+}
+
+void MavLinkManager::setaccel_calib_steps(int _step)
+{
+    m_accel_calib_steps = _step;
+    emit accel_calib_stepsChanged(m_accel_calib_steps);
 }
 
 int MavLinkManager::mode_sbus_chan_num() const

@@ -194,7 +194,6 @@ Item {
                 quickOpenCloseComportButton.imageHover   = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_port_connect.png"
                 comportButtonLabel.text = "Connected"
                 connectedImage.visible = true;
-//                popup_msg = "gStabi controller is connected"
             }
             else{
                 quickOpenCloseComportButton.imageNormal  = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_normal_ports_disconnect.png"
@@ -202,7 +201,6 @@ Item {
                 quickOpenCloseComportButton.imageHover   = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_focus_ports_disconnect.png"
                 comportButtonLabel.text = "Disconnected"
                 connectedImage.visible = false
-//                show_popup_message("gStabi controller is disconnected.")
             }
         }
         onHb_pulseChanged: {
