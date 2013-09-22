@@ -8,9 +8,11 @@ Item{
     property int  gyroLpf_value         : 5
     property bool acc_calib_mode_adv  : true
     property bool use_gps_correction    : false
+    property bool calib_accel_finished : false
+
 
     Row{
-        id: motorsParamsRow
+        id: imuSettingsRow
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         spacing: 0
@@ -274,66 +276,41 @@ Item{
                 onClicked: {
                     if(_serialLink.isConnected){
                         _mavlink_manager.calib_mode = acc_calib_mode_adv
-                        _mavlink_manager.calib_accel()
+                        if(acc_calib_mode_adv) {
+                            calibStepDialog.state = "showDialog"
+                            _mavlink_manager.accel_calib_steps = 0;
+                            popupDialog.x = 50;
+                            show_popup_message("Calib accelerometer sensors in Advanced mode\n\n" +
+                                               "This mode will calib sensors in 06 faces\n\n"+
+                                               "Please follow these steps to get good calib results:\n\n"+
+                                               "[1]. If sensor module is mounted on your gStabi System, take it out then place it on a surface\n\n"+
+                                               "[2]. Click 'Next' button to start calibrating the 1st face\n\n"+
+                                               "[3]. Continue the next face by clicking 'Next' button become 'Finish'\n\n"+
+                                               "[4]. Continue to the 6th face then 'Next' button become 'Finish'\n\n"+
+                                               "[5]. Place the sensor module on a surface, don't move it then Click 'Finish' button\n\n" +
+                                               "[6]. Calibration process completed with a pop up message \n\n" +
+                                               "Note: You must finish the process once it is started \n\n"+
+                                               "      To Restart the process, click on '2.Calib Accel' again  \n"
+                                               )
+                        }
+                        else {
+                            _mavlink_manager.calib_accel()
+                            show_popup_message("Start to calib accel sensor in basic mode")
+
+                        }
                     } else show_popup_message("gStabi Controller is disconnected.\nCheck connection then try again")
 
                 }
             }
-            Row{
-                id: calibSteps
-                spacing: 5
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 20
-                Rectangle{
-                    id: step1Finished
-                    width: 30
-                    height: 20
-                    color: _mavlink_manager.accel_calib_steps >= 1? "cyan" : "transparent"
-                    radius: 1
-                    border.color: "cyan"; border.width: 1
-                }
-                Rectangle{
-                    id: step2Finished
-                    width: 30
-                    height: 20
-                    color: _mavlink_manager.accel_calib_steps >= 2? "cyan" : "transparent"
-                    radius: 1
-                    border.color: "cyan"; border.width: 1
-                }
-                Rectangle{
-                    id: step3Finished
-                    width: 30
-                    height: 20
-                    color: _mavlink_manager.accel_calib_steps >= 3? "cyan" : "transparent"
-                    radius: 1
-                    border.color: "cyan"; border.width: 1
-                }
-                Rectangle{
-                    id: step4Finished
-                    width: 30
-                    height: 20
-                    color: _mavlink_manager.accel_calib_steps >= 4? "cyan" : "transparent"
-                    radius: 1
-                    border.color: "cyan"; border.width: 1
-                }
-                Rectangle{
-                    id: step5Finished
-                    width: 30
-                    height: 20
-                    color: _mavlink_manager.accel_calib_steps >= 5? "cyan" : "transparent"
-                    radius: 1
-                    border.color: "cyan"; border.width: 1
-                }
-                Rectangle{
-                    id: step6Finished
-                    width: 30
-                    height: 20
-                    color: (_mavlink_manager.accel_calib_steps === 6 )? "cyan" : "transparent"
-                    radius: 1
-                    border.color: "cyan"; border.width: 1
-                }
+            GCaliAccelDialog{
+                id: calibStepDialog
+                anchors.horizontalCenter: accelSettings.horizontalCenter
+                anchors.bottom: accelSettings.top
+                anchors.bottomMargin: 0
+                state: "hideDialog"
+
             }
+
         }
         GFrame{
             id: gpsSettings
@@ -379,6 +356,11 @@ Item{
         onUse_gpsChanged        : gpsCorrectionChecked.checked_state    = _mavlink_manager.use_gps
         onGyro_trustChanged     : gyroTrust_value = _mavlink_manager.gyro_trust
         onGyro_lpfChanged       : gyroLpf_value = _mavlink_manager.gyro_lpf
+        onAccel_calib_stepsChanged: {
+            if(_mavlink_manager.accel_calib_steps === 6)  calib_accel_finished = true;
+            if(_mavlink_manager.accel_calib_steps !== 0)  calibAccelButton.enabled = false;
+            else calibAccelButton.enabled = true;
+        }
     }
 
 

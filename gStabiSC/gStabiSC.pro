@@ -86,4 +86,5 @@ OTHER_FILES += \
     qml/gStabiSC/Components/GRCSettings.qml \
     qml/gStabiSC/KeyCodeInput.qml \
     qml/gStabiSC/GSplashScreen.qml \
-    qml/gStabiSC/GMain.qml
+    qml/gStabiSC/GMain.qml \
+    qml/gStabiSC/Components/GCaliAccelDialog.qml

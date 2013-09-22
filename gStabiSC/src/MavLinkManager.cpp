@@ -124,7 +124,6 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
                 setbattery_voltage(m_g_system_status.battery_voltage);
                 // IMU Calib
                  m_g_system_status.imu_calib = mavlink_msg_system_status_get_imu_calib(&message);
-                 qDebug() << m_g_system_status.imu_calib;
                  update_calib_status();
             }
                 break;
@@ -416,14 +415,19 @@ void MavLinkManager::update_calib_status()
     if(calib_type == ACC_CALIB)
     {
         setaccel_calib_steps(m_g_system_status.imu_calib);
+        qDebug() << "Calib step: " << accel_calib_steps();
         switch(m_g_system_status.imu_calib)
         {
         case CALIB_FINISH:
             if(calib_finished){
-            qDebug("Accelerometer sensors calibration completed!");
-            setmavlink_message_log("Accelerometer sensors calibration completed! \nDon't move sensors until the sensor value reach to 0 on gauge display");
-            request_all_params();   // then request all parameters from Board
-            calib_type = CALIB_NONE;
+                setmavlink_message_log("Accelerometer sensors calibration completed! \nDon't move sensors until the sensor value in TILT < 1 and ROLL < 1");
+                request_all_params();   // then request all parameters from Board
+                calib_type = CALIB_NONE;
+            }
+            else if(calib_mode() == 0) {
+                setmavlink_message_log("Accelerometer sensors calibration completed! \nDon't move sensors until the sensor value in TILT < 1 and ROLL < 1");
+                request_all_params();   // then request all parameters from Board
+                calib_type = CALIB_NONE;
             }
             break;
         case ONE_REMAINING_FACE:
@@ -431,30 +435,19 @@ void MavLinkManager::update_calib_status()
             {
                 setmavlink_message_log("Calibrating accelerometer sensors ... \nDon't move sensors untill calibration process completed");
             }
-            else if(calib_mode() == 1) // adv mode
-            {
-                setmavlink_message_log("Accelerometer Calibration for Face 1 - Done.\nContinue to calibrate next face\nPress '2.Calib Accel' button to calib next face");
-            // nhac nguoi dung nhan tiep
-            }
             break;
         case TWO_REMAINING_FACES:
-            setmavlink_message_log("Accelerometer Calibration for Face 2 - Done.\nContinue to calibrate next face\nPress '2.Calib Accel' button to calib next face");
             break;
         case THREE_REMAINING_FACES:
-            setmavlink_message_log("Accelerometer Calibration for Face 3 - Done.\nContinue to calibrate next face\nPress '2.Calib Accel' button to calib next face");
             break;
         case FOUR_REMAINING_FACES:
-            setmavlink_message_log("Accelerometer Calibration for Face 4 - Done.\nContinue to calibrate next face\nPress '2.Calib Accel' button to calib next face");
             break;
         case FIVE_REMAINING_FACES:
-            setmavlink_message_log("Accelerometer Calibration for Face 5 - Done.\nContinue to calibrate next face\nPress '2.Calib Accel' button to calib next face");
             break;
         case SIX_REMAINING_FACES:
-            setmavlink_message_log("Accelerometer Calibration for Face 6 - Done.\nAccelerometer Calibration process is completed.\nPress '2.Calib Accel' again");
             calib_finished = true;
             break;
         case CALIB_FAIL:
-            qDebug("Accelerometer sensors calibration failed!");
             setmavlink_message_log("Accelerometer sensors calibration failed!");
             calib_type = CALIB_NONE;
             break;
@@ -466,19 +459,15 @@ void MavLinkManager::update_calib_status()
     {
         switch(m_g_system_status.imu_calib){
         case CALIB_FINISH:
-            qDebug("Gyroscope sensors calibration completed!");
             setmavlink_message_log("Gyroscope sensors calibration completed!");
-
             request_all_params();   // then request all parameters from Board
             calib_type = CALIB_NONE;
             break;
         case CALIB_FAIL:
-            qDebug("Gyroscope sensors calibration failed!");
             setmavlink_message_log("Gyroscope sensors calibration failed!");
             calib_type = CALIB_NONE;
             break;
         default:
-            qDebug("Calibrating gyroscope sensors ... ");
             setmavlink_message_log("Calibrating gyroscope sensors ... \nDon't move sensors untill calibration process completed ");
             break;
         }
@@ -817,6 +806,7 @@ void MavLinkManager::mavlink_init()
     first_data_pack = true;           // this will be check when mavlink message was received, to check whether it's 1st time to received the message
     heartbeat_state = false;
     setkeycode_request(false);
+    calib_type = CALIB_NONE;
 
 }
 
@@ -865,14 +855,14 @@ void MavLinkManager::calib_accel()
     mavlink_message_t msg;
     uint8_t buf[MAVLINK_MAX_PACKET_LEN];
 
-    if(calib_mode() == 0) {
-        qDebug("debug >> Calib acc in Basic mode");
-        setmavlink_message_log("Start to calib Accel in Basic mode");
-    }
-    else if(calib_mode() == 1) {
-        qDebug("debug >> Calib acc in Adv mode");
-        setmavlink_message_log("Start to calib Accel in Advanced mode\n Calibration process will go through 6 steps for 6 faces.");
-    }
+//    if(calib_mode() == 0) {
+//        qDebug("debug >> Calib acc in Basic mode");
+//        setmavlink_message_log("Start to calib Accel in Basic mode");
+//    }
+//    else if(calib_mode() == 1) {
+//        qDebug("debug >> Calib acc in Adv mode");
+//        setmavlink_message_log("Start to calib Accel in Advanced mode\n Calibration process will go through 6 steps for 6 faces.");
+//    }
     mavlink_msg_imu_calib_request_pack(SYSTEM_ID, MAV_COMP_ID_SERVO1, &msg, 0, calib_mode());  // '0' means acc calib
     len = mavlink_msg_to_send_buffer(buf, &msg);
     emit messge_write_to_comport_ready((const char*)buf, len);

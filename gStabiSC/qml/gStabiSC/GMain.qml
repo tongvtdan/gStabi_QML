@@ -124,7 +124,7 @@ Item {
                     }
                     _serialLink.open_close_comport();
                     if(_serialLink.isConnected) {
-                        show_popup_message("Port " + selected_portname + " is Opened \n Connecting to gStabi Controller ...")
+                        show_popup_message("Port " + selected_portname + " is Opened \n Connected to gStabi Controller. Updating parameters...")
                     }
                     else {
                         show_popup_message("Port " + selected_portname + " is Closed.")
@@ -156,7 +156,7 @@ Item {
     }
     GPopupMessage{
         id: popupDialog
-        x: gstabiBackgroundImage.width/2 -200
+        x: gstabiBackgroundImage.width/2 - width/2
         y: 200
     }
     GKeyCodeInput{

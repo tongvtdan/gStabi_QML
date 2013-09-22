@@ -85,5 +85,6 @@
         <file>qml/gStabiSC/GKeyCodeInput.qml</file>
         <file>qml/gStabiSC/GSplashScreen.qml</file>
         <file>qml/gStabiSC/GMain.qml</file>
+        <file>qml/gStabiSC/Components/GCaliAccelDialog.qml</file>
     </qresource>
 </RCC>
