@@ -164,7 +164,7 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
                                .arg(unique_device_id.unique_id_5)
                                );
             }
-                break;
+            break;
             default:
                 break;
             } // end of switch

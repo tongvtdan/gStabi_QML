@@ -10,7 +10,7 @@
 SerialLink::SerialLink(QObject *parent) :
     QObject(parent),
     m_connection_state(false),
-    m_check_gstabi_product(true)
+    m_check_gstabi_product(false)
 {
     fillSerialPortInfo();
     portSettings();

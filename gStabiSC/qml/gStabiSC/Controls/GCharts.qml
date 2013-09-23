@@ -9,13 +9,10 @@ Rectangle {
     Column{
 
     }
-
     GRealtimeChart{
-        width: parent.width - 100;height: 250
-        anchors.right: parent.right
-        anchors.rightMargin: 0
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 0
+        width: 700;height: 250
+        anchors.right: parent.right; anchors.rightMargin: 10
+        anchors.bottom: parent.bottom;  anchors.bottomMargin: 10
     }
 }
 
