@@ -90,6 +90,7 @@ private:
     bool m_ports_updated;
 //    [!]
 
+    bool m_check_gstabi_product;
 
 
 };

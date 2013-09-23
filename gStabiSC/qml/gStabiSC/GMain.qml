@@ -172,7 +172,6 @@ Item {
             }
         }
     }
-
     onMain_log_msgChanged: {
         if(main_log_msg.length >=5000){
             main_log_msg = ""
@@ -185,7 +184,6 @@ Item {
         target: _mavlink_manager;
         onMavlink_message_logChanged: {
             show_popup_message(_mavlink_manager.mavlink_message_log)
-//            main_log_msg = _mavlink_manager.mavlink_message_log + "\n" + main_log_msg
         }
         onBoard_connection_stateChanged: {
             if(_mavlink_manager.board_connection_state){
@@ -207,7 +205,6 @@ Item {
             if(_mavlink_manager.hb_pulse)
                 connectedImage.source  = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_run_0_port_connect.png"
             else connectedImage.source = "qrc:/images/qml/gStabiSC/images/buttons/gStabiUI_3.3_run_1_port_connect.png"
-//            if(popup_show)popup_show = false
         }
         onKeycode_requestChanged: {
             if(_mavlink_manager.keycode_request === true) keycodeInputDialog.state = "showDialog"
@@ -236,9 +233,10 @@ Item {
         if(Storage.getSetting("Profile") !== "NA"){   // if already exist, get it
             profile_name = Storage.getSetting("Profile")
         }
-        show_popup_message("*** Welcome to gStabi Station Controller ***\n"+
-                           "        1. Power on gStabi system \n"   +
-                           "        2. Open Serial port\n"          +
+        show_popup_message("*** Welcome to gStabi Station Controller ***\n\n"+
+                           "        ----- Gremsy Co., Ltd -----\n\n" +
+                           "        1. Power on gStabi system \n\n"   +
+                           "        2. Open Serial port\n\n"          +
                            "        3. Application is ready to Monitor or Setup gStabi Controller")
 
 

@@ -9,7 +9,8 @@
 
 SerialLink::SerialLink(QObject *parent) :
     QObject(parent),
-    m_connection_state(false)
+    m_connection_state(false),
+    m_check_gstabi_product(true)
 {
     fillSerialPortInfo();
     portSettings();
@@ -68,12 +69,7 @@ void SerialLink::open_close_comport()
     {
         serialport->open(QIODevice::ReadWrite);
         //Hardware trigger
-        //[!]for old version controller board
-//        serialport->setRts(1); // 0V output on boot0
-//        [!]
-//        [!]for new version controller board
         serialport->setRts(0); // 0V output on boot0
-//        [!]
         serialport->setDtr(1); // 0v output on reset
         serialport->setDtr(0); // 3V3 output on reset
     }
@@ -98,25 +94,20 @@ void SerialLink::fillSerialPortInfo()
    for(int i = serial_port_info.size() - 1; i >= 0; i--){
        QextPortInfo portInfo = serial_port_info.at(i);
        QString serialport_name;
-
+       int m_productID;
        serialport_name = portInfo.portName;
-       if(serialport_name == ""){
-           serial_port_info.removeAt(i);    // remove all dummy serial ports
+       if(m_check_gstabi_product){
+           m_productID = portInfo.productID;
+           if(m_productID != 0x88FC){   // 0x88FC, Gremsy gStabi Product ID
+               serial_port_info.removeAt(i);    // remove all dummy serial ports
+           }
        }
-//       int m_productID;
-//       m_productID = portInfo.productID;
-//       if(m_productID != 35068){   // 0x88FC, Gremsy gStabi Product ID
-////           qDebug()<< "C++>>Gremsy gStabi Product: " << portInfo.portName;
-////           update_comport_settings(portInfo.portName);
-////           gremsy_virtual_portname = portInfo.portName;
-//           serial_port_info.removeAt(i);    // remove all dummy serial ports
-//       }
+       else{
+           if(serialport_name == ""){
+               serial_port_info.removeAt(i);    // remove all dummy serial ports
+           }
+       }
    }
-//   if(gremsy_virtual_portname != ""){
-//        qDebug()<< "C++>>Gremsy gStabi Product: " << gremsy_virtual_portname;
-//       update_comport_settings(gremsy_virtual_portname);
-//       open_close_comport();
-//   }
    if(serial_port_info.size() > 0){
         selected_port_name = serial_port_info.at(0).portName; // get the latest port
    }

@@ -27,4 +27,23 @@ GFrame{
             keycodeInputDialog.state = "showDialog"
         }
     }
+    GButton{
+        id: getUDID
+        text: "Get UDID"
+        anchors.left: enterKeycodeEnableButton.right; anchors.leftMargin: 20
+        anchors.top : enterKeycodeEnableButton.top
+        onClicked: {
+            if(_serialLink.isConnected){
+                _mavlink_manager.send_unique_device_id_request();
+                udidDialog.state = "showDialog"
+            } else show_popup_message("gStabi Controller is disconnected!\n\nCheck connection then try again")
+        }
+    }
+    GUDID{
+        id: udidDialog
+        x:  0
+        y: -100
+        state: "hideDialog"
+
+    }
 }

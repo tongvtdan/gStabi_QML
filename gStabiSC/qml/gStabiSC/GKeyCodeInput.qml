@@ -85,13 +85,11 @@ Rectangle{
             id: activateButton
             height: 25
             text: "Activate"
-//            anchors.top: messageTextContainer.bottom
-//            anchors.topMargin: 10
-//            anchors.horizontalCenter: parent.horizontalCenter
             onClicked: {
                 key_code = inputText.text
-                _mavlink_manager.send_keycode(key_code)
-
+                if(_serialLink.isConnected){
+                    _mavlink_manager.send_keycode(key_code)
+                } else show_popup_message("gStabi Controller is disconnected!\\nnCheck the connection then try again")
                 root.state = "hideDialog";
             }
         }

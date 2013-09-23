@@ -3,26 +3,18 @@ import QtQuick 2.0
 Item {
     property double  battery_percent: 0
 
-//    AnimatedImage{
-//        id: batteryLevelAnimaation
-//        width: 30
-//        height: 140
-//        source: "qrc:/images/qml/gStabiSC/images/animation.gif"
-//        currentFrame: 10;
-//        paused: true
-//    }
     Rectangle{
         id: batteryIndicatorBorder
-        width: 20
+        width: 25
         height: 100
         color: "transparent"
-        border{ color: "cyan"; width: 1}
+        border{ color: "#0c57ee"; width: 2}
         Rectangle {
             id: pole
-            width: 7
+            width: 10
             height: 5
-            color: "#00000000"
-            border.color: "cyan"; border.width: 1
+            color: "#403434"
+            border.color: "#334040"; border.width: 1
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.top
             anchors.bottomMargin: -border.width
@@ -31,22 +23,18 @@ Item {
         Rectangle{
             id: batteryLevelIndicator
             anchors.centerIn: parent.Center
-            width: parent.width;
-//            height: 50
+            width: parent.width - 2*parent.border.width;
             height: battery_percent
             color: "#0ef1e2"
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom: parent.bottom;  anchors.bottomMargin: parent.border.width
             transformOrigin: Item.Bottom
         }
 
         GTextStyled {
             id: batteryLevelLabel
-            x: 15
-            y: 36
             width: 10
-            color: "green"
-
+            color: "blue"
             text: battery_percent.toFixed(1).toString()+"%"
             font.pixelSize: 10
             anchors.verticalCenter: parent.verticalCenter

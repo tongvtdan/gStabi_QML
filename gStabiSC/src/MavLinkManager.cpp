@@ -32,7 +32,7 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
             if(first_data_pack){    // if it is the first time receive mavlink message
                 first_data_pack = false; // From now on, all message is treated as normal.
                 request_all_params();   // then request all parameters from Board
-//                setkeycode_request(true);  // simulate the request from MCU
+                //                setkeycode_request(true);  // simulate the request from MCU
             }
             switch (message.msgid)
             {
@@ -110,7 +110,7 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
                 rc_sbus_level[17] = sbus_chan_values.ch18;
                 update_rc_sbus_value();
             }
-            break;
+                break;
             case MAVLINK_MSG_ID_PPM_CHAN_VALUES: {  // get value of PWM from RC Remote control
                 pwm_values.tilt = mavlink_msg_ppm_chan_values_get_tilt(&message);
                 pwm_values.roll = mavlink_msg_ppm_chan_values_get_roll(&message);
@@ -123,22 +123,22 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
                 m_g_system_status.battery_voltage = mavlink_msg_system_status_get_battery_voltage(&message);
                 setbattery_voltage(m_g_system_status.battery_voltage);
                 // IMU Calib
-                 m_g_system_status.imu_calib = mavlink_msg_system_status_get_imu_calib(&message);
-                 update_calib_status();
+                m_g_system_status.imu_calib = mavlink_msg_system_status_get_imu_calib(&message);
+                update_calib_status();
             }
                 break;
             case MAVLINK_MSG_ID_DEBUG_VALUES :{
                 if(debug_enabled){
-                setmavlink_message_log(QString("*** Debug ***\n- 1: %1\n- 2: %2\n- 3: %3\n- 4: %4\n- 5: %5\n- 6: %6\n- 7: %7\n- 8: %8")
-                                            .arg(mavlink_msg_debug_values_get_debug1(&message))
-                                            .arg(mavlink_msg_debug_values_get_debug2(&message))
-                                            .arg(mavlink_msg_debug_values_get_debug3(&message))
-                                            .arg(mavlink_msg_debug_values_get_debug4(&message))
-                                            .arg(mavlink_msg_debug_values_get_debug5(&message))
-                                            .arg(mavlink_msg_debug_values_get_debug6(&message))
-                                            .arg(mavlink_msg_debug_values_get_debug7(&message))
-                                            .arg(mavlink_msg_debug_values_get_debug8(&message))
-                                       );
+                    setmavlink_message_log(QString("*** Debug ***\n- 1: %1\n- 2: %2\n- 3: %3\n- 4: %4\n- 5: %5\n- 6: %6\n- 7: %7\n- 8: %8")
+                                           .arg(mavlink_msg_debug_values_get_debug1(&message))
+                                           .arg(mavlink_msg_debug_values_get_debug2(&message))
+                                           .arg(mavlink_msg_debug_values_get_debug3(&message))
+                                           .arg(mavlink_msg_debug_values_get_debug4(&message))
+                                           .arg(mavlink_msg_debug_values_get_debug5(&message))
+                                           .arg(mavlink_msg_debug_values_get_debug6(&message))
+                                           .arg(mavlink_msg_debug_values_get_debug7(&message))
+                                           .arg(mavlink_msg_debug_values_get_debug8(&message))
+                                           );
                 }
             }
                 break;
@@ -149,11 +149,24 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
             }
                 break;
             case MAVLINK_MSG_ID_UNIQUE_ID_VALUES:{
-
+                unique_device_id.unique_id_0 = mavlink_msg_unique_id_values_get_unique_id_0(&message);
+                unique_device_id.unique_id_1 = mavlink_msg_unique_id_values_get_unique_id_1(&message);
+                unique_device_id.unique_id_2 = mavlink_msg_unique_id_values_get_unique_id_2(&message);
+                unique_device_id.unique_id_3 = mavlink_msg_unique_id_values_get_unique_id_3(&message);
+                unique_device_id.unique_id_4 = mavlink_msg_unique_id_values_get_unique_id_4(&message);
+                unique_device_id.unique_id_5 = mavlink_msg_unique_id_values_get_unique_id_5(&message);
+                setudid_values(QString("%1 - %2 - %3 - %4 - %5 - %6")
+                               .arg(unique_device_id.unique_id_0)
+                               .arg(unique_device_id.unique_id_1)
+                               .arg(unique_device_id.unique_id_2)
+                               .arg(unique_device_id.unique_id_3)
+                               .arg(unique_device_id.unique_id_4)
+                               .arg(unique_device_id.unique_id_5)
+                               );
             }
                 break;
             default:
-            break;
+                break;
             } // end of switch
         }
     }
@@ -195,7 +208,7 @@ void MavLinkManager::update_all_parameters(uint8_t index, float value)
         break;
     case PARAM_SERIAL_NUMBER:   current_params_on_board.serialNumber = value;
         break;
-//   <<< Controller Settings
+        //   <<< Controller Settings
     case PARAM_PITCH_P:          current_params_on_board.pitchKp = value;
         settilt_kp(current_params_on_board.pitchKp);
         break;
@@ -212,7 +225,7 @@ void MavLinkManager::update_all_parameters(uint8_t index, float value)
         setroll_ki(current_params_on_board.rollKi);
         break;
     case PARAM_ROLL_D:          current_params_on_board.rollKd = value;
-         setroll_kd(current_params_on_board.rollKd);
+        setroll_kd(current_params_on_board.rollKd);
         break;
     case PARAM_YAW_P:           current_params_on_board.yawKp = value;
         setpan_kp(current_params_on_board.yawKp);
@@ -241,13 +254,13 @@ void MavLinkManager::update_all_parameters(uint8_t index, float value)
     case PARAM_YAW_FILTER:      current_params_on_board.panFilter = value;
         setpan_filter(current_params_on_board.panFilter);
         break;
-//   >>>  Controller Settings End
-//   <<<  Motor Settings
-//**********************
+        //   >>>  Controller Settings End
+        //   <<<  Motor Settings
+        //**********************
     case PARAM_MOTOR_FREQ:      current_params_on_board.motorFreq = value;
         setmotor_freq(current_params_on_board.motorFreq);
         break;
-//**************************
+        //**************************
     case PARAM_PITCH_POWER:     current_params_on_board.pitchPower = value;
         settilt_power(current_params_on_board.pitchPower);
         break;
@@ -273,7 +286,7 @@ void MavLinkManager::update_all_parameters(uint8_t index, float value)
         setmotor_roll_dir(current_params_on_board.dirMotorRoll);
         break;
     case PARAM_DIR_MOTOR_YAW:   current_params_on_board.dirMotorYaw = value;
-         setmotor_pan_dir(current_params_on_board.dirMotorYaw);
+        setmotor_pan_dir(current_params_on_board.dirMotorYaw);
         break;
     case PARAM_TRAVEL_MIN_PITCH:current_params_on_board.travelMinPitch = value;
         settilt_up_limit_angle(current_params_on_board.travelMinPitch);
@@ -282,10 +295,10 @@ void MavLinkManager::update_all_parameters(uint8_t index, float value)
         settilt_down_limit_angle(current_params_on_board.travelMaxPitch);
         break;
     case PARAM_TRAVEL_MIN_ROLL: current_params_on_board.travelMinRoll = value;
-         setroll_up_limit_angle(current_params_on_board.travelMinRoll);
+        setroll_up_limit_angle(current_params_on_board.travelMinRoll);
         break;
     case PARAM_TRAVEL_MAX_ROLL: current_params_on_board.travelMaxRoll = value;
-         setroll_down_limit_angle(current_params_on_board.travelMaxRoll);
+        setroll_down_limit_angle(current_params_on_board.travelMaxRoll);
         break;
     case PARAM_TRAVEL_MIN_YAW:  current_params_on_board.travelMinYaw = value;
         setpan_ccw_limit_angle(current_params_on_board.travelMinYaw);
@@ -300,11 +313,11 @@ void MavLinkManager::update_all_parameters(uint8_t index, float value)
         setroll_mode(current_params_on_board.rcRollMode);
         break;
     case PARAM_RC_YAW_MODE:     current_params_on_board.rcYawMode = value;
-         setpan_mode(current_params_on_board.rcYawMode);
+        setpan_mode(current_params_on_board.rcYawMode);
         break;
-//   >>> Motor Settings End
+        //   >>> Motor Settings End
 
-//   <<< RC Settings
+        //   <<< RC Settings
     case PARAM_RC_PITCH_LPF:    current_params_on_board.rcPitchLPF = value;
         settilt_lpf(current_params_on_board.rcPitchLPF);
         break;
@@ -323,7 +336,7 @@ void MavLinkManager::update_all_parameters(uint8_t index, float value)
     case PARAM_RC_YAW_TRIM:     current_params_on_board.rcYawTrim = value;
         setpan_trim(current_params_on_board.rcYawTrim);
         break;
-    // **** SBUS Channel
+        // **** SBUS Channel
     case PARAM_SBUS_PITCH_CHAN: current_params_on_board.sbusPitchChan = value;
         settilt_sbus_chan_num(current_params_on_board.sbusPitchChan + 1); // +1 for display, value of chan: 0 for chan1, 1 for  chan2,...
         break;
@@ -336,8 +349,8 @@ void MavLinkManager::update_all_parameters(uint8_t index, float value)
     case PARAM_SBUS_MODE_CHAN:  current_params_on_board.sbusModeChan = value;
         setmode_sbus_chan_num(current_params_on_board.sbusModeChan + 1);
         break;
-//   >>> RC Settings End
-//   <<< IMU Settings
+        //   >>> RC Settings End
+        //   <<< IMU Settings
     case PARAM_ACCX_OFFSET:     current_params_on_board.accXOffset = value;
         setacc_x_offset(current_params_on_board.accXOffset);
         break;
@@ -369,12 +382,12 @@ void MavLinkManager::update_all_parameters(uint8_t index, float value)
     case PARAM_GYRO_LPF:        current_params_on_board.gyroLPF = value;
         setgyro_lpf(current_params_on_board.gyroLPF);
         break;
-//  >>> IMU Settings End
-//  <<< Others
+        //  >>> IMU Settings End
+        //  <<< Others
     case PARAM_RADIO_TYPE:      current_params_on_board.radioType = value;
         setcontrol_type(current_params_on_board.radioType);
         break;
-//  >>> Others end
+        //  >>> Others end
 
     default:
         break;
@@ -477,17 +490,17 @@ void MavLinkManager::update_calib_status()
 
 void MavLinkManager::update_all_parameters_to_UI()
 {
-//    if(!first_data_pack)    // to ensure all params read
-//    {
-//        setmavlink_message_log("Updating parameters...");
-////        get_firmware_version();
-////        get_hardware_serial_number();
-//        // General
+    //    if(!first_data_pack)    // to ensure all params read
+    //    {
+    //        setmavlink_message_log("Updating parameters...");
+    ////        get_firmware_version();
+    ////        get_hardware_serial_number();
+    //        // General
 
 
-//        setmavlink_message_log("Updating parameters...Done");
-//    }
-//    else setmavlink_message_log("Waiting for reading parameters...");
+    //        setmavlink_message_log("Updating parameters...Done");
+    //    }
+    //    else setmavlink_message_log("Waiting for reading parameters...");
 }
 
 void MavLinkManager::get_firmware_version()
@@ -520,223 +533,223 @@ void MavLinkManager::get_attitude_data()
 void MavLinkManager::write_params_to_board()
 {
     if(board_connection_state() == ONLINE){
-    qDebug("Sending parameters to controller board...");
-    setmavlink_message_log("Sending parameters to controller board...");
-    // Motor config params
-// General
-    if(control_type() != current_params_on_board.radioType){
-        current_params_on_board.radioType = control_type();
-        write_a_param_to_board("RADIO_TYPE", current_params_on_board.radioType);
-    }
-    if(skip_gyro_calib() != current_params_on_board.skipGyroCalib){
-        current_params_on_board.skipGyroCalib = skip_gyro_calib();
-        write_a_param_to_board("SKIP_GYRO_CALIB", current_params_on_board.skipGyroCalib);
-    }
-    if(use_gps() != current_params_on_board.useGPS){
-        current_params_on_board.useGPS = use_gps();
-        write_a_param_to_board("USE_GPS", current_params_on_board.useGPS);
-    }
-    if(gyro_trust() != current_params_on_board.gyroTrust){
-        current_params_on_board.gyroTrust = gyro_trust();
-        write_a_param_to_board("GYRO_TRUST", current_params_on_board.gyroTrust);
-    }
-    if(gyro_lpf() != current_params_on_board.gyroLPF){
-        current_params_on_board.gyroLPF = gyro_lpf();
-        write_a_param_to_board("GYRO_LPF", current_params_on_board.gyroLPF);
-    }
-    if(motor_freq() != current_params_on_board.motorFreq){
-        current_params_on_board.motorFreq = motor_freq();
-        write_a_param_to_board("MOTOR_FREQ", current_params_on_board.motorFreq);
-    }
+        qDebug("Sending parameters to controller board...");
+        setmavlink_message_log("Sending parameters to controller board...");
+        // Motor config params
+        // General
+        if(control_type() != current_params_on_board.radioType){
+            current_params_on_board.radioType = control_type();
+            write_a_param_to_board("RADIO_TYPE", current_params_on_board.radioType);
+        }
+        if(skip_gyro_calib() != current_params_on_board.skipGyroCalib){
+            current_params_on_board.skipGyroCalib = skip_gyro_calib();
+            write_a_param_to_board("SKIP_GYRO_CALIB", current_params_on_board.skipGyroCalib);
+        }
+        if(use_gps() != current_params_on_board.useGPS){
+            current_params_on_board.useGPS = use_gps();
+            write_a_param_to_board("USE_GPS", current_params_on_board.useGPS);
+        }
+        if(gyro_trust() != current_params_on_board.gyroTrust){
+            current_params_on_board.gyroTrust = gyro_trust();
+            write_a_param_to_board("GYRO_TRUST", current_params_on_board.gyroTrust);
+        }
+        if(gyro_lpf() != current_params_on_board.gyroLPF){
+            current_params_on_board.gyroLPF = gyro_lpf();
+            write_a_param_to_board("GYRO_LPF", current_params_on_board.gyroLPF);
+        }
+        if(motor_freq() != current_params_on_board.motorFreq){
+            current_params_on_board.motorFreq = motor_freq();
+            write_a_param_to_board("MOTOR_FREQ", current_params_on_board.motorFreq);
+        }
 
-//    [!] *** SBUS Channel ***
-    if(mode_sbus_chan_num() != current_params_on_board.sbusModeChan){
-        current_params_on_board.sbusModeChan = mode_sbus_chan_num() - 1;
-        write_a_param_to_board("SBUS_MODE_CHAN", current_params_on_board.sbusModeChan);
-    }
-    if(tilt_sbus_chan_num() != current_params_on_board.sbusPitchChan){
-        current_params_on_board.sbusPitchChan = tilt_sbus_chan_num() - 1;      // - 1 to get a real value for channel from display value in QML
-        write_a_param_to_board("SBUS_PITCH_CHAN", current_params_on_board.sbusPitchChan);
-    }
-    if(pan_sbus_chan_num() != current_params_on_board.sbusYawChan){
-        current_params_on_board.sbusYawChan = pan_sbus_chan_num() - 1;      // - 1 to get a real value for channel from display value in QML
-        write_a_param_to_board("SBUS_YAW_CHAN", current_params_on_board.sbusYawChan);
-    }
-    if(roll_sbus_chan_num() != current_params_on_board.sbusRollChan){
-        current_params_on_board.sbusRollChan = roll_sbus_chan_num() - 1;      // - 1 to get a real value for channel from display value in QML
-        write_a_param_to_board("SBUS_ROLL_CHAN", current_params_on_board.sbusRollChan);
-    }
-//    [!]
-//    [1] Tilt Motor
-    if(tilt_power() != current_params_on_board.pitchPower){  // if power level changed, it will be store in params
-        current_params_on_board.pitchPower = tilt_power();   // update current value to params struct
-        write_a_param_to_board("PITCH_POWER", current_params_on_board.pitchPower);
-    }
-    if(motor_tilt_dir() != current_params_on_board.dirMotorPitch){
-        current_params_on_board.dirMotorPitch = motor_tilt_dir();   // update current value to params struct
-        write_a_param_to_board("DIR_MOTOR_PITCH", current_params_on_board.dirMotorPitch);
-    }
-    if(motor_tilt_num_poles() != current_params_on_board.nPolesPitch){
-        current_params_on_board.nPolesPitch = motor_tilt_num_poles();   // update current value to params struct
-        write_a_param_to_board("NPOLES_PITCH", current_params_on_board.nPolesPitch);
-    }
-    if(tilt_up_limit_angle() != current_params_on_board.travelMinPitch){
-        current_params_on_board.travelMinPitch = tilt_up_limit_angle();   // update current value to params struct
-        write_a_param_to_board("TRAVEL_MIN_PIT",  current_params_on_board.travelMinPitch);
-    }
-    if(tilt_down_limit_angle() != current_params_on_board.travelMaxPitch){
-        current_params_on_board.travelMaxPitch = tilt_down_limit_angle();   // update current value to params struct
-        write_a_param_to_board("TRAVEL_MAX_PIT", current_params_on_board.travelMaxPitch);
-    }
+        //    [!] *** SBUS Channel ***
+        if(mode_sbus_chan_num() != current_params_on_board.sbusModeChan){
+            current_params_on_board.sbusModeChan = mode_sbus_chan_num() - 1;
+            write_a_param_to_board("SBUS_MODE_CHAN", current_params_on_board.sbusModeChan);
+        }
+        if(tilt_sbus_chan_num() != current_params_on_board.sbusPitchChan){
+            current_params_on_board.sbusPitchChan = tilt_sbus_chan_num() - 1;      // - 1 to get a real value for channel from display value in QML
+            write_a_param_to_board("SBUS_PITCH_CHAN", current_params_on_board.sbusPitchChan);
+        }
+        if(pan_sbus_chan_num() != current_params_on_board.sbusYawChan){
+            current_params_on_board.sbusYawChan = pan_sbus_chan_num() - 1;      // - 1 to get a real value for channel from display value in QML
+            write_a_param_to_board("SBUS_YAW_CHAN", current_params_on_board.sbusYawChan);
+        }
+        if(roll_sbus_chan_num() != current_params_on_board.sbusRollChan){
+            current_params_on_board.sbusRollChan = roll_sbus_chan_num() - 1;      // - 1 to get a real value for channel from display value in QML
+            write_a_param_to_board("SBUS_ROLL_CHAN", current_params_on_board.sbusRollChan);
+        }
+        //    [!]
+        //    [1] Tilt Motor
+        if(tilt_power() != current_params_on_board.pitchPower){  // if power level changed, it will be store in params
+            current_params_on_board.pitchPower = tilt_power();   // update current value to params struct
+            write_a_param_to_board("PITCH_POWER", current_params_on_board.pitchPower);
+        }
+        if(motor_tilt_dir() != current_params_on_board.dirMotorPitch){
+            current_params_on_board.dirMotorPitch = motor_tilt_dir();   // update current value to params struct
+            write_a_param_to_board("DIR_MOTOR_PITCH", current_params_on_board.dirMotorPitch);
+        }
+        if(motor_tilt_num_poles() != current_params_on_board.nPolesPitch){
+            current_params_on_board.nPolesPitch = motor_tilt_num_poles();   // update current value to params struct
+            write_a_param_to_board("NPOLES_PITCH", current_params_on_board.nPolesPitch);
+        }
+        if(tilt_up_limit_angle() != current_params_on_board.travelMinPitch){
+            current_params_on_board.travelMinPitch = tilt_up_limit_angle();   // update current value to params struct
+            write_a_param_to_board("TRAVEL_MIN_PIT",  current_params_on_board.travelMinPitch);
+        }
+        if(tilt_down_limit_angle() != current_params_on_board.travelMaxPitch){
+            current_params_on_board.travelMaxPitch = tilt_down_limit_angle();   // update current value to params struct
+            write_a_param_to_board("TRAVEL_MAX_PIT", current_params_on_board.travelMaxPitch);
+        }
 
-    if(tilt_lpf() != current_params_on_board.rcPitchLPF){
-        current_params_on_board.rcPitchLPF = tilt_lpf();
-        write_a_param_to_board("RC_PITCH_LPF", current_params_on_board.rcPitchLPF);
-    }
-    if(tilt_trim() != current_params_on_board.rcPitchTrim){
-        current_params_on_board.rcPitchTrim = tilt_trim();
-        write_a_param_to_board("RC_PITCH_TRIM", current_params_on_board.rcPitchTrim);
-    }
-    if(tilt_mode() != current_params_on_board.rcPitchMode){
-        current_params_on_board.rcPitchMode = tilt_mode();
-        write_a_param_to_board("RC_PITCH_MODE", current_params_on_board.rcPitchMode);
-    }
-//    [2] Pan Motor
-    if(pan_power() != current_params_on_board.yawPower){  // if power level changed, it will be store in params
-        current_params_on_board.yawPower = pan_power();   // update current value to params struct
-        write_a_param_to_board("YAW_POWER", current_params_on_board.yawPower);
-    }
-    if(motor_pan_dir() != current_params_on_board.dirMotorYaw){
-        current_params_on_board.dirMotorYaw = motor_pan_dir();   // update current value to params struct
-        write_a_param_to_board("DIR_MOTOR_YAW", current_params_on_board.dirMotorYaw);
-    }
-    if(motor_pan_num_poles() != current_params_on_board.nPolesYaw){
-        current_params_on_board.nPolesYaw = motor_pan_num_poles();   // update current value to params struct
-        write_a_param_to_board("NPOLES_YAW", current_params_on_board.nPolesYaw);
-    }
-    if(pan_ccw_limit_angle() != current_params_on_board.travelMinYaw){
-        current_params_on_board.travelMinYaw = pan_ccw_limit_angle();   // update current value to params struct
-        write_a_param_to_board("TRAVEL_MIN_YAW",  current_params_on_board.travelMinYaw);
-    }
-    if(pan_cw_limit_angle() != current_params_on_board.travelMaxYaw){
-        current_params_on_board.travelMaxYaw = pan_cw_limit_angle();   // update current value to params struct
-        write_a_param_to_board("TRAVEL_MAX_YAW", current_params_on_board.travelMaxYaw);
-    }
-    if(pan_lpf() != current_params_on_board.rcYawLPF){
-        current_params_on_board.rcYawLPF = pan_lpf();
-        write_a_param_to_board("RC_YAW_LPF", current_params_on_board.rcYawLPF);
-    }
-    if(pan_trim() != current_params_on_board.rcYawTrim){
-        current_params_on_board.rcYawTrim = pan_trim();
-        write_a_param_to_board("RC_YAW_TRIM", current_params_on_board.rcYawTrim);
-    }
-    if(pan_mode() != current_params_on_board.rcYawMode){
-        current_params_on_board.rcYawMode = pan_mode();
-        write_a_param_to_board("RC_YAW_MODE", current_params_on_board.rcYawMode);
-    }
-    //    [3] Roll Motor
-    if(roll_power() != current_params_on_board.rollPower){  // if power level changed, it will be store in params
-        current_params_on_board.rollPower = roll_power();   // update current value to params struct
-        write_a_param_to_board("ROLL_POWER", current_params_on_board.rollPower);
-    }
-    if(motor_roll_dir() != current_params_on_board.dirMotorRoll){
-        current_params_on_board.dirMotorRoll = motor_roll_dir();   // update current value to params struct
-        write_a_param_to_board("DIR_MOTOR_ROLL", current_params_on_board.dirMotorRoll);
-    }
-    if(motor_roll_num_poles() != current_params_on_board.nPolesRoll){
-        current_params_on_board.nPolesRoll = motor_roll_num_poles();   // update current value to params struct
-        write_a_param_to_board("NPOLES_ROLL", current_params_on_board.nPolesRoll);
-    }
-    if(roll_up_limit_angle() != current_params_on_board.travelMinRoll){
-        current_params_on_board.travelMinRoll = roll_up_limit_angle();   // update current value to params struct
-        write_a_param_to_board("TRAVEL_MIN_ROLL",  current_params_on_board.travelMinRoll);
-    }
-    if(roll_down_limit_angle() != current_params_on_board.travelMaxRoll){
-        current_params_on_board.travelMaxRoll = roll_down_limit_angle();   // update current value to params struct
-        write_a_param_to_board("TRAVEL_MAX_ROLL", current_params_on_board.travelMaxRoll);
-    }
-    if(roll_lpf() != current_params_on_board.rcRollLPF){
-        current_params_on_board.rcRollLPF = roll_lpf();
-        write_a_param_to_board("RC_ROLL_LPF", current_params_on_board.rcRollLPF);
-    }
-    if(roll_trim() != current_params_on_board.rcRollTrim){
-        current_params_on_board.rcRollTrim = roll_trim();
-        write_a_param_to_board("RC_ROLL_TRIM", current_params_on_board.rcRollTrim);
-    }
-    if(roll_mode() != current_params_on_board.rcRollMode){
-        current_params_on_board.rcRollMode = roll_mode();
-        write_a_param_to_board("RC_ROLL_MODE", current_params_on_board.rcRollMode);
-    }
+        if(tilt_lpf() != current_params_on_board.rcPitchLPF){
+            current_params_on_board.rcPitchLPF = tilt_lpf();
+            write_a_param_to_board("RC_PITCH_LPF", current_params_on_board.rcPitchLPF);
+        }
+        if(tilt_trim() != current_params_on_board.rcPitchTrim){
+            current_params_on_board.rcPitchTrim = tilt_trim();
+            write_a_param_to_board("RC_PITCH_TRIM", current_params_on_board.rcPitchTrim);
+        }
+        if(tilt_mode() != current_params_on_board.rcPitchMode){
+            current_params_on_board.rcPitchMode = tilt_mode();
+            write_a_param_to_board("RC_PITCH_MODE", current_params_on_board.rcPitchMode);
+        }
+        //    [2] Pan Motor
+        if(pan_power() != current_params_on_board.yawPower){  // if power level changed, it will be store in params
+            current_params_on_board.yawPower = pan_power();   // update current value to params struct
+            write_a_param_to_board("YAW_POWER", current_params_on_board.yawPower);
+        }
+        if(motor_pan_dir() != current_params_on_board.dirMotorYaw){
+            current_params_on_board.dirMotorYaw = motor_pan_dir();   // update current value to params struct
+            write_a_param_to_board("DIR_MOTOR_YAW", current_params_on_board.dirMotorYaw);
+        }
+        if(motor_pan_num_poles() != current_params_on_board.nPolesYaw){
+            current_params_on_board.nPolesYaw = motor_pan_num_poles();   // update current value to params struct
+            write_a_param_to_board("NPOLES_YAW", current_params_on_board.nPolesYaw);
+        }
+        if(pan_ccw_limit_angle() != current_params_on_board.travelMinYaw){
+            current_params_on_board.travelMinYaw = pan_ccw_limit_angle();   // update current value to params struct
+            write_a_param_to_board("TRAVEL_MIN_YAW",  current_params_on_board.travelMinYaw);
+        }
+        if(pan_cw_limit_angle() != current_params_on_board.travelMaxYaw){
+            current_params_on_board.travelMaxYaw = pan_cw_limit_angle();   // update current value to params struct
+            write_a_param_to_board("TRAVEL_MAX_YAW", current_params_on_board.travelMaxYaw);
+        }
+        if(pan_lpf() != current_params_on_board.rcYawLPF){
+            current_params_on_board.rcYawLPF = pan_lpf();
+            write_a_param_to_board("RC_YAW_LPF", current_params_on_board.rcYawLPF);
+        }
+        if(pan_trim() != current_params_on_board.rcYawTrim){
+            current_params_on_board.rcYawTrim = pan_trim();
+            write_a_param_to_board("RC_YAW_TRIM", current_params_on_board.rcYawTrim);
+        }
+        if(pan_mode() != current_params_on_board.rcYawMode){
+            current_params_on_board.rcYawMode = pan_mode();
+            write_a_param_to_board("RC_YAW_MODE", current_params_on_board.rcYawMode);
+        }
+        //    [3] Roll Motor
+        if(roll_power() != current_params_on_board.rollPower){  // if power level changed, it will be store in params
+            current_params_on_board.rollPower = roll_power();   // update current value to params struct
+            write_a_param_to_board("ROLL_POWER", current_params_on_board.rollPower);
+        }
+        if(motor_roll_dir() != current_params_on_board.dirMotorRoll){
+            current_params_on_board.dirMotorRoll = motor_roll_dir();   // update current value to params struct
+            write_a_param_to_board("DIR_MOTOR_ROLL", current_params_on_board.dirMotorRoll);
+        }
+        if(motor_roll_num_poles() != current_params_on_board.nPolesRoll){
+            current_params_on_board.nPolesRoll = motor_roll_num_poles();   // update current value to params struct
+            write_a_param_to_board("NPOLES_ROLL", current_params_on_board.nPolesRoll);
+        }
+        if(roll_up_limit_angle() != current_params_on_board.travelMinRoll){
+            current_params_on_board.travelMinRoll = roll_up_limit_angle();   // update current value to params struct
+            write_a_param_to_board("TRAVEL_MIN_ROLL",  current_params_on_board.travelMinRoll);
+        }
+        if(roll_down_limit_angle() != current_params_on_board.travelMaxRoll){
+            current_params_on_board.travelMaxRoll = roll_down_limit_angle();   // update current value to params struct
+            write_a_param_to_board("TRAVEL_MAX_ROLL", current_params_on_board.travelMaxRoll);
+        }
+        if(roll_lpf() != current_params_on_board.rcRollLPF){
+            current_params_on_board.rcRollLPF = roll_lpf();
+            write_a_param_to_board("RC_ROLL_LPF", current_params_on_board.rcRollLPF);
+        }
+        if(roll_trim() != current_params_on_board.rcRollTrim){
+            current_params_on_board.rcRollTrim = roll_trim();
+            write_a_param_to_board("RC_ROLL_TRIM", current_params_on_board.rcRollTrim);
+        }
+        if(roll_mode() != current_params_on_board.rcRollMode){
+            current_params_on_board.rcRollMode = roll_mode();
+            write_a_param_to_board("RC_ROLL_MODE", current_params_on_board.rcRollMode);
+        }
 
-    // Controller Setting Params
-//    [1] Tilt Motor
-    if(tilt_kp() != current_params_on_board.pitchKp){
-        current_params_on_board.pitchKp = tilt_kp();   // update current value to params struct
-        write_a_param_to_board("PITCH_P", current_params_on_board.pitchKp);
-    }
-    if(tilt_ki() != current_params_on_board.pitchKi){
-        current_params_on_board.pitchKi = tilt_ki();   // update current value to params struct
-        write_a_param_to_board("PITCH_I", current_params_on_board.pitchKi);
-    }
-    if(tilt_kd() != current_params_on_board.pitchKd){
-        current_params_on_board.pitchKd = tilt_kd();   // update current value to params struct
-        write_a_param_to_board("PITCH_D", current_params_on_board.pitchKd);
-    }
-    if(tilt_follow() != current_params_on_board.pitchFollow){
-        current_params_on_board.pitchFollow = tilt_follow();   // update current value to params struct
-        write_a_param_to_board("PITCH_FOLLOW", current_params_on_board.pitchFollow);
-    }
-    if(tilt_filter() != current_params_on_board.tiltFilter){
-        current_params_on_board.tiltFilter = tilt_filter();   // update current value to params struct
-        write_a_param_to_board("PITCH_FILTER", current_params_on_board.tiltFilter);
-    }
-//    [2] Pan Motor
-    if(pan_kp() != current_params_on_board.yawKp){
-        current_params_on_board.yawKp = pan_kp();   // update current value to params struct
-        write_a_param_to_board("YAW_P", current_params_on_board.yawKp);
-    }
-    if(pan_ki() != current_params_on_board.yawKi){
-        current_params_on_board.yawKi = pan_ki();   // update current value to params struct
-        write_a_param_to_board("YAW_I", current_params_on_board.yawKi);
-    }
-    if(pan_kd() != current_params_on_board.yawKd){
-        current_params_on_board.yawKd = pan_kd();   // update current value to params struct
-        write_a_param_to_board("YAW_D", current_params_on_board.yawKd);
-    }
-    if(pan_follow() != current_params_on_board.yawFollow){
-        current_params_on_board.yawFollow = pan_follow();   // update current value to params struct
-        write_a_param_to_board("YAW_FOLLOW", current_params_on_board.yawFollow);
-    }
-    if(pan_filter() != current_params_on_board.panFilter){
-        current_params_on_board.panFilter = pan_filter();   // update current value to params struct
-        write_a_param_to_board("YAW_FILTER", current_params_on_board.panFilter);
-    }
+        // Controller Setting Params
+        //    [1] Tilt Motor
+        if(tilt_kp() != current_params_on_board.pitchKp){
+            current_params_on_board.pitchKp = tilt_kp();   // update current value to params struct
+            write_a_param_to_board("PITCH_P", current_params_on_board.pitchKp);
+        }
+        if(tilt_ki() != current_params_on_board.pitchKi){
+            current_params_on_board.pitchKi = tilt_ki();   // update current value to params struct
+            write_a_param_to_board("PITCH_I", current_params_on_board.pitchKi);
+        }
+        if(tilt_kd() != current_params_on_board.pitchKd){
+            current_params_on_board.pitchKd = tilt_kd();   // update current value to params struct
+            write_a_param_to_board("PITCH_D", current_params_on_board.pitchKd);
+        }
+        if(tilt_follow() != current_params_on_board.pitchFollow){
+            current_params_on_board.pitchFollow = tilt_follow();   // update current value to params struct
+            write_a_param_to_board("PITCH_FOLLOW", current_params_on_board.pitchFollow);
+        }
+        if(tilt_filter() != current_params_on_board.tiltFilter){
+            current_params_on_board.tiltFilter = tilt_filter();   // update current value to params struct
+            write_a_param_to_board("PITCH_FILTER", current_params_on_board.tiltFilter);
+        }
+        //    [2] Pan Motor
+        if(pan_kp() != current_params_on_board.yawKp){
+            current_params_on_board.yawKp = pan_kp();   // update current value to params struct
+            write_a_param_to_board("YAW_P", current_params_on_board.yawKp);
+        }
+        if(pan_ki() != current_params_on_board.yawKi){
+            current_params_on_board.yawKi = pan_ki();   // update current value to params struct
+            write_a_param_to_board("YAW_I", current_params_on_board.yawKi);
+        }
+        if(pan_kd() != current_params_on_board.yawKd){
+            current_params_on_board.yawKd = pan_kd();   // update current value to params struct
+            write_a_param_to_board("YAW_D", current_params_on_board.yawKd);
+        }
+        if(pan_follow() != current_params_on_board.yawFollow){
+            current_params_on_board.yawFollow = pan_follow();   // update current value to params struct
+            write_a_param_to_board("YAW_FOLLOW", current_params_on_board.yawFollow);
+        }
+        if(pan_filter() != current_params_on_board.panFilter){
+            current_params_on_board.panFilter = pan_filter();   // update current value to params struct
+            write_a_param_to_board("YAW_FILTER", current_params_on_board.panFilter);
+        }
 
-//    [3] Roll Motor
-    if(roll_kp() != current_params_on_board.rollKp){
-        current_params_on_board.rollKp = roll_kp();   // update current value to params struct
-        write_a_param_to_board("ROLL_P", current_params_on_board.rollKp);
-    }
-    if(roll_ki() != current_params_on_board.rollKi){
-        current_params_on_board.rollKi = roll_ki();   // update current value to params struct
-        write_a_param_to_board("ROLL_I", current_params_on_board.rollKi);
-    }
-    if(roll_kd() != current_params_on_board.rollKd){
-        current_params_on_board.rollKd = roll_kd();   // update current value to params struct
-        write_a_param_to_board("ROLL_D", current_params_on_board.rollKd);
-    }
-    if(roll_follow() != current_params_on_board.rollFollow){
-        current_params_on_board.rollFollow = roll_follow();   // update current value to params struct
-        write_a_param_to_board("ROLL_FOLLOW", current_params_on_board.rollFollow);
-    }
-    if(roll_filter() != current_params_on_board.rollFilter){
-        current_params_on_board.rollFilter = roll_filter();   // update current value to params struct
-        write_a_param_to_board("ROLL_FILTER", current_params_on_board.rollFilter);
-    }
-    // other params
+        //    [3] Roll Motor
+        if(roll_kp() != current_params_on_board.rollKp){
+            current_params_on_board.rollKp = roll_kp();   // update current value to params struct
+            write_a_param_to_board("ROLL_P", current_params_on_board.rollKp);
+        }
+        if(roll_ki() != current_params_on_board.rollKi){
+            current_params_on_board.rollKi = roll_ki();   // update current value to params struct
+            write_a_param_to_board("ROLL_I", current_params_on_board.rollKi);
+        }
+        if(roll_kd() != current_params_on_board.rollKd){
+            current_params_on_board.rollKd = roll_kd();   // update current value to params struct
+            write_a_param_to_board("ROLL_D", current_params_on_board.rollKd);
+        }
+        if(roll_follow() != current_params_on_board.rollFollow){
+            current_params_on_board.rollFollow = roll_follow();   // update current value to params struct
+            write_a_param_to_board("ROLL_FOLLOW", current_params_on_board.rollFollow);
+        }
+        if(roll_filter() != current_params_on_board.rollFilter){
+            current_params_on_board.rollFilter = roll_filter();   // update current value to params struct
+            write_a_param_to_board("ROLL_FILTER", current_params_on_board.rollFilter);
+        }
+        // other params
 
-    qDebug("C++>> Sending parameters to controller board...Done!");
-    setmavlink_message_log("Sent parameters to controller board!");
+        qDebug("C++>> Sending parameters to controller board...Done!");
+        setmavlink_message_log("Sent parameters to controller board!");
     }
     else {
         qDebug("C++>> Communication error, please check the connection then write parammeters again *");
@@ -855,14 +868,14 @@ void MavLinkManager::calib_accel()
     mavlink_message_t msg;
     uint8_t buf[MAVLINK_MAX_PACKET_LEN];
 
-//    if(calib_mode() == 0) {
-//        qDebug("debug >> Calib acc in Basic mode");
-//        setmavlink_message_log("Start to calib Accel in Basic mode");
-//    }
-//    else if(calib_mode() == 1) {
-//        qDebug("debug >> Calib acc in Adv mode");
-//        setmavlink_message_log("Start to calib Accel in Advanced mode\n Calibration process will go through 6 steps for 6 faces.");
-//    }
+    //    if(calib_mode() == 0) {
+    //        qDebug("debug >> Calib acc in Basic mode");
+    //        setmavlink_message_log("Start to calib Accel in Basic mode");
+    //    }
+    //    else if(calib_mode() == 1) {
+    //        qDebug("debug >> Calib acc in Adv mode");
+    //        setmavlink_message_log("Start to calib Accel in Advanced mode\n Calibration process will go through 6 steps for 6 faces.");
+    //    }
     mavlink_msg_imu_calib_request_pack(SYSTEM_ID, MAV_COMP_ID_SERVO1, &msg, 0, calib_mode());  // '0' means acc calib
     len = mavlink_msg_to_send_buffer(buf, &msg);
     emit messge_write_to_comport_ready((const char*)buf, len);
@@ -880,6 +893,16 @@ void MavLinkManager::send_keycode(int _keycode_value)
     len = mavlink_msg_to_send_buffer(buf, &msg);
     emit messge_write_to_comport_ready((const char*)buf, len);
     qDebug() << "Sent keycode";
+}
+
+void MavLinkManager::send_unique_device_id_request()
+{
+    uint16_t len=0;
+    mavlink_message_t msg;
+    uint8_t buf[MAVLINK_MAX_PACKET_LEN];
+    mavlink_msg_unique_id_request_pack(SYSTEM_ID, MAV_COMP_ID_SERVO1, &msg, GSTABI);
+    len = mavlink_msg_to_send_buffer(buf, &msg);
+    emit messge_write_to_comport_ready((const char*)buf, len);
 }
 
 
@@ -1085,7 +1108,7 @@ void MavLinkManager::setgyro_trust(int _value)
 
 int MavLinkManager::gyro_lpf() const
 {
-   return m_gyro_lpf;
+    return m_gyro_lpf;
 }
 
 void MavLinkManager::setgyro_lpf(int _value)
@@ -1130,13 +1153,24 @@ void MavLinkManager::setkeycode_request(bool _request)
 
 int MavLinkManager::accel_calib_steps() const
 {
-   return m_accel_calib_steps;
+    return m_accel_calib_steps;
 }
 
 void MavLinkManager::setaccel_calib_steps(int _step)
 {
     m_accel_calib_steps = _step;
     emit accel_calib_stepsChanged(m_accel_calib_steps);
+}
+
+QString MavLinkManager::udid_values() const
+{
+    return m_udid_values;
+}
+
+void MavLinkManager::setudid_values(QString _udid_str)
+{
+    m_udid_values = _udid_str;
+    emit udid_valuesChanged(m_udid_values);
 }
 
 int MavLinkManager::mode_sbus_chan_num() const
@@ -1264,7 +1298,7 @@ void MavLinkManager::setmotor_tilt_num_poles(int _poles)
 
 int MavLinkManager::tilt_up_limit_angle() const
 {
-   return m_tilt_up_limit_angle;
+    return m_tilt_up_limit_angle;
 }
 
 void MavLinkManager::settilt_up_limit_angle(int _min)
@@ -1510,7 +1544,7 @@ void MavLinkManager::setmotor_pan_num_poles(int _poles)
 
 int MavLinkManager::pan_cw_limit_angle() const
 {
-   return m_pan_cw_limit_angle;
+    return m_pan_cw_limit_angle;
 }
 
 void MavLinkManager::setpan_cw_limit_angle(int _min)
@@ -1656,7 +1690,7 @@ void MavLinkManager::setmotor_roll_num_poles(int _poles)
 
 int MavLinkManager::roll_up_limit_angle() const
 {
-   return m_roll_up_limit_angle;
+    return m_roll_up_limit_angle;
 }
 
 void MavLinkManager::setroll_up_limit_angle(int _min)

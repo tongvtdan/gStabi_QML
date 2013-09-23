@@ -86,5 +86,7 @@
         <file>qml/gStabiSC/GSplashScreen.qml</file>
         <file>qml/gStabiSC/GMain.qml</file>
         <file>qml/gStabiSC/Components/GCaliAccelDialog.qml</file>
+        <file>qml/gStabiSC/Components/GRealtimeChart.qml</file>
+        <file>qml/gStabiSC/Components/GUDID.qml</file>
     </qresource>
 </RCC>

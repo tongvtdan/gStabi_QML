@@ -48,6 +48,7 @@ class MavLinkManager : public QObject
     Q_PROPERTY(QString mavlink_message_log READ mavlink_message_log WRITE setmavlink_message_log NOTIFY mavlink_message_logChanged)
     Q_PROPERTY(bool gremsy_product_id READ gremsy_product_id WRITE setgremsy_product_id NOTIFY gremsy_product_idChanged)
     Q_PROPERTY(bool keycode_request READ keycode_request WRITE setkeycode_request NOTIFY keycode_requestChanged) // true: show Keycode pop up dialog
+    Q_PROPERTY(QString udid_values READ udid_values WRITE setudid_values NOTIFY udid_valuesChanged)
 
     // IMU data
     Q_PROPERTY(float roll_angle  READ roll_angle    WRITE setroll_angle     NOTIFY roll_angleChanged)
@@ -237,6 +238,9 @@ public:
     int accel_calib_steps() const;
     void setaccel_calib_steps(int _step);
 
+    QString udid_values() const;
+    void setudid_values(QString _udid_str);
+
  // *********** RC Settings
 // RC Mode
     int mode_sbus_chan_num() const;
@@ -416,6 +420,7 @@ public:
     Q_INVOKABLE void calib_gyro();
     Q_INVOKABLE void calib_accel();
     Q_INVOKABLE void send_keycode(int _keycode_value);
+    Q_INVOKABLE void send_unique_device_id_request();
 
 
 signals:
@@ -452,6 +457,7 @@ signals:
     void motor_freqChanged(int);
     void keycode_requestChanged(bool);
     void accel_calib_stepsChanged(int);
+    void udid_valuesChanged(QString);
 
     // RC Settings
     // RC Mode
@@ -567,6 +573,7 @@ private:
     gConfig_t current_params_on_board;
     mavlink_heartbeat_t m_mavlink_heartbeat;
     mavlink_system_status_t m_g_system_status;
+    mavlink_unique_id_values_t unique_device_id;
     int rc_sbus_level[18];
 
 //    [!] Q_PROPERTY
@@ -589,6 +596,7 @@ private:
     int m_motor_freq;
     bool m_keycode_request;
     int m_accel_calib_steps;
+    QString m_udid_values;
 
     // [!]RC Settings
     //    Mode

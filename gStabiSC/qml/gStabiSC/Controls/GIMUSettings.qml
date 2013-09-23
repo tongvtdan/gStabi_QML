@@ -164,7 +164,7 @@ Item{
                 onClicked: {
                     if(_serialLink.isConnected){
                     _mavlink_manager.calib_gyro()
-                    } else show_popup_message("gStabi Controller is disconnected.\nCheck connection then try again")
+                    } else show_popup_message("gStabi Controller is disconnected!\n\nCheck connection then try again")
                 }
             }
         }
