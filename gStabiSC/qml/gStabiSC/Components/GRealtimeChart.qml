@@ -37,7 +37,6 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-
 import QtQuick 2.0
 
 Rectangle {
@@ -120,6 +119,7 @@ Rectangle {
             var ctx = canvas.getContext("2d");
             ctx.lineWidth = 1;
             drawBackground(ctx);
+
 
 
         }

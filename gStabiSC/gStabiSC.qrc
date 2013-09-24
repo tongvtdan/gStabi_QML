@@ -88,5 +88,12 @@
         <file>qml/gStabiSC/Components/GCaliAccelDialog.qml</file>
         <file>qml/gStabiSC/Components/GRealtimeChart.qml</file>
         <file>qml/gStabiSC/Components/GUDID.qml</file>
+        <file>qml/gStabiSC/Controls/webview/examples.css</file>
+        <file>qml/gStabiSC/Controls/webview/realtimecharts.html</file>
+        <file>qml/gStabiSC/Controls/webview/style.css</file>
+        <file>qml/gStabiSC/Controls/webview/js/jquery.flot.js</file>
+        <file>qml/gStabiSC/Controls/webview/js/jquery.js</file>
+        <file>qml/gStabiSC/Controls/webview/graph.html</file>
+        <file>javascript/Chart.js</file>
     </qresource>
 </RCC>
