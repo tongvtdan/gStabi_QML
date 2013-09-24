@@ -12,7 +12,6 @@ MavLinkManager::MavLinkManager(QObject *parent) :
 
     mavlink_init();
     system_msg_log = "";
-    debug_enabled = false;  // send/not send debug message to QML
 }
 
 void MavLinkManager::process_mavlink_message(QByteArray data)
@@ -128,7 +127,7 @@ void MavLinkManager::process_mavlink_message(QByteArray data)
             }
                 break;
             case MAVLINK_MSG_ID_DEBUG_VALUES :{
-                if(debug_enabled){
+                if(debug_enabled()){
                     setmavlink_message_log(QString("*** Debug ***\n- 1: %1\n- 2: %2\n- 3: %3\n- 4: %4\n- 5: %5\n- 6: %6\n- 7: %7\n- 8: %8")
                                            .arg(mavlink_msg_debug_values_get_debug1(&message))
                                            .arg(mavlink_msg_debug_values_get_debug2(&message))
@@ -1171,6 +1170,17 @@ void MavLinkManager::setudid_values(QString _udid_str)
 {
     m_udid_values = _udid_str;
     emit udid_valuesChanged(m_udid_values);
+}
+
+bool MavLinkManager::debug_enabled() const
+{
+    return m_debug_enabled;
+}
+
+void MavLinkManager::setdebug_enabled(bool _enabled)
+{
+    m_debug_enabled = _enabled;
+    emit debug_enabledChanged(m_debug_enabled);
 }
 
 int MavLinkManager::mode_sbus_chan_num() const

@@ -49,6 +49,8 @@ class MavLinkManager : public QObject
     Q_PROPERTY(bool gremsy_product_id READ gremsy_product_id WRITE setgremsy_product_id NOTIFY gremsy_product_idChanged)
     Q_PROPERTY(bool keycode_request READ keycode_request WRITE setkeycode_request NOTIFY keycode_requestChanged) // true: show Keycode pop up dialog
     Q_PROPERTY(QString udid_values READ udid_values WRITE setudid_values NOTIFY udid_valuesChanged)
+    Q_PROPERTY(bool debug_enabled READ debug_enabled WRITE setdebug_enabled NOTIFY debug_enabledChanged)
+
 
     // IMU data
     Q_PROPERTY(float roll_angle  READ roll_angle    WRITE setroll_angle     NOTIFY roll_angleChanged)
@@ -240,6 +242,9 @@ public:
 
     QString udid_values() const;
     void setudid_values(QString _udid_str);
+
+    bool debug_enabled() const;
+    void setdebug_enabled(bool _enabled);
 
  // *********** RC Settings
 // RC Mode
@@ -458,6 +463,7 @@ signals:
     void keycode_requestChanged(bool);
     void accel_calib_stepsChanged(int);
     void udid_valuesChanged(QString);
+    void debug_enabledChanged(bool);
 
     // RC Settings
     // RC Mode
@@ -597,6 +603,7 @@ private:
     bool m_keycode_request;
     int m_accel_calib_steps;
     QString m_udid_values;
+    bool m_debug_enabled;
 
     // [!]RC Settings
     //    Mode
@@ -633,7 +640,6 @@ private:
                                 // if false: continue to parse message to get data.
     uint8_t calib_type;
     bool calib_finished;
-    bool debug_enabled ;
 };
 
 #endif // MAVLINKMANAGER_HPP

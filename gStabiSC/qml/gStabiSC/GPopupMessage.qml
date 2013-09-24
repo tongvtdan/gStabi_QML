@@ -18,9 +18,22 @@ Rectangle{
     GButton{
         y: 10
         text: "OK"
+        anchors.horizontalCenterOffset: -50
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom;        anchors.bottomMargin: 5
         onClicked: popup_show = false
+    }
+    GCheckBox{
+        id: debugEnabledChecked
+        height: 25
+        anchors.right: parent.right
+        anchors.rightMargin: 10
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 5
+        checkbox_text: "Enable Debug Mode"
+        onChecked_stateChanged: {
+            _mavlink_manager.debug_enabled = checked_state;
+        }
     }
 
     Rectangle{
@@ -76,5 +89,9 @@ Rectangle{
 
            }
        ]
+       Connections{
+           target: _mavlink_manager;
+           onDebug_enabledChanged: debugEnabledChecked.checked_state = _mavlink_manager.debug_enabled
+       }
 }
 
