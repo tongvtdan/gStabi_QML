@@ -1,6 +1,6 @@
 #include "MavLinkManager.hpp"
 #include <QDebug>
-
+#include <QThread>
 
 MavLinkManager::MavLinkManager(QObject *parent) :
     QObject(parent)
@@ -486,6 +486,12 @@ void MavLinkManager::update_calib_status()
     }
 }
 
+void MavLinkManager::gDebug(QString _msg, int _val)
+{
+    qDebug() << QString("debug >> %1 Changed to: %2").arg(_msg).arg(_val);
+    QThread::msleep(10);
+}
+
 
 void MavLinkManager::update_all_parameters_to_UI()
 {
@@ -532,152 +538,185 @@ void MavLinkManager::get_attitude_data()
 void MavLinkManager::write_params_to_board()
 {
     if(board_connection_state() == ONLINE){
-        qDebug("Sending parameters to controller board...");
         setmavlink_message_log("Sending parameters to controller board...");
         // Motor config params
         // General
         if(control_type() != current_params_on_board.radioType){
             current_params_on_board.radioType = control_type();
             write_a_param_to_board("RADIO_TYPE", current_params_on_board.radioType);
+            gDebug("Control type",current_params_on_board.radioType);
         }
         if(skip_gyro_calib() != current_params_on_board.skipGyroCalib){
             current_params_on_board.skipGyroCalib = skip_gyro_calib();
             write_a_param_to_board("SKIP_GYRO_CALIB", current_params_on_board.skipGyroCalib);
+            gDebug("Skip Gyro Calib", current_params_on_board.skipGyroCalib);
         }
         if(use_gps() != current_params_on_board.useGPS){
             current_params_on_board.useGPS = use_gps();
             write_a_param_to_board("USE_GPS", current_params_on_board.useGPS);
+            gDebug("Use GPS",current_params_on_board.useGPS );
         }
         if(gyro_trust() != current_params_on_board.gyroTrust){
             current_params_on_board.gyroTrust = gyro_trust();
             write_a_param_to_board("GYRO_TRUST", current_params_on_board.gyroTrust);
+            gDebug("Gyro trust",current_params_on_board.gyroTrust);
         }
         if(gyro_lpf() != current_params_on_board.gyroLPF){
             current_params_on_board.gyroLPF = gyro_lpf();
             write_a_param_to_board("GYRO_LPF", current_params_on_board.gyroLPF);
+            gDebug("Gyro LPF", current_params_on_board.gyroLPF );
         }
         if(motor_freq() != current_params_on_board.motorFreq){
             current_params_on_board.motorFreq = motor_freq();
             write_a_param_to_board("MOTOR_FREQ", current_params_on_board.motorFreq);
+            gDebug("Motor Fred", current_params_on_board.motorFreq);
         }
 
         //    [!] *** SBUS Channel ***
         if(mode_sbus_chan_num() != current_params_on_board.sbusModeChan){
             current_params_on_board.sbusModeChan = mode_sbus_chan_num() - 1;
             write_a_param_to_board("SBUS_MODE_CHAN", current_params_on_board.sbusModeChan);
+            gDebug("SBUS Mode Channel Num", current_params_on_board.sbusModeChan);
         }
         if(tilt_sbus_chan_num() != current_params_on_board.sbusPitchChan){
             current_params_on_board.sbusPitchChan = tilt_sbus_chan_num() - 1;      // - 1 to get a real value for channel from display value in QML
             write_a_param_to_board("SBUS_PITCH_CHAN", current_params_on_board.sbusPitchChan);
-        }
+            gDebug("Tilt SBUS Chan Num", current_params_on_board.sbusPitchChan);
+          }
         if(pan_sbus_chan_num() != current_params_on_board.sbusYawChan){
             current_params_on_board.sbusYawChan = pan_sbus_chan_num() - 1;      // - 1 to get a real value for channel from display value in QML
             write_a_param_to_board("SBUS_YAW_CHAN", current_params_on_board.sbusYawChan);
+            gDebug("Pan SBUS Channel Num", current_params_on_board.sbusYawChan);
         }
         if(roll_sbus_chan_num() != current_params_on_board.sbusRollChan){
             current_params_on_board.sbusRollChan = roll_sbus_chan_num() - 1;      // - 1 to get a real value for channel from display value in QML
             write_a_param_to_board("SBUS_ROLL_CHAN", current_params_on_board.sbusRollChan);
+             gDebug("Roll SBUS Channel Num", current_params_on_board.sbusRollChan);
         }
         //    [!]
         //    [1] Tilt Motor
         if(tilt_power() != current_params_on_board.pitchPower){  // if power level changed, it will be store in params
             current_params_on_board.pitchPower = tilt_power();   // update current value to params struct
             write_a_param_to_board("PITCH_POWER", current_params_on_board.pitchPower);
+             gDebug("Till Power Level", current_params_on_board.pitchPower);
         }
         if(motor_tilt_dir() != current_params_on_board.dirMotorPitch){
             current_params_on_board.dirMotorPitch = motor_tilt_dir();   // update current value to params struct
             write_a_param_to_board("DIR_MOTOR_PITCH", current_params_on_board.dirMotorPitch);
+            gDebug("Tilt Motor Dir", current_params_on_board.dirMotorPitch);
         }
         if(motor_tilt_num_poles() != current_params_on_board.nPolesPitch){
             current_params_on_board.nPolesPitch = motor_tilt_num_poles();   // update current value to params struct
             write_a_param_to_board("NPOLES_PITCH", current_params_on_board.nPolesPitch);
+            gDebug("Tilt Motor Poles Num", current_params_on_board.nPolesPitch);
         }
         if(tilt_up_limit_angle() != current_params_on_board.travelMinPitch){
             current_params_on_board.travelMinPitch = tilt_up_limit_angle();   // update current value to params struct
             write_a_param_to_board("TRAVEL_MIN_PIT",  current_params_on_board.travelMinPitch);
+            gDebug("Tilt Up Limit", current_params_on_board.travelMinPitch);
         }
         if(tilt_down_limit_angle() != current_params_on_board.travelMaxPitch){
             current_params_on_board.travelMaxPitch = tilt_down_limit_angle();   // update current value to params struct
             write_a_param_to_board("TRAVEL_MAX_PIT", current_params_on_board.travelMaxPitch);
+            gDebug("Tilt Down Limit", current_params_on_board.travelMaxPitch);
         }
 
         if(tilt_lpf() != current_params_on_board.rcPitchLPF){
             current_params_on_board.rcPitchLPF = tilt_lpf();
             write_a_param_to_board("RC_PITCH_LPF", current_params_on_board.rcPitchLPF);
+            gDebug("Tilt LPF", current_params_on_board.rcPitchLPF);
         }
         if(tilt_trim() != current_params_on_board.rcPitchTrim){
             current_params_on_board.rcPitchTrim = tilt_trim();
             write_a_param_to_board("RC_PITCH_TRIM", current_params_on_board.rcPitchTrim);
+            gDebug("Tilt RC Trim", current_params_on_board.rcPitchTrim);
         }
         if(tilt_mode() != current_params_on_board.rcPitchMode){
             current_params_on_board.rcPitchMode = tilt_mode();
             write_a_param_to_board("RC_PITCH_MODE", current_params_on_board.rcPitchMode);
+            gDebug("Tilt RC Mode", current_params_on_board.rcPitchMode);
         }
         //    [2] Pan Motor
         if(pan_power() != current_params_on_board.yawPower){  // if power level changed, it will be store in params
             current_params_on_board.yawPower = pan_power();   // update current value to params struct
             write_a_param_to_board("YAW_POWER", current_params_on_board.yawPower);
+             gDebug("Pan Power Level", current_params_on_board.yawPower );
         }
         if(motor_pan_dir() != current_params_on_board.dirMotorYaw){
             current_params_on_board.dirMotorYaw = motor_pan_dir();   // update current value to params struct
             write_a_param_to_board("DIR_MOTOR_YAW", current_params_on_board.dirMotorYaw);
+            gDebug("Pan Motor Dir", current_params_on_board.dirMotorYaw );
         }
         if(motor_pan_num_poles() != current_params_on_board.nPolesYaw){
             current_params_on_board.nPolesYaw = motor_pan_num_poles();   // update current value to params struct
             write_a_param_to_board("NPOLES_YAW", current_params_on_board.nPolesYaw);
+            gDebug("Pan Motor Poles", current_params_on_board.nPolesYaw );
         }
         if(pan_ccw_limit_angle() != current_params_on_board.travelMinYaw){
             current_params_on_board.travelMinYaw = pan_ccw_limit_angle();   // update current value to params struct
             write_a_param_to_board("TRAVEL_MIN_YAW",  current_params_on_board.travelMinYaw);
+            gDebug("Pan CCW Limit", current_params_on_board.travelMinYaw);
         }
         if(pan_cw_limit_angle() != current_params_on_board.travelMaxYaw){
             current_params_on_board.travelMaxYaw = pan_cw_limit_angle();   // update current value to params struct
             write_a_param_to_board("TRAVEL_MAX_YAW", current_params_on_board.travelMaxYaw);
+            gDebug("Pan CW Limit", current_params_on_board.travelMaxYaw);
         }
         if(pan_lpf() != current_params_on_board.rcYawLPF){
             current_params_on_board.rcYawLPF = pan_lpf();
             write_a_param_to_board("RC_YAW_LPF", current_params_on_board.rcYawLPF);
+            gDebug("Pan LPF", current_params_on_board.rcYawLPF);
         }
         if(pan_trim() != current_params_on_board.rcYawTrim){
             current_params_on_board.rcYawTrim = pan_trim();
             write_a_param_to_board("RC_YAW_TRIM", current_params_on_board.rcYawTrim);
+            gDebug("Pan Trim", current_params_on_board.rcYawTrim);
         }
         if(pan_mode() != current_params_on_board.rcYawMode){
             current_params_on_board.rcYawMode = pan_mode();
             write_a_param_to_board("RC_YAW_MODE", current_params_on_board.rcYawMode);
+            gDebug("Pam Mode", current_params_on_board.rcYawMode);
         }
         //    [3] Roll Motor
         if(roll_power() != current_params_on_board.rollPower){  // if power level changed, it will be store in params
             current_params_on_board.rollPower = roll_power();   // update current value to params struct
             write_a_param_to_board("ROLL_POWER", current_params_on_board.rollPower);
+            gDebug("Roll Power Level", current_params_on_board.rollPower);
         }
         if(motor_roll_dir() != current_params_on_board.dirMotorRoll){
             current_params_on_board.dirMotorRoll = motor_roll_dir();   // update current value to params struct
             write_a_param_to_board("DIR_MOTOR_ROLL", current_params_on_board.dirMotorRoll);
+            gDebug("Roll Motor Dir", current_params_on_board.dirMotorRoll);
         }
         if(motor_roll_num_poles() != current_params_on_board.nPolesRoll){
             current_params_on_board.nPolesRoll = motor_roll_num_poles();   // update current value to params struct
             write_a_param_to_board("NPOLES_ROLL", current_params_on_board.nPolesRoll);
+            gDebug("Roll Motor Poles", current_params_on_board.nPolesRoll);
         }
         if(roll_up_limit_angle() != current_params_on_board.travelMinRoll){
             current_params_on_board.travelMinRoll = roll_up_limit_angle();   // update current value to params struct
             write_a_param_to_board("TRAVEL_MIN_ROLL",  current_params_on_board.travelMinRoll);
+            gDebug("Roll Up Limit", current_params_on_board.travelMinRoll);
         }
         if(roll_down_limit_angle() != current_params_on_board.travelMaxRoll){
             current_params_on_board.travelMaxRoll = roll_down_limit_angle();   // update current value to params struct
             write_a_param_to_board("TRAVEL_MAX_ROLL", current_params_on_board.travelMaxRoll);
+            gDebug("Roll Down Limit", current_params_on_board.travelMaxRoll);
         }
         if(roll_lpf() != current_params_on_board.rcRollLPF){
             current_params_on_board.rcRollLPF = roll_lpf();
             write_a_param_to_board("RC_ROLL_LPF", current_params_on_board.rcRollLPF);
+            gDebug("Roll LPF", current_params_on_board.rcRollLPF);
         }
         if(roll_trim() != current_params_on_board.rcRollTrim){
             current_params_on_board.rcRollTrim = roll_trim();
             write_a_param_to_board("RC_ROLL_TRIM", current_params_on_board.rcRollTrim);
+            gDebug("Roll Trim", current_params_on_board.rcRollTrim);
         }
         if(roll_mode() != current_params_on_board.rcRollMode){
             current_params_on_board.rcRollMode = roll_mode();
             write_a_param_to_board("RC_ROLL_MODE", current_params_on_board.rcRollMode);
+            gDebug("Roll Mode", current_params_on_board.rcRollMode);
         }
 
         // Controller Setting Params
@@ -685,65 +724,83 @@ void MavLinkManager::write_params_to_board()
         if(tilt_kp() != current_params_on_board.pitchKp){
             current_params_on_board.pitchKp = tilt_kp();   // update current value to params struct
             write_a_param_to_board("PITCH_P", current_params_on_board.pitchKp);
+            gDebug("Tilt Kp", current_params_on_board.pitchKp);
+
         }
         if(tilt_ki() != current_params_on_board.pitchKi){
             current_params_on_board.pitchKi = tilt_ki();   // update current value to params struct
             write_a_param_to_board("PITCH_I", current_params_on_board.pitchKi);
+
+            gDebug("Tilt Ki", current_params_on_board.pitchKi);
         }
         if(tilt_kd() != current_params_on_board.pitchKd){
             current_params_on_board.pitchKd = tilt_kd();   // update current value to params struct
             write_a_param_to_board("PITCH_D", current_params_on_board.pitchKd);
+            gDebug("Tilt Kd", current_params_on_board.pitchKd);
         }
         if(tilt_follow() != current_params_on_board.pitchFollow){
             current_params_on_board.pitchFollow = tilt_follow();   // update current value to params struct
             write_a_param_to_board("PITCH_FOLLOW", current_params_on_board.pitchFollow);
+            gDebug("Tilt Follow", current_params_on_board.pitchFollow);
         }
         if(tilt_filter() != current_params_on_board.tiltFilter){
             current_params_on_board.tiltFilter = tilt_filter();   // update current value to params struct
             write_a_param_to_board("PITCH_FILTER", current_params_on_board.tiltFilter);
+            gDebug("Tilt Response", current_params_on_board.tiltFilter);
         }
         //    [2] Pan Motor
         if(pan_kp() != current_params_on_board.yawKp){
             current_params_on_board.yawKp = pan_kp();   // update current value to params struct
             write_a_param_to_board("YAW_P", current_params_on_board.yawKp);
+            gDebug("Pan Kp", current_params_on_board.yawKp);
         }
         if(pan_ki() != current_params_on_board.yawKi){
             current_params_on_board.yawKi = pan_ki();   // update current value to params struct
             write_a_param_to_board("YAW_I", current_params_on_board.yawKi);
+            gDebug("Pan Ki", current_params_on_board.yawKi);
         }
         if(pan_kd() != current_params_on_board.yawKd){
             current_params_on_board.yawKd = pan_kd();   // update current value to params struct
             write_a_param_to_board("YAW_D", current_params_on_board.yawKd);
+            gDebug("Pan Kd", current_params_on_board.yawKd);
         }
         if(pan_follow() != current_params_on_board.yawFollow){
             current_params_on_board.yawFollow = pan_follow();   // update current value to params struct
             write_a_param_to_board("YAW_FOLLOW", current_params_on_board.yawFollow);
+            gDebug("Pan Follow", current_params_on_board.yawFollow);
         }
         if(pan_filter() != current_params_on_board.panFilter){
             current_params_on_board.panFilter = pan_filter();   // update current value to params struct
             write_a_param_to_board("YAW_FILTER", current_params_on_board.panFilter);
+            gDebug("Pan Response", current_params_on_board.panFilter);
         }
 
         //    [3] Roll Motor
         if(roll_kp() != current_params_on_board.rollKp){
             current_params_on_board.rollKp = roll_kp();   // update current value to params struct
             write_a_param_to_board("ROLL_P", current_params_on_board.rollKp);
+            gDebug("Roll Kp", current_params_on_board.rollKp);
         }
         if(roll_ki() != current_params_on_board.rollKi){
             current_params_on_board.rollKi = roll_ki();   // update current value to params struct
             write_a_param_to_board("ROLL_I", current_params_on_board.rollKi);
+            gDebug("Roll Ki", current_params_on_board.rollKi);
         }
         if(roll_kd() != current_params_on_board.rollKd){
             current_params_on_board.rollKd = roll_kd();   // update current value to params struct
             write_a_param_to_board("ROLL_D", current_params_on_board.rollKd);
+            gDebug("Roll Kd", current_params_on_board.rollKd);
         }
         if(roll_follow() != current_params_on_board.rollFollow){
             current_params_on_board.rollFollow = roll_follow();   // update current value to params struct
             write_a_param_to_board("ROLL_FOLLOW", current_params_on_board.rollFollow);
+            gDebug("Roll Follow", current_params_on_board.rollFollow);
         }
         if(roll_filter() != current_params_on_board.rollFilter){
             current_params_on_board.rollFilter = roll_filter();   // update current value to params struct
             write_a_param_to_board("ROLL_FILTER", current_params_on_board.rollFilter);
+            gDebug("Roll Response", current_params_on_board.rollFilter);
+
         }
         // other params
 
@@ -804,6 +861,7 @@ void MavLinkManager::write_a_param_to_board(const char *param_id, float _value)
                                param_id, _value, MAVLINK_TYPE_INT16_T);
     len = mavlink_msg_to_send_buffer(buf, &msg);
     emit messge_write_to_comport_ready((const char*)buf, len);      // send signal
+//    gDebug(QString("Sent %1").arg(param_id), _value);
 
 }
 

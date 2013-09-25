@@ -57,12 +57,12 @@ GFrame{
                 width: 180;// height: 20;
                 anchors.verticalCenter: parent.verticalCenter
                 value: p_value
-                onValueChanged: { p_value = value; }
+                onValueChanged:  p_value = value;
             }
             GTextInput{
                 id: pValueInput
                 bottom_value: p_min; top_value: p_max;
-                text_value: p_value.toString()
+                text_value: p_value
                 onText_valueChanged: p_value = text_value
             }
         }
@@ -90,12 +90,12 @@ GFrame{
                 width: 180; //height: 20;
                 anchors.verticalCenter: parent.verticalCenter
                 value: i_value
-                onValueChanged: { i_value = value; }
+                onValueChanged:  i_value = value;
             }
             GTextInput{
                 id: iValueInput
                 bottom_value: i_min; top_value: i_max;
-                text_value: i_value.toString()
+                text_value: i_value
                 onText_valueChanged: i_value = text_value
             }
         }
@@ -108,7 +108,6 @@ GFrame{
             GTextStyled{
                 id: dLabel
                 width: 20; height: 20
-                //            color : "#00e3f9"
                 color: text_color
                 font.pixelSize: 16
                 text: "D"
@@ -127,7 +126,7 @@ GFrame{
             GTextInput{
                 id: dValueInput
                 bottom_value: d_min; top_value: d_max;
-                text_value: d_value.toString()
+                text_value: d_value
                 onText_valueChanged: d_value = text_value
             }
         }
@@ -154,12 +153,12 @@ GFrame{
                 width: 180;// height: 20;
                 anchors.verticalCenter: parent.verticalCenter
                 value: follow_value
-                onValueChanged: { follow_value = value; }
+                onValueChanged:  follow_value = value;
             }
             GTextInput{
                 id: followValueInput
                 bottom_value: follow_min; top_value: follow_max;
-                text_value: follow_value.toString()
+                text_value: follow_value
                 onText_valueChanged: follow_value = text_value
             }
         }
@@ -187,21 +186,36 @@ GFrame{
                 width: 180; //height: 20;
                 anchors.verticalCenter: parent.verticalCenter
                 value: filter_value
-                onValueChanged: { filter_value = value; }
+                onValueChanged:  filter_value = value;
             }
             GTextInput{
                 id: filterValueInput
                 bottom_value: filter_min; top_value: filter_max;
-                text_value: filter_value.toString()
+                text_value: filter_value
                 onText_valueChanged: filter_value = text_value
             }
         }
     }
-    onP_valueChanged: {pSlider.value = p_value; pValueInput.text_value = p_value}
-    onI_valueChanged: {iSlider.value = i_value; iValueInput.text_value = i_value}
-    onD_valueChanged: {dSlider.value = d_value; dValueInput.text_value = d_value}
-    onFollow_valueChanged: {followSlider.value = follow_value; followValueInput.text_value = follow_value}
-    onFilter_valueChanged: {filterSlider.value = filter_value; filterValueInput.text_value = filter_value}
+    onP_valueChanged: {
+        pSlider.value = p_value;
+        pValueInput.text_value = p_value
+    }
+    onI_valueChanged: {
+        iSlider.value = i_value;
+        iValueInput.text_value = i_value
+    }
+    onD_valueChanged: {
+        dSlider.value = d_value;
+        dValueInput.text_value = d_value
+    }
+    onFollow_valueChanged: {
+        followSlider.value = follow_value;
+        followValueInput.text_value = follow_value
+    }
+    onFilter_valueChanged: {
+        filterSlider.value = filter_value;
+        filterValueInput.text_value = filter_value
+    }
 
 }
 

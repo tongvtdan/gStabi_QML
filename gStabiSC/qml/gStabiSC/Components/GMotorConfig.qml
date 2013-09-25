@@ -7,8 +7,8 @@ GFrame{
 
     property int    power_level : 50
     property int    poles_num   : 24
-    property int    max_value   : 10
-    property int    min_value   : -10
+    property int    max_value   : 45
+    property int    min_value   : -45
     property int    motor_dir   : 0
     property int    lpf_value   : 5
     property int    trim_value  : 5
@@ -135,40 +135,6 @@ GFrame{
             motor_dir = checked_state;
         }
     }
-    /*
-    Rectangle{
-        id: modeContainer
-        anchors.left: parent.left
-        anchors.leftMargin: 10
-        anchors.top: powerRow.bottom; anchors.topMargin: 30
-        width: Math.max(angleModeChecked.width, velocityModeChecked.width) + 10
-        height: (angleModeChecked.height + velocityModeChecked.height + 10)
-        color: "transparent"
-        radius: 5
-        border.color: "cyan"; border.width: 1
-        GCheckBox{
-            id: angleModeChecked
-            height: 30
-            checkbox_text: "Angle Mode"
-            anchors.top: parent.top ; anchors.topMargin: 5
-            anchors.left: parent.left;  anchors.leftMargin: 5
-            checked_state: !speed_mode
-            onChecked_stateChanged: {
-                speed_mode = !checked_state
-            }
-        }
-        GCheckBox{
-            id: velocityModeChecked
-            checkbox_text: "Speed Mode"
-            anchors.top: angleModeChecked.bottom ; anchors.topMargin: 5
-            anchors.left: parent.left;  anchors.leftMargin: 5
-            checked_state: speed_mode
-            onChecked_stateChanged: {
-                speed_mode = checked_state
-            }
-        }
-    }
-*/
     onPower_levelChanged: {
         powerLevelInput.text_value = power_level;
         powerSlider.value = power_level;
@@ -177,6 +143,8 @@ GFrame{
         polesNumInput.text_value = poles_num;
     }
     onMotor_dirChanged: reversedCheckBox.checked_state = motor_dir;
+    onMax_valueChanged: maxLimitInput.text_value = max_value
+    onMin_valueChanged: minLimitInput.text_value = min_value
 
 
 

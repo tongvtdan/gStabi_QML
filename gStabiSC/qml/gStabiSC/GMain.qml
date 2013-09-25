@@ -16,7 +16,7 @@ Item {
     property int    selected_port_index: 1
     property string profile_name    : "Profile_Default"
 
-    property int    gremsy_product_id: 0
+    property int    gremsy_product_id: 1 // this will disable/enabled some controls
 
     width:1024; height: 650
 

@@ -2,7 +2,7 @@ import QtQuick 2.0
 
 Rectangle{
     id: container
-    property int    text_value      : 0
+    property int    text_value     : 0
     property int    bottom_value    : 0
     property int    top_value       : 100
     property bool   read_only       : false
@@ -27,9 +27,19 @@ Rectangle{
         font{ family: "Segoe UI"; bold: true; pixelSize: 12}
         validator: IntValidator{bottom: bottom_value; top: top_value;}
         focus: true
-        text: text_value
+        text: text_value.toString()
+        cursorVisible: false
         readOnly: read_only
         Behavior on color {ColorAnimation {duration: 200 }}
+        onTextChanged: {
+            if(text !== "") {
+                text_value = text;
+            } else {
+                text_value = 0;
+            }
+//            console.log("console >> " + text_value)
+
+        }
         Keys.onPressed: {
             if ((event.key === Qt.Key_Return) || (event.key === Qt.Key_Enter)) {
                 text_value = text

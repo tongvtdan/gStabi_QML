@@ -554,6 +554,8 @@ private:
     void update_rc_sbus_value();
     void update_pwm_values();
     void update_calib_status();
+    void gDebug(QString _msg, int _val);
+
 
 
 private:

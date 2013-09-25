@@ -172,8 +172,10 @@ void SerialLink::portPrepareToClose()
 
 void SerialLink::send_message_to_comport(const char *_buf, unsigned int _len)
 {
+    qint64 write_result;
     if(serialport->isOpen()){
-        serialport->write(_buf, _len);
+        write_result = serialport->write(_buf, _len);
+        qDebug() << " debug >> Write to Serial: Buff Len: "<< _len << ", data written len: " << write_result;
     }
     else {
         qDebug("Please check the connection then open the Comport");

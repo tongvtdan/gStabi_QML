@@ -53,7 +53,7 @@ Item{
             onP_valueChanged:       _mavlink_manager.roll_kp     = p_value;
             onI_valueChanged:       _mavlink_manager.roll_ki     = i_value;
             onD_valueChanged:       _mavlink_manager.roll_kd     = d_value;
-            onFilter_valueChanged:  _mavlink_manager.roll_filter = filter_value;
+            onFilter_valueChanged:  {_mavlink_manager.roll_filter = filter_value; }
             onFollow_valueChanged:  _mavlink_manager.roll_follow = follow_value;
 
         }
